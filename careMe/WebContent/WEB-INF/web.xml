@@ -9,4 +9,22 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
+  <servlet>
+ 	<servlet-name>dispatcher</servlet-name>
+ 	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+ 	
+	<init-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/config.xml, /WEB-INF/dispatcher1.xml, /WEB-INF/dispatcher2.xml, /WEB-INF/dispatcher3.xml, /WEB-INF/dispatcher4.xml, /WEB-INF/dispatcher5.xml
+		</param-value>
+	</init-param>	
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+  
+  
 </web-app>
