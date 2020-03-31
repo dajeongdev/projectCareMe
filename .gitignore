@@ -1,0 +1,50 @@
+# Compiled class file
+*.class
+
+## S: Eclipse
+*.tmp
+*.bak
+*.swp
+*~.nib
+.settings/
+.loadpath
+.recommenders
+.externalToolBuilders/
+*/target/*
+Servers/*
+
+#gradle
+.gradle
+
+# Eclipse Core
+.project
+
+# JDT-specific(Eclipse Java Development Tools)
+.classpath
+
+# Annotation Processing
+.apt_generated
+.sts4-cache/
+
+# Locally stored Eclipse Launch configuration
+*.launch
+
+# Spring Tool Suite
+.springBeans
+
+## E: Eclipse
+
+# db config
+db.properties
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
