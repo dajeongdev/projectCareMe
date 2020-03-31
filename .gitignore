@@ -11,6 +11,7 @@
 .recommenders
 .externalToolBuilders/
 */target/*
+*/bin/*
 Servers/*
 
 #gradle
