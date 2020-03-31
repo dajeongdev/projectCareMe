@@ -16,7 +16,7 @@
 	</bean>
 
 	
-	<bean id="boardDao" class="MyBrd.BoardDao" p:sqlSessionFactory-ref="sqlSessionFactory" />
+	<bean id="boardDao" class="com.careme.dao.BoardDao" p:sqlSessionFactory-ref="sqlSessionFactory" />
 
 
 </beans>
