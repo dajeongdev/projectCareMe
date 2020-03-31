@@ -1,6 +1,9 @@
 package com.careme.dao;
 
-public class BoardDao{
+import org.mybatis.spring.support.SqlSessionDaoSupport;
+
+public class BoardDao extends SqlSessionDaoSupport  {
+
 
 	
 }
