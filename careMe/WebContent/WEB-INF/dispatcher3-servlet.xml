@@ -7,15 +7,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<context:annotation-config/>
-	<context:component-scan base-package="spring.*"/>
-
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/view/" />
-		<property name="suffix" value=".jsp"/>
-	</bean>
-
-	
 	<bean id="boardDao" class="com.careme.dao.BoardDao" p:sqlSessionFactory-ref="sqlSessionFactory" />
 
 
