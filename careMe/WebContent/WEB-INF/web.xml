@@ -16,7 +16,13 @@
  	
 	<init-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/config.xml, /WEB-INF/dispatcher1.xml, /WEB-INF/dispatcher2.xml, /WEB-INF/dispatcher3.xml, /WEB-INF/dispatcher4.xml, /WEB-INF/dispatcher5.xml
+		<param-value>
+			 /WEB-INF/config.xml
+			,/WEB-INF/dispatcher1.xml
+			,/WEB-INF/dispatcher2.xml
+			,/WEB-INF/dispatcher3.xml
+			,/WEB-INF/dispatcher4.xml
+			,/WEB-INF/dispatcher5.xml
 		</param-value>
 	</init-param>	
   </servlet>
