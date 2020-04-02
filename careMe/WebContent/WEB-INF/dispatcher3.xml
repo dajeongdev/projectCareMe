@@ -7,7 +7,5 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<bean id="boardDao" class="com.careme.dao.BoardDao" p:sqlSessionFactory-ref="sqlSessionFactory" />
-
 
 </beans>
