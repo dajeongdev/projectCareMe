@@ -1,4 +1,4 @@
-package com.careme.dao;
+package com.careme.model.dto;
 
 import java.time.LocalDateTime;
 
