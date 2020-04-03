@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.careme.dao.StoryDao;
-import com.careme.model.dto.StoryDto;
+import com.careme.model.dto.StoryBoardDto;
 
 @Service
 public class StoryService {
@@ -17,7 +17,7 @@ public class StoryService {
 		this.dao = dao;
 	}
 
-	public List<StoryDto> selectAll() {
+	public List<StoryBoardDto> selectAll() {
 		return dao.selectAll();
 	}
 }

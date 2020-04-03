@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.model.dto.StoryDto;
+import com.careme.model.dto.StoryBoardDto;
 import com.careme.service.StoryService;
 
 @Controller
@@ -22,7 +22,7 @@ public class StoryController {
 	@RequestMapping("/story/story_main")
 	public ModelAndView selectAll() {
 		ModelAndView mav = new ModelAndView();
-		List<StoryDto> list = service.selectAll();
+		List<StoryBoardDto> list = service.selectAll();
 		mav.setViewName("story/story_main");
 		mav.addObject("story", list);
 		return mav;

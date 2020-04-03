@@ -2,18 +2,30 @@ package com.careme.model.dto;
 
 import java.time.LocalDateTime;
 
-public class StoryDto {
+public class StoryBoardDto {
 	private int story_board_idx;
 	private int member_idx;
-	private int pet_idx;
+	private int tag_idx;
 	private String title;
 	private String content;
-	private int like;
+	private int heart;
 	private int view_count;
 	private LocalDateTime reg_date;
 	private LocalDateTime update_date;
 	private String del_yn;
 	
+	public int getTag_idx() {
+		return tag_idx;
+	}
+	public void setTag_idx(int tag_idx) {
+		this.tag_idx = tag_idx;
+	}
+	public int getHeart() {
+		return heart;
+	}
+	public void setHeart(int heart) {
+		this.heart = heart;
+	}
 	public int getStory_board_idx() {
 		return story_board_idx;
 	}
@@ -26,12 +38,6 @@ public class StoryDto {
 	public void setMember_idx(int member_idx) {
 		this.member_idx = member_idx;
 	}
-	public int getPet_idx() {
-		return pet_idx;
-	}
-	public void setPet_idx(int pet_idx) {
-		this.pet_idx = pet_idx;
-	}
 	public String getTitle() {
 		return title;
 	}
@@ -43,12 +49,6 @@ public class StoryDto {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public int getLike() {
-		return like;
-	}
-	public void setLike(int like) {
-		this.like = like;
 	}
 	public int getView_count() {
 		return view_count;
