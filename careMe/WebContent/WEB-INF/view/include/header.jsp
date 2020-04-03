@@ -31,7 +31,7 @@ ${uri}
 	<div class="collapse navbar-collapse" id="navbars">
 		<ul class="navbar-nav mr-auto">
 			<li class="nav-item active">
-				<a class="nav-link" href="#">전문가 상담<span class="sr-only">(current)</span></a>
+				<a class="nav-link" href="view/doctorBoardView/doctorBoard">전문가 상담<span class="sr-only">(current)</span></a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#">케어일기</a>
