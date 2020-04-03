@@ -13,7 +13,7 @@
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 	
 	<h1>main world!</h1>
-	<a href="story/story_main">스토리 메인</a>
+	<a href="story/storyMain">스토리 메인</a>
 </div>
 
 
