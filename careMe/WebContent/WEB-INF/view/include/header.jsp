@@ -55,7 +55,7 @@
 				<a class="nav-link" href="#">펫스토리</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">고민상담</a>
+				<a class="nav-link" href="view/casualBoardview/casualBoard">고민상담</a>
 			</li>
 		</ul>
 	</div>
