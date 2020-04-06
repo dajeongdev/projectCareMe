@@ -8,20 +8,34 @@ import com.careme.model.dto.QuestionBoardDto;
 
 public class QuestionBoardDao extends SqlSessionDaoSupport {
 
-	public List<QuestionBoardDto> getArticle(){
-		return getSqlSession().selectList("doctorQuestionBrd.getArt");
-	}
 	
-	public List<QuestionBoardDto> getArticlePro(){
+// Doctor Board 가져오기	
+	
+	public List<QuestionBoardDto> getDoctorBoard(){
 		return getSqlSession().selectList("doctorQuestionBrd.getArtPro");
 	}
 	
-	public QuestionBoardDto getArtContents(int question_table_idx){
+	public QuestionBoardDto getDoctorBoardContents(int question_table_idx){
 		return getSqlSession().selectOne("doctorQuestionBrd.getArtContent", question_table_idx);
 	}
 	
-	public void getArtViews(int question_table_idx) {
+	public void getDoctorBoardViews(int question_table_idx) {
 		getSqlSession().update("doctorQuestionBrd.getArtView", question_table_idx);
 	}
+	
+// Casual Board 가져오기
+	public List<QuestionBoardDto> getCasualBoard(){
+		return getSqlSession().selectList("casualQuestionBrd.getArt");
+	}
+	
+	public QuestionBoardDto getCasualBoardContents(int question_table_idx){
+		return getSqlSession().selectOne("casualQuestionBrd.getArtContent", question_table_idx);
+	}
+	
+	public void getCasualBoardViews(int question_table_idx) {
+		getSqlSession().update("casualQuestionBrd.getArtView", question_table_idx);
+	}
+	
+	
 	
 }

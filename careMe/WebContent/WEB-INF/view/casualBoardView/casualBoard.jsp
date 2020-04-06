@@ -1,75 +1,79 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="Spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">	
+<meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
-<title>°í¹Î »ó´ã</title>
+<title>ë©”ì¸ í™”ë©´</title>
 </head>
 <body>
-	<div class="container-fluid" style="padding: 0;">
-		<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 
+<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 
-		<div class="container-fluid">
+<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light"> 
+	<div class="container min-vh-100 pt-3 text-center">
+		
+		
+		
+		
 			<div class="row">
-				<main role="main" class="col-md-9 col-lg-10 px-4">
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
-					<h2>°í¹Î »ó´ã</h2>
-					<p>
-						(ÀüÃ¼ ±Û:
-						<c:out value="${count}" />
-						)
-					</p>
+					<h2>ê³ ë¯¼ ìƒë‹´</h2>
+					<p>(ì „ì²´ ê¸€:<c:out value="${count}" />)</p>
 					<div class="table-responsive">
 						<table class="table table-striped table-sm">
-							<!-- ¸Ç À­ ÁÙ -->
+							<!-- ë§¨ ìœ— ì¤„ -->
 							<thead>
 								<tr>
-									<th>¹ø È£</th>
-									<th>Á¦¸ñ</th>
-									<th>ÀÛ¼ºÀÚ</th>
-									<th>ÀÛ¼ºÀÏÀÚ</th>
-									<th>Á¶È¸</th>
+									<th>ë²ˆ í˜¸</th>
+									<th>ì œëª©</th>
+									<th>ìž‘ì„±ìž</th>
+									<th>ìž‘ì„±ì¼ìž</th>
+									<th>ì¡°íšŒ</th>
 								</tr>
 							</thead>
 							<tbody>
 
-								<!-- ±Û µé¾î°¡´Â °÷ -->
-								<c:forEach var="item" items="${list}">
-									<tr>
+							<!-- ê¸€ ë“¤ì–´ê°€ëŠ” ê³³ -->
+							<c:forEach var="item" items="${list}">
+								<tr>
 										<td><c:out value="${item.question_table_idx}" /></td>
-										<td><a
-											href="casualBoardContent?question_table_idx=${item.question_table_idx}">"${item.title}"</a></td>
+										<td><a href="casualBoardContent?question_table_idx=${item.question_table_idx}">"${item.title}"</a></td>
 										<td><c:out value="${item.member_id}" /></td>
-										<td><c:out value="${item.brd_reg_date}" /></td>
-										<td><c:out value="${item.views}" /></td>
-									</tr>
+										<td><c:out value="${item.reg_date}" /></td>
+										<td><c:out value="${item.view_count}" /></td>
+								</tr>
 								</c:forEach>
 							</tbody>
-
-							
+		  					<!-- ê²Œì‹œíŒ ê¸€ì“°ê¸° -->
+ 							<tr>
+		  					    <td align="right"><a href="writeForm">ê¸€ì“°ê¸°</a></td>
+				                <td colspan="4" width="50" align="center">number</td>
+	  					    </tr>
 						</table>
 					</div>
 				</main>
 			</div>
-		  <!-- °Ô½ÃÆÇ ±Û¾²±â -->
-		  <tr>
-		      <td align="right"><a href="writeForm">±Û¾²±â</a></td>
-			  <td colspan="4" width="50" align="center">number</td>
-	      </tr>
-		  <!-- °Ô½ÃÆÇ °Ë»ö -->
+		 
+		  <!-- ê²Œì‹œíŒ ê²€ìƒ‰ -->
 		  <form action="searchPro">
-			<select name="searchn">
-				<option value="0">ÀÛ¼ºÀÚ</option>
-				<option value="1">Á¦¸ñ</option>
-				<option value="2">³»¿ë</option>
+		  <select name="searchn">
+				<option value="0">ìž‘ì„±ìž</option>
+				<option value="1">ì œëª©</option>
+				<option value="2">ë‚´ìš©</option>
 			</select> <input type="text" name="searchKeyword" size="15" maxlength="50" />
-			<input type="submit" value="°Ë»ö" />
-		  </form>
+			<input type="submit" value="ê²€ìƒ‰" />
+		  </form>	
+		
+		 
+		 
+
+		 
 		</div>
 	</div>
 </body>

@@ -22,19 +22,11 @@ public class DoctorBoardController {
 	QuestionBoardService bs;
 	QuestionBoardDao boardDao;
 	
-	//main 불러오기
-	
-//		@RequestMapping(value="main")
-//		public ModelAndView toMain() {
-//			ModelAndView mav = new ModelAndView();
-//			mav.setViewName("main");
-//			return mav;
-//		}
 		
 	//게시판 뿌리기
 		@RequestMapping(value="/view/doctorBoardView/doctorBoard")
-		public ModelAndView toBoardPro() {
-			List<QuestionBoardDto> getArts = bs.getArticlesPro();
+		public ModelAndView toDoctorBoard() {
+			List<QuestionBoardDto> getArts = bs.getDoctorBoard();
 			ModelAndView listPro = new ModelAndView();
 			listPro.addObject("listPro", getArts);
 			listPro.addObject("countPro", getArts.size());
@@ -44,10 +36,10 @@ public class DoctorBoardController {
 		
 	//게시글 내용 불러오기
 		@RequestMapping(value="/doctorBoardView/doctorBoardContentPro", method=RequestMethod.GET)
-		public ModelAndView contentsPro(@RequestParam int question_table_idx, HttpSession session) throws Exception{
+		public ModelAndView doctorBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception{
 			ModelAndView list = new ModelAndView();
-			list.addObject("list", bs.getArtContents(question_table_idx, session));
-			bs.getArtViews(question_table_idx, session);
+			list.addObject("list", bs.getDoctorBoardContents(question_table_idx, session));
+			bs.getDoctorBoardViews(question_table_idx, session);
 			list.setViewName("contentPro");
 			return list;
 		}

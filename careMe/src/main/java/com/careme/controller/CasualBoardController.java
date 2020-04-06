@@ -25,8 +25,8 @@ public class CasualBoardController {
 	
 //게시판 뿌리기(게시글 / 글개수)
 	@RequestMapping(value="/view/casualBoardView/casualBoard")
-	public ModelAndView toBoard() {
-		List<QuestionBoardDto> getArts = bs.getArticles();
+	public ModelAndView toCasualBoard() {
+		List<QuestionBoardDto> getArts = bs.getCasualBoard();
 		ModelAndView list = new ModelAndView();
 		list.addObject("list", getArts);
 		list.addObject("count", getArts.size());
@@ -38,8 +38,8 @@ public class CasualBoardController {
 	@RequestMapping(value="/casualBoardView/casualBoardContent", method=RequestMethod.GET)
 	public ModelAndView contents(@RequestParam int question_table_idx, HttpSession session) throws Exception{
 		ModelAndView list = new ModelAndView();
-		list.addObject("list", bs.getArtContents(question_table_idx, session));
-		bs.getArtViews(question_table_idx, session);
+		list.addObject("list", bs.getCasualBoardContents(question_table_idx, session));
+		bs.getCasualBoardViews(question_table_idx, session);
 		list.setViewName("content");
 		return list;
 	}

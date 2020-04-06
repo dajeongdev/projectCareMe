@@ -15,22 +15,34 @@ public class QuestionBoardService {
 	
 	@Autowired
 	QuestionBoardDao dao = new QuestionBoardDao();
-	
-	public List<QuestionBoardDto> getArticles(){
-		return dao.getArticle();
+
+// Doctor Board 가져오기	
+	public List<QuestionBoardDto> getDoctorBoard(){
+		return dao.getDoctorBoard();
 	}
 	
-	public List<QuestionBoardDto> getArticlesPro(){
-		return dao.getArticlePro();
-	}
-	
-	public QuestionBoardDto getArtContents(int question_table_idx, HttpSession session){
-		return dao.getArtContents(question_table_idx);
+	public QuestionBoardDto getDoctorBoardContents(int question_table_idx, HttpSession session){
+		return dao.getDoctorBoardContents(question_table_idx);
 	}
 
-	public void getArtViews (int question_table_idx, HttpSession session) {
-		dao.getArtViews(question_table_idx);
+	public void getDoctorBoardViews (int question_table_idx, HttpSession session) {
+		dao.getDoctorBoardViews(question_table_idx);
 	}
+	
+// Casual Board 가져오기	
+	public List<QuestionBoardDto> getCasualBoard(){
+		return dao.getCasualBoard();
+	}
+	
+	public QuestionBoardDto getCasualBoardContents(int question_table_idx, HttpSession session){
+		return dao.getCasualBoardContents(question_table_idx);
+	}
+
+	public void getCasualBoardViews (int question_table_idx, HttpSession session) {
+		dao.getCasualBoardViews(question_table_idx);
+	}
+	
+	
 	
 //	public void updateArticle(String title, String content) {
 //		dao.updateArticles(title, content);
