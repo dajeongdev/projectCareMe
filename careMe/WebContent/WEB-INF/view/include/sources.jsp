@@ -10,4 +10,4 @@
 <link rel="stylesheet" href="${bootstrapCSS}">
 <script type="text/javascript" src="${bootstrapJS}"></script>
 <script type="text/javascript" src="${jqeury}"></script>
-<script type="text/javascript" src="${bootstrapJS}"></script>    
+<script type="text/javascript" src="${popper}"></script>
