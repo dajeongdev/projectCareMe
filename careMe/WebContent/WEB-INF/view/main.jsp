@@ -11,13 +11,28 @@
 
 <jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column"> 
-
-	<div class="container-fluid pd-5">	
-	
-	
-		<h1>main world!</h1>
+<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light"> 
+	<div class="container min-vh-100 pt-3 text-center">
+		<!--  S: 내용작성 -->
 		
+		<div class="row mb3 jumbotron">
+			<div class="col-md-4">게시판 1</div>
+			<div class="col-md-4">게시판 2</div>
+			<div class="col-md-4">게시판 3</div>
+		</div>
+		
+		<div class="row mb3 jumbotron">
+			<div class="col-md-2">왼쪽</div>
+			<div class="col-md-8">의사 정보</div>
+			<div class="col-md-2">오른쪽</div>
+		</div>
+		
+		<div class="row mb3 jumbotron">
+			<div class="col-md-2">왼쪽</div>
+			<div class="col-md-8">스토리 사진들</div>
+			<div class="col-md-2">오른쪽</div>
+		</div>		
+
 		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSample">modal</button>
 	
 		<div class="modal fade" id="modalSample" tabindex="-1" role="dialog">
@@ -43,8 +58,8 @@
 		  </div>
 		</div>
 			
+		<!--  E: 내용작성 -->	
 	</div>
-
 </div>
 
 </body>
