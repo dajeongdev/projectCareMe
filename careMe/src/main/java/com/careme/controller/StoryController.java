@@ -19,11 +19,11 @@ public class StoryController {
 		this.service = service;
 	}
 	
-	@RequestMapping("/story/storyMain")
+	@RequestMapping("/view/story/storyMain")
 	public ModelAndView selectAll() {
 		ModelAndView mav = new ModelAndView();
 		List<StoryBoardDto> list = service.selectAll();
-		mav.setViewName("story/storyMain");
+		mav.setViewName("/story/storyMain");
 		mav.addObject("story", list);
 		return mav;
 	}
