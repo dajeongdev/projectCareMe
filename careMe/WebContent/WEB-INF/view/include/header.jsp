@@ -40,6 +40,7 @@
 			<c:if test="${currentMenu != 'main'}">
 				<li class="nav-item">			
 			</c:if>
+			<li>
 				<a class="nav-link" href="/careMe/main">Main</a>
 			</li>
 			<li class="nav-item">
@@ -52,7 +53,7 @@
 				<a class="nav-link" href="#">전문의 찾기</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">펫스토리</a>
+				<a class="nav-link" href="view/story/storyMain">펫스토리</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#">고민상담</a>
