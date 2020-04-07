@@ -10,4 +10,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public List<StoryBoardDto> selectAll() {
 		return getSqlSession().selectList("story.selectAll");
 	}
+	
+	public int articleInsert() {
+		return getSqlSession().insert("story.articleInsert");
+	}
 }

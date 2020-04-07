@@ -23,6 +23,11 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		getSqlSession().update("doctorQuestionBrd.getArtView", question_table_idx);
 	}
 	
+	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc){
+		getSqlSession().selectList("doctorQuestionBrd.get")
+	}
+	
+	
 // Casual Board 가져오기
 	public List<QuestionBoardDto> getCasualBoard(){
 		return getSqlSession().selectList("casualQuestionBrd.getArt");
