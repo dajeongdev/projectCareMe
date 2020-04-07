@@ -40,7 +40,8 @@
 			<c:if test="${currentMenu != 'main'}">
 				<li class="nav-item">			
 			</c:if>
-				<a class="nav-link" href="view/doctorBoardView/doctorBoard">Main</a>
+			<li>
+				<a class="nav-link" href="view/main">Main</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="view/doctorBoardView/doctorBoard">전문가 상담</a>
@@ -52,7 +53,7 @@
 				<a class="nav-link" href="#">전문의 찾기</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">펫스토리</a>
+				<a class="nav-link" href="view/story/storyMain">펫스토리</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#">고민상담</a>

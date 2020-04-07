@@ -14,8 +14,12 @@ import com.careme.model.dto.QuestionBoardDto;
 public class QuestionBoardService {
 	
 	@Autowired
-	QuestionBoardDao dao = new QuestionBoardDao();
+	QuestionBoardDao dao;
 	
+	public void setDao(QuestionBoardDao dao) {
+		this.dao = dao;
+	}
+
 	public List<QuestionBoardDto> getArticles(){
 		return dao.getArticle();
 	}
@@ -48,7 +52,7 @@ public class QuestionBoardService {
 //		return dao.getArtSearchCount();
 //	}
 
-//	public int addArticles(String title, String content, String member_id) {//º¸µå µðÆ¼¿À¿¡ ÀÖ´Âµ¥ ¿¡½ºÅ¥¿¤¿¡´Â ¾ø´Â º¯¼ö¸¦ Ãß°¡
+//	public int addArticles(String title, String content, String member_id) {//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Âµï¿½ ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
 //		return dao.insertArticle(title, content, member_id);
 //	}
 
