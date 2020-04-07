@@ -20,4 +20,8 @@ public class StoryService {
 	public List<StoryBoardDto> selectAll() {
 		return dao.selectAll();
 	}
+	
+	public int articleInsert() {
+		return dao.articleInsert();
+	}
 }

@@ -6,4 +6,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectAll" resultType="com.careme.model.dto.StoryBoardDto">
 		select * from story_board
 	</select>
+<!-- 	<select id="list" resultType="com.careme.model.dto.StoryBoardDto">
+		select title, profile_image_file_name, from story_board natural join members
+		where 
+	</select>
+	
+	<insert id="articleInsert" parameterType="hashmap">
+		insert into story_board 
+		value(#{story_board_idx}, #{member_idx}, #{tag_idx}, 
+		#{title}, #{content}, #{reg_date}, #{update_date})
+	</insert>
+	
+	<insert id="fileInsert" parameterType="hashmap">
+		insert into story_file
+		values(#{story_board_idx}, #{file_name}, #{file_path}, 
+		#{file_size}, #{reg_date}, #{update_date})
+	</insert> -->
 </mapper>
