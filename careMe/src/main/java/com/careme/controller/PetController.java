@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.service.PetService;
 import com.google.gson.Gson;
@@ -22,10 +22,12 @@ public class PetController {
 	public void setPetService(PetService petService) {
 		this.petService = petService;
 	}
+
 	
 	@RequestMapping(value = "/pet/regist", method = RequestMethod.POST)
-	public String registPet(PetDto dto) throws Exception {
-		System.out.println(dto);
+	public String registPet(MultipartHttpServletRequest request) {
+		petService.insertPet(request);
+		
 		return "/main";
 	}
 

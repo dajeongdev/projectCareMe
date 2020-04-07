@@ -13,8 +13,9 @@
 <script>
 
 	$(function() {
-		
-		
+		$("#profileImage").change(function() {
+	        readURL(this);
+	    });
 		
 		$("#additional").on("hide.bs.collapse", function () {
 			$(".bi-caret-down-fill").show();
@@ -24,10 +25,10 @@
 			$(".bi-caret-up-fill").show();
 		});
 
-		$("#pet_species_level1").on("change", function () {
+		$("#petSpeciesLevel1").on("change", function () {
 			var ancestor = $(this).find("option:selected").data("num");
 			if (!ancestor) {
-				$("#pet_species_level2 option").remove();
+				$("#petSpeciesLevel2 option").remove();
 				return false;
 			}
 			var url = "/careMe/api/pet/species?level=2&ancestor=" + ancestor;
@@ -36,21 +37,33 @@
 				url : url,				
 				dataType : "json"
 			}).done(function(items) {
-				$("#pet_species_level2 option").remove();
+				$("#petSpeciesLevel2 option").remove();
 				if (items.length > 0) {
 					for (item in items) {
 						var s = items[item]; 
 						var option = "<option value=" + s.pet_species_idx + ">" + s.pet_species_name + "</option>"
-						$("#pet_species_level2").append(option);
+						$("#petSpeciesLevel2").append(option);
 					}
 				}
 			}).fail(function(e) {
 				alert(e.responseText);
 			});
 		})
-
 	})
-	 
+	
+	
+	function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#previewImg').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    
+
 	
 </script>
 </head>
@@ -60,8 +73,18 @@
 <div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light"> 
 	<div class="container min-vh-100 pt-3"  style="max-width:720px">
 	
-		<form name="pet_regist" method="get" action="/careMe/pet/regist">
+		<form name="pet_regist" method="post" action="/careMe/pet/regist" enctype="multipart/form-data">
+		
+			<!-- S: 필수 -->
 			<div class="my-3 p-3 bg-white rounded shadow-sm">
+			
+				<div class="row mb-3">
+					<div class="col-12">
+						<label for="name">프로필 사진</label>
+						<img id="previewImg" class="w-100">
+						<input type="file" class="form-control" id="profileImage" name="profileImage" placeholder="" max="20" required>
+					</div>					
+				</div>
 							
 				<div class="row mb-3">
 					<div class="col-12">
@@ -73,7 +96,7 @@
 				<div class="row">
 					<div class="col-md-6  mb-3">
 						<label for="petSpecies1">동물의 종류(대분류)</label>
-						<select class="form-control" id="pet_species_level1">
+						<select class="form-control" id="petSpeciesLevel1">
 							<option>==선택==</option>
 							<c:if test="${speciesOption != null}">
 								<c:forEach var="option" items="${speciesOption}">
@@ -84,7 +107,7 @@
 					</div>
 					<div class="col-md-6  mb-3">
 						<label for="petSpecies2">동물의 종류(소분류)</label>
-						<select class="form-control" id="pet_species_level2" name="pet_species_idx" required>
+						<select class="form-control" id="petSpeciesLevel2" name="species" required>
 						</select>
 					</div>
 				</div>
@@ -94,22 +117,26 @@
 						<p class="mb-1">중성화 여부</p>
 						<div class="d-block mb-3">
 					          <div class="custom-control custom-radio">
-					            <input id="neutY" name="is_neutralized" type="radio" class="custom-control-input" value="y" checked>
+					            <input id="neutY" name="neutralized" type="radio" class="custom-control-input" value="y" checked>
 					            <label class="custom-control-label" for="neutY">예</label>
 					          </div>
 					          <div class="custom-control custom-radio">
-					            <input id="neutN" name="is_neutralized" type="radio" class="custom-control-input" value="n" required>
+					            <input id="neutN" name="neutralized" type="radio" class="custom-control-input" value="n" required>
 					            <label class="custom-control-label" for="neutN">아니오</label>
 					          </div>
 					          <div class="custom-control custom-radio">
-					            <input id="neutD" name="is_neutralized" type="radio" class="custom-control-input" value="d" required>
+					            <input id="neutD" name="neutralized" type="radio" class="custom-control-input" value="d" required>
 					            <label class="custom-control-label" for="neutD">모름</label>
 					          </div>
 					    </div>
 					</div>					
 				</div>
+				
 			</div>
+			<!-- E: 필수 -->
 			
+			
+			<!-- S: 추가 -->
 			<div class="my-3 p-3 bg-white rounded shadow-sm">
 			
 				<div class="row">
@@ -135,7 +162,7 @@
 					<div class="row mb-3">
 						<div class="col-12">
 							<label for="birth">생일은 언제인가요</label>
-							<input type="date" class="form-control" id="birth" name="birth" placeholder="" value="">
+							<input type="date" class="form-control" id="birth" name="birth">
 						</div>					
 					</div>
 					
@@ -162,7 +189,7 @@
 					<div class="row mb-3">
 						<div class="col-12">
 							<label for="weight">몸무게(kg)</label>
-							<input type="number" class="form-control" id="weight" name="weight" placeholder="" value="0">
+							<input type="number" class="form-control" id="weight" name="weight" placeholder="" >
 						</div>					
 					</div>
 					
@@ -188,27 +215,29 @@
 					
 					<div class="row mb-3">
 						<div class="col-12">
-							<label for="blood_type">혈액형</label>
-							<input type="text" class="form-control" id="blood_type" name="blood_type" placeholder="" value="">
+							<label for="bloodType">혈액형</label>
+							<input type="text" class="form-control" id="bloodType" name="bloodType" placeholder="">
 						</div>					
 					</div>
 					
 					<div class="row mb-3">
 						<div class="col-12">
-							<label for="registration_number">등록번호</label>
-							<input type="text" class="form-control" id="registration_number" name="registration_number"  value="" placeholder="">
+							<label for="registrationNumber">등록번호</label>
+							<input type="text" class="form-control" id="registrationNumber" name="registrationNumber" placeholder="">
 						</div>					
 					</div>
 					
 					<div class="row mb-3">
 						<div class="col-12">
 							<label for="memo">기타 특이사항</label>
-							<textarea class="form-control" id="memo" name="memo" placeholder="" value=""></textarea>
+							<textarea class="form-control" id="memo" name="memo" placeholder=""></textarea>
 						</div>					
 					</div>
 					
 				</div>
 			</div>
+			
+			<!-- E: 추가 -->
 
 			
 			<div class="row p-3">
