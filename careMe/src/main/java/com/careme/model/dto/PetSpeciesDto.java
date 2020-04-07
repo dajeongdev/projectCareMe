@@ -1,6 +1,6 @@
 package com.careme.model.dto;
 
-public class PetSpecies {
+public class PetSpeciesDto {
 	private int pet_species_idx;
 	private int code_level;
 	private String pet_species_name;
