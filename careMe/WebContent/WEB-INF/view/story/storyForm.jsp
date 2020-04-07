@@ -19,7 +19,7 @@
 #hash-search, #content, #title {
 	width: 600px;
 }
-#hash-inbox {
+#hash-inbox { 
 	background: #bdbdbd;
 	width: 600px;
 	height: 150px;
