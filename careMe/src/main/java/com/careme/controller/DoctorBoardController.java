@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
+import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.service.QuestionBoardService;
 
@@ -35,12 +36,46 @@ public class DoctorBoardController {
 		}
 		
 	//게시글 내용 불러오기
-		@RequestMapping(value="/doctorBoardView/doctorBoardContentPro", method=RequestMethod.GET)
+		@RequestMapping(value="/view/doctorBoardView/doctorBoardContent", method=RequestMethod.GET)
 		public ModelAndView doctorBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception{
 			ModelAndView list = new ModelAndView();
 			list.addObject("list", bs.getDoctorBoardContents(question_table_idx, session));
 			bs.getDoctorBoardViews(question_table_idx, session);
-			list.setViewName("contentPro");
+			list.setViewName("doctorBoardContent");
+			return list;
+		}
+		
+		// 게시판 검색
+		@RequestMapping(value="/view/doctorBoardSearch")
+		public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
+			SearchBoardCommand sbc = new SearchBoardCommand();
+			ModelAndView list = new ModelAndView();
+			List<QuestionBoardDto> items = null;
+			
+			if (searchn==0) {
+				sbc.setSearch_option("member_id");
+				sbc.setSearchKeyword(searchKeyword);			
+				items=bs.getDoctorBoardSearch(sbc);
+				list.addObject("list", items);
+				list.addObject("count", items.size());
+				list.setViewName("redirect:view/doctorBoardView/doctorBoard");
+				
+			}else if(searchn==1) {
+				sbc.setSearch_option("title");
+				sbc.setSearchKeyword(searchKeyword);
+				items=bs.getDoctorBoardSearch(sbc);
+				list.addObject("list", items);
+				list.addObject("count", items.size());
+				list.setViewName("redirect:view/doctorBoardView/doctorBoard");
+				
+			}else if(searchn==2) {
+				sbc.setSearch_option("content");
+				sbc.setSearchKeyword(searchKeyword);
+				items=bs.getDoctorBoardSearch(sbc);
+				list.addObject("list", items);
+				list.addObject("count", items.size());
+				list.setViewName("redirect:view/doctorBoardView/doctorBoard");
+			}
 			return list;
 		}
 		
@@ -68,42 +103,6 @@ public class DoctorBoardController {
 //			bs.deleteArticle();
 //			}
 		
-	//게시글 검색
-//		@RequestMapping(value="/view/searchPro")
-//		public ModelAndView searchListPro(@RequestParam int searchn, String searchKeyword, HttpSession session) {
-//			SearchCommand sc = new SearchCommand();
-//			ModelAndView listPro = new ModelAndView();
-//			List<BoardDto> items = null;
-			
-//			if (searchn==0) {
-				
-//				sc.search_option="member_id";
-//				sc.searchKeyword=searchKeyword;			
-//				items=bs.getArtSearch(sc);
-//				listPro.addObject("listPro", items);
-//				listPro.addObject("countPro", items.size());
-//				listPro.setViewName("listPro");
-				
-//			}else if(searchn==1) {
-				
-//				sc.search_option="title";
-//				sc.searchKeyword=searchKeyword;
-//				items=bs.getArtSearch(sc);
-//				listPro.addObject("listPro", items);
-//				listPro.addObject("countPro", items.size());
-//				listPro.setViewName("listPro");
-				
-//			}else if(searchn==2) {
-				
-//				sc.search_option="content";
-//				sc.searchKeyword=searchKeyword;
-//				items=bs.getArtSearch(sc);
-//				listPro.addObject("listPro", items);
-//				listPro.addObject("countPro", items.size());
-//				listPro.setViewName("listPro");
-				
-//			}
-//			return listPro;
-//		}
+
 
 }

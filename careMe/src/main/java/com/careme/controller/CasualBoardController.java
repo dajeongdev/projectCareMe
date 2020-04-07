@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
+import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.service.QuestionBoardService;
 
@@ -30,7 +31,7 @@ public class CasualBoardController {
 		ModelAndView list = new ModelAndView();
 		list.addObject("list", getArts);
 		list.addObject("count", getArts.size());
-		list.setViewName("/casualBoardView/casualBoard");
+		list.setViewName("contentPro");
 		return list;
 	}
 
@@ -44,42 +45,42 @@ public class CasualBoardController {
 		return list;
 	}
 	
-//게시판 검색
-//	@RequestMapping(value="/view/search")
-//	public ModelAndView searchList(@RequestParam int searchn, String searchKeyword) {
-//		SearchCommand sc = new SearchCommand();
-//		ModelAndView list = new ModelAndView();
-//		List<BoardDto> items = null;
+// 게시판 검색
+	@RequestMapping(value="/view/casualBoardView/casualBoardSearch")
+	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
+		SearchBoardCommand sbc = new SearchBoardCommand();
+		ModelAndView list = new ModelAndView();
+		List<QuestionBoardDto> items = null;
 		
-//		if (searchn==0) {
+		if (searchn==0) {
 			
-//			sc.search_option="member_id";
-//			sc.searchKeyword=searchKeyword;			
-//			items=bs.getArtSearch(sc);
-//			list.addObject("list", items);
-//			list.addObject("count", items.size());
-//			list.setViewName("list");
+			sbc.setSearch_option("member_id");
+			sbc.setSearchKeyword(searchKeyword);			
+			items=bs.getCasualBoardSearch(sbc);
+			list.addObject("list", items);
+			list.addObject("count", items.size());
+			list.setViewName("list");
 			
-//		}else if(searchn==1) {
+		}else if(searchn==1) {
 			
-//			sc.search_option="title";
-//			sc.searchKeyword=searchKeyword;
-//			items=bs.getArtSearch(sc);
-//			list.addObject("list", items);
-//			list.addObject("count", items.size());
-//			list.setViewName("list");
+			sbc.setSearch_option("title");
+			sbc.setSearchKeyword(searchKeyword);
+			items=bs.getCasualBoardSearch(sbc);
+			list.addObject("list", items);
+			list.addObject("count", items.size());
+			list.setViewName("list");
 			
-//		}else if(searchn==2) {
+		}else if(searchn==2) {
 			
-//			sc.search_option="content";
-//			sc.searchKeyword=searchKeyword;
-//			items=bs.getArtSearch(sc);
-//			list.addObject("list", items);
-//			list.addObject("count", items.size());
-//			list.setViewName("list");
+			sbc.setSearch_option("content");
+			sbc.setSearchKeyword(searchKeyword);
+			items=bs.getCasualBoardSearch(sbc);
+			list.addObject("list", items);
+			list.addObject("count", items.size());
+			list.setViewName("list");
 			
-//		}
-//		return list;
-//	}
+		}
+		return list;
+	}
 	
 }

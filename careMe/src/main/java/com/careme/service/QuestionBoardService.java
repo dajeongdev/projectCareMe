@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.careme.dao.QuestionBoardDao;
+import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.QuestionBoardDto;
 
 @Service
@@ -30,6 +31,10 @@ public class QuestionBoardService {
 		dao.getDoctorBoardViews(question_table_idx);
 	}
 	
+	public List<QuestionBoardDto>getDoctorBoardSearch(SearchBoardCommand sbc){
+		return dao.getDoctorBoardSearch(sbc);
+	}
+	
 // Casual Board 가져오기	
 	public List<QuestionBoardDto> getCasualBoard(){
 		return dao.getCasualBoard();
@@ -43,6 +48,10 @@ public class QuestionBoardService {
 		dao.getCasualBoardViews(question_table_idx);
 	}
 	
+	public List<QuestionBoardDto>getCasualBoardSearch(SearchBoardCommand sbc){
+		return dao.getCasualBoardSearch(sbc);
+	}
+
 	
 	
 //	public void updateArticle(String title, String content) {

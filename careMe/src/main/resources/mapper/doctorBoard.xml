@@ -18,7 +18,21 @@
 		where question_table_idx=#{question_table_idx}
 </update>
 
-
+<!-- 게시판글 검색 -->
+	<select id="getSrchArticle" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.SearchBoardCommand">
+		select * from question_board natural join members
+			<choose>
+				<when test='search_option != null and search_option.equals("member_id")'>
+					where member_id like concat('%',#{searchKeyword},'%')
+				</when>
+				<when test='search_option != null and search_option.equals("title")'>
+					where title like concat('%',#{searchKeyword},'%')
+				</when>
+				<when test='search_option != null and search_option.equals("content")'>
+					where content like concat('%',#{searchKeyword},'%')
+				</when>
+			</choose>
+	</select>  
 
 <!-- 게시판글 작성 수정 삭제 -->
 	

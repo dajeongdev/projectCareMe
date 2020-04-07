@@ -22,8 +22,8 @@
 		<div class="row">
 			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 				
-				<h2>전문 상담</h2>
-				<p>(전체 글:<c:out value="${countPro}"/>)</p>
+				<h2 align="left">전문 상담</h2>
+				<p align="left">(전체 글:<c:out value="${countPro}"/>)</p>
 				<div class="table-responsive">
 					<table class="table table-striped table-sm">
 						<!-- 맨 윗 줄 -->
@@ -60,7 +60,7 @@
 		</div>
 	
 		<!-- 게시판 검색 -->
-		<form action="searchPro">
+		<form action="view/doctorBoardView/doctorBoardSearch">
 		<select name="searchn">
 			<option value="0">작성자</option>
 			<option value="1">제목</option>
