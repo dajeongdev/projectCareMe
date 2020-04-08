@@ -64,6 +64,48 @@ $(function (){
 		    $(this).remove();
 	});
 });
+$(document).ready(function() {
+	$("#list").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_openBaordList();
+	})
+	$("#write").unbind("click").click(function(e) {
+		e.preventDefault();
+		fn_writeBoard();
+	})
+	$("a[name='delete']").on("click", function(e) {
+		e.preventDefault();
+		fn_fileDelete($(this));
+	})
+	$("a[name='delete']").on("click", function(e) {
+		e.preventDefault();
+		fn_fileAdd($(this));
+	})
+});
+	function fn_openBoardList() {
+		var comSubmit = new ComSubmit();
+		comSubmit.setURL("<c:url value='/story/storyMain' />");
+		comSubmit.submit();
+	}
+
+	function fn_insertBoard() {
+		var comSubmit = new ComSubmit("upload");
+		comSubmit.setURL("<c:url value='/story/storyDetail' />");
+		comSubmit.submit();
+	}
+	function fn_fileDelete(obj) {
+		obj.parent.remove();
+	}
+	function fn_fileAdd() {
+		var str = "<p><input type='file' name='file' /><a href='#this' name='delete' class='btn'>삭제</a>";
+		$("#fileDiv").append(str);
+
+		$("a[name='delete']").on("click", function(e) {
+			e.preventDefault();
+			fn_fileDelete($(this));
+		});
+	}
+
 </script>
 </head>
 <body>
@@ -74,8 +116,13 @@ $(function (){
 	<div class="container">
 		<div class="story_title">
 			<input type="text" id="title" placeholder="제목을 입력해주세요.">
+			<button type="button" id="addFile">사진 추가</button>
 		</div>
 		<div class="story_content">
+			<form action="storyForm" method="post" enctype="multipart/form-data">
+				<input type="file" name="uploadFiles" multiple/>
+				<a href="#this" name="delete" class="btn">삭제</a>
+			</form>
 			<textarea id="content" cols="30" rows="5" placeholder="스토리를 들려주세요."></textarea>
 			<div id="info-tag">
 				<input type="text" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
@@ -85,7 +132,8 @@ $(function (){
 				</div>
 			</div>
 		</div>
-		<button type="submit" class="btn">등    록</button>
+		<input type="submit" class="submit" onsubmit="" value="등  록"/>
+		<input type="button" class="list" value="목  록"/>
 	</div>
 </div>
 </body>

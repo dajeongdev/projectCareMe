@@ -32,7 +32,7 @@
 		</article>
 	</div>
 </div>
-
+<a href="/careMe/view/story/storyDetail.jsp">글보기</a>
 
 </body>
 </html>

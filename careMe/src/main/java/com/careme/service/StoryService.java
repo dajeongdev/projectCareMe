@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.careme.dao.StoryDao;
 import com.careme.model.dto.StoryBoardDto;
@@ -24,4 +26,5 @@ public class StoryService {
 	public int articleInsert() {
 		return dao.articleInsert();
 	}
+	
 }

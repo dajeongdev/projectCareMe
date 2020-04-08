@@ -2,6 +2,8 @@ package com.careme.model.dto;
 
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class StoryFileDto {
 	private int story_file_idx;
 	private int story_board_idx;
@@ -10,7 +12,14 @@ public class StoryFileDto {
 	private int file_size;
 	private LocalDateTime reg_date;
 	private String del_yn;
+	private MultipartFile file;
 
+	public MultipartFile getFile() {
+		return file;
+	}
+	public void setFile(MultipartFile file) {
+		this.file = file;
+	}
 	public int getStory_file_idx() {
 		return story_file_idx;
 	}
