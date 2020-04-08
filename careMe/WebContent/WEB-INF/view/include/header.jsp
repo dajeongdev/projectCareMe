@@ -44,7 +44,7 @@
 				<a class="nav-link" href="view/main">Main</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="view/doctorBoardView/doctorBoard">전문가 상담</a>
+				<a class="nav-link" href="/careMe/view/doctorBoardView/doctorBoard">전문가 상담</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#">케어일기</a>

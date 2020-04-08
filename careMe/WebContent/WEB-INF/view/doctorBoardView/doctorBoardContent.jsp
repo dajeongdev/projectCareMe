@@ -65,7 +65,7 @@
 									type="button" value="답글쓰기"
 									onClick="document.location.href='commentForm'"> <input
 									type="button" value="글목록"
-									onClick="document.location.href='casualBoard'"></td>
+									onClick="location.href='doctorBoard'"></td>
 							</tr>
 						</table>
 					</form>

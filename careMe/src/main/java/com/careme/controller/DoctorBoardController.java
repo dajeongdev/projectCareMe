@@ -86,17 +86,17 @@ public class DoctorBoardController {
 		List<QuestionBoardDto> getSpecs = bs.getSpecies();
 		
 		if(getSpecs==null) {
-			write.setViewName("doctorWriteForm");
+			write.setViewName("doctorBoardView/doctorWriteForm");
 			return write;
 		}else {
 			write.addObject("specs", getSpecs);
-			write.setViewName("doctorWriteForm");
+			write.setViewName("doctorBoardView/doctorWriteForm");
 			System.out.println(write);
 			return write;
 		}
 	}
 
-	@RequestMapping(value="/view/doctorBoardWriteAdd", method=RequestMethod.POST)
+	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
 	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.addArticles(boardDto);
 		System.out.println(boardDto);
@@ -108,19 +108,19 @@ public class DoctorBoardController {
 	}
 	
 	// 게시판 글수정
-	@RequestMapping(value = "/view/doctorBoardView/doctorBoardUpdateForm")
+	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
 	public ModelAndView toUpdatePro(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView();
 		List<QuestionBoardDto> getSpecs = bs.getSpecies();
 		int idx = question_table_idx;
 
 		if (getSpecs == null) {
-			update.setViewName("/view/doctorBoardView/doctorBoardUpdateForm");
+			update.setViewName("doctorBoardView/doctorBoardUpdateForm");
 			return update;
 		} else {
 			update.addObject("specs", getSpecs);
 			update.addObject("idx", idx);
-			update.setViewName("/view/doctorBoardView/doctorBoardUpdateForm");
+			update.setViewName("doctorBoardView/doctorBoardUpdateForm");
 			return update;
 		}
 	}

@@ -57,12 +57,14 @@
 									</tr>
 								</c:forEach>
 							</tbody>
-							<!-- 게시판 글쓰기 -->
-							<tr>
-								<td align="right"><input name="writeForm" type="button" value="글쓰기" onClick="href='writeForm'"></td>
-								<td colspan="4" width="50" align="center">number</td>
-							</tr>
 						</table>
+
+						<!-- 게시판 글쓰기 -->
+						<div align="right">
+							<input name="doctorBoardWriteForm" type="button" value="글쓰기"
+								onClick="location.href='doctorWriteForm'">
+						</div>
+						<div align="left">number</div>
 					</div>
 				</main>
 			</div>
