@@ -28,6 +28,23 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("doctorQuestionBrd.getSrchArticle");
 	}
 	
+// Doctor Board 작성, 수정, 삭제 기능
+	
+	public List<QuestionBoardDto> getSpecies() {
+		return getSqlSession().selectList("doctorQuestionBrd.getSpec");
+	}
+	
+	public int insertArticle(QuestionBoardDto boardDto){
+		return getSqlSession().insert("doctorQuestionBrd.insertArt", boardDto);
+		}
+	
+	public int updateArticles(QuestionBoardDto boardDto) {
+		return getSqlSession().update("doctorQuestionBrd.updateArticle", boardDto);
+	}
+	
+	public int deleteArticles(int idx) {
+		return getSqlSession().delete("doctorquestionBrd.deleteArticle", idx);
+		}
 	
 	
 	

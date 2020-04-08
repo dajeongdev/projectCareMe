@@ -59,7 +59,7 @@
 							</tbody>
 							<!-- 게시판 글쓰기 -->
 							<tr>
-								<td align="right"><a href="writeForm">글쓰기</a></td>
+								<td align="right"><input name="writeForm" type="button" value="글쓰기" onClick="href='writeForm'"></td>
 								<td colspan="4" width="50" align="center">number</td>
 							</tr>
 						</table>

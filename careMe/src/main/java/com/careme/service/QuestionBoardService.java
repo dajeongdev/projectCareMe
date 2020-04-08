@@ -1,5 +1,6 @@
 package com.careme.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -34,6 +35,32 @@ public class QuestionBoardService {
 	public List<QuestionBoardDto>getDoctorBoardSearch(SearchBoardCommand sbc){
 		return dao.getDoctorBoardSearch(sbc);
 	}
+
+// Doctor Board 작성, 수정, 삭제 기능
+	
+	// 작성
+		public List<QuestionBoardDto> getSpecies(){
+			return dao.getSpecies();
+		}
+		
+		public int addArticles(QuestionBoardDto boardDto) {
+			boardDto.setReg_date(LocalDateTime.now());
+			return dao.insertArticle(boardDto);
+		}
+	
+	// 수정
+	
+		public int updateArticle(QuestionBoardDto boardDto) {
+			boardDto.setUpdate_date(LocalDateTime.now());
+			return dao.updateArticles(boardDto);
+		}
+		
+	// 삭제	
+		public int deleteArticle(int idx) {
+			return dao.deleteArticles(idx);
+		}
+	
+	
 	
 // Casual Board 가져오기	
 	public List<QuestionBoardDto> getCasualBoard(){

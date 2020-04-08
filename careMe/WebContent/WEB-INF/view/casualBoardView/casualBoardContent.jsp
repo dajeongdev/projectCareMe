@@ -56,8 +56,9 @@
 							</pre></td>
 							</tr>
 							<tr height="30">
-								<td colspan="4" align="right"><input type="button"
-									value="글수정" onClick="document.location.href='updateForm'">
+								<td colspan="4" align="right">
+									<input type="button"
+									value="글수정" onClick="document.location.href='casualBoardUpdateForm?question_table_idx=${list.question_table_idx}'">
 									<input type="button" value="글삭제"
 									onClick="document.location.href='deleteForm'"> <input
 									type="button" value="답글쓰기"

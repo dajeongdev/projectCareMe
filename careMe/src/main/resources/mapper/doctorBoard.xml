@@ -50,5 +50,7 @@
 		doctor_idx=#{doctor_idx}, is_private=#{is_private}, pet_idx=#{pet_idx}, update_date=#{update_date} where question_table_idx=#{question_table_idx}
 	</update>
 
-
+	<delete id="deleteArticle" parameterType="int">
+		delete from question_board where question_table_idx=#{question_table_idx}
+	</delete>
 </mapper>
