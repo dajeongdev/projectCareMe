@@ -31,17 +31,17 @@ public class CasualBoardController {
 		ModelAndView list = new ModelAndView();
 		list.addObject("list", getArts);
 		list.addObject("count", getArts.size());
-		list.setViewName("contentPro");
+		list.setViewName("/casualBoardView/casualBoard");
 		return list;
 	}
 
 //게시글 내용 불러오기
-	@RequestMapping(value="/casualBoardView/casualBoardContent", method=RequestMethod.GET)
+	@RequestMapping(value="/view/casualBoardView/casualBoardContent", method=RequestMethod.GET)
 	public ModelAndView contents(@RequestParam int question_table_idx, HttpSession session) throws Exception{
 		ModelAndView list = new ModelAndView();
 		list.addObject("list", bs.getCasualBoardContents(question_table_idx, session));
 		bs.getCasualBoardViews(question_table_idx, session);
-		list.setViewName("content");
+		list.setViewName("casualBoardView/casualBoardContent");
 		return list;
 	}
 	

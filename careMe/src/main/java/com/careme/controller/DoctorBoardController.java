@@ -41,7 +41,7 @@ public class DoctorBoardController {
 			ModelAndView list = new ModelAndView();
 			list.addObject("list", bs.getDoctorBoardContents(question_table_idx, session));
 			bs.getDoctorBoardViews(question_table_idx, session);
-			list.setViewName("doctorBoardContent");
+			list.setViewName("doctorBoardView/doctorBoardContent");
 			return list;
 		}
 		
