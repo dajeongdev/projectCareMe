@@ -1,5 +1,6 @@
 package com.careme.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -8,33 +9,77 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.careme.dao.QuestionBoardDao;
+import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.QuestionBoardDto;
 
 @Service
 public class QuestionBoardService {
 	
 	@Autowired
-	QuestionBoardDao dao;
+
+	QuestionBoardDao dao = new QuestionBoardDao();
+
+// Doctor Board 가져오기	
+	public List<QuestionBoardDto> getDoctorBoard(){
+		return dao.getDoctorBoard();
+	}
 	
-	public void setDao(QuestionBoardDao dao) {
-		this.dao = dao;
+	public QuestionBoardDto getDoctorBoardContents(int question_table_idx, HttpSession session){
+		return dao.getDoctorBoardContents(question_table_idx);
 	}
 
-	public List<QuestionBoardDto> getArticles(){
-		return dao.getArticle();
+	public void getDoctorBoardViews (int question_table_idx, HttpSession session) {
+		dao.getDoctorBoardViews(question_table_idx);
 	}
 	
-	public List<QuestionBoardDto> getArticlesPro(){
-		return dao.getArticlePro();
-	}
-	
-	public QuestionBoardDto getArtContents(int question_table_idx, HttpSession session){
-		return dao.getArtContents(question_table_idx);
+	public List<QuestionBoardDto>getDoctorBoardSearch(SearchBoardCommand sbc){
+		return dao.getDoctorBoardSearch(sbc);
 	}
 
-	public void getArtViews (int question_table_idx, HttpSession session) {
-		dao.getArtViews(question_table_idx);
+// Doctor Board 작성, 수정, 삭제 기능
+	
+	// 작성
+		public List<QuestionBoardDto> getSpecies(){
+			return dao.getSpecies();
+		}
+		
+		public int addArticles(QuestionBoardDto boardDto) {
+			boardDto.setReg_date(LocalDateTime.now());
+			return dao.insertArticle(boardDto);
+		}
+	
+	// 수정
+	
+		public int updateArticle(QuestionBoardDto boardDto) {
+			boardDto.setUpdate_date(LocalDateTime.now());
+			return dao.updateArticles(boardDto);
+		}
+		
+	// 삭제	
+		public int deleteArticle(int idx) {
+			return dao.deleteArticles(idx);
+		}
+	
+	
+	
+// Casual Board 가져오기	
+	public List<QuestionBoardDto> getCasualBoard(){
+		return dao.getCasualBoard();
 	}
+	
+	public QuestionBoardDto getCasualBoardContents(int question_table_idx, HttpSession session){
+		return dao.getCasualBoardContents(question_table_idx);
+	}
+
+	public void getCasualBoardViews (int question_table_idx, HttpSession session) {
+		dao.getCasualBoardViews(question_table_idx);
+	}
+	
+	public List<QuestionBoardDto>getCasualBoardSearch(SearchBoardCommand sbc){
+		return dao.getCasualBoardSearch(sbc);
+	}
+
+	
 	
 //	public void updateArticle(String title, String content) {
 //		dao.updateArticles(title, content);
