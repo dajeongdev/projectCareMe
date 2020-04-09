@@ -5,6 +5,7 @@ import java.util.List;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
 
 public class QuestionBoardDao extends SqlSessionDaoSupport {
@@ -13,7 +14,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Doctor Board 가져오기 & 검색 기능
 	
 	public List<QuestionBoardDto> getDoctorBoard(){
-		return getSqlSession().selectList("doctorQuestionBrd.getArtPro");
+		return getSqlSession().selectList("doctorQuestionBrd.getArt");
 	}
 	
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx){
@@ -26,6 +27,14 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	
 	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc){
 		return getSqlSession().selectList("doctorQuestionBrd.getSrchArticle");
+	}
+	
+	public List<BoardCommentDto> getDoctorBoardComments(int question_table_idx){
+		return getSqlSession().selectList("doctorQuestionBrd.getArtComments", question_table_idx);
+	}
+	
+	public int getDoctorCommentCount(int question_table_idx) {
+		return getSqlSession().selectOne("casualQuestionBrd.getCommentCount", question_table_idx);
 	}
 	
 // Doctor Board 작성, 수정, 삭제 기능
@@ -46,6 +55,20 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().delete("doctorQuestionBrd.deleteArticle", idx);
 		}
 	
+// Doctor Comment 작성, 수정, 삭제 기능
+
+	public int insertCommentForDoctor(BoardCommentDto commentDto){
+		return getSqlSession().insert("doctorQuestionBrd.insertArt", commentDto);
+	}
+				
+	public int updateCommentForDoctor(BoardCommentDto commentDto) {
+		return getSqlSession().update("doctorQuestionBrd.updateArticle", commentDto);
+	}
+				
+	public int deleteCommentForDoctor(int idx) {
+		return getSqlSession().delete("doctorQuestionBrd.deleteArticle", idx);
+	}
+	
 	
 	
 // Casual Board 가져오기 & 검색 기능
@@ -64,6 +87,14 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 
 	public List<QuestionBoardDto> getCasualBoardSearch(SearchBoardCommand sbc){
 		return getSqlSession().selectList("casualQuestionBrd.getSrchArticle");
+	}
+	
+	public List<BoardCommentDto> getCasualBoardComments(int question_table_idx){
+		return getSqlSession().selectList("casualQuestionBrd.getArtComments", question_table_idx);
+	}
+	
+	public int getCasualCommentCount(int question_table_idx) {
+		return getSqlSession().selectOne("casualQuestionBrd.getCommentCount", question_table_idx);
 	}
 
 // Casual Board 작성, 수정, 삭제 기능
@@ -84,5 +115,20 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 			return getSqlSession().delete("casualQuestionBrd.deleteArticle", idx);
 			}
 
+// Casual Comment 작성, 수정, 삭제 기능
+
+		public int insertCommentForCasual(BoardCommentDto commentDto){
+			return getSqlSession().insert("casualQuestionBrd.insertArt", commentDto);
+		}
+			
+		public int updateCommentForCasual(BoardCommentDto commentDto) {
+			return getSqlSession().update("casualQuestionBrd.updateArticle", commentDto);
+		}
+			
+		public int deleteCommentForCasual(int idx) {
+			return getSqlSession().delete("casualQuestionBrd.deleteArticle", idx);
+		}
 	
+		
+		
 }

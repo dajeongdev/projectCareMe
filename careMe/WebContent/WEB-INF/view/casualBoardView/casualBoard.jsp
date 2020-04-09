@@ -12,7 +12,6 @@
 <title>메인 화면</title>
 </head>
 <body>
-
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 
 	<div
@@ -20,16 +19,11 @@
 		<div class="container min-vh-100 pt-3 text-center">
 
 
-
-
 			<div class="row">
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-
 					<h2 align="left">고민 상담</h2>
 					<p align="left">
-						(전체 글:
-						<c:out value="${count}" />
-						)
+						(전체 글: <c:out value="${count}" />)
 					</p>
 					<div class="table-responsive">
 						<table class="table table-striped table-sm">

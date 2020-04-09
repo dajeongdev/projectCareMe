@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
 
 @Service
@@ -35,6 +36,14 @@ public class QuestionBoardService {
 	public List<QuestionBoardDto>getDoctorBoardSearch(SearchBoardCommand sbc){
 		return dao.getDoctorBoardSearch(sbc);
 	}
+	
+	public List<BoardCommentDto> getDoctorBoardComments(int question_table_idx){
+		return dao.getDoctorBoardComments(question_table_idx);
+	}
+	
+	public int getDoctorCommentCount(int question_table_idx) {
+		return dao.getDoctorCommentCount(question_table_idx);
+	}
 
 // Doctor Board 작성, 수정, 삭제 기능
 	
@@ -59,6 +68,25 @@ public class QuestionBoardService {
 		public int deleteDoctorArticle(int idx) {
 			return dao.deleteArticlesForDoctor(idx);
 		}
+
+// Doctor Board Comments 작성, 수정, 삭제 기능		
+		
+	// comment 작성
+		public int addDoctorComment(BoardCommentDto commentDto) {
+			commentDto.setReg_date(LocalDateTime.now());
+			return dao.insertCommentForDoctor(commentDto);
+		}
+						
+	// comment 수정
+		public int updateDoctorComment(BoardCommentDto commentDto) {
+			commentDto.setReg_date(LocalDateTime.now());
+			return dao.updateCommentForDoctor(commentDto);
+		}
+							
+	// comment 삭제	
+		public int deleteDoctorComment(int idx) {
+			return dao.deleteCommentForDoctor(idx);
+		}
 	
 	
 	
@@ -79,27 +107,54 @@ public class QuestionBoardService {
 		return dao.getCasualBoardSearch(sbc);
 	}
 
-	// Casual Board 작성, 수정, 삭제 기능
+	public List<BoardCommentDto> getCasualBoardComments(int question_table_idx){
+		return dao.getCasualBoardComments(question_table_idx);
+	}
 	
-		// 작성
-			public List<QuestionBoardDto> getSpeciesForCasual(){
-				return dao.getSpeciesForCasual();
-			}
+	public int getCasualCommentCount(int question_table_idx) {
+		return dao.getCasualCommentCount(question_table_idx);
+	}
+	
+// Casual Board 작성, 수정, 삭제 기능
+	
+	// 작성
+		public List<QuestionBoardDto> getSpeciesForCasual(){
+			return dao.getSpeciesForCasual();
+		}
 			
-			public int addCasualArticles(QuestionBoardDto boardDto) {
-				boardDto.setReg_date(LocalDateTime.now());
-				return dao.insertArticleForCasual(boardDto);
-			}
+		public int addCasualArticles(QuestionBoardDto boardDto) {
+			boardDto.setReg_date(LocalDateTime.now());
+			return dao.insertArticleForCasual(boardDto);
+		}
 		
-		// 수정
+	// 수정
 		
-			public int updateCasualArticle(QuestionBoardDto boardDto) {
-				boardDto.setUpdate_date(LocalDateTime.now());
-				return dao.updateArticlesForCasual(boardDto);
-			}
+		public int updateCasualArticle(QuestionBoardDto boardDto) {
+			boardDto.setUpdate_date(LocalDateTime.now());
+			return dao.updateArticlesForCasual(boardDto);
+		}
 			
-		// 삭제	
-			public int deleteCasualArticle(int idx) {
-				return dao.deleteArticlesForCasual(idx);
-			}
+	// 삭제	
+		public int deleteCasualArticle(int idx) {
+			return dao.deleteArticlesForCasual(idx);
+		}
+
+// Casual Board Comments 작성, 수정, 삭제 기능		
+			
+	// comment 작성
+		public int addCasualComment(BoardCommentDto commentDto) {
+			commentDto.setReg_date(LocalDateTime.now());
+			return dao.insertCommentForCasual(commentDto);
+		}
+					
+	// comment 수정
+		public int updateCasualComment(BoardCommentDto commentDto) {
+			commentDto.setReg_date(LocalDateTime.now());
+			return dao.updateCommentForCasual(commentDto);
+		}
+						
+	// comment 삭제	
+		public int deleteCasualComment(int idx) {
+			return dao.deleteCommentForCasual(idx);
+		}	
 }

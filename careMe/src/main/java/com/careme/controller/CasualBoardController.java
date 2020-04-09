@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.service.QuestionBoardService;
 
@@ -23,7 +24,7 @@ public class CasualBoardController {
 	QuestionBoardService bs;
 	QuestionBoardDao boardDao;
 
-//°Ô½ÃÆÇ »Ñ¸®±â(°Ô½Ã±Û / ±Û°³¼ö)
+//ê²Œì‹œíŒ ë¿Œë¦¬ê¸°(ê²Œì‹œê¸€ / ëŒ“ê¸€ / ê¸€ê°œìˆ˜)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
 	public ModelAndView toCasualBoard() {
 		List<QuestionBoardDto> getArts = bs.getCasualBoard();
@@ -33,18 +34,26 @@ public class CasualBoardController {
 		list.setViewName("/casualBoardView/casualBoard");
 		return list;
 	}
+	
 
-//°Ô½Ã±Û ³»¿ë ºÒ·¯¿À±â
+//ê²Œì‹œê¸€ ë‚´ìš© ë¶ˆëŸ¬ì˜¤ê¸°
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
-	public ModelAndView contents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
+	public ModelAndView casualBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
 		ModelAndView list = new ModelAndView();
-		list.addObject("list", bs.getCasualBoardContents(question_table_idx, session));
-		bs.getCasualBoardViews(question_table_idx, session);
 		list.setViewName("casualBoardView/casualBoardContent");
-		return list;
+		bs.getCasualBoardViews(question_table_idx, session);
+		list.addObject("list", bs.getCasualBoardContents(question_table_idx, session));
+		int commentCounts = bs.getCasualCommentCount(question_table_idx);		
+		System.out.println(commentCounts);
+		if(commentCounts>0) {
+			list.addObject("commentList", bs.getCasualBoardComments(question_table_idx));
+			return list;
+		}else {
+			return list;
+		}
 	}
 
-// °Ô½ÃÆÇ °Ë»ö
+// ê²Œì‹œíŒ ê²€ìƒ‰ê¸°ëŠ¥
 	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
 	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
@@ -82,7 +91,7 @@ public class CasualBoardController {
 		return list;
 	}
 
-	// °Ô½ÃÆÇ ±Û¾²±â
+// ê²Œì‹œê¸€ ì‘ì„±
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView();
@@ -110,9 +119,9 @@ public class CasualBoardController {
 		}
 	}
 
-	// °Ô½ÃÆÇ ±Û¼öÁ¤
+// ê²Œì‹œê¸€ ìˆ˜ì •
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
-	public ModelAndView toUpdatePro(@RequestParam int question_table_idx) throws Exception {
+	public ModelAndView toCasualUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView();
 		List<QuestionBoardDto> getSpecs = bs.getSpeciesForCasual();
 		int idx = question_table_idx;
@@ -129,7 +138,7 @@ public class CasualBoardController {
 	}
 
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateArticle(QuestionBoardDto boardDto) throws Exception {
+	public String updateCasualArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.updateCasualArticle(boardDto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
@@ -139,28 +148,67 @@ public class CasualBoardController {
 	}
 	
 	
-	//°Ô½ÃÆÇ ±Û»èÁ¦
+// ê²Œì‹œê¸€ ì‚­ì œ
 	@RequestMapping(value="/view/casualBoardView/deleteArticle")
-	public String deleteArticle(@RequestParam int question_table_idx) {
+	public String deleteCasualArticle(@RequestParam int question_table_idx) {
 		int idx = question_table_idx;
 		int result = bs.deleteCasualArticle(idx);
 		if(result>0) {
-		return "redirect:/view/casualBoardView/doctorBoard";
+		return "redirect:/view/casualBoardView/casualBoard";
 		}else {
 			System.out.println("no!!!");
-		return "redirect:/view/casualBoardView/doctorBoard";
+		return "redirect:/view/casualBoardView/casualBoard";
 		}
 	}
 	
+//	===================================================================================================================
+	
+	// comment ì‘ì„±
+		@RequestMapping(value="/view/casualBoardView/casualCommentAdd")
+		public String writeCasualComment(BoardCommentDto commentDto) throws Exception {
+			int result = bs.addCasualComment(commentDto);
+			if (result > 0) {
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+			} else {
+				System.out.println("no!!!");
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+			}
+		}
+
+		
+	// comment ìˆ˜ì •
+		@RequestMapping(value = "/view/casualBoardView/casualCommentUpdate", method = RequestMethod.POST)
+		public String updateCasualComment(BoardCommentDto commentDto) throws Exception {
+			int result = bs.updateCasualComment(commentDto);
+			if (result > 0) {
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+			} else {
+				System.out.println("no!!!");
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+			}
+		}
+		
+		
+	// comment ì‚­ì œ
+		@RequestMapping(value="/view/casualBoardView/casualCommentDelete")
+		public String deleteCasualComment(@RequestParam int question_board_comment_idx) {
+			int idx = question_board_comment_idx;
+			int result = bs.deleteCasualComment(idx);
+			if(result>0) {
+			return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+			}else {
+				System.out.println("no!!!");
+			return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+			}
+		}
 	
 	
-// ÀÚÁÖ ¹¯´Â Áú¹® ¸µÅ©
+	
+// ìì£¼ ë¬»ëŠ” ì§ˆë¬¸ ë§í¬
 	@RequestMapping(value = "/view/infoBoardView/infoBoard")
 	public ModelAndView infoLink() throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("infoBoardView/infoBoard");
-		System.out.println(mav);
-		System.out.println("used!!!!");
 		return mav;
 	}
 		
