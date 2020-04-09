@@ -37,6 +37,7 @@ public class PetController {
 	public ModelAndView updateForm(HttpServletRequest reqeust, int p) {
 		ModelAndView mav = new ModelAndView("pet/update");
 		PetDto pet = petService.selectPet(p); 
+		System.out.println(pet);
 		mav.addObject("speciesOption", petService.selectPetSpeciesLevel1());
 		mav.addObject("speciesOption2", petService.selectPetSpeciesLevel2(1));
 		mav.addObject("pet", pet);

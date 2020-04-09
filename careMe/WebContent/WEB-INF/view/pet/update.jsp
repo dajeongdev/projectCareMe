@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<spring:url value="/resources/img/icons/" var="icons" />
-
+<spring:url value="resources/upload/img/pet/profile/1586253298948.jpg" var="profileImg" />
+<% String hostname = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
+<c:set var="hostname" value="<%=hostname%>" />
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
-<title>메인 화면</title>
+<title>펫 정보수정</title>
 <script>
 
 	$(function() {
@@ -73,7 +73,7 @@
 <div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light"> 
 	<div class="container min-vh-100 pt-3"  style="max-width:720px">
 	
-		<form name="pet_regist" method="post" action="/careMe/pet/regist" enctype="multipart/form-data">
+		<form name="pet_regist" method="post" action="/careMe/pet/update" enctype="multipart/form-data">
 		
 			<!-- S: 필수 -->
 			<div class="my-3 p-3 bg-white rounded shadow-sm">
@@ -81,7 +81,7 @@
 				<div class="row mb-3">
 					<div class="col-12">
 						<label for="name">프로필 사진</label>
-						<img id="previewImg" class="w-100">
+						<img id="previewImg" class="w-100" src="${hostname}${profileImg}">
 						<input type="file" class="form-control" id="profileImage" name="profileImage" placeholder="" max="20" required>
 					</div>					
 				</div>
