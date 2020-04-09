@@ -3,8 +3,55 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="story">
-	<select id="selectAll" resultType="com.careme.model.dto.StoryBoardDto">
-		select * from story_board
+	<!-- 글목록 -->
+	<select id="list" resultType="com.careme.model.dto.StoryBoardDto">
+		select * from story_board order by story_board_idx desc
 	</select>
-
+	
+	<!-- 글작성 -->
+	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto">
+		insert into story_board, story_file, tag values(#{title}, #{content}, #{file}, #{tag_name})
+	</insert>
+	
+	<!-- paging -->
+	<select id="listPage" parameterType="" resultType="com.careme.model.dto.StoryBoardDto">
+		
+	</select>
+	
+	<!-- 상세보기 -->
+	<select id="selectOne" parameterType="int" resultType="com.careme.model.dto.StoryBoardDto">
+		select title, content, writer, tag_name, 
+		from story_board, tag
+		where story_board_idx = #{story_board_idx}
+	</select>
+	
+	<!-- 글수정 -->
+	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto">
+		update story_board, tag 
+		set title = #{title}, content = #{content}, tag_name = #{tag_name}
+		where story_board_idx = #{story_board_idx}
+	</update>
+	
+	<!-- 글삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from story_board where story_board_idx = #{story_board_idx}
+	</delete>
+	<!-- 태그 삭제 -->
+	<delete id="deleteTag" parameterType="int">
+		delete from tag where tag_name = #{tag_name}
+	</delete>
+	
+	<!-- 댓글 조회 -->
+	<select id="readCom" resultType="com.careme.model.dto.StoryComment">
+		select story_comment_idx, content, writer, reg_date
+		from story_comment
+		where story_board_idx = #{story_board_idx}
+	</select>
+	
+	<!-- 댓글 작성 -->
+	<insert id="insertCom">
+		insert into story_comment(story_board_idx, content, writer)
+		values(#{story_board_idx}, #{content}, #{writer})
+	</insert>
+	
 </mapper>

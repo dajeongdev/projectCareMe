@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
 .story_form { width: 100%; height: 100%; position: relative; }
 .container {
@@ -22,7 +23,7 @@
 #hash-inbox { 
 	background: #bdbdbd;
 	width: 600px;
-	height: 150px;
+	height: 100px;
 }
 .added-tag {
 	background: #82b1ff;
@@ -64,34 +65,42 @@ $(function (){
 		    $(this).remove();
 	});
 });
-$(document).ready(function() {
-	$("#list").unbind("click").click(function(e) {
-		e.preventDefault();
-		fn_openBaordList();
-	})
-	$("#write").unbind("click").click(function(e) {
-		e.preventDefault();
-		fn_writeBoard();
-	})
-	$("a[name='delete']").on("click", function(e) {
-		e.preventDefault();
-		fn_fileDelete($(this));
-	})
-	$("a[name='delete']").on("click", function(e) {
-		e.preventDefault();
-		fn_fileAdd($(this));
-	})
-});
-	function fn_openBoardList() {
-		var comSubmit = new ComSubmit();
-		comSubmit.setURL("<c:url value='/story/storyMain' />");
-		comSubmit.submit();
-	}
+	$(document).ready(function() {
+		var formObj = $("form[name='insert']");
 
-	function fn_insertBoard() {
-		var comSubmit = new ComSubmit("upload");
-		comSubmit.setURL("<c:url value='/story/storyDetail' />");
-		comSubmit.submit();
+		// 수정
+		$(".insert_btn").on("click", function() {
+			if(fn_valiChk()) {
+				return false;
+			}
+			formObj.attr("action", "/story/storyEdit");
+			formObj.attr("method", "post");
+			formObj.submit();
+		})
+		// 삭제
+		$(".delete_btn").on("click", function() {
+			formObj.attr("action", "/story/stoyDelete");
+			formObj.attr("method", "post");
+			formObj.submit();
+		})
+
+		$("a[name='delete']").on("click", function(e) {
+			e.preventDefault();
+			fn_fileDelete($(this));
+		})
+		$("a[name='delete']").on("click", function(e) {
+			e.preventDefault();
+			fn_fileAdd($(this));
+		})
+	});
+	function fn_valiChk() {
+		var regForm = $("form[name='insert']) .chk").length;
+		for(var i = 0; i < regForm; i++) {
+			if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null) {
+				alert($(".chk").eq(i).attr("title"));
+				return true;
+			});
+		}
 	}
 	function fn_fileDelete(obj) {
 		obj.parent.remove();
@@ -99,7 +108,7 @@ $(document).ready(function() {
 	function fn_fileAdd() {
 		var str = "<p><input type='file' name='file' /><a href='#this' name='delete' class='btn'>삭제</a>";
 		$("#fileDiv").append(str);
-
+	
 		$("a[name='delete']").on("click", function(e) {
 			e.preventDefault();
 			fn_fileDelete($(this));
@@ -109,21 +118,27 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
+
 <div class="container-fluid" style="padding:0;">
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
 <div class="story_form">
 	<div class="container">
-		<div class="story_title">
-			<input type="text" id="title" placeholder="제목을 입력해주세요.">
-			<button type="button" id="addFile">사진 추가</button>
-		</div>
-		<div class="story_content">
-			<form action="storyForm" method="post" enctype="multipart/form-data">
+		<form name="insert" role="form" method="post" action="/story/update" enctype="multipart/form-data">
+			<input type="hidden" name="story_board_idx" value="${update.story_board.idx}" readonly="readonly">
+			<label for="title"></label>
+			<input type="text" id="title" name="title" 
+				value="${update.title}" placeholder="제목을 입력해주세요.">
+			<button type="button" class="btn btn-outline-dark">사진추가</button>
+			<div class="story_content">
 				<input type="file" name="uploadFiles" multiple/>
 				<a href="#this" name="delete" class="btn">삭제</a>
-			</form>
-			<textarea id="content" cols="30" rows="5" placeholder="스토리를 들려주세요."></textarea>
+			<div class="form-group">
+			 	<label for="content"></label>
+    			<textarea class="form-control" name="content"
+    			id="exampleFormControlTextarea1 content" rows="3" placeholder="스토리를 들려주세요."></textarea>
+  			</div>
+  			</div>
 			<div id="info-tag">
 				<input type="text" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
@@ -131,9 +146,9 @@ $(document).ready(function() {
 					</div>
 				</div>
 			</div>
-		</div>
-		<input type="submit" class="submit" onsubmit="" value="등  록"/>
-		<input type="button" class="list" value="목  록"/>
+			<button type="submit" class="insert_btn">등록</button>
+			<button type="submit" class="list_btn">목록</button>
+		</form>
 	</div>
 </div>
 </body>

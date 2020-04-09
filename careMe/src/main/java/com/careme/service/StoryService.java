@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.careme.dao.StoryDao;
 import com.careme.model.dto.StoryBoardDto;
+import com.careme.model.dto.StoryCommentDto;
 
 @Service
 public class StoryService {
@@ -19,12 +20,38 @@ public class StoryService {
 		this.dao = dao;
 	}
 
-	public List<StoryBoardDto> selectAll() {
-		return dao.selectAll();
+	// 게시글 목록
+	public List<StoryBoardDto> listing() {
+		return dao.listing();
+	}
+
+	// 게시글 작성
+	public void insert(StoryBoardDto dto) {
+		dao.insert(dto);
 	}
 	
-	public int articleInsert() {
-		return dao.articleInsert();
+	// 게시글 상세보기
+	public StoryBoardDto select(int story_board_idx) {
+		return dao.select(story_board_idx);
 	}
 	
+	// 게시글 수정
+	public void update(StoryBoardDto dto) {
+		dao.update(dto);
+	}
+	
+	// 게시글 삭제
+	public void delete(int story_board_idx) {
+		dao.delete(story_board_idx);
+	}
+	
+	// 댓글 조회
+	public List<StoryCommentDto> readCom(int story_board_idx) {
+		return dao.readCom(story_board_idx);
+	}
+	
+	// 댓글 작성
+	public void insertCom(StoryCommentDto dto) {
+		dao.insertCom(dto);
+	}
 }
