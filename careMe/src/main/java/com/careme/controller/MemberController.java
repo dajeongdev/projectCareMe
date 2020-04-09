@@ -41,18 +41,19 @@ public class MemberController {
 		return mav;
 	}
 
-	// �α���
+	// 로그인폼
 	@RequestMapping(value = "login/loginform", method = RequestMethod.GET)
 	public String form() {
 		return "login/loginform";
 	}
 
-	// ȸ������
+	// 회원가입폼
 	@RequestMapping(value = "login/signup", method = RequestMethod.GET)
 	public String form(Model model) {
 		return "login/signup";
 	}
 	
+	//로그인 성공
 	@RequestMapping(value = "login/loginok")
 	public String loginOk(LoginCommand lc, HttpSession session) {
 	int i = memberService.loginOk(lc);//1이나 0리턴
