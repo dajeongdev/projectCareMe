@@ -83,7 +83,7 @@ public class DoctorBoardController {
 	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpecies();
+		List<QuestionBoardDto> getSpecs = bs.getSpeciesForDoctor();
 		
 		if(getSpecs==null) {
 			write.setViewName("doctorBoardView/doctorWriteForm");
@@ -98,7 +98,7 @@ public class DoctorBoardController {
 
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
 	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.addArticles(boardDto);
+		int result = bs.addDoctorArticles(boardDto);
 		System.out.println(boardDto);
 		if(result>0) {
 			return "redirect:/view/doctorBoardView/doctorBoard";
@@ -111,7 +111,7 @@ public class DoctorBoardController {
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
 	public ModelAndView toUpdatePro(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpecies();
+		List<QuestionBoardDto> getSpecs = bs.getSpeciesForDoctor();
 		int idx = question_table_idx;
 
 		if (getSpecs == null) {
@@ -127,7 +127,7 @@ public class DoctorBoardController {
 
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardUpdateAdd", method = RequestMethod.POST)
 	public String updateArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.updateArticle(boardDto);
+		int result = bs.updateDoctorArticle(boardDto);
 		if (result > 0) {
 			return "redirect:/view/doctorBoardView/doctorBoard";
 		} else {
@@ -135,20 +135,19 @@ public class DoctorBoardController {
 		}
 	}
 
+	
+	//게시판 글삭제
+		@RequestMapping(value="/view/doctorBoardView/deleteArticle")
+		public String deleteArticle(@RequestParam int question_table_idx) {
+			int idx = question_table_idx;
+			int result = bs.deleteDoctorArticle(idx);
+			if(result>0) {
+			return "redirect:/view/doctorBoardView/doctorBoard";
+			}else {
+				System.out.println("no!!!");
+			return "redirect:/view/doctorBoardView/doctorBoard";
+			}
+		}
 
-
-//		@RequestMapping(value="/view/write")
-//		public int writeArticle(@RequestParam String title, String content, String member_id, HttpSession session) {
-//			int result = bs.addArticles(title, content, member_id);
-//			return result;
-//		}
-
-
-
-	// 게시판 글삭제
-//		@RequestMapping(value="/view/delete")
-//		public void deleteArticle() {
-//			bs.deleteArticle();
-//			}
 
 }

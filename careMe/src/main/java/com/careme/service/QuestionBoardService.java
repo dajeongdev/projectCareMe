@@ -39,25 +39,25 @@ public class QuestionBoardService {
 // Doctor Board ÀÛ¼º, ¼öÁ¤, »èÁ¦ ±â´É
 	
 	// ÀÛ¼º
-		public List<QuestionBoardDto> getSpecies(){
-			return dao.getSpecies();
+		public List<QuestionBoardDto> getSpeciesForDoctor(){
+			return dao.getSpeciesForDoctor();
 		}
 		
-		public int addArticles(QuestionBoardDto boardDto) {
+		public int addDoctorArticles(QuestionBoardDto boardDto) {
 			boardDto.setReg_date(LocalDateTime.now());
-			return dao.insertArticle(boardDto);
+			return dao.insertArticleForDoctor(boardDto);
 		}
 	
 	// ¼öÁ¤
 	
-		public int updateArticle(QuestionBoardDto boardDto) {
+		public int updateDoctorArticle(QuestionBoardDto boardDto) {
 			boardDto.setUpdate_date(LocalDateTime.now());
-			return dao.updateArticles(boardDto);
+			return dao.updateArticlesForDoctor(boardDto);
 		}
 		
 	// »èÁ¦	
-		public int deleteArticle(int idx) {
-			return dao.deleteArticles(idx);
+		public int deleteDoctorArticle(int idx) {
+			return dao.deleteArticlesForDoctor(idx);
 		}
 	
 	
@@ -79,26 +79,27 @@ public class QuestionBoardService {
 		return dao.getCasualBoardSearch(sbc);
 	}
 
+	// Casual Board ÀÛ¼º, ¼öÁ¤, »èÁ¦ ±â´É
 	
-	
-//	public void updateArticle(String title, String content) {
-//		dao.updateArticles(title, content);
-//	}
-	
-//	public void deleteArticle() {
-//		dao.deleteArticles();
-//	}
-	
-//	public List<Question_BoardDto>getArtSearch(SearchCommand sc){
-//		return dao.getArtSearch(sc);
-//	}
-	
-//	public int getArtSearchCount() {
-//		return dao.getArtSearchCount();
-//	}
-
-//	public int addArticles(String title, String content, String member_id) {//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Âµï¿½ ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
-//		return dao.insertArticle(title, content, member_id);
-//	}
-
+		// ÀÛ¼º
+			public List<QuestionBoardDto> getSpeciesForCasual(){
+				return dao.getSpeciesForCasual();
+			}
+			
+			public int addCasualArticles(QuestionBoardDto boardDto) {
+				boardDto.setReg_date(LocalDateTime.now());
+				return dao.insertArticleForCasual(boardDto);
+			}
+		
+		// ¼öÁ¤
+		
+			public int updateCasualArticle(QuestionBoardDto boardDto) {
+				boardDto.setUpdate_date(LocalDateTime.now());
+				return dao.updateArticlesForCasual(boardDto);
+			}
+			
+		// »èÁ¦	
+			public int deleteCasualArticle(int idx) {
+				return dao.deleteArticlesForCasual(idx);
+			}
 }

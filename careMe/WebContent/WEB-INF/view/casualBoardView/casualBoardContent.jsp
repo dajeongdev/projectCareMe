@@ -60,7 +60,7 @@
 									<input type="button"
 									value="글수정" onClick="document.location.href='casualBoardUpdateForm?question_table_idx=${list.question_table_idx}'">
 									<input type="button" value="글삭제"
-									onClick="document.location.href='deleteForm'"> <input
+									onClick="document.location.href='deleteArticle?question_table_idx=${list.question_table_idx}'"> <input
 									type="button" value="답글쓰기"
 									onClick="document.location.href='commentForm'"> <input
 									type="button" value="글목록"
