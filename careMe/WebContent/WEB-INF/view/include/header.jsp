@@ -41,13 +41,13 @@
 				<li class="nav-item">			
 			</c:if>
 			<li>
-				<a class="nav-link" href="/careMe/main">Main</a>
+				<a class="nav-link" href="view/main">Main</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="/careMe/view/doctorBoardView/doctorBoard">전문가 상담</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/careMe/pet/regist">케어일기</a>
+				<a class="nav-link" href="#">케어일기</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#">전문의 찾기</a>
@@ -56,7 +56,7 @@
 				<a class="nav-link" href="view/story/storyMain">펫스토리</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">고민상담</a>
+				<a class="nav-link" href="/careMe/view/casualBoardView/casualBoard">고민상담</a>
 			</li>
 		</ul>
 	</div>

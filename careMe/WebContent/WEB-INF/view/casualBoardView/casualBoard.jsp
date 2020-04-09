@@ -21,13 +21,14 @@
 
 
 
+
 			<div class="row">
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 
-					<h2 align="left">전문 상담</h2>
+					<h2 align="left">고민 상담</h2>
 					<p align="left">
 						(전체 글:
-						<c:out value="${countPro}" />
+						<c:out value="${count}" />
 						)
 					</p>
 					<div class="table-responsive">
@@ -45,33 +46,31 @@
 							<tbody>
 
 								<!-- 글 들어가는 곳 -->
-								<c:forEach var="item" items="${listPro}">
+								<c:forEach var="item" items="${list}">
 									<tr>
 										<td><c:out value="${item.question_table_idx}" /></td>
 										<td><a
-											href="doctorBoardContent?question_table_idx=${item.question_table_idx}">"${item.title}"</a></td>
+											href="casualBoardContent?question_table_idx=${item.question_table_idx}">"${item.title}"</a></td>
 										<td><c:out value="${item.member_id}" /></td>
 										<td><c:out value="${item.reg_date}" /></td>
 										<td><c:out value="${item.view_count}" /></td>
 									</tr>
 								</c:forEach>
 							</tbody>
-
 						</table>
+
 						<!-- 게시판 글쓰기 -->
-						<div>
-							<div align="right">
-								<input name="doctorBoardWriteForm" type="button" value="글쓰기"
-									onClick="location.href='doctorWriteForm'">
-							</div>
-							<div align="left">number</div>
+						<div align="right">
+							<input name="doctorBoardWriteForm" type="button" value="글쓰기"
+								onClick="location.href='doctorWriteForm'">
 						</div>
+						<div align="left">number</div>
 					</div>
 				</main>
 			</div>
 
 			<!-- 게시판 검색 -->
-			<form action="view/doctorBoardView/doctorBoardSearch">
+			<form action="view/casualBoardView/casualBoardSearch">
 				<select name="searchn">
 					<option value="0">작성자</option>
 					<option value="1">제목</option>
@@ -79,6 +78,8 @@
 				</select> <input type="text" name="searchKeyword" size="15" maxlength="50" />
 				<input type="submit" value="검색" />
 			</form>
+
+
 
 
 

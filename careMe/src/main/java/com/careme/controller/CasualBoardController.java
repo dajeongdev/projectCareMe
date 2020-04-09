@@ -17,138 +17,125 @@ import com.careme.model.dto.QuestionBoardDto;
 import com.careme.service.QuestionBoardService;
 
 @Controller
-public class DoctorBoardController {
+public class CasualBoardController {
 
 	@Autowired
 	QuestionBoardService bs;
 	QuestionBoardDao boardDao;
 
-	// 게시판 뿌리기
-	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
-	public ModelAndView toDoctorBoard() {
-		List<QuestionBoardDto> getArts = bs.getDoctorBoard();
-		ModelAndView listPro = new ModelAndView();
-		listPro.addObject("listPro", getArts);
-		listPro.addObject("countPro", getArts.size());
-		listPro.setViewName("/doctorBoardView/doctorBoard");
-		return listPro;
-	}
-
-	// 게시글 내용 불러오기
-	@RequestMapping(value = "/view/doctorBoardView/doctorBoardContent", method = RequestMethod.GET)
-	public ModelAndView doctorBoardContents(@RequestParam int question_table_idx, HttpSession session)
-			throws Exception {
+//게시판 뿌리기(게시글 / 글개수)
+	@RequestMapping(value = "/view/casualBoardView/casualBoard")
+	public ModelAndView toCasualBoard() {
+		List<QuestionBoardDto> getArts = bs.getCasualBoard();
 		ModelAndView list = new ModelAndView();
-		list.addObject("list", bs.getDoctorBoardContents(question_table_idx, session));
-		bs.getDoctorBoardViews(question_table_idx, session);
-		list.setViewName("doctorBoardView/doctorBoardContent");
+		list.addObject("list", getArts);
+		list.addObject("count", getArts.size());
+		list.setViewName("/casualBoardView/casualBoard");
 		return list;
 	}
 
-	// 게시판 검색
-	@RequestMapping(value = "/view/doctorBoardSearch")
+//게시글 내용 불러오기
+	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
+	public ModelAndView contents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
+		ModelAndView list = new ModelAndView();
+		list.addObject("list", bs.getCasualBoardContents(question_table_idx, session));
+		bs.getCasualBoardViews(question_table_idx, session);
+		list.setViewName("casualBoardView/casualBoardContent");
+		return list;
+	}
+
+// 게시판 검색
+	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
 	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
 		ModelAndView list = new ModelAndView();
 		List<QuestionBoardDto> items = null;
 
 		if (searchn == 0) {
+
 			sbc.setSearch_option("member_id");
 			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getDoctorBoardSearch(sbc);
+			items = bs.getCasualBoardSearch(sbc);
 			list.addObject("list", items);
 			list.addObject("count", items.size());
-			list.setViewName("redirect:view/doctorBoardView/doctorBoard");
+			list.setViewName("list");
 
 		} else if (searchn == 1) {
+
 			sbc.setSearch_option("title");
 			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getDoctorBoardSearch(sbc);
+			items = bs.getCasualBoardSearch(sbc);
 			list.addObject("list", items);
 			list.addObject("count", items.size());
-			list.setViewName("redirect:view/doctorBoardView/doctorBoard");
+			list.setViewName("list");
 
 		} else if (searchn == 2) {
+
 			sbc.setSearch_option("content");
 			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getDoctorBoardSearch(sbc);
+			items = bs.getCasualBoardSearch(sbc);
 			list.addObject("list", items);
 			list.addObject("count", items.size());
-			list.setViewName("redirect:view/doctorBoardView/doctorBoard");
+			list.setViewName("list");
+
 		}
 		return list;
 	}
 
-	//게시판 글쓰기
-	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm")
+	// 게시판 글쓰기
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView();
 		List<QuestionBoardDto> getSpecs = bs.getSpecies();
-		
-		if(getSpecs==null) {
-			write.setViewName("doctorBoardView/doctorWriteForm");
+
+		if (getSpecs == null) {
+			write.setViewName("casualBoardView/casualWriteForm");
 			return write;
-		}else {
+		} else {
 			write.addObject("specs", getSpecs);
-			write.setViewName("doctorBoardView/doctorWriteForm");
+			write.setViewName("casualBoardView/casualWriteForm");
 			System.out.println(write);
 			return write;
 		}
 	}
 
-	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
+	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.addArticles(boardDto);
 		System.out.println(boardDto);
-		if(result>0) {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-		}else {
-			return "redirect:/view/doctorBoardView/doctorBoard";
+		if (result > 0) {
+			return "redirect:/view/casualBoardView/casualBoard";
+		} else {
+			return "redirect:/view/casualBoardView/casualBoard";
 		}
 	}
-	
+
 	// 게시판 글수정
-	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
+	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
 	public ModelAndView toUpdatePro(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView();
 		List<QuestionBoardDto> getSpecs = bs.getSpecies();
 		int idx = question_table_idx;
 
 		if (getSpecs == null) {
-			update.setViewName("doctorBoardView/doctorBoardUpdateForm");
+			update.setViewName("casualBoardView/casualBoardUpdateForm");
 			return update;
 		} else {
 			update.addObject("specs", getSpecs);
 			update.addObject("idx", idx);
-			update.setViewName("doctorBoardView/doctorBoardUpdateForm");
+			update.setViewName("casualBoardView/casualBoardUpdateForm");
 			return update;
 		}
 	}
 
-	@RequestMapping(value = "/view/doctorBoardView/doctorBoardUpdateAdd", method = RequestMethod.POST)
+	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
 	public String updateArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.updateArticle(boardDto);
 		if (result > 0) {
-			return "redirect:/view/doctorBoardView/doctorBoard";
+			return "redirect:/view/casualBoardView/casualBoard";
 		} else {
-			return "redirect:/view/doctorBoardView/doctorBoard";
+			return "redirect:/view/casualBoardView/casualBoard";
 		}
 	}
-
-
-
-//		@RequestMapping(value="/view/write")
-//		public int writeArticle(@RequestParam String title, String content, String member_id, HttpSession session) {
-//			int result = bs.addArticles(title, content, member_id);
-//			return result;
-//		}
-
-
-
-	// 게시판 글삭제
-//		@RequestMapping(value="/view/delete")
-//		public void deleteArticle() {
-//			bs.deleteArticle();
-//			}
 
 }
