@@ -11,122 +11,157 @@
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>회원가입폼</title>
+<script type="text/javascript">
+	function validate() {
+		var re = /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
+		var re2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+		// 이메일이 적합한지 검사할 정규식
+
+		var id = document.getElementById("member_id");
+		var pw = document.getElementById("member_pass");
+		var email = document.getElementById("member_email");
+
+		if (!check(re, member_id, "아이디는 4~12자의 영문 대소문자와 숫자로만 입력")) {
+			return false;
+		}
+
+		if (!check(re, pw, "패스워드는 4~12자의 영문 대소문자와 숫자로만 입력")) {
+			return false;
+		}
+
+		if (join.pw.value != join.checkpw.value) {
+			alert("비밀번호가 다릅니다. 다시 확인해 주세요.");
+			join.checkpw.value = "";
+			join.checkpw.focus();
+			return false;
+		}
+
+		if (email.value == "") {
+			alert("이메일을 입력해 주세요");
+			email.focus();
+			return false;
+		}
+
+		if (!check(re2, email, "적합하지 않은 이메일 형식입니다.")) {
+			return false;
+		}
+		alert("회원가입이 완료되었습니다.");
+	}
+	/*  function checkUserId(member_id) {
+	        //Id가 입력되었는지 확인하기
+	        if (!checkExistData(member_id, "아이디를"))
+	            return false;
+	 
+	        var idRegExp = /^[a-zA-z0-9]{4,12}$/; //아이디 유효성 검사
+	        if (!idRegExp.test(member_id)) {
+	            alert("아이디는 영문 대소문자와 숫자 4~12자리로 입력해야합니다!");
+	            form.userId.value = "";
+	            form.userId.focus();
+	            return false;
+	        }
+	        return true; //확인이 완료되었을 때
+	    }
+	 
+	    function checkPassword(id, password1, password2) {
+	        //비밀번호가 입력되었는지 확인하기
+	        if (!checkExistData(password1, "비밀번호를"))
+	            return false;
+	        //비밀번호 확인이 입력되었는지 확인하기
+	        if (!checkExistData(password2, "비밀번호 확인을"))
+	            return false;
+	 
+	        var password1RegExp = /^[a-zA-z0-9]{4,12}$/; //비밀번호 유효성 검사
+	        if (!password1RegExp.test(password1)) {
+	            alert("비밀번호는 영문 대소문자와 숫자 4~12자리로 입력해야합니다!");
+	            form.password1.value = "";
+	            form.password1.focus();
+	            return false;
+	        }
+	        //비밀번호와 비밀번호 확인이 맞지 않다면..
+	        if (password1 != password2) {
+	            alert("두 비밀번호가 맞지 않습니다.");
+	            form.password1.value = "";
+	            form.password2.value = "";
+	            form.password2.focus();
+	            return false;
+	        }
+	 
+	    function checkMail(mail) {
+	        //mail이 입력되었는지 확인하기
+	        if (!checkExistData(mail, "이메일을"))
+	            return false;
+	 
+	        var emailRegExp = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+	        if (!emailRegExp.test(mail)) {
+	            alert("이메일 형식이 올바르지 않습니다!");
+	            form.mail.value = "";
+	            form.mail.focus();
+	            return false;
+	        }
+	        return true; //확인이 완료되었을 때
+	    } */
+</script>
 
 </head>
-<body class="text-center">
-	<script type="text/javascript">
-
-		function Signup()
-	   		{
-	           var form = document.form1;
-
-	                  //아이디에서 입력 필수 조건문
-	                  if (form.member_id.value == "")
-	                  {
-	                          alert("아이디를 입력해야 합니다!");
-	                          form.member_id.focus();//포커스를 id박스로 이동.
-	                          return;
-	                  }
-
-	                  //아이디 입력 문자수를 4~12자로 제한하는 조건문
-	                  if (form.member_id.value.length < 4 || form.member_id.value.length > 12)
-	                  {
-	                   alert("아이디는 4~12자 이내로 입력 가능합니다!");
-
-	                   form.member_id.select();//입력한 문자를 선택 상태로 만듬.
-	                   return;
-	                  }
-
-	            //입력된 문자의 길이만큼 루프를 돌면서 검사 
-	            for (i=0; i<form.member_id.value.length; i++)
-	            {
-	                   var ch = form.member_id.value.charAt(i);//문자를 반환(정수형), 범위 검사 가능
-
-	                   //입력된 문자를 검사
-
-	                   if ( ( ch < "a" || ch > "z") && (ch < "A" || ch > "Z") && (ch < "0" || ch > "9" ) )
-	                   {
-	                    alert("아이디는 영문 소문자로만 입력 가능 합니다!");
-	                    form.member_id.select();
-	                    return;
-	                   }
-	            }
-
-				//패스워드 검사
-	            if (form.member_pass.value == "")
-	            {
-	                 alert("패스워드를 입력 해야 합니다!");
-	                 form.member_pass.focus();//포커스를 Password박스로 이동.
-	                 return;
-	            }
-
-	 
-
-	            if (form.member_pass.value.length < 4 || form.member_pass.value.length > 12)
-	            {
-	                 alert("비밀번호는 4~12자 이내로 입력 가능 합니다!");
-
-	                 form.member_pass.select();
-	                 return;
-	            }
-
-	   form.submit();
-	   }
-	  
-	</script>
-
+<body>
 	<div class="container-fluid" style="padding: 0;">
 		<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 	</div>
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-4"
-				style="padding: 15px; margin: 0 auto; margin-top: 100px">
-				<form action="signup" method="post">
-					<div>
-						<h1>회원가입</h1>
-					</div>
-					<br>
-					<!-- 아이디 -->
-					<div class="input-group-prepend">
-						<span id="member_id" class="input-group-text">아이디</span> <input
-							type="text" name="member_id" class="form-control"
-							placeholder="아이디를 입력하세요" required /> <input type="button"
-							value="중복확인" />
-					</div>
-					<!-- 비밀번호 -->
-					<div class="input-group-prepend">
-						<span id="member_pass" class="input-group-text">비밀번호</span> <input
-							type="password" name="member_pass" class="form-control"
-							placeholder="비밀번호를 입력하세요" required />
-					</div>
-					<!-- 비밀번호 확인 -->
-					<div class="input-group-prepend">
-						<span id="member_pass2" class="input-group-text">비밀번호</span> <input
-							type="password" name="member_pass2" class="form-control"
-							placeholder="비밀번호를 다시 입력해주세요" required />
-					</div>
-					<!-- 핸드폰 -->
-					<div class="input-group-prepend">
-						<span id="member_phone" class="input-group-text">핸드폰</span> <input
-							type="text" name="member_phone" class="form-control"
-							pattern="\d{3}\-\d{4}-\d{4}" placeholder="000-0000-0000" required />
-					</div>
-					<!-- 이메일 -->
-					<div class="input-group-prepend">
-						<span id="member_email" class="input-group-text">이메일</span> <input
-							type="text" name="member_email" class="form-control"
-							placeholder="your@email.com" />
-					</div>
-				</form>
-				<br>
-				<!-- 가입완료버튼 -->
-				<div>
-					<input type="submit" value="가입하기"
-						class="btn btn-dark btn-sm btn-block" />
-				</div>
+
+	<div style="margin: 0 auto; margin-top: 100px;" class="text-center">
+		<h1>회원가입</h1>
+	</div>
+	<br>
+	<div class="jumbotron"
+		style="padding: 15px; margin: 0 auto; max-width: 700px">
+
+		<form name="join" onsubmit="return validate();" action=# method="post"
+			enctype="text/plain">
+			<table width="600" height="400" align="center" cellspacing="0">
+				<tr height="10" align="center">
+				</tr>
+
+				<tr>
+					<td><b>ID:</b></td>
+					<td><input type="text" style="width: 530px" id="member_id"
+						name="id" maxlength="12" class="form-control"
+						placeholder="※4-12자의 영문 대소문자와 숫자로만 입력" /></td>
+					<td><input type="button" class="btn btn-dark btn-sm btn-block"
+						value="중복확인" onclick="overlapCheck(this.form)"></td>
+				</tr>
+				<tr>
+					<td><b>PW:</b></td>
+					<td><input type="password" style="width: 530px" id="pw"
+						maxlength="12" class="form-control"
+						placeholder=" ※4-12자의 영문 대소문자와 숫자로만 입력" /></td>
+				</tr>
+				<tr>
+					<td><b>PW:</b></td>
+					<td><input type="password" style="width: 530px" id="checkpw"
+						maxlength="12" class="form-control" /></td>
+				</tr>
+				<tr>
+					<td><b>email:</b></td>
+					<td><input type="text" style="width: 530px" id="email"
+						class="form-control" placeholder="ex)your@email.com" /></td>
+				</tr>
+
+				<tr>
+					<td><b>phone:</b></td>
+					<td><input type="text" style="width: 530px" id="phone"
+						class="form-control" placeholder="000-0000-0000" /></td>
+					<td><input type="button" class="btn btn-dark btn-sm btn-block"
+						value="인증하기" onclick=""></td>
+				</tr>
+
+			</table>
+			<br>
+			<div class="text-center">
+				<input type="submit" name="join" value="회원 가입"
+					class="btn btn-dark btn-sm btn-block"> <input type="reset"
+					name="reset" value="다시 입력" class="btn btn-dark btn-sm btn-block">
 			</div>
-		</div>
+		</form>
 	</div>
 </body>
 </html>

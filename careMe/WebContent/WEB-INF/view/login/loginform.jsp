@@ -13,7 +13,7 @@
 
 </head>
 <body class="text-center">
-<!-- 
+
 	<script type="text/javascript">
 	function Login()
 	   {
@@ -81,53 +81,59 @@
 	            }
 
 	   form.submit();
+	     
 	   }
 
 	</script>
- -->
+
 
 	<div class="container-fluid" style="padding: 0;">
 		<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 	</div>
 
-
-	<div class="container">
-		<div class="row">
-			<!-- 입력폼 그리드 -->
-			<div class="col-lg-4"
-				style="padding: 15px; margin: 0 auto; margin-top: 100px">
-				<form action="Login" method="post">
-					<!-- ID입력 -->
-					<div class="input-group mt-3 mb-1">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="member_id">ID</span>
-						</div>
-						<input type="text" name="member_id" class="form-control"
-							placeholder="Input ID" aria-label="Input ID"
-							aria-describedby="member_id" required>
-					</div>
-					<!-- PW입력 -->
-					<div class="input-group mb-2">
-						<div class="input-group-prepend">
-							<span class="input-group-text" id="member_pass">PW</span>
-						</div>
-						<input type="password" name="member_pass" class="form-control"
-							placeholder="Input Password" aria-label="Input Password"
-							aria-describedby="member_pass" required>
-					</div>
-					<!-- 로그인 버튼 -->
-					<button type="submit" class="btn btn-dark btn-sm btn-block">
-						로그인 하기</button>
-				</form>
-				<!-- 회원가입 버튼 -->
-				<button type="button" class="btn btn-dark btn-sm btn-block my-1"
-					onclick="location.href='signup'">회원가입 하기</button>
-		
+	<div style="margin: 0 auto; margin-top: 100px;" class="text-center">
+		<h1>로그인</h1>
+	</div>
+	<br>
+	<div class="jumbotron"
+		style="padding: 15px; margin: 0 auto; max-width: 500px">
+		<br>
+		<!-- 로그인 성공시 메인으로 돌아감 -->
+		<form name="form1" action="../main">
+			<table width="400" height="100" align="center" cellspacing="0">
+				<tr height="10" align="center">
+				</tr>
 				
+				<!-- 로그인 -->
+				<tr>
+					<td><b>ID:</b></td>
+					<td><input type="text" style="width: 430px" id="id"
+						name="member_id" maxlength="12" class="form-control" placeholder="Input ID"/></td>
+				</tr>
+				<tr>
+					<td><b>PW:</b></td>
+					<td><input type="password" style="width: 430px" id="pw"
+						name="member_pass" maxlength="12" class="form-control" placeholder="Input PW"/></td>
+				</tr>
+			</table>
+			<br>
+			<!-- 버튼 -->
+			<div>
+				<input type="button" value="  로그인 " onclick="Login();" 
+				class="btn btn-dark btn-sm btn-block"/> <input
+					type="button" value="회원가입" onclick="location.href='signup'"
+						 class="btn btn-dark btn-sm btn-block"/>
 
 			</div>
-		</div>
-	</div> 
+
+
+			<!-- 아이디 : <input type="text" size="15" name="member_id" /><br /> 비밀번호 :
+			<input type="password" size="15" name="member_pass" /><br /> <br />
+
+			<input type="button" value="  로그인 " onclick="Login();" /> <input
+				type="button" value="회원가입" onclick="location.href='signup'" /> -->
+		</form>
+	</div>
 </body>
 
 </html>

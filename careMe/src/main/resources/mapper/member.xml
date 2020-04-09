@@ -10,11 +10,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 로그인 -->
 	<select id="login" resultType="com.careme.model.dto.MemberDto">
-		select * from members where member_id=#{member_id} and
+		select member_id,member_pass from
+		members where member_id=#{member_id} and
 		member_pass=#{member_pass}
 	</select>
 
-	<!-- 회원가입  -->
+	<!-- 회원가입 -->
 	<insert id="signup"
 		parameterType="com.careme.model.dto.MemberDto">
 		insert into members(member_id, member_pass,
@@ -33,4 +34,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		parameterType="com.careme.model.dto.MemberDto">
 		delete * from members where member_idx=#{member_idx}
 	</delete>
+
+
+	<select id="loginCheck" resultType="String">
+		SELECT count(*) FROM member
+		WHERE member_id = #{member_id} AND member_pass = #{member_pass}
+	</select>
 </mapper>
