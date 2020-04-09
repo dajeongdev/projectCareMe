@@ -154,11 +154,11 @@ public class CasualBoardController {
 	
 	
 	
-// 자주 묻는 질문 임시 링크
-	@RequestMapping(value = "/careMe/view/infoBoardView/infoBoard")
+// 자주 묻는 질문 링크
+	@RequestMapping(value = "/view/infoBoardView/infoBoard")
 	public ModelAndView infoLink() throws Exception{
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("/infoBoardss");
+		mav.setViewName("infoBoardView/infoBoard");
 		System.out.println(mav);
 		System.out.println("used!!!!");
 		return mav;
