@@ -85,7 +85,7 @@ public class StoryController {
 	@RequestMapping(value = "/storyForm", method = RequestMethod.POST)
 	public ModelAndView articleInsert(@ModelAttribute("insert")StoryBoardDto dto, MultipartHttpServletRequest mpRequest) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		service.insert(dto, mpRequest);
+		//service.insert(dto, mpRequest);
 		mav.setViewName("/story/storyForm");
 		return mav;
 	}

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.StoryDao;
 import com.careme.model.dto.StoryBoardDto;
@@ -26,7 +27,7 @@ public class StoryService {
 	}
 
 	// 게시글 작성
-	public void insert(StoryBoardDto dto) {
+	public void insert(StoryBoardDto dto, MultipartHttpServletRequest mpRequest) {
 		dao.insert(dto);
 	}
 	
