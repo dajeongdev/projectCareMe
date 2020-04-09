@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<!-- 로그인 -->
-	<select id="login" resultType="com.careme.model.dto.MemberDto">
+	<select id="login" resultType="com.careme.model.dto.MemberDto" parameterType="com.careme.model.command.LoginCommand">
 		select member_id,member_pass from
 		members where member_id=#{member_id} and
 		member_pass=#{member_pass}

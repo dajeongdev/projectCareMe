@@ -99,7 +99,7 @@
 		style="padding: 15px; margin: 0 auto; max-width: 500px">
 		<br>
 		<!-- 로그인 성공시 메인으로 돌아감 -->
-		<form name="form1" action="../main">
+		<form name="form1" action="loginok">
 			<table width="400" height="100" align="center" cellspacing="0">
 				<tr height="10" align="center">
 				</tr>
