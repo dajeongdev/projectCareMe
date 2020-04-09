@@ -23,4 +23,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, #{profile_image_file_path, jdbcType=VARCHAR}, #{profile_image_file_size, jdbcType=INTEGER} )
 	</insert>
 	
+	<select id="selectPet" resultType="com.careme.model.dto.PetDto">
+		select * from pet where pet_idx = #{pet_idx}
+	</select>
+	
+	<select id="selectPetList" resultType="com.careme.model.dto.PetDto">
+		select * from pet where member_idx = #{member_idx}
+	</select>
+	
 </mapper>

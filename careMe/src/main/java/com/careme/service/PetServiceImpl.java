@@ -28,7 +28,6 @@ public class PetServiceImpl implements PetService  {
 	}
 	
 	
-	
 	@Override
 	public List<PetSpeciesDto> selectPetSpeciesLevel1() {
 		return dao.selectPetSpeciesLevel1();
@@ -40,10 +39,9 @@ public class PetServiceImpl implements PetService  {
 	}
 	
 	@Override
-	public List<PetDto> selectPet() {
-		List<PetDto> pets = null;
-		return pets;
-	};
+	public PetDto selectPet(int petIdx) {
+		return dao.selectPet(petIdx);
+	}
 	
 	@Override
 	public int insertPet(MultipartHttpServletRequest request) {
