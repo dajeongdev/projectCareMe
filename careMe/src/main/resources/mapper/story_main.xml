@@ -6,4 +6,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectAll" resultType="com.careme.model.dto.StoryBoardDto">
 		select * from story_board
 	</select>
+
 </mapper>

@@ -26,7 +26,6 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("main");
 		List<MemberDto> members = memberDao.selectAll();
-		System.out.println(members);
 		mav.addObject("members", members);
 		return mav;
 	}
