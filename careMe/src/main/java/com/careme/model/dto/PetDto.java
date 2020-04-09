@@ -7,18 +7,19 @@ public class PetDto {
 	private int member_idx;
 	private String name;
 	private int pet_species_idx;
-	private String profile_image;
-	private String is_neutralized;
+	private String profile_image_file_name;
+	private String profile_image_file_path;
+	private Long profile_image_file_size;
+	private String neutralized;
 	private String birth;
 	private String gender;
 	private Double weight;
 	private String vaccination;
 	private String blood_type;
-	private int registration_number;
+	private String registration_number;
 	private String memo;
 	private LocalDateTime reg_date;
 	private String del_yn;
-	
 	public int getPet_idx() {
 		return pet_idx;
 	}
@@ -43,17 +44,29 @@ public class PetDto {
 	public void setPet_species_idx(int pet_species_idx) {
 		this.pet_species_idx = pet_species_idx;
 	}
-	public String getProfile_image() {
-		return profile_image;
+	public String getProfile_image_file_name() {
+		return profile_image_file_name;
 	}
-	public void setProfile_image(String profile_image) {
-		this.profile_image = profile_image;
+	public void setProfile_image_file_name(String profile_image_file_name) {
+		this.profile_image_file_name = profile_image_file_name;
 	}
-	public String getIs_neutralized() {
-		return is_neutralized;
+	public String getProfile_image_file_path() {
+		return profile_image_file_path;
 	}
-	public void setIs_neutralized(String is_neutralized) {
-		this.is_neutralized = is_neutralized;
+	public void setProfile_image_file_path(String profile_image_file_path) {
+		this.profile_image_file_path = profile_image_file_path;
+	}
+	public Long getProfile_image_file_size() {
+		return profile_image_file_size;
+	}
+	public void setProfile_image_file_size(Long profile_image_file_size) {
+		this.profile_image_file_size = profile_image_file_size;
+	}
+	public String getNeutralized() {
+		return neutralized;
+	}
+	public void setNeutralized(String neutralized) {
+		this.neutralized = neutralized;
 	}
 	public String getBirth() {
 		return birth;
@@ -85,10 +98,10 @@ public class PetDto {
 	public void setBlood_type(String blood_type) {
 		this.blood_type = blood_type;
 	}
-	public int getRegistration_number() {
+	public String getRegistration_number() {
 		return registration_number;
 	}
-	public void setRegistration_number(int registration_number) {
+	public void setRegistration_number(String registration_number) {
 		this.registration_number = registration_number;
 	}
 	public String getMemo() {
@@ -113,10 +126,13 @@ public class PetDto {
 	@Override
 	public String toString() {
 		return "PetDto [pet_idx=" + pet_idx + ", member_idx=" + member_idx + ", name=" + name + ", pet_species_idx="
-				+ pet_species_idx + ", profile_image=" + profile_image + ", is_neutralized=" + is_neutralized
-				+ ", birth=" + birth + ", gender=" + gender + ", weight=" + weight + ", vaccination=" + vaccination
-				+ ", blood_type=" + blood_type + ", registration_number=" + registration_number + ", memo=" + memo
-				+ ", reg_date=" + reg_date + ", del_yn=" + del_yn + "]";
+				+ pet_species_idx + ", profile_image_file_name=" + profile_image_file_name
+				+ ", profile_image_file_path=" + profile_image_file_path + ", profile_image_file_size="
+				+ profile_image_file_size + ", neutralized=" + neutralized + ", birth=" + birth + ", gender=" + gender
+				+ ", weight=" + weight + ", vaccination=" + vaccination + ", blood_type=" + blood_type
+				+ ", registration_number=" + registration_number + ", memo=" + memo + ", reg_date=" + reg_date
+				+ ", del_yn=" + del_yn + "]";
 	}
+	
 
 }

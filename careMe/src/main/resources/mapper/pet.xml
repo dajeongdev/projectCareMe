@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pet">
+	
+	<select id="selectSpeciesLevel1" resultType="com.careme.model.dto.PetSpeciesDto">
+		select * from pet_species where pet_species_level = 1
+	</select>
+	
+	<select id="selectSpeciesLevel2" resultType="com.careme.model.dto.PetSpeciesDto">
+		select * from pet_species where pet_species_level = 2 and pet_species_ancestor = #{pet_ancestor_idx}			
+	</select>
+	
+	<insert id="insertPet" parameterType="com.careme.model.dto.PetDto">
+		insert into pet ( member_idx, name, pet_species_idx, neutralized, birth, gender, weight, vaccination, blood_type
+		, registration_number, memo, profile_image_file_name, profile_image_file_path, profile_image_file_size )		
+		
+		values ( #{member_idx, jdbcType=INTEGER}, #{name, jdbcType=VARCHAR}, #{pet_species_idx, jdbcType=INTEGER}
+				, #{neutralized, jdbcType=CHAR}, #{birth, jdbcType=VARCHAR}, #{gender, jdbcType=CHAR}, #{weight, jdbcType=DOUBLE}
+				, #{vaccination, jdbcType=VARCHAR}, #{blood_type, jdbcType=VARCHAR}, #{registration_number, jdbcType=VARCHAR}
+				, #{memo, jdbcType=VARCHAR}, #{profile_image_file_name,  jdbcType=VARCHAR}
+				, #{profile_image_file_path, jdbcType=VARCHAR}, #{profile_image_file_size, jdbcType=INTEGER} )
+	</insert>
+	
+</mapper>

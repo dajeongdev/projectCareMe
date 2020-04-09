@@ -1,5 +1,6 @@
 package com.careme.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -8,52 +9,97 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.careme.dao.QuestionBoardDao;
+import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.QuestionBoardDto;
 
 @Service
 public class QuestionBoardService {
 	
 	@Autowired
-	QuestionBoardDao dao;
+
+	QuestionBoardDao dao = new QuestionBoardDao();
+
+// Doctor Board °¡Á®¿À±â	
+	public List<QuestionBoardDto> getDoctorBoard(){
+		return dao.getDoctorBoard();
+	}
 	
-	public void setDao(QuestionBoardDao dao) {
-		this.dao = dao;
+	public QuestionBoardDto getDoctorBoardContents(int question_table_idx, HttpSession session){
+		return dao.getDoctorBoardContents(question_table_idx);
 	}
 
-	public List<QuestionBoardDto> getArticles(){
-		return dao.getArticle();
+	public void getDoctorBoardViews (int question_table_idx, HttpSession session) {
+		dao.getDoctorBoardViews(question_table_idx);
 	}
 	
-	public List<QuestionBoardDto> getArticlesPro(){
-		return dao.getArticlePro();
-	}
-	
-	public QuestionBoardDto getArtContents(int question_table_idx, HttpSession session){
-		return dao.getArtContents(question_table_idx);
+	public List<QuestionBoardDto>getDoctorBoardSearch(SearchBoardCommand sbc){
+		return dao.getDoctorBoardSearch(sbc);
 	}
 
-	public void getArtViews (int question_table_idx, HttpSession session) {
-		dao.getArtViews(question_table_idx);
+// Doctor Board ÀÛ¼º, ¼öÁ¤, »èÁ¦ ±â´É
+	
+	// ÀÛ¼º
+		public List<QuestionBoardDto> getSpeciesForDoctor(){
+			return dao.getSpeciesForDoctor();
+		}
+		
+		public int addDoctorArticles(QuestionBoardDto boardDto) {
+			boardDto.setReg_date(LocalDateTime.now());
+			return dao.insertArticleForDoctor(boardDto);
+		}
+	
+	// ¼öÁ¤
+	
+		public int updateDoctorArticle(QuestionBoardDto boardDto) {
+			boardDto.setUpdate_date(LocalDateTime.now());
+			return dao.updateArticlesForDoctor(boardDto);
+		}
+		
+	// »èÁ¦	
+		public int deleteDoctorArticle(int idx) {
+			return dao.deleteArticlesForDoctor(idx);
+		}
+	
+	
+	
+// Casual Board °¡Á®¿À±â	
+	public List<QuestionBoardDto> getCasualBoard(){
+		return dao.getCasualBoard();
 	}
 	
-//	public void updateArticle(String title, String content) {
-//		dao.updateArticles(title, content);
-//	}
-	
-//	public void deleteArticle() {
-//		dao.deleteArticles();
-//	}
-	
-//	public List<Question_BoardDto>getArtSearch(SearchCommand sc){
-//		return dao.getArtSearch(sc);
-//	}
-	
-//	public int getArtSearchCount() {
-//		return dao.getArtSearchCount();
-//	}
+	public QuestionBoardDto getCasualBoardContents(int question_table_idx, HttpSession session){
+		return dao.getCasualBoardContents(question_table_idx);
+	}
 
-//	public int addArticles(String title, String content, String member_id) {//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Âµï¿½ ï¿½ï¿½ï¿½ï¿½Å¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
-//		return dao.insertArticle(title, content, member_id);
-//	}
+	public void getCasualBoardViews (int question_table_idx, HttpSession session) {
+		dao.getCasualBoardViews(question_table_idx);
+	}
+	
+	public List<QuestionBoardDto>getCasualBoardSearch(SearchBoardCommand sbc){
+		return dao.getCasualBoardSearch(sbc);
+	}
 
+	// Casual Board ÀÛ¼º, ¼öÁ¤, »èÁ¦ ±â´É
+	
+		// ÀÛ¼º
+			public List<QuestionBoardDto> getSpeciesForCasual(){
+				return dao.getSpeciesForCasual();
+			}
+			
+			public int addCasualArticles(QuestionBoardDto boardDto) {
+				boardDto.setReg_date(LocalDateTime.now());
+				return dao.insertArticleForCasual(boardDto);
+			}
+		
+		// ¼öÁ¤
+		
+			public int updateCasualArticle(QuestionBoardDto boardDto) {
+				boardDto.setUpdate_date(LocalDateTime.now());
+				return dao.updateArticlesForCasual(boardDto);
+			}
+			
+		// »èÁ¦	
+			public int deleteCasualArticle(int idx) {
+				return dao.deleteArticlesForCasual(idx);
+			}
 }

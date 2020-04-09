@@ -4,6 +4,7 @@ public class SearchBoardCommand {
 	
 		String search_option;
 		String searchKeyword;
+		
 		public String getSearch_option() {
 			return search_option;
 		}
