@@ -81,6 +81,10 @@
 
 
 
+			<div>
+				<a href="/careMe/view/infoBoardView/infoBoard">자주 묻는 질문 링크</a>
+			</div>
+
 
 
 		</div>

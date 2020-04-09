@@ -86,7 +86,7 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpecies();
+		List<QuestionBoardDto> getSpecs = bs.getSpeciesForCasual();
 
 		if (getSpecs == null) {
 			write.setViewName("casualBoardView/casualWriteForm");
@@ -101,7 +101,7 @@ public class CasualBoardController {
 
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.addArticles(boardDto);
+		int result = bs.addCasualArticles(boardDto);
 		System.out.println(boardDto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
@@ -114,7 +114,7 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
 	public ModelAndView toUpdatePro(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpecies();
+		List<QuestionBoardDto> getSpecs = bs.getSpeciesForCasual();
 		int idx = question_table_idx;
 
 		if (getSpecs == null) {
@@ -130,12 +130,42 @@ public class CasualBoardController {
 
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
 	public String updateArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.updateArticle(boardDto);
+		int result = bs.updateCasualArticle(boardDto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
 		} else {
 			return "redirect:/view/casualBoardView/casualBoard";
 		}
 	}
+	
+	
+	//게시판 글삭제
+	@RequestMapping(value="/view/casualBoardView/deleteArticle")
+	public String deleteArticle(@RequestParam int question_table_idx) {
+		int idx = question_table_idx;
+		int result = bs.deleteCasualArticle(idx);
+		if(result>0) {
+		return "redirect:/view/casualBoardView/doctorBoard";
+		}else {
+			System.out.println("no!!!");
+		return "redirect:/view/casualBoardView/doctorBoard";
+		}
+	}
+	
+	
+	
+// 자주 묻는 질문 임시 링크
+	@RequestMapping(value = "/careMe/view/infoBoardView/infoBoard")
+	public ModelAndView infoLink() throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/infoBoardss");
+		System.out.println(mav);
+		System.out.println("used!!!!");
+		return mav;
+	}
+		
+	
+	
+	
 
 }
