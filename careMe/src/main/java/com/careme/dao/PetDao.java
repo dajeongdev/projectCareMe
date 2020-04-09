@@ -16,12 +16,20 @@ public class PetDao  extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("pet.selectSpeciesLevel2", level1); 
 	}
 	
+	public List<PetSpeciesDto> selectSpeciesLevel2BySelfIdx (int level2) {
+		return getSqlSession().selectList("pet.selectSpeciesLevel2BySelfIdx", level2); 
+	}
+	
 	public int insertPet(PetDto dto) {
 		return getSqlSession().insert("pet.insertPet", dto);
 	}
 	
 	public PetDto selectPet(int petIdx) {
 		return getSqlSession().selectOne("pet.selectPet", petIdx);
+	}
+	
+	public int updatePet(PetDto dto) {
+		return getSqlSession().update("pet.updatePet", dto);
 	}
 
 }

@@ -2,7 +2,7 @@ package com.careme.model.dto;
 
 public class PetSpeciesDto {
 	private int pet_species_idx;
-	private int code_level;
+	private int pet_species_level;
 	private String pet_species_name;
 	private int pet_species_ancestor;
 	
@@ -12,11 +12,11 @@ public class PetSpeciesDto {
 	public void setPet_species_idx(int pet_species_idx) {
 		this.pet_species_idx = pet_species_idx;
 	}
-	public int getCode_level() {
-		return code_level;
+	public int getPet_species_level() {
+		return pet_species_level;
 	}
-	public void setCode_level(int code_level) {
-		this.code_level = code_level;
+	public void setPet_species_level(int pet_species_level) {
+		this.pet_species_level = pet_species_level;
 	}
 	public String getPet_species_name() {
 		return pet_species_name;
@@ -33,8 +33,9 @@ public class PetSpeciesDto {
 	
 	@Override
 	public String toString() {
-		return "PetSpecies [pet_species_idx=" + pet_species_idx + ", code_level=" + code_level + ", pet_species_name="
-				+ pet_species_name + ", pet_species_ancestor=" + pet_species_ancestor + "]";
+		return "PetSpeciesDto [pet_species_idx=" + pet_species_idx + ", pet_species_level=" + pet_species_level
+				+ ", pet_species_name=" + pet_species_name + ", pet_species_ancestor=" + pet_species_ancestor + "]";
 	}
+	
 
 }

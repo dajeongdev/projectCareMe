@@ -178,8 +178,8 @@
 						            <label class="custom-control-label" for="genF">여</label>
 						          </div>
 						          <div class="custom-control custom-radio">
-						            <input id="genD" name="gender" type="radio" class="custom-control-input" value="n">
-						            <label class="custom-control-label" for="genD">기타</label>
+						            <input id="genN" name="gender" type="radio" class="custom-control-input" value="n">
+						            <label class="custom-control-label" for="genN">기타</label>
 						          </div>
 						    </div>
 						</div>					

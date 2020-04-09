@@ -33,25 +33,34 @@ public class PetController {
 		return "/main";
 	}
 	
-	@RequestMapping(value = "/pet/update", method = RequestMethod.GET)
-	public ModelAndView updateForm(HttpServletRequest reqeust, int p) {
-		ModelAndView mav = new ModelAndView("pet/update");
-		PetDto pet = petService.selectPet(p); 
-		System.out.println(pet);
-		mav.addObject("speciesOption", petService.selectPetSpeciesLevel1());
-		mav.addObject("speciesOption2", petService.selectPetSpeciesLevel2(1));
-		mav.addObject("pet", pet);
-		
-		return mav;
-	}
-
-
 	@RequestMapping(value = "/pet/regist", method = RequestMethod.GET)
 	public ModelAndView registForm() {
 		ModelAndView mav = new ModelAndView("pet/regist");
 		mav.addObject("speciesOption", petService.selectPetSpeciesLevel1()); 		
 		return mav;
 	}
+	
+	@RequestMapping(value = "/pet/update", method = RequestMethod.POST)
+	public String updatePet(MultipartHttpServletRequest request) {
+		petService.updatePet(request);
+		return "redirect:/main";
+	}
+	
+	@RequestMapping(value = "/pet/update", method = RequestMethod.GET)
+	public ModelAndView updateForm(HttpServletRequest request, int p) {
+		ModelAndView mav = new ModelAndView("pet/update");
+		
+		PetDto pet = petService.selectPet(p);
+		request.getSession().setAttribute("pet_idx", p);
+		
+		mav.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+		mav.addObject("speciesOption2", petService.selectSpeciesLevel2BySelfIdx(pet.getPet_species_idx()));
+		mav.addObject("pet", pet);
+		
+		return mav;
+	}
+	
+
 	
 	@RequestMapping(value = "/api/pet/species", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody

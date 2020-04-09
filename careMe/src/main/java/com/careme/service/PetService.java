@@ -13,11 +13,13 @@ public interface PetService {
 	
 	List<PetSpeciesDto> selectPetSpeciesLevel2(int level1);
 	
+	List<PetSpeciesDto> selectSpeciesLevel2BySelfIdx(int level2);
+	
 	public PetDto selectPet(int petIdx);
 	
 	public int insertPet(MultipartHttpServletRequest request);
 	
-	public int updatePet();
+	public int updatePet(MultipartHttpServletRequest request);
 	
 	public int deletePut();
 	

@@ -2,17 +2,24 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="pet">
 	
-	<select id="selectSpeciesLevel1" resultType="com.careme.model.dto.PetSpeciesDto">
+	<select id="selectSpeciesLevel1" resultType="PetSpeciesDto">
 		select * from pet_species where pet_species_level = 1
 	</select>
 	
-	<select id="selectSpeciesLevel2" resultType="com.careme.model.dto.PetSpeciesDto">
+	<select id="selectSpeciesLevel2" resultType="PetSpeciesDto">
 		select * from pet_species where pet_species_level = 2 and pet_species_ancestor = #{pet_ancestor_idx}			
 	</select>
 	
-	<insert id="insertPet" parameterType="com.careme.model.dto.PetDto">
+	<select id="selectSpeciesLevel2BySelfIdx" resultType="PetSpeciesDto">
+		select a.* from pet_species a
+			  inner join (select * from pet_species where pet_species_idx = #{pet_idx}) b 
+					  on a.pet_species_ancestor = b.pet_species_ancestor;			
+	</select>
+	
+	<insert id="insertPet" parameterType="PetDto">
 		insert into pet ( member_idx, name, pet_species_idx, neutralized, birth, gender, weight, vaccination, blood_type
 		, registration_number, memo, profile_image_file_name, profile_image_file_path, profile_image_file_size )		
 		
@@ -23,12 +30,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				, #{profile_image_file_path, jdbcType=VARCHAR}, #{profile_image_file_size, jdbcType=INTEGER} )
 	</insert>
 	
-	<select id="selectPet" resultType="com.careme.model.dto.PetDto">
+	<select id="selectPet" resultType="PetDto">
 		select * from pet where pet_idx = #{pet_idx}
 	</select>
 	
-	<select id="selectPetList" resultType="com.careme.model.dto.PetDto">
+	<select id="selectPetList" resultType="PetDto">
 		select * from pet where member_idx = #{member_idx}
 	</select>
+	
+	<update id="updatePet" parameterType="PetDto">
+		update pet 		
+		<set>
+			<if test="name != null">name=#{name},</if>
+			<if test="pet_species_idx != null">pet_species_idx=#{pet_species_idx},</if>
+			<if test="neutralized != null">neutralized=#{neutralized},</if>
+			<if test="birth != null">birth=#{birth},</if>
+			<if test="gender != null">gender=#{gender},</if>
+			<if test="weight != null">weight=#{weight},</if>
+			<if test="vaccination != null">vaccination=#{vaccination},</if>
+			<if test="blood_type != null">blood_type=#{blood_type},</if>
+			<if test="registration_number != null">registration_number=#{registration_number},</if>
+			<if test="memo != null">memo=#{memo},</if>
+			<if test="profile_image_file_name != null">profile_image_file_name=#{profile_image_file_name},</if>
+			<if test="profile_image_file_path != null">profile_image_file_path=#{profile_image_file_path},</if>
+			<if test="profile_image_file_size != null">profile_image_file_size=#{profile_image_file_size},</if>
+		</set>
+		<where>
+			pet_idx = #{pet_idx}
+		</where>
+	</update>
 	
 </mapper>
