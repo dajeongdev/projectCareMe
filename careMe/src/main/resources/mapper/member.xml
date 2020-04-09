@@ -2,8 +2,35 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="member">	
-	<select id="selectAll" resultType="com.careme.model.dto.MemberDto">
+<mapper namespace="member">
+	<select id="selectAll"
+		resultType="com.careme.model.dto.MemberDto">
 		select * from members
 	</select>
+
+	<!-- 로그인 -->
+	<select id="login" resultType="com.careme.model.dto.MemberDto">
+		select * from members where member_id=#{member_id} and
+		member_pass=#{member_pass}
+	</select>
+
+	<!-- 회원가입  -->
+	<insert id="signup"
+		parameterType="com.careme.model.dto.MemberDto">
+		insert into members(member_id, member_pass,
+		member_email, member_phone)
+		values(#{member_id},#{member_pass},#{member_email},
+		#{member_phone})
+	</insert>
+
+	<!-- <insert id="userJoin" parameterType="com.careme.model.dto.MemberDto"> 
+		insert into members (member_idx,member_id,member_pass,member_email,member_phone,member_token,member_join_type,reg_date) 
+		values (#{member_idx},#{member_id},#{member_pass},#{member_email},#{member_phone},#{member_token},#{member_join_type},#{reg_date}) 
+		</insert> -->
+
+	<!-- 계정삭제 -->
+	<delete id="delete"
+		parameterType="com.careme.model.dto.MemberDto">
+		delete * from members where member_idx=#{member_idx}
+	</delete>
 </mapper>

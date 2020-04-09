@@ -11,5 +11,9 @@ public class MemberDao extends SqlSessionDaoSupport {
 	public List<MemberDto> selectAll() {
 		return getSqlSession().selectList("member.selectAll");		
 	}
-
+	
+	public List<MemberDto> login(){
+		return getSqlSession().selectList("members.login()");
+	}
+	
 }
