@@ -37,38 +37,38 @@
 				<div align="left" class="card-body">
 					<div>
 						<p style="font:20">
-							<c:out value="${list.content}" />
+							<c:out value="${mlist.content}" />
 						</p>
 					</div>
 				</div>
 			</div>
 						
 			<!-- 고정되는 하단 -->
-			<c:forEach var="commentList" items="${commentList}">
 			<table align="right">
 				<tr height="30">
 					<td colspan="4" align="right"><input type="button" value="글수정"
-						onClick="document.location.href='doctorBoardUpdateForm?question_table_idx=${list.question_table_idx}'">
+						onClick="document.location.href='doctorBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">
 					<input type="button" value="글삭제"
-						onClick="document.location.href='deleteDoctorArticle?question_table_idx=${list.question_table_idx}'">
+						onClick="document.location.href='deleteDoctorArticle?question_table_idx=${mlist.question_table_idx}'">
 					<input type="button" value="글목록" onClick="location.href='casualBoard'"></td>
 				</tr>
 			</table>
 			<br>
 			
 			<!-- comment append -->
-			<div align="left" class="card">
-				<div class="card-header">
-					<p style="strong" align="right">
+			<c:forEach var="item" items="${clist}">
+			<div>
+				<div>
+					<p style="strong" align="left">
 						<img height="100" width="80" src="<%=request.getContextPath()%>/resources/img/dog.jpg">
-						작성자: <c:out value="${commentList.member_id}" /> on <i><c:out value="${commentList.reg_date}" /></i>
+						작성자: <c:out value="${item.member_id}" /> on <i><c:out value="${item.reg_date}" /></i>
 					</p>
 				</div>
 				
 				<div align="left" class="card-body">
 					<div>
 						<p style="font:20">
-							<c:out value="${commentList.content}" />
+							<c:out value="${item.content}" />
 						</p>
 					</div>
 				</div>
@@ -77,20 +77,19 @@
 
 
 			<!-- comment 작성 -->
-			<div align="left" class="comments">
+			<div align="left">
 				<h5 class="uppercase">0 Comments</h5>
 				<hr>
-			<div id="respond" class="comment-respond">
-				<h5 id="reply-title" class="comment-reply-title">
+			<div>
+				<h5>
 					댓글을 달아주세요 
 				</h5>
 
-			<form action="view/casualBoardView/casualCommentAdd?question_board_idx='${list.question_board_idx}'" method="post" id="commentform" class="comment-form" novalidate="">
-				<textarea name="comment" style="width: 900px; height: 100px" placeholder="Your Comment Here" id="comment" aria-required="true" rows="3"></textarea>
+			<form action="doctorCommentAdd?question_table_idx=${mlist.question_table_idx}" method="post">
+				<textarea name="content" style="width: 900px; height: 100px" placeholder="Your Comment Here" rows="3"></textarea>
 						<p class="form-submit">
-							<input type="submit" id="submit" value="확인"> 
-							<input type="hidden" id="member_idx" value="1">
-							<input type="hidden" id="question_board_idx" value="${list.question_board_idx}">
+							<input type="submit" name="submit" value="확인"> 
+							<input type="hidden" name="member_idx" value="2">
 						</p>
 			</form>
 			</div>
@@ -98,31 +97,6 @@
 		</main>
 	</div>
 
-
-<!-- 고정 상단 -->
-
-						<!--<table border="1">
-							<tr height="30">
-								<td align="center" width="125">No.</td>
-								<td align="center" width="125" align="center"><c:out
-										value="${list.question_table_idx}" /></td>
-								<td align="center" width="125">조회수</td>
-								<td align="center" width="125" align="center"><c:out
-										value="${list.view_count}" /></td>
-							</tr>
-							<tr height="30">
-								<td align="center" width="125">작성자</td>
-								<td align="center" width="125" align="center"><c:out
-										value="${list.member_id}" /></td>
-								<td align="center" width="125">작성 날짜</td>
-								<td align="center" width="125" align="center"><c:out
-										value="${list.reg_date}" /></td>
-							</tr>
-							<tr height="30">
-								<td align="center" width="125">제목</td>
-								<td align="center" width="375" align="center" colspan="3"><c:out
-										value="${list.title}" /></td>
-							</tr> -->
 
 
 		</div>

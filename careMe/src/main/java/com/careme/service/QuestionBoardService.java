@@ -20,16 +20,16 @@ public class QuestionBoardService {
 
 	QuestionBoardDao dao = new QuestionBoardDao();
 
-// Doctor Board °¡Á®¿À±â	
+// Doctor Board ê²Œì‹œê¸€ ë¿Œë¦¬ê¸°
 	public List<QuestionBoardDto> getDoctorBoard(){
 		return dao.getDoctorBoard();
 	}
 	
-	public QuestionBoardDto getDoctorBoardContents(int question_table_idx, HttpSession session){
+	public QuestionBoardDto getDoctorBoardContents(int question_table_idx){
 		return dao.getDoctorBoardContents(question_table_idx);
 	}
 
-	public void getDoctorBoardViews (int question_table_idx, HttpSession session) {
+	public void getDoctorBoardViews (int question_table_idx) {
 		dao.getDoctorBoardViews(question_table_idx);
 	}
 	
@@ -40,14 +40,11 @@ public class QuestionBoardService {
 	public List<BoardCommentDto> getDoctorBoardComments(int question_table_idx){
 		return dao.getDoctorBoardComments(question_table_idx);
 	}
-	
-	public int getDoctorCommentCount(int question_table_idx) {
-		return dao.getDoctorCommentCount(question_table_idx);
-	}
 
-// Doctor Board ÀÛ¼º, ¼öÁ¤, »èÁ¦ ±â´É
+
+// Doctor Board ìž‘ì„±, ìˆ˜ì •, ì‚­ì œ
 	
-	// ÀÛ¼º
+	// ê²Œì‹œê¸€ ìž‘ì„±
 		public List<QuestionBoardDto> getSpeciesForDoctor(){
 			return dao.getSpeciesForDoctor();
 		}
@@ -57,49 +54,49 @@ public class QuestionBoardService {
 			return dao.insertArticleForDoctor(boardDto);
 		}
 	
-	// ¼öÁ¤
+	// ê²Œì‹œê¸€ ìˆ˜ì •
 	
 		public int updateDoctorArticle(QuestionBoardDto boardDto) {
 			boardDto.setUpdate_date(LocalDateTime.now());
 			return dao.updateArticlesForDoctor(boardDto);
 		}
 		
-	// »èÁ¦	
+	// ê²Œì‹œê¸€ ì‚­ì œ
 		public int deleteDoctorArticle(int idx) {
 			return dao.deleteArticlesForDoctor(idx);
 		}
 
-// Doctor Board Comments ÀÛ¼º, ¼öÁ¤, »èÁ¦ ±â´É		
+// Doctor Board Comments ìž‘ì„±, ìˆ˜ì •, ì‚­ì œ
 		
-	// comment ÀÛ¼º
+	// comment ìž‘ì„±
 		public int addDoctorComment(BoardCommentDto commentDto) {
 			commentDto.setReg_date(LocalDateTime.now());
 			return dao.insertCommentForDoctor(commentDto);
 		}
 						
-	// comment ¼öÁ¤
+	// comment ìˆ˜ì •
 		public int updateDoctorComment(BoardCommentDto commentDto) {
 			commentDto.setReg_date(LocalDateTime.now());
 			return dao.updateCommentForDoctor(commentDto);
 		}
 							
-	// comment »èÁ¦	
+	// comment ì‚­ì œ	
 		public int deleteDoctorComment(int idx) {
 			return dao.deleteCommentForDoctor(idx);
 		}
 	
 	
 	
-// Casual Board °¡Á®¿À±â	
+// Casual Board ë‚´ìš© êµ¬í˜„
 	public List<QuestionBoardDto> getCasualBoard(){
 		return dao.getCasualBoard();
 	}
 	
-	public QuestionBoardDto getCasualBoardContents(int question_table_idx, HttpSession session){
+	public QuestionBoardDto getCasualBoardContents(int question_table_idx){
 		return dao.getCasualBoardContents(question_table_idx);
 	}
 
-	public void getCasualBoardViews (int question_table_idx, HttpSession session) {
+	public void getCasualBoardViews (int question_table_idx) {
 		dao.getCasualBoardViews(question_table_idx);
 	}
 	
@@ -111,13 +108,10 @@ public class QuestionBoardService {
 		return dao.getCasualBoardComments(question_table_idx);
 	}
 	
-	public int getCasualCommentCount(int question_table_idx) {
-		return dao.getCasualCommentCount(question_table_idx);
-	}
 	
-// Casual Board ÀÛ¼º, ¼öÁ¤, »èÁ¦ ±â´É
+// Casual Board ìž‘ì„±, ìˆ˜ì •, ì‚­ì œ
 	
-	// ÀÛ¼º
+	// ê²Œì‹œê¸€ ìž‘ì„±
 		public List<QuestionBoardDto> getSpeciesForCasual(){
 			return dao.getSpeciesForCasual();
 		}
@@ -127,33 +121,33 @@ public class QuestionBoardService {
 			return dao.insertArticleForCasual(boardDto);
 		}
 		
-	// ¼öÁ¤
+	// ê²Œì‹œê¸€ ìˆ˜ì •
 		
 		public int updateCasualArticle(QuestionBoardDto boardDto) {
 			boardDto.setUpdate_date(LocalDateTime.now());
 			return dao.updateArticlesForCasual(boardDto);
 		}
 			
-	// »èÁ¦	
+	// ê²Œì‹œê¸€ ì‚­ì œ
 		public int deleteCasualArticle(int idx) {
 			return dao.deleteArticlesForCasual(idx);
 		}
 
-// Casual Board Comments ÀÛ¼º, ¼öÁ¤, »èÁ¦ ±â´É		
+// Casual Board Comments ìž‘ì„±, ìˆ˜ì •, ì‚­ì œ	
 			
-	// comment ÀÛ¼º
+	// comment ìž‘ì„±
 		public int addCasualComment(BoardCommentDto commentDto) {
 			commentDto.setReg_date(LocalDateTime.now());
 			return dao.insertCommentForCasual(commentDto);
 		}
 					
-	// comment ¼öÁ¤
+	// comment ìˆ˜ì •
 		public int updateCasualComment(BoardCommentDto commentDto) {
 			commentDto.setReg_date(LocalDateTime.now());
 			return dao.updateCommentForCasual(commentDto);
 		}
 						
-	// comment »èÁ¦	
+	// comment ì‚­ì œ	
 		public int deleteCasualComment(int idx) {
 			return dao.deleteCommentForCasual(idx);
 		}	

@@ -24,7 +24,7 @@ public class DoctorBoardController {
 	QuestionBoardService bs;
 	QuestionBoardDao boardDao;
 
-	// °Ô½ÃÆÇ »Ñ¸®±â
+//ê²Œì‹œíŒ ë¿Œë¦¬ê¸°(ê²Œì‹œê¸€ / ëŒ“ê¸€ / ê¸€ê°œìˆ˜)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
 	public ModelAndView toDoctorBoard() {
 		List<QuestionBoardDto> getArts = bs.getDoctorBoard();
@@ -35,26 +35,22 @@ public class DoctorBoardController {
 		return listPro;
 	}
 
-	// °Ô½Ã±Û ³»¿ë ºÒ·¯¿À±â
+//ê²Œì‹œê¸€ ë‚´ìš© ë¶ˆëŸ¬ì˜¤ê¸°
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardContent", method = RequestMethod.GET)
-	public ModelAndView doctorBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
-		ModelAndView list = new ModelAndView();
-		list.setViewName("doctorBoardView/doctorBoardContent");
-		bs.getDoctorBoardViews(question_table_idx, session);
-		list.addObject("list", bs.getDoctorBoardContents(question_table_idx, session));
+	public ModelAndView doctorBoardContents(@RequestParam int question_table_idx) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		bs.getDoctorBoardViews(question_table_idx);
+		QuestionBoardDto mlist=bs.getDoctorBoardContents(question_table_idx);
+		List<BoardCommentDto> clist = bs.getDoctorBoardComments(question_table_idx);
 		
-		int commentCounts = bs.getDoctorCommentCount(question_table_idx);		
-		
-		if(commentCounts>0) {
-			list.addObject("commentList", bs.getDoctorBoardComments(question_table_idx));
-			return list;
-		}else {
-			return list;
-		}
-		
+		mav.addObject("mlist", mlist);
+		mav.addObject("clist", clist);
+		mav.setViewName("doctorBoardView/doctorBoardContent");
+		return mav;
 	}
 
-	// °Ô½ÃÆÇ °Ë»ö
+	
+// ê²Œì‹œíŒ ê²€ìƒ‰ê¸°ëŠ¥
 	@RequestMapping(value = "/view/doctorBoardSearch")
 	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
@@ -88,7 +84,7 @@ public class DoctorBoardController {
 		return list;
 	}
 
-	//°Ô½ÃÆÇ ±Û¾²±â
+// ê²Œì‹œê¸€ ì‘ì„±
 	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView();
@@ -116,7 +112,7 @@ public class DoctorBoardController {
 		}
 	}
 	
-	// °Ô½ÃÆÇ ±Û¼öÁ¤
+// ê²Œì‹œê¸€ ìˆ˜ì •
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
 	public ModelAndView toDoctorUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView();
@@ -145,57 +141,59 @@ public class DoctorBoardController {
 	}
 
 	
-	//°Ô½ÃÆÇ ±Û»èÁ¦
-		@RequestMapping(value="/view/doctorBoardView/deleteArticle")
-		public String deleteDoctorArticle(@RequestParam int question_table_idx) {
-			int idx = question_table_idx;
-			int result = bs.deleteDoctorArticle(idx);
-			if(result>0) {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-			}else {
-				System.out.println("no!!!");
-			return "redirect:/view/doctorBoardView/doctorBoard";
-			}
+// ê²Œì‹œê¸€ ì‚­ì œ
+	@RequestMapping(value="/view/doctorBoardView/deleteArticle")
+	public String deleteDoctorArticle(@RequestParam int question_table_idx) {
+		int idx = question_table_idx;
+		int result = bs.deleteDoctorArticle(idx);
+		if(result>0) {
+		return "redirect:/view/doctorBoardView/doctorBoard";
+		}else {
+			System.out.println("no!!!");
+		return "redirect:/view/doctorBoardView/doctorBoard";
 		}
+	}
 
 //		===================================================================================================================
 		
-	// comment ÀÛ¼º
+	// comment ì‘ì„±
 		@RequestMapping(value="/view/doctorBoardView/doctorCommentAdd")
 		public String writeDoctorComment(BoardCommentDto commentDto) throws Exception {
 			int result = bs.addDoctorComment(commentDto);
+			int backToPage=commentDto.getQuestion_table_idx();
 			if (result > 0) {
-				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx='${list.question_table_idx}'";
+				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
 			} else {
 				System.out.println("no!!!");
-				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx='${list.question_table_idx}'";
+				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
 			}
 		}
 
 			
-	// comment ±Û¼öÁ¤
+	// comment ìˆ˜ì •
 		@RequestMapping(value = "/view/doctorBoardView/doctorCommentUpdate", method = RequestMethod.POST)
 		public String updateDoctorComment(BoardCommentDto commentDto) throws Exception {
 			int result = bs.updateDoctorComment(commentDto);
+			int backToPage=commentDto.getQuestion_table_idx();
 			if (result > 0) {
-				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx='${list.question_table_idx}'";
+				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
 			} else {
 				System.out.println("no!!!");
-				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx='${list.question_table_idx}'";
+				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
 			}
 		}
 			
 			
-	// comment ±Û»èÁ¦
+	// comment ì‚­ì œ
 		@RequestMapping(value="/view/doctorBoardView/doctorCommentDelete")
 		public String deleteDoctorComment(@RequestParam int question_board_comment_idx) {
 			int idx = question_board_comment_idx;
 			int result = bs.deleteDoctorComment(idx);
 			if(result>0) {
-			return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx='${list.question_table_idx}'";
+			return "redirect:history.go(-1)";
 			}else {
 				System.out.println("no!!!");
-			return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx='${list.question_table_idx}'";
+			return "redirect:history.go(-1)";
 			}
 		}
 }

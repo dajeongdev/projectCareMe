@@ -21,10 +21,7 @@
 	<select id="getArtComments" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
 		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
 	</select>
-	
-	<select id="getCommentCount" resultType="int" parameterType="int">
-		select count(*) from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx}
-	</select>
+
 	
 <!-- 게시판글 검색 -->
 	<select id="getSrchArticle" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.SearchBoardCommand">
@@ -65,8 +62,8 @@
 <!-- comment 작성 수정 삭제 -->
 
 	<insert id="insertComment" parameterType="com.careme.model.dto.BoardCommentDto">
-		insert into question_board_comment (member_idx, content, heart, reg_date, del_yn) 
-		values (#{member_idx}, #{content}, 0, #{reg_date}, 'n')
+		insert into question_board_comment (question_table_idx, member_idx, content, heart, reg_date, del_yn) 
+		values (#{question_table_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
 	</insert>
 	
     <update id="updateComment" parameterType="com.careme.model.dto.BoardCommentDto">

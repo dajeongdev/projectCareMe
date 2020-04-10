@@ -11,7 +11,7 @@ import com.careme.model.dto.QuestionBoardDto;
 public class QuestionBoardDao extends SqlSessionDaoSupport {
 
 	
-// Doctor Board ∞°¡Æø¿±‚ & ∞Àªˆ ±‚¥…
+// Doctor Board ÎÇ¥Ïö© Î∞è Í≤ÄÏÉâ
 	
 	public List<QuestionBoardDto> getDoctorBoard(){
 		return getSqlSession().selectList("doctorQuestionBrd.getArt");
@@ -33,11 +33,9 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("doctorQuestionBrd.getArtComments", question_table_idx);
 	}
 	
-	public int getDoctorCommentCount(int question_table_idx) {
-		return getSqlSession().selectOne("casualQuestionBrd.getCommentCount", question_table_idx);
-	}
+
 	
-// Doctor Board ¿€º∫, ºˆ¡§, ªË¡¶ ±‚¥…
+// Doctor Board ÏûëÏÑ±, ÏàòÏ†ï, ÏÇ≠Ï†ú
 	
 	public List<QuestionBoardDto> getSpeciesForDoctor() {
 		return getSqlSession().selectList("doctorQuestionBrd.getSpec");
@@ -55,23 +53,23 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().delete("doctorQuestionBrd.deleteArticle", idx);
 		}
 	
-// Doctor Comment ¿€º∫, ºˆ¡§, ªË¡¶ ±‚¥…
+// Doctor Comment ÏûëÏÑ±, ÏàòÏ†ï, ÏÇ≠Ï†ú
 
 	public int insertCommentForDoctor(BoardCommentDto commentDto){
-		return getSqlSession().insert("doctorQuestionBrd.insertArt", commentDto);
+		return getSqlSession().insert("doctorQuestionBrd.insertComment", commentDto);
 	}
 				
 	public int updateCommentForDoctor(BoardCommentDto commentDto) {
-		return getSqlSession().update("doctorQuestionBrd.updateArticle", commentDto);
+		return getSqlSession().update("doctorQuestionBrd.updateComment", commentDto);
 	}
 				
 	public int deleteCommentForDoctor(int idx) {
-		return getSqlSession().delete("doctorQuestionBrd.deleteArticle", idx);
+		return getSqlSession().delete("doctorQuestionBrd.deleteComment", idx);
 	}
 	
 	
 	
-// Casual Board ∞°¡Æø¿±‚ & ∞Àªˆ ±‚¥…
+// Casual Board ÎÇ¥Ïö© Î∞è Í≤ÄÏÉâ
 	
 	public List<QuestionBoardDto> getCasualBoard(){
 		return getSqlSession().selectList("casualQuestionBrd.getArt");
@@ -93,11 +91,8 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("casualQuestionBrd.getArtComments", question_table_idx);
 	}
 	
-	public int getCasualCommentCount(int question_table_idx) {
-		return getSqlSession().selectOne("casualQuestionBrd.getCommentCount", question_table_idx);
-	}
 
-// Casual Board ¿€º∫, ºˆ¡§, ªË¡¶ ±‚¥…
+// Casual Board ÏûëÏÑ±, ÏàòÏ†ï, ÏÇ≠Ï†ú
 	
 		public List<QuestionBoardDto> getSpeciesForCasual() {
 			return getSqlSession().selectList("casualQuestionBrd.getSpec");
@@ -115,18 +110,18 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 			return getSqlSession().delete("casualQuestionBrd.deleteArticle", idx);
 			}
 
-// Casual Comment ¿€º∫, ºˆ¡§, ªË¡¶ ±‚¥…
+// Casual Comment ÏûëÏÑ±, ÏàòÏ†ï, ÏÇ≠Ï†ú
 
 		public int insertCommentForCasual(BoardCommentDto commentDto){
-			return getSqlSession().insert("casualQuestionBrd.insertArt", commentDto);
+			return getSqlSession().insert("casualQuestionBrd.insertComment", commentDto);
 		}
 			
 		public int updateCommentForCasual(BoardCommentDto commentDto) {
-			return getSqlSession().update("casualQuestionBrd.updateArticle", commentDto);
+			return getSqlSession().update("casualQuestionBrd.updateComment", commentDto);
 		}
 			
 		public int deleteCommentForCasual(int idx) {
-			return getSqlSession().delete("casualQuestionBrd.deleteArticle", idx);
+			return getSqlSession().delete("casualQuestionBrd.deleteComment", idx);
 		}
 	
 		

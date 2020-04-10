@@ -38,20 +38,18 @@ public class CasualBoardController {
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
-	public ModelAndView casualBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
-		ModelAndView list = new ModelAndView();
-		list.setViewName("casualBoardView/casualBoardContent");
-		bs.getCasualBoardViews(question_table_idx, session);
-		list.addObject("list", bs.getCasualBoardContents(question_table_idx, session));
-		int commentCounts = bs.getCasualCommentCount(question_table_idx);		
-		System.out.println(commentCounts);
-		if(commentCounts>0) {
-			list.addObject("commentList", bs.getCasualBoardComments(question_table_idx));
-			return list;
-		}else {
-			return list;
-		}
+	public ModelAndView casualBoardContents(@RequestParam int question_table_idx) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		bs.getCasualBoardViews(question_table_idx);
+		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
+		List<BoardCommentDto> clist = bs.getCasualBoardComments(question_table_idx);
+		
+		mav.addObject("mlist", mlist);
+		mav.addObject("clist", clist);
+		mav.setViewName("casualBoardView/casualBoardContent");
+		return mav;
 	}
+		
 
 // 게시판 검색기능
 	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
@@ -71,7 +69,9 @@ public class CasualBoardController {
 
 		} else if (searchn == 1) {
 
-			sbc.setSearch_option("title");
+			sbc.setSearch_option(""
+					+ ""
+					+ "");
 			sbc.setSearchKeyword(searchKeyword);
 			items = bs.getCasualBoardSearch(sbc);
 			list.addObject("list", items);
@@ -167,11 +167,12 @@ public class CasualBoardController {
 		@RequestMapping(value="/view/casualBoardView/casualCommentAdd")
 		public String writeCasualComment(BoardCommentDto commentDto) throws Exception {
 			int result = bs.addCasualComment(commentDto);
+			int backToPage=commentDto.getQuestion_table_idx();
 			if (result > 0) {
-				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
 			} else {
 				System.out.println("no!!!");
-				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
 			}
 		}
 
@@ -180,11 +181,12 @@ public class CasualBoardController {
 		@RequestMapping(value = "/view/casualBoardView/casualCommentUpdate", method = RequestMethod.POST)
 		public String updateCasualComment(BoardCommentDto commentDto) throws Exception {
 			int result = bs.updateCasualComment(commentDto);
+			int backToPage=commentDto.getQuestion_table_idx();
 			if (result > 0) {
-				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
 			} else {
 				System.out.println("no!!!");
-				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
 			}
 		}
 		
@@ -193,12 +195,13 @@ public class CasualBoardController {
 		@RequestMapping(value="/view/casualBoardView/casualCommentDelete")
 		public String deleteCasualComment(@RequestParam int question_board_comment_idx) {
 			int idx = question_board_comment_idx;
+			
 			int result = bs.deleteCasualComment(idx);
 			if(result>0) {
-			return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+			return "redirect:history.go(-1)";
 			}else {
 				System.out.println("no!!!");
-			return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx='${list.question_table_idx}'";
+			return "redirect:history.go(-1)";
 			}
 		}
 	

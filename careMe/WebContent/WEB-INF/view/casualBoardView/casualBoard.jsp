@@ -43,8 +43,7 @@
 								<c:forEach var="item" items="${list}">
 									<tr>
 										<td><c:out value="${item.question_table_idx}" /></td>
-										<td><a
-											href="casualBoardContent?question_table_idx=${item.question_table_idx}">"${item.title}"</a></td>
+										<td><a href="casualBoardContent?question_table_idx=${item.question_table_idx}">${item.title}</a></td>
 										<td><c:out value="${item.member_id}" /></td>
 										<td><c:out value="${item.reg_date}" /></td>
 										<td><c:out value="${item.view_count}" /></td>
