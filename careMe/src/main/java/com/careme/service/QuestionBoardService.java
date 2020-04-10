@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 
 @Service
 public class QuestionBoardService {
 	
 	@Autowired
-
 	QuestionBoardDao dao = new QuestionBoardDao();
 
 // Doctor Board 게시글 뿌리기

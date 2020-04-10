@@ -43,15 +43,18 @@
 						</select>
 
 						<!-- MyPet<select name="pet_idx"><br>
-			<option value="1">Pet 1</option>
-			<option value="2">Pet 2</option>
-			</select><br> -->
+							<option value="1">Pet 1</option>
+							<option value="2">Pet 2</option>
+						</select><br> -->
 
 						내용<br>
 						<textarea name="content" rows="13" cols="40"></textarea>
-						<br> <input type="submit" value="수정"> <input
-							type="reset" value="다시쓰기"> <input type="button"
-							value="목록으로" OnClick="location.href='casualBoard'">
+						<br> 
+						
+						
+						<input type="submit" value="수정"> 
+						<input type="reset" value="다시쓰기">
+						<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
 
 					</form>
 

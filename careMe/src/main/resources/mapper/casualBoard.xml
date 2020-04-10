@@ -42,7 +42,7 @@
 <!-- 게시판글 작성 수정 삭제 -->
 	
 	<select id="getSpec" resultType="com.careme.model.dto.QuestionBoardDto">
-		select pet_species_idx from pet_species
+		select pet_species_idx, pet_species_name from pet_species where pet_species_level=1;
 	</select>
 	
 	<insert id="insertArt" parameterType="com.careme.model.dto.QuestionBoardDto">

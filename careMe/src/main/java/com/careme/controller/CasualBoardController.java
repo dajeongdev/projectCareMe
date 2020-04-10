@@ -2,28 +2,41 @@ package com.careme.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
+import com.google.gson.Gson;
+
 
 @Controller
 public class CasualBoardController {
 
 	@Autowired
 	QuestionBoardService bs;
+	
+	@Autowired
 	QuestionBoardDao boardDao;
-
+	
+	@Autowired
+	PetService petService;
+	
+	public void setPetService(PetService petService) {
+		this.petService = petService;
+	}
+	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
 	public ModelAndView toCasualBoard() {
@@ -50,10 +63,12 @@ public class CasualBoardController {
 		return mav;
 	}
 		
+	
+
 
 // 게시판 검색기능
 	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
-	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
+	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
 		ModelAndView list = new ModelAndView();
 		List<QuestionBoardDto> items = null;
@@ -92,24 +107,31 @@ public class CasualBoardController {
 	}
 
 // 게시글 작성
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
 	public ModelAndView toWriteForm() throws Exception {
-		ModelAndView write = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpeciesForCasual();
-
-		if (getSpecs == null) {
-			write.setViewName("casualBoardView/casualWriteForm");
-			return write;
-		} else {
-			write.addObject("specs", getSpecs);
-			write.setViewName("casualBoardView/casualWriteForm");
-			System.out.println(write);
-			return write;
-		}
+		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
+		write.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+		return write;
 	}
+	
+	
+	@RequestMapping(value = "casualWriteForm/species", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String getPetSpeciesList(int level, int ancestor) {
+		List<PetSpeciesDto> items = null;
+		
+		if (level == 1) items = petService.selectPetSpeciesLevel1();
+		else if (level == 2) items = petService.selectPetSpeciesLevel2(ancestor);
+		
+		Gson json = new Gson();
+		System.out.println(json);
+		return json.toJson(items);
+	}
+	
 
+	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
+	public String writeCasualBoardArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.addCasualArticles(boardDto);
 		System.out.println(boardDto);
 		if (result > 0) {
@@ -123,19 +145,13 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
 	public ModelAndView toCasualUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpeciesForCasual();
 		int idx = question_table_idx;
-
-		if (getSpecs == null) {
-			update.setViewName("casualBoardView/casualBoardUpdateForm");
-			return update;
-		} else {
-			update.addObject("specs", getSpecs);
+			update.addObject("speciesOption", petService.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
 			update.setViewName("casualBoardView/casualBoardUpdateForm");
 			return update;
-		}
 	}
+	
 
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
 	public String updateCasualArticle(QuestionBoardDto boardDto) throws Exception {

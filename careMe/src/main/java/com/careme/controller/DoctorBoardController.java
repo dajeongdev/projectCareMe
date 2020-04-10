@@ -87,20 +87,13 @@ public class DoctorBoardController {
 // 게시글 작성
 	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
-		ModelAndView write = new ModelAndView();
+		ModelAndView write = new ModelAndView("doctorBoardView/doctorWriteForm");
 		List<QuestionBoardDto> getSpecs = bs.getSpeciesForDoctor();
-		
-		if(getSpecs==null) {
-			write.setViewName("doctorBoardView/doctorWriteForm");
-			return write;
-		}else {
 			write.addObject("specs", getSpecs);
-			write.setViewName("doctorBoardView/doctorWriteForm");
 			System.out.println(write);
 			return write;
-		}
 	}
-
+	
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
 	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.addDoctorArticles(boardDto);

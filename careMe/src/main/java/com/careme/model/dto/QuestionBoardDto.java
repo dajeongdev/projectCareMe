@@ -6,18 +6,22 @@ public class QuestionBoardDto {
 	
 	int question_table_idx;
 	int member_idx;
+	int doctor_idx;
 	String member_id;
+
 	String title;
 	String question_type;
-	int doctor_idx;
-	int pet_idx;
-	int pet_species_idx;
 	String content;
 	int view_count;
 	String is_private;
 	LocalDateTime reg_date;
 	LocalDateTime update_date;
 	String del_yn;
+	
+	int pet_idx;
+	int pet_species_idx;
+	int pet_species_level;
+	String pet_species_name;
 	
 	public int getQuestion_table_idx() {
 		return question_table_idx;
@@ -103,12 +107,38 @@ public class QuestionBoardDto {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
+	
+	
+	public int getPet_species_level() {
+		return pet_species_level;
+	}
+	public void setPet_species_level(int pet_species_level) {
+		this.pet_species_level = pet_species_level;
+	}
+	public String getPet_species_name() {
+		return pet_species_name;
+	}
+	public void setPet_species_name(String pet_species_name) {
+		this.pet_species_name = pet_species_name;
+	}
+	
 	@Override
 	public String toString() {
-		return "Question_BoardDto [question_table_idx=" + question_table_idx + ", member_idx=" + member_idx + ", title="
-				+ title + ", question_type=" + question_type + ", doctor_idx=" + doctor_idx + ", pet_idx=" + pet_idx
-				+ ", pet_species_idx=" + pet_species_idx + ", content=" + content + ", view_count=" + view_count
-				+ ", is_private=" + is_private + ", reg_date=" + reg_date + ", update_date=" + update_date + ", del_yn="
-				+ del_yn + "]";
+		return "QuestionBoardDto [question_table_idx=" + question_table_idx + ", member_idx=" + member_idx
+				+ ", doctor_idx=" + doctor_idx + ", member_id=" + member_id + ", title=" + title + ", question_type="
+				+ question_type + ", content=" + content + ", view_count=" + view_count + ", is_private=" + is_private
+				+ ", reg_date=" + reg_date + ", update_date=" + update_date + ", del_yn=" + del_yn + ", pet_idx="
+				+ pet_idx + ", pet_species_idx=" + pet_species_idx + ", pet_species_level=" + pet_species_level
+				+ ", pet_species_name=" + pet_species_name + ", getQuestion_table_idx()=" + getQuestion_table_idx()
+				+ ", getMember_idx()=" + getMember_idx() + ", getMember_id()=" + getMember_id() + ", getTitle()="
+				+ getTitle() + ", getQuestion_type()=" + getQuestion_type() + ", getDoctor_idx()=" + getDoctor_idx()
+				+ ", getPet_idx()=" + getPet_idx() + ", getPet_species_idx()=" + getPet_species_idx()
+				+ ", getContent()=" + getContent() + ", getView_count()=" + getView_count() + ", getIs_private()="
+				+ getIs_private() + ", getReg_date()=" + getReg_date() + ", getUpdate_date()=" + getUpdate_date()
+				+ ", getDel_yn()=" + getDel_yn() + ", getPet_species_level()=" + getPet_species_level()
+				+ ", getPet_species_name()=" + getPet_species_name() + ", getClass()=" + getClass() + ", hashCode()="
+				+ hashCode() + ", toString()=" + super.toString() + "]";
 	}
+	
+
 }

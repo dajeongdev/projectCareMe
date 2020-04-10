@@ -54,8 +54,8 @@
 
 						<!-- 게시판 글쓰기 -->
 						<div align="right">
-							<input name="doctorBoardWriteForm" type="button" value="글쓰기"
-								onClick="location.href='doctorWriteForm'">
+							<input name="casualBoardWrite" type="button" value="글쓰기"
+								onClick="location.href='casualWriteForm'">
 						</div>
 						<div align="left">number</div>
 					</div>
