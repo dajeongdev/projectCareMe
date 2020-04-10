@@ -8,7 +8,7 @@
 </head>
 <body>
 
- <% response.sendRedirect("main"); %> 
-<!--  <a href="login/login">로그인</a> -->
+<% response.sendRedirect("main"); %>
+<!-- <a href="login/loginform">로그인</a> -->
  </body>
 </html>

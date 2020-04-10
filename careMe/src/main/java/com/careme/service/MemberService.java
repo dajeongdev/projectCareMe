@@ -22,9 +22,20 @@ public class MemberService {
 	public void setDao(MemberDao dao) {
 		this.dao = dao;
 	}
-	
+	//로그인 성공
 	public int loginOk(LoginCommand lc) {
 		List<MemberDto> lok = dao.login(lc);
+		return lok.size();
+	}
+	//중복아이디체크
+	public int idcheck(LoginCommand lc) {
+		List<MemberDto> lok = dao.idChk(lc);
+		return lok.size();
+	}
+	
+	//회원가입 성공
+	public int insertOk(MemberDto mdto) {
+		List<MemberDto> lok = dao.insert(mdto);
 		return lok.size();
 	}
 }

@@ -2,6 +2,7 @@ package com.careme.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.MemberDao;
@@ -20,14 +23,14 @@ import com.careme.service.MemberService;
 public class MemberController {
 	@Autowired
 	MemberDao memberDao;
-	
+
 	@Autowired
 	MemberService memberService;
-	
+
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
-	
+
 	private void setMemberDao(MemberDao memberDao) {
 		this.memberDao = memberDao;
 	}
@@ -47,24 +50,44 @@ public class MemberController {
 		return "login/loginform";
 	}
 
-	// 회원가입폼
-	@RequestMapping(value = "login/signup", method = RequestMethod.GET)
-	public String form(Model model) {
-		return "login/signup";
-	}
-	
-	//로그인 성공
+	// 로그인 성공
 	@RequestMapping(value = "login/loginok")
 	public String loginOk(LoginCommand lc, HttpSession session) {
-	int i = memberService.loginOk(lc);//1이나 0리턴
-	System.out.println(i);
-		if(i==0) {
+		int i = memberService.loginOk(lc);// 1이나 0리턴
+		// System.out.println(i);
+		if (i == 0) {
 			return "redirect:loginform";
-		}else {
+		} else {
 			session.setAttribute("OK", lc.getMember_id());
 			return "redirect:/main";
 		}
-		
 	}
 
+	/*
+	 * // 아이디 중복체크
+	 * 
+	 * @RequestMapping(value = "login/Idcheck") public String idcheck(LoginCommand
+	 * lc, HttpSession session) { int i2 = memberService.idcheck(lc);// 1이나 0 리턴
+	 * try{ if (i2 == 1) { return "redirect:signup"; } else if (i2 == 0) {
+	 * session.setAttribute("use", lc.getMember_id()); return ""; } return "";
+	 * 
+	 * }
+	 */
+
+	// 회원가입폼
+	@RequestMapping(value = "login/signup", method = RequestMethod.GET)
+	public String form2() {
+		return "login/signup";
+	}
+
+	// 회원가입 성공
+	public String insertOk(MemberDto mdto, HttpSession session) {
+		int i3 = memberService.insertOk(mdto); // 0이나 1리턴
+		if (i3 == 0) { // 없으면 가입
+			session.setAttribute("sussess", mdto.getMember_id());
+			return "signupsu";
+		} else { // 실패
+			return "signupfa";
+		}
+	}
 }

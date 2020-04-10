@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
 <!DOCTYPE html>
@@ -86,53 +85,62 @@
 
 	</script>
 
-
+	<!-- 헤더 -->
 	<div class="container-fluid" style="padding: 0;">
 		<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 	</div>
 
+	<!-- 로그인 폼 -->
 	<div style="margin: 0 auto; margin-top: 100px;" class="text-center">
 		<h1>로그인</h1>
 	</div>
 	<br>
-	<div class="jumbotron"
-		style="padding: 15px; margin: 0 auto; max-width: 500px">
+	<!-- 회색칸 만드는방법 class="jumbotron" -->
+	<div style="padding: 15px; margin: 0 auto; max-width: 500px">
 		<br>
 		<!-- 로그인 성공시 메인으로 돌아감 -->
 		<form name="form1" action="loginok">
 			<table width="400" height="100" align="center" cellspacing="0">
 				<tr height="10" align="center">
 				</tr>
-				
+
 				<!-- 로그인 -->
 				<tr>
 					<td><b>ID:</b></td>
 					<td><input type="text" style="width: 430px" id="id"
-						name="member_id" maxlength="12" class="form-control" placeholder="Input ID"/></td>
+						name="member_id" maxlength="12" class="form-control"
+						placeholder="Input ID" /></td>
 				</tr>
 				<tr>
 					<td><b>PW:</b></td>
 					<td><input type="password" style="width: 430px" id="pw"
-						name="member_pass" maxlength="12" class="form-control" placeholder="Input PW"/></td>
+						name="member_pass" maxlength="12" class="form-control"
+						placeholder="Input PW" /></td>
 				</tr>
 			</table>
 			<br>
 			<!-- 버튼 -->
-			<div>
-				<input type="button" value="  로그인 " onclick="Login();" 
-				class="btn btn-dark btn-sm btn-block"/> <input
-					type="button" value="회원가입" onclick="location.href='signup'"
-						 class="btn btn-dark btn-sm btn-block"/>
+			<!-- 짧은버튼 -->
+			<table width="300" height="30" align="center" cellspacing="0">
+				<tbody>
+					<tr>
+						<td><input type="button" value="  로그인 " onclick="Login();"
+							class="btn btn-dark btn-sm btn-block"></td>
+						<td><input type="button" value="회원가입"
+							onclick="location.href='signup'"
+							class="btn btn-dark btn-sm btn-block"></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- 폼 길이 버튼 -->
+			<!-- <div>
+				<input type="button" value="  로그인 " onclick="Login();"
+					class="btn btn-dark btn-sm btn-block" /> <input type="button"
+					value="회원가입" onclick="location.href='signup'"
+					class="btn btn-dark btn-sm btn-block" /> -->
+	</div>
 
-			</div>
-
-
-			<!-- 아이디 : <input type="text" size="15" name="member_id" /><br /> 비밀번호 :
-			<input type="password" size="15" name="member_pass" /><br /> <br />
-
-			<input type="button" value="  로그인 " onclick="Login();" /> <input
-				type="button" value="회원가입" onclick="location.href='signup'" /> -->
-		</form>
+	</form>
 	</div>
 </body>
 

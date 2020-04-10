@@ -9,14 +9,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<!-- 로그인 -->
-	<select id="login" resultType="com.careme.model.dto.MemberDto" parameterType="com.careme.model.command.LoginCommand">
+	<select id="login" resultType="com.careme.model.dto.MemberDto"
+		parameterType="com.careme.model.command.LoginCommand">
 		select member_id,member_pass from
-		members where member_id=#{member_id} and
+		members where
+		member_id=#{member_id} and
 		member_pass=#{member_pass}
 	</select>
 
+	<!-- 아이디 중복 체크 -->
+	<select id="idChk" resultType="com.careme.model.dto.MemberDto"
+	 parameterType="com.careme.model.command.LoginCommand">
+		SELECT COUNT(*) FROM members
+		WHERE
+		member_id = #{member_id}
+	</select>
+
 	<!-- 회원가입 -->
-	<insert id="signup"
+	<insert id="insert"
 		parameterType="com.careme.model.dto.MemberDto">
 		insert into members(member_id, member_pass,
 		member_email, member_phone)
@@ -24,20 +34,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{member_phone})
 	</insert>
 
-	<!-- <insert id="userJoin" parameterType="com.careme.model.dto.MemberDto"> 
-		insert into members (member_idx,member_id,member_pass,member_email,member_phone,member_token,member_join_type,reg_date) 
-		values (#{member_idx},#{member_id},#{member_pass},#{member_email},#{member_phone},#{member_token},#{member_join_type},#{reg_date}) 
-		</insert> -->
+	<!-- 정보수정 -->
+	<update id="update" parameterType="String">
+		update set members
+		member_pass,member_phone,member_email where member_id
+	</update>
 
 	<!-- 계정삭제 -->
 	<delete id="delete"
 		parameterType="com.careme.model.dto.MemberDto">
-		delete * from members where member_idx=#{member_idx}
+		delete * from members where member_id=#{member_id} and
+		member_pass=#{member_pass}
 	</delete>
 
-
-	<select id="loginCheck" resultType="String">
-		SELECT count(*) FROM member
-		WHERE member_id = #{member_id} AND member_pass = #{member_pass}
-	</select>
 </mapper>

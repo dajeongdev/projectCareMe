@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-펫등록하러가기
+가입성공
 </body>
 </html>
