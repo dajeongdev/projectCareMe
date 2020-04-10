@@ -2,6 +2,8 @@ package com.careme.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -64,15 +66,15 @@ public class PetServiceImpl implements PetService  {
 	public int updatePet(MultipartHttpServletRequest request) {
 		int res = 0;
 		pet = requestToPetDto(request);
-		System.out.println(pet);
 		res = dao.updatePet(pet);
-		if (res > 0) request.getSession().removeAttribute("pet_idx");
+		request.getSession().removeAttribute("pet_idx");
 		return res;
 	};
 	
 	@Override
-	public int deletePut() { return 0; };
-	
+	public int deletePet(HttpServletRequest request) {
+		return dao.deletePet((int) request.getSession().getAttribute("pet_idx")); 
+	};
 	
 	public PetDto requestToPetDto(MultipartHttpServletRequest request) {
 		pet = new PetDto();

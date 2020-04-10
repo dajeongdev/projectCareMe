@@ -2,6 +2,8 @@ package com.careme.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.dto.PetDto;
@@ -21,6 +23,6 @@ public interface PetService {
 	
 	public int updatePet(MultipartHttpServletRequest request);
 	
-	public int deletePut();
+	public int deletePet(HttpServletRequest request);
 	
 }

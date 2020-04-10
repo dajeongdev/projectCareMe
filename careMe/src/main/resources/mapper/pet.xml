@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	
 	<select id="selectPet" resultType="PetDto">
-		select * from pet where pet_idx = #{pet_idx}
+		select * from pet where pet_idx = #{pet_idx} and del_yn = 'n'
 	</select>
 	
 	<select id="selectPetList" resultType="PetDto">
@@ -58,6 +58,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<where>
 			pet_idx = #{pet_idx}
 		</where>
+	</update>
+	
+	<update id="deletePet">
+		update pet set del_yn = 'y' where pet_idx = #{pet_idx}
 	</update>
 	
 </mapper>

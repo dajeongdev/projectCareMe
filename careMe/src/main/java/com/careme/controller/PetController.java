@@ -60,6 +60,11 @@ public class PetController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/pet/delete")
+	public String deletePet(HttpServletRequest request) {
+		petService.deletePet(request);
+		return "redirect:/main";
+	}
 
 	
 	@RequestMapping(value = "/api/pet/species", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")

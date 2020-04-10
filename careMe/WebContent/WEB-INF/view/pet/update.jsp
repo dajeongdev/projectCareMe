@@ -62,6 +62,14 @@
         }
     }
 
+    function deletePet() {
+        var dForm = document.createElement('form');
+        dForm.action = "delete";
+
+        document.body.appendChild(dForm);
+        dForm.submit();
+    }
+
     
 
 	
@@ -73,7 +81,7 @@
 <div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light"> 
 	<div class="container min-vh-100 pt-3"  style="max-width:720px">
 	
-		<form name="pet_regist" method="post" action="/careMe/pet/update" enctype="multipart/form-data">
+		<form name="pet_regist" method="post" action="update" enctype="multipart/form-data">
 		
 			<!-- S: 필수 -->
 			<div class="my-3 p-3 bg-white rounded shadow-sm">
@@ -257,10 +265,15 @@
 			
 			<div class="row p-3">
 				<div class="col-12 text-center">
-					<button type="submit" class="btn btn-success">제출</button>
+					<button type="submit" class="btn btn-success">수정</button>
 				</div>
 			</div>
 			
+			<div class="row p-3">
+				<div class="col-12 text-center">
+					<button onclick="deletePet()" class="btn btn-danger">삭제</button>
+				</div>
+			</div>
 		</form>
 	</div>
 </div>

@@ -50,7 +50,7 @@
 				href="/careMe/view/doctorBoardView/doctorBoard">전문가 상담</a></li>
 			
 			
-			<li class="nav-item"><a class="nav-link" href="#">케어일기</a></li>
+			<li class="nav-item"><a class="nav-link" href="/careMe/carediary">케어일기</a></li>
 			
 			
 			<li class="nav-item"><a class="nav-link" href="#">전문의 찾기</a></li>
