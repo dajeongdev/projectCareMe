@@ -4,6 +4,7 @@ import java.io.File;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.activation.CommandMap;
 import javax.annotation.RegEx;
@@ -63,13 +64,13 @@ public class StoryController {
 	// 글수정
 	@RequestMapping(value = "/updateView", method = RequestMethod.GET)
 	public String updateForm() {
-		return "story/storyEdit";
+		return "/story/storyEdit";
 	}
 	@RequestMapping("/view/story/storyEdit")
 	public ModelAndView articleUpdate(@ModelAttribute("update") StoryBoardDto dto) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		service.update(dto);
-		mav.setViewName("redirect:/story/storyDetail");
+		mav.setViewName("redirect:/view/story/storyDetail");
 		return mav;
 	}
 	
@@ -78,14 +79,21 @@ public class StoryController {
 	public ModelAndView articleDelete(StoryBoardDto dto, int story_board_idx) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		service.delete(story_board_idx);
-		mav.setViewName("redirect:/story/storyMain");
+		mav.setViewName("redirect:/view/story/storyMain");
 		return mav;
 	}
 	
-	@RequestMapping(value = "/storyForm", method = RequestMethod.POST)
+	// 글작성
+	@RequestMapping(value = "/storyForm", method = RequestMethod.GET)
+	public String insertView() {
+		return "redirect:/view/story/storyForm";
+	}
+	
+	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
 	public ModelAndView articleInsert(@ModelAttribute("insert")StoryBoardDto dto, MultipartHttpServletRequest mpRequest) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		//service.insert(dto, mpRequest);
+		Map<String, Object> map;
+		//service.insert(dto, mpRequest, map);
 		mav.setViewName("/story/storyForm");
 		return mav;
 	}

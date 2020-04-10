@@ -8,18 +8,18 @@ public class StoryBoardDto {
 	private int tag_idx;
 	private String title;
 	private String content;
-	private String tag_name;
 	private int heart;
 	private int view_count;
 	private LocalDateTime reg_date;
 	private LocalDateTime update_date;
 	private String del_yn;
+	private String member_id;
 	
-	public String getTag_name() {
-		return tag_name;
+	public String getMember_id() {
+		return member_id;
 	}
-	public void setTag_name(String tag_name) {
-		this.tag_name = tag_name;
+	public void setMember_id(String member_id) {
+		this.member_id = member_id;
 	}
 	public int getTag_idx() {
 		return tag_idx;

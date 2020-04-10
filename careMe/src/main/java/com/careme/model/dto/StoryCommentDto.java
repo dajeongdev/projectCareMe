@@ -5,18 +5,18 @@ import java.time.LocalDateTime;
 public class StoryCommentDto {
 	private int story_comment_idx;
 	private int story_board_idx;
+	private int member_idx;
 	private String content;
-	private String writer;
 	private int heart;
 	private LocalDateTime reg_date;
 	private LocalDateTime update_date;
 	private String del_yn;
 	
-	public String getWriter() {
-		return writer;
+	public int getMember_idx() {
+		return member_idx;
 	}
-	public void setWriter(String writer) {
-		this.writer = writer;
+	public void setMember_idx(int member_idx) {
+		this.member_idx = member_idx;
 	}
 	public int getStory_comment_idx() {
 		return story_comment_idx;

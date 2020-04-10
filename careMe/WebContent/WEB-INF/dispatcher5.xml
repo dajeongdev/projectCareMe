@@ -12,5 +12,5 @@
 	<bean id="storyDao" class="com.careme.dao.StoryDao">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
 	</bean>
-
+	
 </beans>

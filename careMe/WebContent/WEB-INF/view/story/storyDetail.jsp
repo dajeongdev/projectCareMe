@@ -51,13 +51,13 @@ function fn_valiChk() {
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
 <div id="body">
-	<forn name="detail" role="form" method="post">
+	<form name="detail" role="form" method="post">
 		<input type="hidden" id="story_board_idx" name="story_board_idx"
 			value="${detail.story_board_idx}">
-	</forn>
+	</form>
 	<div id="header">
-		<h3>${update.title}</h3>
-		<p>${update.reg_date}</p>
+		<h3>${detail.title}</h3>
+		<p>${detail.reg_date}</p>
 		<p>${update.view_count}</p>
 	</div>
 	<div>
@@ -76,7 +76,7 @@ function fn_valiChk() {
 			<c:forEach items="${comList}" var="comList">
 				<li>
 					<p>
-					${comList.writer}<br>
+					${comList.member_idx}<br>
 					${comList.content}<br>
 					<fmt:formatDate value="${comList.reg_date}" pattern="MM-dd"/>
 					</p>

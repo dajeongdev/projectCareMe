@@ -16,10 +16,8 @@ import com.careme.model.dto.QuestionBoardDto;
 public class QuestionBoardService {
 	
 	@Autowired
-
 	QuestionBoardDao dao = new QuestionBoardDao();
 
-// Doctor Board 가져오기	
 	public List<QuestionBoardDto> getDoctorBoard(){
 		return dao.getDoctorBoard();
 	}
@@ -36,33 +34,24 @@ public class QuestionBoardService {
 		return dao.getDoctorBoardSearch(sbc);
 	}
 
-// Doctor Board 작성, 수정, 삭제 기능
-	
-	// 작성
-		public List<QuestionBoardDto> getSpeciesForDoctor(){
-			return dao.getSpeciesForDoctor();
-		}
+	public List<QuestionBoardDto> getSpeciesForDoctor(){
+		return dao.getSpeciesForDoctor();
+	}
 		
-		public int addDoctorArticles(QuestionBoardDto boardDto) {
-			boardDto.setReg_date(LocalDateTime.now());
-			return dao.insertArticleForDoctor(boardDto);
-		}
+	public int addDoctorArticles(QuestionBoardDto boardDto) {
+		boardDto.setReg_date(LocalDateTime.now());
+		return dao.insertArticleForDoctor(boardDto);
+	}
 	
-	// 수정
-	
-		public int updateDoctorArticle(QuestionBoardDto boardDto) {
-			boardDto.setUpdate_date(LocalDateTime.now());
-			return dao.updateArticlesForDoctor(boardDto);
-		}
+	public int updateDoctorArticle(QuestionBoardDto boardDto) {
+		boardDto.setUpdate_date(LocalDateTime.now());
+		return dao.updateArticlesForDoctor(boardDto);
+	}
 		
-	// 삭제	
-		public int deleteDoctorArticle(int idx) {
-			return dao.deleteArticlesForDoctor(idx);
-		}
+	public int deleteDoctorArticle(int idx) {
+		return dao.deleteArticlesForDoctor(idx);
+	}
 	
-	
-	
-// Casual Board 가져오기	
 	public List<QuestionBoardDto> getCasualBoard(){
 		return dao.getCasualBoard();
 	}
@@ -79,27 +68,21 @@ public class QuestionBoardService {
 		return dao.getCasualBoardSearch(sbc);
 	}
 
-	// Casual Board 작성, 수정, 삭제 기능
-	
-		// 작성
-			public List<QuestionBoardDto> getSpeciesForCasual(){
-				return dao.getSpeciesForCasual();
-			}
+	public List<QuestionBoardDto> getSpeciesForCasual(){
+		return dao.getSpeciesForCasual();
+	}
 			
-			public int addCasualArticles(QuestionBoardDto boardDto) {
-				boardDto.setReg_date(LocalDateTime.now());
-				return dao.insertArticleForCasual(boardDto);
-			}
+	public int addCasualArticles(QuestionBoardDto boardDto) {
+		boardDto.setReg_date(LocalDateTime.now());
+		return dao.insertArticleForCasual(boardDto);
+	}
 		
-		// 수정
-		
-			public int updateCasualArticle(QuestionBoardDto boardDto) {
-				boardDto.setUpdate_date(LocalDateTime.now());
-				return dao.updateArticlesForCasual(boardDto);
-			}
+	public int updateCasualArticle(QuestionBoardDto boardDto) {
+		boardDto.setUpdate_date(LocalDateTime.now());
+		return dao.updateArticlesForCasual(boardDto);
+	}
 			
-		// 삭제	
-			public int deleteCasualArticle(int idx) {
-				return dao.deleteArticlesForCasual(idx);
-			}
+	public int deleteCasualArticle(int idx) {
+		return dao.deleteArticlesForCasual(idx);
+	}
 }

@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.dto.StoryBoardDto;
 
+@Component
 public class StoryFileCommand {
 	private static final String filePath = "d://ParkDajeong/PORTFOLIO/upload//";
 	
@@ -38,7 +41,7 @@ public class StoryFileCommand {
 			if(multipartFile.isEmpty() == false) {
 				originFileName = multipartFile.getOriginalFilename();
 				originFileExtens = originFileName.substring(originFileName.lastIndexOf("."));
-				saveFileName = originFileName + System.currentTimeMillis();
+				saveFileName = getRandomString() + originFileExtens;
 				
 				file = new File(filePath + saveFileName);
 				multipartFile.transferTo(file);
@@ -52,6 +55,9 @@ public class StoryFileCommand {
 		}
 		return list;
 	}
-
+	
+	public static String getRandomString() {
+		return UUID.randomUUID().toString().replaceAll("-", "");
+	}
 	
 }

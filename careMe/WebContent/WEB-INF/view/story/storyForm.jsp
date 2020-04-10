@@ -35,7 +35,8 @@
 </style>
 <title>스토리 글쓰기</title>
 <script>
-	// 해쉬태그 입력
+
+// 해쉬태그 입력
 $(function (){
 	  $("#hash-search").on("keyup", function (e) {//해시태그 입력칸 이벤트
 	    var tag = "";
@@ -65,6 +66,7 @@ $(function (){
 		    $(this).remove();
 	});
 });
+	
 	$(document).ready(function() {
 		var formObj = $("form[name='insert']");
 
@@ -73,7 +75,7 @@ $(function (){
 			if(fn_valiChk()) {
 				return false;
 			}
-			formObj.attr("action", "/story/storyEdit");
+			formObj.attr("action", "/story/storyDetail");
 			formObj.attr("method", "post");
 			formObj.submit();
 		})
@@ -124,14 +126,13 @@ $(function (){
 </div>
 <div class="story_form">
 	<div class="container">
-		<form name="insert" role="form" method="post" action="/story/update" enctype="multipart/form-data">
-			<input type="hidden" name="story_board_idx" value="${update.story_board.idx}" readonly="readonly">
+		<form id="insert" role="form" method="post" action="storyDatail" enctype="multipart/form-data">
+			<input type="hidden" name="story_board_idx" value="${insert.story_board.idx}" readonly="readonly">
 			<label for="title"></label>
-			<input type="text" id="title" name="title" 
-				value="${update.title}" placeholder="제목을 입력해주세요.">
+			<input type="text" id="title" name="title" placeholder="제목을 입력해주세요.">
 			<button type="button" class="btn btn-outline-dark">사진추가</button>
 			<div class="story_content">
-				<input type="file" name="uploadFiles" multiple/>
+				<input type="file" name="mpRequest" multiple/>
 				<a href="#this" name="delete" class="btn">삭제</a>
 			<div class="form-group">
 			 	<label for="content"></label>
