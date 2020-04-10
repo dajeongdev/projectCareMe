@@ -14,12 +14,12 @@
 <script>
 	$(function(){
 		$("#petSpeciesLevel1").on("change", function(){
-		var ancestor = $(this).find("option:selected").data("num");
+		var ancestor=$(this).find("option:selected").data("num");
 			if(!ancestor){
 				$("#petSpeciesLevel2 option").remove();
 				return false;
 			}
-		var url ="casualBoardView/casualWriteForm/species?level=2&ancestor="+ancestor;
+		var url ="casualWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
 		$.ajax(
 			{type:"get",
 			url:url,
@@ -61,10 +61,10 @@
 						<div style="width: 900px; height: 100px" align="left">
 							<input placeholder="제목" type="text" name="title">
 						</div>
-						<input name="question_type" type="hidden" value="n" /> <input
-							name="is_private" type="hidden" value="n" /> <input
-							name="doctor_idx" type="hidden" value="1" /> <input
-							name="pet_idx" type="hidden" value="1" />
+						<input name="question_type" type="hidden" value="n" /> 
+						<input name="is_private" type="hidden" value="n" /> 
+						<input name="doctor_idx" type="hidden" value="1" /> 
+						<input name="pet_idx" type="hidden" value="1" />
 
 						<!-- 동물 종류 찾기 -->
 
@@ -82,7 +82,7 @@
 							</div>
 							<div class="col-md-6  mb-3">
 								<label for="petSpecies2">소분류</label> 
-								<select class="form-control" id="petSpeciesLevel2" name="species" required>
+								<select class="form-control" id="petSpeciesLevel2" name="pet_species_idx" required>
 								</select>
 							</div>
 						</div>

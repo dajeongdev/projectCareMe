@@ -115,7 +115,7 @@ public class CasualBoardController {
 	}
 	
 	
-	@RequestMapping(value = "casualWriteForm/species", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getPetSpeciesList(int level, int ancestor) {
 		List<PetSpeciesDto> items = null;
@@ -132,8 +132,8 @@ public class CasualBoardController {
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeCasualBoardArticle(QuestionBoardDto boardDto) throws Exception {
+		System.out.println("컨트롤러=============" + boardDto);
 		int result = bs.addCasualArticles(boardDto);
-		System.out.println(boardDto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
 		} else {
