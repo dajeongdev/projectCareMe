@@ -8,7 +8,6 @@
 </head>
 <body>
 
-
 <% response.sendRedirect("main"); %>
 
 </body>
