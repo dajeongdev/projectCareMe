@@ -17,7 +17,8 @@
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
 
-<div id="storyMain">
+<div class="storyMain cover-container d-flex w-100 h-100 mx-auto flex-column bg-ligh">
+	<div class="container main-vh-100 pt-3 text-center">
 	<h3><strong>인기글</strong></h3>
 	<hr>
 	<div class="card-group">
@@ -49,18 +50,48 @@
 
 	
 	<br>
-	<input type="submit" class="btn btn-outline-dark insert_btn" value="글쓰기" onclick="storyForm">
-	<hr>
-		
-	<table border="1">
-	<c:forEach items="${list}" var="list" >
-          
-	</c:forEach> 
-	</table>
-		
+	<div align="right">
+		<input type="button" class="btn btn-outline-dark insert_btn" 
+			name="storyForm" value="글쓰기" onclick="location.href='storyForm'">
+	</div>
 	
+	<hr>
+	
+	<div>
+		<table class="table-responsive">
+			<tr>
+				<th>제목</th>
+				<th>작성자</th>
+				<th>작성일</th>
+				<th>조회수</th>
+				<th>좋아요</th>
+			<tr>
+			<tbody>
+			<c:forEach items="${list}" var="list" >
+		          <tr>
+		          	<td><a href="storyDetail?story_board_idx=${list.story_board_idx}">"${list.title}"</a></td>
+		          	<td><c:out value="${list.member_id}" /></td>
+		          	<td><c:out value="${list.reg_date}" /></td>
+		          	<td><c:out value="${list.view_count}" /></td>
+		          	<td><c:out value="${list.heart}" /></td>
+		          </tr>
+			</c:forEach> 
+			</tbody>
+		</table>
+	</div>
+	
+	<form action="view/story/storyBoardSearch">
+		<select name="search">
+			<option value="0">작성자</option>
+			<option value="1">제목</option>
+			<option value="2">내용</option>
+		</select>
+		<input type="text" name="search" size="20" maxLength="40">
+		<input type="submit" value="검색">
+	</form>
+	
+	</div>
 </div>
-<a href="/careMe/view/story/storyDetail.jsp">글보기</a>
 </form>
 </body>
 </html>

@@ -15,6 +15,7 @@ import com.careme.dao.StoryDao;
 import com.careme.model.command.StoryFileCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
+import com.careme.model.dto.StoryFileDto;
 
 @Service
 public class StoryService {
@@ -30,14 +31,10 @@ public class StoryService {
 	}
 
 	// 게시글 작성
-	public void insert(StoryBoardDto dto, MultipartHttpServletRequest mpRequest, Map<String, Object> map) throws Exception {
-		dao.insert(dto);
-		dao.insertFile(map);
-		List<Map<String, Object>> list = com.fileInfo(dto, mpRequest);
-		int size = list.size();
-		for(int i = 0; i < size; i++) {
-			dao.insertFile(list.get(i));
-		}
+	public int insert(StoryBoardDto dto, StoryFileDto fileDto) throws Exception {
+		int i = dao.insert(dto);
+		i += dao.insertFile(fileDto);
+		return i;
 	}
 	
 	// 게시글 상세보기

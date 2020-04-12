@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.StoryFileCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -62,11 +63,11 @@ public class StoryController {
 	}
 	
 	// 글수정
-	@RequestMapping(value = "/updateView", method = RequestMethod.GET)
+	@RequestMapping(value = "/storyEdit", method = RequestMethod.GET)
 	public String updateForm() {
 		return "/story/storyEdit";
 	}
-	@RequestMapping("/view/story/storyEdit")
+	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.POST)
 	public ModelAndView articleUpdate(@ModelAttribute("update") StoryBoardDto dto) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		service.update(dto);
@@ -86,15 +87,15 @@ public class StoryController {
 	// 글작성
 	@RequestMapping(value = "/storyForm", method = RequestMethod.GET)
 	public String insertView() {
-		return "redirect:/view/story/storyForm";
+		return "/view/story/storyForm";
 	}
 	
 	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
-	public ModelAndView articleInsert(@ModelAttribute("insert")StoryBoardDto dto, MultipartHttpServletRequest mpRequest) throws Exception {
+	public ModelAndView articleInsert(@ModelAttribute("insert")StoryBoardDto dto, StoryFileDto fileDto) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		Map<String, Object> map;
-		//service.insert(dto, mpRequest, map);
-		mav.setViewName("/story/storyForm");
+		int i = service.insert(dto, fileDto);
+		mav.addObject("insert", i);
+		mav.setViewName("/story/storyDetail");
 		return mav;
 	}
 	

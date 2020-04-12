@@ -126,13 +126,13 @@ $(function (){
 </div>
 <div class="story_form">
 	<div class="container">
-		<form id="insert" role="form" method="post" action="storyDatail" enctype="multipart/form-data">
+		<form id="insert" method="post" action="storyForm" enctype="multipart/form-data">
 			<input type="hidden" name="story_board_idx" value="${insert.story_board.idx}" readonly="readonly">
 			<label for="title"></label>
 			<input type="text" id="title" name="title" placeholder="제목을 입력해주세요.">
 			<button type="button" class="btn btn-outline-dark">사진추가</button>
 			<div class="story_content">
-				<input type="file" name="mpRequest" multiple/>
+				<input type="file" name="insert"/>
 				<a href="#this" name="delete" class="btn">삭제</a>
 			<div class="form-group">
 			 	<label for="content"></label>
