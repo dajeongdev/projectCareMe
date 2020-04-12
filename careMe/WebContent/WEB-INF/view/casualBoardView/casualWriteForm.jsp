@@ -97,12 +97,7 @@
 							<p>tag 추가하기</p>
 							<input type="text" name="tagArea" placeholder="#">
 
-
-
-
-
 						</div>
-
 
 						<!-- <div align="left">
 						파일첨부<br>
@@ -111,12 +106,11 @@
     					</form>
     					</div> -->
 
-						<input type="submit" value="제출"> <input type="reset"
-							value="다시쓰기"> <input type="button" value="목록으로"
-							OnClick="location.href='casualBoard'">
+						<input type="submit" value="제출"> 
+						<input type="reset" value="다시쓰기"> 
+						<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
 
 					</form>
-
 				</main>
 			</div>
 

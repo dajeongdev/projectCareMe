@@ -6,7 +6,6 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
-import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 
 public class QuestionBoardDao extends SqlSessionDaoSupport {
@@ -37,10 +36,6 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 
 	
 // Doctor Board 작성, 수정, 삭제
-	
-	public List<QuestionBoardDto> getSpeciesForDoctor() {
-		return getSqlSession().selectList("doctorQuestionBrd.getSpec");
-	}
 	
 	public int insertArticleForDoctor(QuestionBoardDto boardDto){
 		return getSqlSession().insert("doctorQuestionBrd.insertArt", boardDto);
@@ -95,35 +90,31 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 
 // Casual Board 작성, 수정, 삭제
 	
-		public List<QuestionBoardDto> getSpeciesForCasual() {
-			return getSqlSession().selectList("casualQuestionBrd.getSpec");
-		}
+	public int insertArticleForCasual(QuestionBoardDto boardDto){
+		return getSqlSession().insert("casualQuestionBrd.insertArt", boardDto);
+	}
 		
-		public int insertArticleForCasual(QuestionBoardDto boardDto){
-			return getSqlSession().insert("casualQuestionBrd.insertArt", boardDto);
-			}
+	public int updateArticlesForCasual(QuestionBoardDto boardDto) {
+		return getSqlSession().update("casualQuestionBrd.updateArticle", boardDto);
+	}
 		
-		public int updateArticlesForCasual(QuestionBoardDto boardDto) {
-			return getSqlSession().update("casualQuestionBrd.updateArticle", boardDto);
-		}
-		
-		public int deleteArticlesForCasual(int idx) {
-			return getSqlSession().delete("casualQuestionBrd.deleteArticle", idx);
-			}
+	public int deleteArticlesForCasual(int idx) {
+		return getSqlSession().delete("casualQuestionBrd.deleteArticle", idx);
+	}
 
 // Casual Comment 작성, 수정, 삭제
 
-		public int insertCommentForCasual(BoardCommentDto commentDto){
-			return getSqlSession().insert("casualQuestionBrd.insertComment", commentDto);
-		}
+	public int insertCommentForCasual(BoardCommentDto commentDto){
+		return getSqlSession().insert("casualQuestionBrd.insertComment", commentDto);
+	}
 			
-		public int updateCommentForCasual(BoardCommentDto commentDto) {
-			return getSqlSession().update("casualQuestionBrd.updateComment", commentDto);
-		}
+	public int updateCommentForCasual(BoardCommentDto commentDto) {
+		return getSqlSession().update("casualQuestionBrd.updateComment", commentDto);
+	}
 			
-		public int deleteCommentForCasual(int idx) {
-			return getSqlSession().delete("casualQuestionBrd.deleteComment", idx);
-		}
+	public int deleteCommentForCasual(int idx) {
+		return getSqlSession().delete("casualQuestionBrd.deleteComment", idx);
+	}
 	
 		
 		

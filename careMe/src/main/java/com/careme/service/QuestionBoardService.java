@@ -45,9 +45,6 @@ public class QuestionBoardService {
 // Doctor Board 작성, 수정, 삭제
 	
 	// 게시글 작성
-		public List<QuestionBoardDto> getSpeciesForDoctor(){
-			return dao.getSpeciesForDoctor();
-		}
 		
 		public int addDoctorArticles(QuestionBoardDto boardDto) {
 			boardDto.setReg_date(LocalDateTime.now());
@@ -112,10 +109,7 @@ public class QuestionBoardService {
 // Casual Board 작성, 수정, 삭제
 	
 	// 게시글 작성
-		public List<QuestionBoardDto> getSpeciesForCasual(){
-			return dao.getSpeciesForCasual();
-		}
-			
+		
 		public int addCasualArticles(QuestionBoardDto boardDto) {
 			boardDto.setReg_date(LocalDateTime.now());
 			return dao.insertArticleForCasual(boardDto);

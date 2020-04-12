@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
@@ -47,7 +46,7 @@ public class CasualBoardController {
 		list.setViewName("/casualBoardView/casualBoard");
 		return list;
 	}
-	
+
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
@@ -63,8 +62,6 @@ public class CasualBoardController {
 		return mav;
 	}
 		
-	
-
 
 // 게시판 검색기능
 	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
@@ -106,6 +103,7 @@ public class CasualBoardController {
 		return list;
 	}
 
+	
 // 게시글 작성
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
 	public ModelAndView toWriteForm() throws Exception {
@@ -117,22 +115,19 @@ public class CasualBoardController {
 	
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String getPetSpeciesList(int level, int ancestor) {
+	public String getCasualPetSpeciesList(int level, int ancestor) {
 		List<PetSpeciesDto> items = null;
 		
 		if (level == 1) items = petService.selectPetSpeciesLevel1();
 		else if (level == 2) items = petService.selectPetSpeciesLevel2(ancestor);
 		
 		Gson json = new Gson();
-		System.out.println(json);
 		return json.toJson(items);
 	}
 	
-
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeCasualBoardArticle(QuestionBoardDto boardDto) throws Exception {
-		System.out.println("컨트롤러=============" + boardDto);
 		int result = bs.addCasualArticles(boardDto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
@@ -141,14 +136,14 @@ public class CasualBoardController {
 		}
 	}
 
+	
 // 게시글 수정
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
 	public ModelAndView toCasualUpdate(@RequestParam int question_table_idx) throws Exception {
-		ModelAndView update = new ModelAndView();
+		ModelAndView update = new ModelAndView("casualBoardView/casualBoardUpdateForm");
 		int idx = question_table_idx;
 			update.addObject("speciesOption", petService.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
-			update.setViewName("casualBoardView/casualBoardUpdateForm");
 			return update;
 	}
 	
@@ -177,7 +172,9 @@ public class CasualBoardController {
 		}
 	}
 	
+	
 //	===================================================================================================================
+	
 	
 	// comment 작성
 		@RequestMapping(value="/view/casualBoardView/casualCommentAdd")
@@ -230,9 +227,5 @@ public class CasualBoardController {
 		mav.setViewName("infoBoardView/infoBoard");
 		return mav;
 	}
-		
 	
-	
-	
-
 }

@@ -2,27 +2,38 @@ package com.careme.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
+import com.google.gson.Gson;
 
 @Controller
 public class DoctorBoardController {
 
 	@Autowired
 	QuestionBoardService bs;
+	
+	@Autowired
 	QuestionBoardDao boardDao;
+	
+	@Autowired
+	PetService petService;
+	
+	public void setPetService(PetService petService) {
+		this.petService = petService;
+	}
 
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
@@ -88,16 +99,27 @@ public class DoctorBoardController {
 	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView("doctorBoardView/doctorWriteForm");
-		List<QuestionBoardDto> getSpecs = bs.getSpeciesForDoctor();
-			write.addObject("specs", getSpecs);
-			System.out.println(write);
-			return write;
+		write.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+		return write;
 	}
+	
+	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm/pet_species_idx", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")
+	@ResponseBody
+	public String getDoctorPetSpeciesList(int level, int ancestor) {
+		List<PetSpeciesDto> items = null;
+		
+		if(level==1) items = petService.selectPetSpeciesLevel1();
+		else if(level==2) items = petService.selectPetSpeciesLevel2(ancestor);
+		
+		Gson json = new Gson();
+		return json.toJson(items);
+	}
+	
+	
 	
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
 	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.addDoctorArticles(boardDto);
-		System.out.println(boardDto);
 		if(result>0) {
 			return "redirect:/view/doctorBoardView/doctorBoard";
 		}else {
@@ -108,19 +130,11 @@ public class DoctorBoardController {
 // 게시글 수정
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
 	public ModelAndView toDoctorUpdate(@RequestParam int question_table_idx) throws Exception {
-		ModelAndView update = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpeciesForDoctor();
+		ModelAndView update = new ModelAndView("doctorBoardView/doctorBoardUpdateForm");
 		int idx = question_table_idx;
-
-		if (getSpecs == null) {
-			update.setViewName("doctorBoardView/doctorBoardUpdateForm");
-			return update;
-		} else {
-			update.addObject("specs", getSpecs);
+			update.addObject("speciesOption", petService.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
-			update.setViewName("doctorBoardView/doctorBoardUpdateForm");
 			return update;
-		}
 	}
 
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardUpdateAdd", method = RequestMethod.POST)

@@ -23,12 +23,9 @@
 
 			<div class="row">
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-
 					<h2 align="left">전문 상담</h2>
 					<p align="left">
-						(전체 글:
-						<c:out value="${countPro}" />
-						)
+						(전체 글: <c:out value="${countPro}" />)
 					</p>
 					<div class="table-responsive">
 						<table class="table table-striped table-sm">

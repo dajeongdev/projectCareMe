@@ -50,7 +50,7 @@
 						onClick="document.location.href='doctorBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">
 					<input type="button" value="글삭제"
 						onClick="document.location.href='deleteDoctorArticle?question_table_idx=${mlist.question_table_idx}'">
-					<input type="button" value="글목록" onClick="location.href='casualBoard'"></td>
+					<input type="button" value="글목록" onClick="location.href='doctorBoard'"></td>
 				</tr>
 			</table>
 			<br>
