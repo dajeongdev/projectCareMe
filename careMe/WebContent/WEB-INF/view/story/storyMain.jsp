@@ -79,7 +79,7 @@
 			</tbody>
 		</table>
 	</div>
-	
+	</form>
 	<form action="view/story/storyBoardSearch">
 		<select name="search">
 			<option value="0">작성자</option>
@@ -92,6 +92,6 @@
 	
 	</div>
 </div>
-</form>
+
 </body>
 </html>
