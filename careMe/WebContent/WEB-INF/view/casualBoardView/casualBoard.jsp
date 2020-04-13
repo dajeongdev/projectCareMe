@@ -41,9 +41,9 @@
 
 								<!-- 글 들어가는 곳 -->
 								<c:forEach var="item" items="${list}">
-									<tr>
+									<tr onClick="location.href='casualBoardContent?question_table_idx=${item.question_table_idx}'">
 										<td><c:out value="${item.question_table_idx}" /></td>
-										<td><a href="casualBoardContent?question_table_idx=${item.question_table_idx}">${item.title}</a></td>
+										<td><c:out value="${item.title}"/></td>
 										<td><c:out value="${item.member_id}" /></td>
 										<td><c:out value="${item.reg_date}" /></td>
 										<td><c:out value="${item.view_count}" /></td>
