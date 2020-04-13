@@ -15,19 +15,7 @@
 			</list>
 		</property>
 	</bean>
-	
-	<mvc:annotation-driven>
-		<mvc:message-converters>
-			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-				<property name="supportedMediaTypes">
-					<list>
-						<value>text/html;charset=UTF-8</value>
-					</list>
-				</property>
-			</bean>
-		</mvc:message-converters>
-	</mvc:annotation-driven>
-	
+
 	<bean id="question_bd" class="com.careme.dao.QuestionBoardDao" p:sqlSessionFactory-ref="sqlSessionFactory" />
 	
 </beans>

@@ -12,7 +12,6 @@
 <title>메인 화면</title>
 </head>
 <body>
-
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 
 	<div
@@ -20,16 +19,11 @@
 		<div class="container min-vh-100 pt-3 text-center">
 
 
-
-
 			<div class="row">
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-
 					<h2 align="left">고민 상담</h2>
 					<p align="left">
-						(전체 글:
-						<c:out value="${count}" />
-						)
+						(전체 글: <c:out value="${count}" />)
 					</p>
 					<div class="table-responsive">
 						<table class="table table-striped table-sm">
@@ -49,8 +43,7 @@
 								<c:forEach var="item" items="${list}">
 									<tr>
 										<td><c:out value="${item.question_table_idx}" /></td>
-										<td><a
-											href="casualBoardContent?question_table_idx=${item.question_table_idx}">"${item.title}"</a></td>
+										<td><a href="casualBoardContent?question_table_idx=${item.question_table_idx}">${item.title}</a></td>
 										<td><c:out value="${item.member_id}" /></td>
 										<td><c:out value="${item.reg_date}" /></td>
 										<td><c:out value="${item.view_count}" /></td>
@@ -61,8 +54,8 @@
 
 						<!-- 게시판 글쓰기 -->
 						<div align="right">
-							<input name="doctorBoardWriteForm" type="button" value="글쓰기"
-								onClick="location.href='doctorWriteForm'">
+							<input name="casualBoardWrite" type="button" value="글쓰기"
+								onClick="location.href='casualWriteForm'">
 						</div>
 						<div align="left">number</div>
 					</div>

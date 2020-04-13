@@ -6,4 +6,10 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL" />
 	</settings>
+
+	<typeAliases>
+		<typeAlias alias="PetSpeciesDto" type="com.careme.model.dto.PetSpeciesDto" />
+		<typeAlias alias="PetDto" type="com.careme.model.dto.PetDto" />
+	</typeAliases>
+	
 </configuration>

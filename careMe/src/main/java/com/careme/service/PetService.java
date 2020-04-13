@@ -2,6 +2,8 @@ package com.careme.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.dto.PetDto;
@@ -13,12 +15,14 @@ public interface PetService {
 	
 	List<PetSpeciesDto> selectPetSpeciesLevel2(int level1);
 	
-	public List<PetDto> selectPet();
+	List<PetSpeciesDto> selectSpeciesLevel2BySelfIdx(int level2);
+	
+	public PetDto selectPet(int petIdx);
 	
 	public int insertPet(MultipartHttpServletRequest request);
 	
-	public int updatePet();
+	public int updatePet(MultipartHttpServletRequest request);
 	
-	public int deletePut();
+	public int deletePet(HttpServletRequest request);
 	
 }
