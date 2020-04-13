@@ -37,12 +37,16 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	
 // Doctor Board 작성, 수정, 삭제
 	
-	public int insertArticleForDoctor(QuestionBoardDto boardDto){
-		return getSqlSession().insert("doctorQuestionBrd.insertArt", boardDto);
-		}
+	public int insertArticleForDoctor(QuestionBoardDto dto){
+		return getSqlSession().insert("doctorQuestionBrd.insertArt", dto);
+	}
 	
-	public int updateArticlesForDoctor(QuestionBoardDto boardDto) {
-		return getSqlSession().update("doctorQuestionBrd.updateArticle", boardDto);
+	public int insertFileforDoctor(QuestionBoardDto dto) {
+		return getSqlSession().insert("doctorQuestionBrd.insertArtFile", dto);
+	}
+	
+	public int updateArticlesForDoctor(QuestionBoardDto dto) {
+		return getSqlSession().update("doctorQuestionBrd.updateArticle", dto);
 	}
 	
 	public int deleteArticlesForDoctor(int idx) {
@@ -90,12 +94,17 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 
 // Casual Board 작성, 수정, 삭제
 	
-	public int insertArticleForCasual(QuestionBoardDto boardDto){
-		return getSqlSession().insert("casualQuestionBrd.insertArt", boardDto);
+	public int insertArticleForCasual(QuestionBoardDto dto){
+		int idx = getSqlSession().insert("casualQuestionBrd.insertArt", dto);
+		return idx;
+	}
+	
+	public int insertArtFileForCasual(QuestionBoardDto dto) {
+		return getSqlSession().insert("casualQuestionBrd.insertArtFile", dto);
 	}
 		
-	public int updateArticlesForCasual(QuestionBoardDto boardDto) {
-		return getSqlSession().update("casualQuestionBrd.updateArticle", boardDto);
+	public int updateArticlesForCasual(QuestionBoardDto dto) {
+		return getSqlSession().update("casualQuestionBrd.updateArticle", dto);
 	}
 		
 	public int deleteArticlesForCasual(int idx) {

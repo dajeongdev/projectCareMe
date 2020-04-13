@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
@@ -22,18 +22,19 @@ import com.google.gson.Gson;
 
 @Controller
 public class CasualBoardController {
-
+	
 	@Autowired
 	QuestionBoardService bs;
 	
-	@Autowired
-	QuestionBoardDao boardDao;
+	public void setQuestionBoardService(QuestionBoardService bs) {
+		this.bs = bs;
+	}
 	
 	@Autowired
-	PetService petService;
+	PetService ps;
 	
-	public void setPetService(PetService petService) {
-		this.petService = petService;
+	public void setPetService(PetService ps) {
+		this.ps = ps;
 	}
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
@@ -109,18 +110,17 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
-		write.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 		return write;
 	}
-	
 	
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getCasualPetSpeciesList(int level, int ancestor) {
 		List<PetSpeciesDto> items = null;
 		
-		if (level == 1) items = petService.selectPetSpeciesLevel1();
-		else if (level == 2) items = petService.selectPetSpeciesLevel2(ancestor);
+		if (level == 1) items = ps.selectPetSpeciesLevel1();
+		else if (level == 2) items = ps.selectPetSpeciesLevel2(ancestor);
 		
 		Gson json = new Gson();
 		return json.toJson(items);
@@ -128,14 +128,19 @@ public class CasualBoardController {
 	
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public String writeCasualBoardArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.addCasualArticles(boardDto);
+	public String writeCasualBoardArticle(MultipartHttpServletRequest request) throws Exception {
+		
+		bs.addCasualArticles(request);
+		int result = bs.addArtFileForCasual(request);
+		
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
 		} else {
 			return "redirect:/view/casualBoardView/casualBoard";
 		}
 	}
+	
+
 
 	
 // 게시글 수정
@@ -143,15 +148,15 @@ public class CasualBoardController {
 	public ModelAndView toCasualUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView("casualBoardView/casualBoardUpdateForm");
 		int idx = question_table_idx;
-			update.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+			update.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
 			return update;
 	}
 	
 
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateCasualArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.updateCasualArticle(boardDto);
+	public String updateCasualArticle(MultipartHttpServletRequest request) throws Exception {
+		int result = bs.updateCasualArticle(request);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
 		} else {

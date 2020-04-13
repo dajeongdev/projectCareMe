@@ -5,18 +5,63 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.QuestionBoardDao;
+import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.PetDto;
 import com.careme.model.dto.QuestionBoardDto;
 
 @Service
 public class QuestionBoardServiceImpl implements QuestionBoardService{
-	
 	@Autowired
 	QuestionBoardDao dao = new QuestionBoardDao();
+	public void setDao(QuestionBoardDao dao) {
+		this.dao = dao;
+	}
 
+	QuestionBoardDto dto;
+	public void setDto(QuestionBoardDto dto) {
+		this.dto = dto;
+	}
+	
+	@Autowired
+	private FileUploadService fileUploadService;
+	
+	public void setFileUploadService(FileUploadService fileUploadService) {
+		this.fileUploadService = fileUploadService;
+	}
+
+	public QuestionBoardDto requestToBoardDto(MultipartHttpServletRequest request) {
+		dto = new QuestionBoardDto();
+		
+		dto.setMember_idx(Integer.parseInt(request.getParameter("member_idx")));
+		dto.setPet_species_idx(Integer.parseInt(request.getParameter("pet_species_idx")));
+		dto.setDoctor_idx(Integer.parseInt(request.getParameter("doctor_idx")));
+		dto.setMember_id(request.getParameter("member_id"));
+		dto.setTitle(request.getParameter("title"));
+		dto.setContent(request.getParameter("content"));
+		dto.setQuestion_type(request.getParameter("question_type"));
+		dto.setIs_private(request.getParameter("is_private"));
+		dto.setPet_idx(Integer.parseInt(request.getParameter("pet_idx")));
+		dto.setReg_date(LocalDateTime.now());
+		dto.setUpdate_date(LocalDateTime.parse(request.getParameter("update_date")));
+		dto.setDel_yn(request.getParameter("del_yn"));
+		
+		
+		if (!request.getFile(request.getFileNames().next()).isEmpty()) {
+			
+			List<FileUploadCommand> files = fileUploadService.upload(request, "/img/boardUpload/");
+			FileUploadCommand file = files.get(0);
+			dto.setFile_name(file.getFileOriginName());
+			dto.setFile_path(file.getFilePath());
+			dto.setFile_size(file.getFileSize());
+		}
+		return dto;
+	}
+	
 // Doctor Board 게시글 뿌리기
 	public List<QuestionBoardDto> getDoctorBoard(){
 		return dao.getDoctorBoard();
@@ -43,16 +88,16 @@ public class QuestionBoardServiceImpl implements QuestionBoardService{
 	
 	// 게시글 작성
 		
-		public int addDoctorArticles(QuestionBoardDto boardDto) {
-			boardDto.setReg_date(LocalDateTime.now());
-			return dao.insertArticleForDoctor(boardDto);
+		public int addDoctorArticles(MultipartHttpServletRequest request) {
+			dto = requestToBoardDto(request);
+			return dao.insertArticleForDoctor(dto);
 		}
-	
+		
 	// 게시글 수정
 	
-		public int updateDoctorArticle(QuestionBoardDto boardDto) {
-			boardDto.setUpdate_date(LocalDateTime.now());
-			return dao.updateArticlesForDoctor(boardDto);
+		public int updateDoctorArticle(MultipartHttpServletRequest request) {
+			dto = requestToBoardDto(request);
+			return dao.updateArticlesForDoctor(dto);
 		}
 		
 	// 게시글 삭제
@@ -107,16 +152,24 @@ public class QuestionBoardServiceImpl implements QuestionBoardService{
 	
 	// 게시글 작성
 		
-		public int addCasualArticles(QuestionBoardDto boardDto) {
-			boardDto.setReg_date(LocalDateTime.now());
-			return dao.insertArticleForCasual(boardDto);
+		public int addCasualArticles(MultipartHttpServletRequest request) {
+			dto = requestToBoardDto(request);
+			return dao.insertArticleForCasual(dto); 
+		}
+		
+		public int addArtFileForCasual(MultipartHttpServletRequest request) {
+			dto = requestToBoardDto(request);
+			int idx = addCasualArticles(request);
+			dto.setQuestion_table_idx(idx);
+			return dao.insertArtFileForCasual(dto);
 		}
 		
 	// 게시글 수정
 		
-		public int updateCasualArticle(QuestionBoardDto boardDto) {
-			boardDto.setUpdate_date(LocalDateTime.now());
-			return dao.updateArticlesForCasual(boardDto);
+		public int updateCasualArticle(MultipartHttpServletRequest request) {
+			
+			dto.setUpdate_date(LocalDateTime.now());
+			return dao.updateArticlesForCasual(dto);
 		}
 			
 	// 게시글 삭제
@@ -141,5 +194,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService{
 	// comment 삭제	
 		public int deleteCasualComment(int idx) {
 			return dao.deleteCommentForCasual(idx);
-		}	
+		}
+		
 }

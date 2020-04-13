@@ -2,6 +2,8 @@ package com.careme.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
@@ -21,9 +23,9 @@ public interface QuestionBoardService {
 	
 	
 // Doctor Board 작성, 수정, 삭제
-	public int addDoctorArticles (QuestionBoardDto boardDto);
+	public int addDoctorArticles (MultipartHttpServletRequest request);
 	
-	public int updateDoctorArticle (QuestionBoardDto boardDto);
+	public int updateDoctorArticle (MultipartHttpServletRequest request);
 	
 	public int deleteDoctorArticle (int idx);
 	
@@ -49,9 +51,11 @@ public interface QuestionBoardService {
 	
 	
 // Casual Board 작성, 수정, 삭제
-	public int addCasualArticles (QuestionBoardDto boardDto);
+	public int addCasualArticles (MultipartHttpServletRequest request);
 	
-	public int updateCasualArticle (QuestionBoardDto boardDto);
+	public int addArtFileForCasual (MultipartHttpServletRequest request);
+	
+	public int updateCasualArticle (MultipartHttpServletRequest request);
 	
 	public int deleteCasualArticle (int idx);
 	

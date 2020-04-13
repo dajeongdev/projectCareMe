@@ -1,7 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="Spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -48,18 +47,18 @@
 	<div
 		class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 		<div class="container min-vh-100 pt-3 text-center">
-
+		
+		<form action="doctorBoardWriteAdd" method="post" enctype="multipart/form-data">
+			<div class="my-3 p-3 bg-white rounded shadow-sm">
 			<div class="row">
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+					
 					<h2 align="left">전문 상담</h2>
 					<p></p>
-
-
-					<form action="doctorBoardWriteAdd" method="post" name="addWrites" enctype="multipart/form-data">
-
-						<div style="width: 900px; height: 100px" align="left">
-							<input placeholder="제목" type="text" name="title">
-						</div>
+						<div class="mb-3" align="left">
+			          		<label for="title">제목</label>
+          					<input name="title" type="text" class="form-control"/>
+        				</div>
 						<input name="question_type" type="hidden" value="y" /> 
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
@@ -91,26 +90,26 @@
 							<textarea name="content" style="width: 900px; height: 500px"></textarea>
 							<br> <input name="member_idx" type="text" id="subject"><br>
 						</div>
-
-						<div>
-							<p>tag 추가하기</p>
+						
+						
+						<label for="file">파일첨부</label>
+							<input name="file" type="file" />
+    					<br>
+    					
+						<label for="tagArea">태그 추가</label>  					
 							<input type="text" name="tagArea" placeholder="#">
-						</div>
+						<br>
 
-						<!-- <div align="left">
-						파일첨부<br>
-						<form name="fileUpload" enctype="multipart/form-data">
-							<input type="file" id="file_name" aria-describedby="inputGroupFileAddon01"  >
-    					</form>
-    					</div> -->
 
-						<input type="submit" value="제출"> <input type="reset"
-							value="다시쓰기"> <input type="button" value="목록으로"
-							OnClick="location.href='doctorBoard'">
+						<input type="submit" value="제출"> 
+						<input type="reset" value="다시쓰기"> 
+						<input type="button" value="목록으로" OnClick="location.href='doctorBoard'">
 
-					</form>
+					
 				</main>
 			</div>
+			</div>
+		</form>
 
 
 		</div>

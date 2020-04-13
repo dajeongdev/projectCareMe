@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
@@ -15,6 +16,7 @@ import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.service.FileUploadService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
 import com.google.gson.Gson;
@@ -24,9 +26,10 @@ public class DoctorBoardController {
 
 	@Autowired
 	QuestionBoardService bs;
-	
-	@Autowired
-	QuestionBoardDao boardDao;
+
+	public void setQuestionBoardService(QuestionBoardService bs) {
+		this.bs = bs;
+	}
 	
 	@Autowired
 	PetService petService;
@@ -119,8 +122,8 @@ public class DoctorBoardController {
 	
 	
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
-	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.addDoctorArticles(boardDto);
+	public String writeDoctorBoardArticle(MultipartHttpServletRequest request) throws Exception {
+		int result = bs.addDoctorArticles(request);
 		if(result>0) {
 			return "redirect:/view/doctorBoardView/doctorBoard";
 		}else {
@@ -139,8 +142,8 @@ public class DoctorBoardController {
 	}
 
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateDoctorArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.updateDoctorArticle(boardDto);
+	public String updateDoctorArticle(MultipartHttpServletRequest request) throws Exception {
+		int result = bs.updateDoctorArticle(request);
 		if (result > 0) {
 			return "redirect:/view/doctorBoardView/doctorBoard";
 		} else {

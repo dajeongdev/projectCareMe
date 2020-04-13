@@ -1,7 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="Spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -43,24 +42,21 @@
 
 </head>
 <body>
-
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 
-	<div
-		class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
+	<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 		<div class="container min-vh-100 pt-3 text-center">
 
+		<form name="addWrite" action="casualBoardWriteAdd" method="POST" enctype="multipart/form-data">
 			<div class="row">
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+					
 					<h2 align="left">고민 상담</h2>
 					<p></p>
-
-
-					<form action="casualBoardWriteAdd" method="post" name="addWrites" enctype="multipart/form-data">
-
-						<div style="width: 900px; height: 100px" align="left">
-							<input placeholder="제목" type="text" name="title">
-						</div>
+						<div class="mb-3" align="left">
+			          		<label for="title">제목</label>
+          					<input id="title" name="title" type="text" class="form-control"/>
+        				</div>
 						<input name="question_type" type="hidden" value="n" /> 
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
@@ -92,28 +88,28 @@
 							<textarea name="content" style="width: 900px; height: 500px"></textarea>
 							<br> <input name="member_idx" type="text" id="subject"><br>
 						</div>
-
-						<div>
-							<p>tag 추가하기</p>
-							<input type="text" name="tagArea" placeholder="#">
-
+						<div align="left">
+						<label for="file">파일첨부</label>
+							<input name="file" type="file" />
 						</div>
-
-						<!-- <div align="left">
-						파일첨부<br>
-						<form name="fileUpload" enctype="multipart/form-data">
-							<input type="file" id="file_name" aria-describedby="inputGroupFileAddon01"  >
-    					</form>
-    					</div> -->
-
+    					<br>
+    					<div align="left">
+						<label for="tagArea">태그 추가</label>  					
+							<input type="text" name="tagArea" placeholder="#">
+						</div>
+						<br>
+						
+						
 						<input type="submit" value="제출"> 
 						<input type="reset" value="다시쓰기"> 
 						<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
 
-					</form>
+					
 				</main>
 			</div>
-
+			
+		</form>
+					
 
 		</div>
 	</div>

@@ -20,15 +20,15 @@
 
 
 			<div class="row">
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+				<main role="main" class="col-md-10 col-lg-10 px-4">
 					<h2 align="left">고민 상담</h2>
 					<p align="left">
 						(전체 글: <c:out value="${count}" />)
 					</p>
 					<div class="table-responsive">
-						<table class="table table-striped table-sm">
+						<table class="table table-striped table-lg table-hover">
 							<!-- 맨 윗 줄 -->
-							<thead>
+							<thead class="thead-dark">
 								<tr>
 									<th>번 호</th>
 									<th>제목</th>
