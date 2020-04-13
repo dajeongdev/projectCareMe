@@ -23,25 +23,20 @@
 			<p></p>
 
 			<!-- 게시글 본문 -->
-			<div align="left" class="card">
-				<div class="card-header">
-					<p style="strong">
-						<c:out value="${mlist.title}" />
-					</p>
-					<p align="right">
-						<i><c:out value="${mlist.reg_date}" /> by <c:out value="${mlist.member_id}"/></i>
-						<img height="100" width="80" src="<%=request.getContextPath()%>/resources/img/dog.jpg">
-					</p>
-				</div>
-				
-				<div align="left" class="card-body">
-					<div>
-						<p style="font:20">
+			<!-- 게시글 본문 -->
+			
+			<div class="blog-post">
+      			<h2 class="blog-post-title" align="left"><c:out value="${mlist.title}" /></h2>
+        			<img align="left" height="100" width="80" src="<%=request.getContextPath()%>/resources/img/dog.jpg">
+        			<p class="blog-post-meta" align="left"><c:out value="${mlist.reg_date}" /> by <c:out value="${mlist.member_id}"/></p>
+       		 	<hr>
+        			<blockquote>
+          			<p style="font:20" align="left">
 							<c:out value="${mlist.content}" />
-						</p>
-					</div>
-				</div>
+					</p>
+        			</blockquote>
 			</div>
+			<hr>
 					
 			<!-- 고정되는 하단 -->
 			<table align="right">
@@ -78,6 +73,7 @@
 					</div>
 				</div>
 			</div>
+			<hr>
 			</c:forEach>
 
 

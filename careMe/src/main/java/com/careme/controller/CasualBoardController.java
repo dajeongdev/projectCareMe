@@ -16,7 +16,7 @@ import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.service.PetService;
-import com.careme.service.QuestionBoardServiceImpl;
+import com.careme.service.QuestionBoardService;
 import com.google.gson.Gson;
 
 
@@ -24,7 +24,7 @@ import com.google.gson.Gson;
 public class CasualBoardController {
 
 	@Autowired
-	QuestionBoardServiceImpl bs;
+	QuestionBoardService bs;
 	
 	@Autowired
 	QuestionBoardDao boardDao;
