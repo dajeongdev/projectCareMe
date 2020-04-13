@@ -53,9 +53,10 @@ public class DoctorBoardController {
 		bs.getDoctorBoardViews(question_table_idx);
 		QuestionBoardDto mlist=bs.getDoctorBoardContents(question_table_idx);
 		List<BoardCommentDto> clist = bs.getDoctorBoardComments(question_table_idx);
-		
+		int commentCount = clist.size();
 		mav.addObject("mlist", mlist);
 		mav.addObject("clist", clist);
+		mav.addObject("commCount", commentCount);
 		mav.setViewName("doctorBoardView/doctorBoardContent");
 		return mav;
 	}

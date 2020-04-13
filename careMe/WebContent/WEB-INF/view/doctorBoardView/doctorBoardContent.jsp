@@ -26,10 +26,10 @@
 			<div align="left" class="card">
 				<div class="card-header">
 					<p style="strong">
-						<c:out value="${list.title}" />
+						<c:out value="${mlist.title}" />
 					</p>
 					<p align="right">
-						<i><c:out value="${list.reg_date}" /> by <c:out	value="${list.member_id}"/></i>
+						<i><c:out value="${mlist.reg_date}" /> by <c:out	value="${mlist.member_id}"/></i>
 						<img height="100" width="80" src="<%=request.getContextPath()%>/resources/img/dog.jpg">
 					</p>
 				</div>
@@ -56,6 +56,10 @@
 			<br>
 			
 			<!-- comment append -->
+			<div align="left">
+				<h5 class="uppercase"><c:out value="${commCount}"/> Comments</h5>
+				<hr>
+			<div>
 			<c:forEach var="item" items="${clist}">
 			<div>
 				<div>
@@ -77,10 +81,6 @@
 
 
 			<!-- comment 작성 -->
-			<div align="left">
-				<h5 class="uppercase">0 Comments</h5>
-				<hr>
-			<div>
 				<h5>
 					댓글을 달아주세요 
 				</h5>

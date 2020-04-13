@@ -57,6 +57,10 @@
 
 			
 			<!-- comment append -->
+			<div align="left">
+				<h5 class="uppercase"><c:out value="${commCount}"/> Comments</h5>
+				<hr>
+			<div>
 			<c:forEach var="item" items="${clist}">
 			<div>
 				<div>
@@ -78,10 +82,6 @@
 
 
 			<!-- comment 작성 -->
-			<div align="left">
-				<h5 class="uppercase">0 Comments</h5>
-				<hr>
-			<div>
 				<h5>
 					댓글을 달아주세요 
 				</h5>
