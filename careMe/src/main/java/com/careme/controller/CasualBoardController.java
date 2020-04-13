@@ -2,28 +2,41 @@ package com.careme.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
+import com.google.gson.Gson;
+
 
 @Controller
 public class CasualBoardController {
 
 	@Autowired
 	QuestionBoardService bs;
+	
+	@Autowired
 	QuestionBoardDao boardDao;
-
-//∞‘Ω√∆« ª—∏Æ±‚(∞‘Ω√±€ / ±€∞≥ºˆ)
+	
+	@Autowired
+	PetService petService;
+	
+	public void setPetService(PetService petService) {
+		this.petService = petService;
+	}
+	
+//Í≤åÏãúÌåê ÎøåÎ¶¨Í∏∞(Í≤åÏãúÍ∏Ä / ÎåìÍ∏Ä / Í∏ÄÍ∞úÏàò)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
 	public ModelAndView toCasualBoard() {
 		List<QuestionBoardDto> getArts = bs.getCasualBoard();
@@ -34,19 +47,26 @@ public class CasualBoardController {
 		return list;
 	}
 
-//∞‘Ω√±€ ≥ªøÎ ∫“∑Øø¿±‚
-	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
-	public ModelAndView contents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
-		ModelAndView list = new ModelAndView();
-		list.addObject("list", bs.getCasualBoardContents(question_table_idx, session));
-		bs.getCasualBoardViews(question_table_idx, session);
-		list.setViewName("casualBoardView/casualBoardContent");
-		return list;
-	}
 
-// ∞‘Ω√∆« ∞Àªˆ
+//Í≤åÏãúÍ∏Ä ÎÇ¥Ïö© Î∂àÎü¨Ïò§Í∏∞
+	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
+	public ModelAndView casualBoardContents(@RequestParam int question_table_idx) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		bs.getCasualBoardViews(question_table_idx);
+		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
+		List<BoardCommentDto> clist = bs.getCasualBoardComments(question_table_idx);
+		int commentCount = clist.size();
+		mav.addObject("mlist", mlist);
+		mav.addObject("clist", clist);
+		mav.addObject("commCount", commentCount);
+		mav.setViewName("casualBoardView/casualBoardContent");
+		return mav;
+	}
+		
+
+// Í≤åÏãúÌåê Í≤ÄÏÉâÍ∏∞Îä•
 	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
-	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
+	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
 		ModelAndView list = new ModelAndView();
 		List<QuestionBoardDto> items = null;
@@ -62,7 +82,9 @@ public class CasualBoardController {
 
 		} else if (searchn == 1) {
 
-			sbc.setSearch_option("title");
+			sbc.setSearch_option(""
+					+ ""
+					+ "");
 			sbc.setSearchKeyword(searchKeyword);
 			items = bs.getCasualBoardSearch(sbc);
 			list.addObject("list", items);
@@ -82,27 +104,32 @@ public class CasualBoardController {
 		return list;
 	}
 
-	// ∞‘Ω√∆« ±€æ≤±‚
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
+	
+// Í≤åÏãúÍ∏Ä ÏûëÏÑ±
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
 	public ModelAndView toWriteForm() throws Exception {
-		ModelAndView write = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpeciesForCasual();
-
-		if (getSpecs == null) {
-			write.setViewName("casualBoardView/casualWriteForm");
-			return write;
-		} else {
-			write.addObject("specs", getSpecs);
-			write.setViewName("casualBoardView/casualWriteForm");
-			System.out.println(write);
-			return write;
-		}
+		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
+		write.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+		return write;
 	}
-
+	
+	
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String getCasualPetSpeciesList(int level, int ancestor) {
+		List<PetSpeciesDto> items = null;
+		
+		if (level == 1) items = petService.selectPetSpeciesLevel1();
+		else if (level == 2) items = petService.selectPetSpeciesLevel2(ancestor);
+		
+		Gson json = new Gson();
+		return json.toJson(items);
+	}
+	
+	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
+	public String writeCasualBoardArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.addCasualArticles(boardDto);
-		System.out.println(boardDto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
 		} else {
@@ -110,26 +137,20 @@ public class CasualBoardController {
 		}
 	}
 
-	// ∞‘Ω√∆« ±€ºˆ¡§
+	
+// Í≤åÏãúÍ∏Ä ÏàòÏ†ï
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
-	public ModelAndView toUpdatePro(@RequestParam int question_table_idx) throws Exception {
-		ModelAndView update = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpeciesForCasual();
+	public ModelAndView toCasualUpdate(@RequestParam int question_table_idx) throws Exception {
+		ModelAndView update = new ModelAndView("casualBoardView/casualBoardUpdateForm");
 		int idx = question_table_idx;
-
-		if (getSpecs == null) {
-			update.setViewName("casualBoardView/casualBoardUpdateForm");
-			return update;
-		} else {
-			update.addObject("specs", getSpecs);
+			update.addObject("speciesOption", petService.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
-			update.setViewName("casualBoardView/casualBoardUpdateForm");
 			return update;
-		}
 	}
+	
 
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateArticle(QuestionBoardDto boardDto) throws Exception {
+	public String updateCasualArticle(QuestionBoardDto boardDto) throws Exception {
 		int result = bs.updateCasualArticle(boardDto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
@@ -139,33 +160,73 @@ public class CasualBoardController {
 	}
 	
 	
-	//∞‘Ω√∆« ±€ªË¡¶
+// Í≤åÏãúÍ∏Ä ÏÇ≠Ï†ú
 	@RequestMapping(value="/view/casualBoardView/deleteArticle")
-	public String deleteArticle(@RequestParam int question_table_idx) {
+	public String deleteCasualArticle(@RequestParam int question_table_idx) {
 		int idx = question_table_idx;
 		int result = bs.deleteCasualArticle(idx);
 		if(result>0) {
-		return "redirect:/view/casualBoardView/doctorBoard";
+		return "redirect:/view/casualBoardView/casualBoard";
 		}else {
 			System.out.println("no!!!");
-		return "redirect:/view/casualBoardView/doctorBoard";
+		return "redirect:/view/casualBoardView/casualBoard";
 		}
 	}
 	
 	
+//	===================================================================================================================
 	
-// ¿⁄¡÷ πØ¥¬ ¡˙πÆ ∏µ≈©
+	
+	// comment ÏûëÏÑ±
+		@RequestMapping(value="/view/casualBoardView/casualCommentAdd")
+		public String writeCasualComment(BoardCommentDto commentDto) throws Exception {
+			int result = bs.addCasualComment(commentDto);
+			int backToPage=commentDto.getQuestion_table_idx();
+			if (result > 0) {
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
+			} else {
+				System.out.println("no!!!");
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
+			}
+		}
+
+		
+	// comment ÏàòÏ†ï
+		@RequestMapping(value = "/view/casualBoardView/casualCommentUpdate", method = RequestMethod.POST)
+		public String updateCasualComment(BoardCommentDto commentDto) throws Exception {
+			int result = bs.updateCasualComment(commentDto);
+			int backToPage=commentDto.getQuestion_table_idx();
+			if (result > 0) {
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
+			} else {
+				System.out.println("no!!!");
+				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
+			}
+		}
+		
+		
+	// comment ÏÇ≠Ï†ú
+		@RequestMapping(value="/view/casualBoardView/casualCommentDelete")
+		public String deleteCasualComment(@RequestParam int question_board_comment_idx) {
+			int idx = question_board_comment_idx;
+			
+			int result = bs.deleteCasualComment(idx);
+			if(result>0) {
+			return "redirect:history.go(-1)";
+			}else {
+				System.out.println("no!!!");
+			return "redirect:history.go(-1)";
+			}
+		}
+	
+	
+	
+// ÏûêÏ£º Î¨ªÎäî ÏßàÎ¨∏ ÎßÅÌÅ¨
 	@RequestMapping(value = "/view/infoBoardView/infoBoard")
 	public ModelAndView infoLink() throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("infoBoardView/infoBoard");
-		System.out.println(mav);
-		System.out.println("used!!!!");
 		return mav;
 	}
-		
 	
-	
-	
-
 }
