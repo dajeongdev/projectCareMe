@@ -22,9 +22,10 @@
 
 
 			<div class="row mb-2">
+				
+				
 				<div class="col-md-6">
-					<div
-						class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+					<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 						<div class="col p-4 d-flex flex-column position-static">
 							<strong class="d-inline-block mb-2 text-primary">건강/질병</strong>
 							<h3 class="mb-0">당신 강아지의 피부는?</h3>
@@ -38,14 +39,13 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<div
-						class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+					<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 						<div class="col p-4 d-flex flex-column position-static">
 							<strong class="d-inline-block mb-2 text-success">행동/교육</strong>
 							<h3 class="mb-0">앵무새의 습성</h3>
 							<div class="mb-1 text-muted">April 5</div>
 							<p class="mb-auto">앵무새가 흔히 사람만을 따라한다고 하죠. 그 진실은?</p>
-							<a href="#" class="stretched-link">더보기</a>
+							<a href="infoBoardContent?" class="stretched-link">더보기</a>
 						</div>
 						<div class="col-auto d-none d-lg-block">
 							<img src="<%=request.getContextPath()%>/resources/img/infoBoardThumbnail.jpg" width="200" height="250"/>
@@ -53,8 +53,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<div
-						class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+					<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 						<div class="col p-4 d-flex flex-column position-static">
 							<strong class="d-inline-block mb-2 text-success">제품/사료</strong>
 							<h3 class="mb-0">여물은 선택은 이렇게</h3>
@@ -68,8 +67,7 @@
 					</div>
 				</div>
 				<div class="col-md-6">
-					<div
-						class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+					<div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 						<div class="col p-4 d-flex flex-column position-static">
 							<strong class="d-inline-block mb-2 text-success">기 타</strong>
 							<h3 class="mb-0">파충류를 키울 때 주의점</h3>
@@ -82,6 +80,8 @@
 						</div>
 					</div>
 				</div>
+			
+			
 			</div>
 
 
