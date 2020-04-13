@@ -28,7 +28,6 @@ public class CasualBoardController {
 	
 	@Autowired
 	QuestionBoardDao boardDao;
-
 	
 	@Autowired
 	PetService petService;
@@ -48,8 +47,8 @@ public class CasualBoardController {
 		return list;
 	}
 
-//게시글 내용 불러오기
 
+//게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
 	public ModelAndView casualBoardContents(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView mav = new ModelAndView();
@@ -63,9 +62,9 @@ public class CasualBoardController {
 		mav.setViewName("casualBoardView/casualBoardContent");
 		return mav;
 	}
+		
 
 // 게시판 검색기능
-
 	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
 	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
@@ -105,8 +104,7 @@ public class CasualBoardController {
 		return list;
 	}
 
-
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
+	
 // 게시글 작성
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
 	public ModelAndView toWriteForm() throws Exception {
@@ -139,6 +137,7 @@ public class CasualBoardController {
 		}
 	}
 
+	
 // 게시글 수정
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
 	public ModelAndView toCasualUpdate(@RequestParam int question_table_idx) throws Exception {
@@ -160,6 +159,7 @@ public class CasualBoardController {
 		}
 	}
 	
+	
 // 게시글 삭제
 	@RequestMapping(value="/view/casualBoardView/deleteArticle")
 	public String deleteCasualArticle(@RequestParam int question_table_idx) {
@@ -172,7 +172,7 @@ public class CasualBoardController {
 		return "redirect:/view/casualBoardView/casualBoard";
 		}
 	}
-
+	
 	
 //	===================================================================================================================
 	
