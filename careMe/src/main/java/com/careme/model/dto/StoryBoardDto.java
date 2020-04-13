@@ -13,7 +13,14 @@ public class StoryBoardDto {
 	private LocalDateTime reg_date;
 	private LocalDateTime update_date;
 	private String del_yn;
+	private String member_id;
 	
+	public String getMember_id() {
+		return member_id;
+	}
+	public void setMember_id(String member_id) {
+		this.member_id = member_id;
+	}
 	public int getTag_idx() {
 		return tag_idx;
 	}

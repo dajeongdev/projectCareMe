@@ -23,7 +23,6 @@ public class CasualBoardController {
 	QuestionBoardService bs;
 	QuestionBoardDao boardDao;
 
-//게시판 뿌리기(게시글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
 	public ModelAndView toCasualBoard() {
 		List<QuestionBoardDto> getArts = bs.getCasualBoard();
@@ -34,7 +33,6 @@ public class CasualBoardController {
 		return list;
 	}
 
-//게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
 	public ModelAndView contents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
 		ModelAndView list = new ModelAndView();
@@ -44,7 +42,6 @@ public class CasualBoardController {
 		return list;
 	}
 
-// 게시판 검색
 	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
 	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
@@ -82,7 +79,6 @@ public class CasualBoardController {
 		return list;
 	}
 
-	// 게시판 글쓰기
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView();
@@ -110,7 +106,6 @@ public class CasualBoardController {
 		}
 	}
 
-	// 게시판 글수정
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
 	public ModelAndView toUpdatePro(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView();
@@ -139,7 +134,6 @@ public class CasualBoardController {
 	}
 	
 	
-	//게시판 글삭제
 	@RequestMapping(value="/view/casualBoardView/deleteArticle")
 	public String deleteArticle(@RequestParam int question_table_idx) {
 		int idx = question_table_idx;
@@ -152,9 +146,6 @@ public class CasualBoardController {
 		}
 	}
 	
-	
-	
-// 자주 묻는 질문 링크
 	@RequestMapping(value = "/view/infoBoardView/infoBoard")
 	public ModelAndView infoLink() throws Exception{
 		ModelAndView mav = new ModelAndView();
