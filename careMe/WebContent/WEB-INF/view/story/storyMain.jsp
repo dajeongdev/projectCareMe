@@ -5,81 +5,125 @@
 <html>
 <head>
 <style>
-#storyMain { margin: 40px; }
+.storyMain { margin: 40px; }
 </style>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <title>스토리 메인</title>
 </head>
 <body>
-<form action="storyForm" method="post">
+
 <div class="container-fluid" style="padding:0;">
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
-
-<div class="storyMain cover-container d-flex w-100 h-100 mx-auto flex-column bg-ligh">
-	<div class="container main-vh-100 pt-3 text-center">
+<form action="/story/storyForm" method="post">
+<div class="storyMain">
 	<h3><strong>인기글</strong></h3>
 	<hr>
-	<div class="card-group">
-	  	<div class="card">
-		    <img class="card-img-top" src="cat.jpg" alt="Card image cap">
-		    <div class="card-body">
-		      <h5 class="card-title" name="title">title</h5>
-		      <p class="card-text" name="member_id">user</p>
-		      <p class="card-text"><small class="text-muted">reg_date</small></p>
-		    </div>
-		  </div>
-		  <div class="card">
-		    <img class="card-img-top" src="..." alt="Card image cap">
-		    <div class="card-body">
-		      <h5 class="card-title" name="title">title</h5>
-		      <p class="card-text" name="member_id">user</p>
-		      <p class="card-text"><small class="text-muted">reg_date</small></p>
-		    </div>
-		  </div>
-		  <div class="card">
-		    <img class="card-img-top" src="..." alt="Card image cap">
-		    <div class="card-body">
-		      <h5 class="card-title" name="title">title</h5>
-		      <p class="card-text" name="member_id">user</p>
-		      <p class="card-text"><small class="text-muted">reg_date</small></p>
-		    </div>
-		  </div>
-	</div>
+	<div class="album py-5 bg-light">
+    <div class="container">
+    
+	<div class="row">
+        <div class="col-md-3">
+          <div class="card mb-3 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+            <div class="card-body">
+              <p class="card-text">제목</p>
+              <p class="card-text">사용자</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+         <div class="col-md-3">
+          <div class="card mb-3 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+            <div class="card-body">
+              <p class="card-text">제목</p>
+              <p class="card-text">사용자</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card mb-3 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+            <div class="card-body">
+              <p class="card-text">제목</p>
+              <p class="card-text">사용자</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card mb-3 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+            <div class="card-body">
+              <p class="card-text">제목</p>
+              <p class="card-text">사용자</p>
+              <p class="card-text">조회수</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+        
 
 	
 	<br>
 	<div align="right">
-		<input type="button" class="btn btn-outline-dark insert_btn" 
-			name="storyForm" value="글쓰기" onclick="location.href='storyForm'">
+		<button type="button" class="btn btn-outline-dark insert_btn" 
+			name="storyForm" onclick="location.href='storyForm'">글쓰기</button>
 	</div>
 	
 	<hr>
-	
 	<div>
-		<table class="table-responsive">
-			<tr>
-				<th>제목</th>
-				<th>작성자</th>
-				<th>작성일</th>
-				<th>조회수</th>
-				<th>좋아요</th>
-			<tr>
-			<tbody>
-			<c:forEach items="${list}" var="list" >
-		          <tr>
-		          	<td><a href="storyDetail?story_board_idx=${list.story_board_idx}">"${list.title}"</a></td>
-		          	<td><c:out value="${list.member_id}" /></td>
-		          	<td><c:out value="${list.reg_date}" /></td>
-		          	<td><c:out value="${list.view_count}" /></td>
-		          	<td><c:out value="${list.heart}" /></td>
-		          </tr>
-			</c:forEach> 
-			</tbody>
-		</table>
-	</div>
+    <c:forEach items="${list}" var="list">
+         <div class="col-md-3">
+          <div class="card mb-3 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+            <div class="card-body">
+              <p class="card-text">${list.title}</p>
+              <p class="card-text">${list.member_id}</p>
+              <p class="card-text">${list.view_count}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+       </c:forEach>
+        </div>
+        </div>
+     </div>
+    </div>
 	
+
+</div>
+</form>
+
 	<form action="view/story/storyBoardSearch">
 		<select name="search">
 			<option value="0">작성자</option>
@@ -89,9 +133,5 @@
 		<input type="text" name="search" size="20" maxLength="40">
 		<input type="submit" value="검색">
 	</form>
-	
-	</div>
-</div>
-</form>
 </body>
 </html>

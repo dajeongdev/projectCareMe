@@ -126,18 +126,18 @@ $(function (){
 </div>
 <div class="story_form">
 	<div class="container">
-		<form id="insert" method="post" action="storyDetail" enctype="multipart/form-data">
-			<input type="hidden" name="story_board_idx" value="${insert.story_board.idx}" readonly="readonly">
+		<form id="insert" method="post" action="/story/storyDetail" enctype="multipart/form-data">
+			<input type="hidden" name="story_board_idx" value="${insert.story_board.idx}">
 			<label for="title"></label>
-			<input type="text" id="title" name="title" placeholder="제목을 입력해주세요.">
-			<button type="button" class="btn btn-outline-dark">사진추가</button>
+			<input type="text" class="form-control" id="title" name="title" 
+				placeholder="제목을 입력해주세요.">
 			<div class="story_content">
-				<input type="file" name="insert"/>
+				<input type="file" name="file"/>
 				<a href="#this" name="delete" class="btn">삭제</a>
 			<div class="form-group">
 			 	<label for="content"></label>
     			<textarea class="form-control" name="content"
-    			id="exampleFormControlTextarea1 content" rows="3" placeholder="스토리를 들려주세요."></textarea>
+    			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
   			</div>
   			</div>
 			<div id="info-tag">

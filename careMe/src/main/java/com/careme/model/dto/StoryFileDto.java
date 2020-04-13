@@ -5,10 +5,31 @@ import org.springframework.web.multipart.MultipartFile;
 public class StoryFileDto {
 	private int story_file_idx;
 	private int story_board_idx;
+	private String origin_file_name;
+	private String save_file_name;
 	private String file_path;
+	private Long file_size;
 	private String del_yn;
 	private MultipartFile file;
 
+	public String getOrigin_file_name() {
+		return origin_file_name;
+	}
+	public void setOrigin_file_name(String origin_file_name) {
+		this.origin_file_name = origin_file_name;
+	}
+	public String getSave_file_name() {
+		return save_file_name;
+	}
+	public void setSave_file_name(String save_file_name) {
+		this.save_file_name = save_file_name;
+	}
+	public Long getFile_size() {
+		return file_size;
+	}
+	public void setFile_size(Long file_size) {
+		this.file_size = file_size;
+	}
 	public MultipartFile getFile() {
 		return file;
 	}
