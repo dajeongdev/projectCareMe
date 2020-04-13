@@ -1,42 +1,24 @@
 package com.careme.controller;
 
-import java.io.File;
-
-import java.io.IOException;
 import java.util.List;
-import java.util.Map;
-
-import javax.activation.CommandMap;
-import javax.annotation.RegEx;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.model.command.StoryFileCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
-import com.careme.service.StoryService;
-import com.google.gson.Gson;
-import com.lowagie.text.pdf.codec.Base64.InputStream;
+import com.careme.service.StoryServiceImpl;
 
 @Controller
 public class StoryController {
 	@Autowired
-	StoryService service;
+	StoryServiceImpl service;
 
-	public void setService(StoryService service) {
+	public void setService(StoryServiceImpl service) {
 		this.service = service;
 	}
 
