@@ -4,19 +4,25 @@
 <mapper namespace="doctorQuestionBrd">
 
 <!-- 게시판 뿌리기 -->
-<select id="getArtPro" resultType="com.careme.model.dto.QuestionBoardDto">
-	select * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'y'
-</select>
+	<select id="getArt" resultType="com.careme.model.dto.QuestionBoardDto">
+		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'y'
+	</select>
 	
-<select id="getArtContent" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.dto.QuestionBoardDto">
-	select * from question_board inner join members on question_board.member_idx=members.member_idx where question_table_idx=#{question_table_idx}
-</select>
+	<select id="getArtContent" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.dto.QuestionBoardDto">
+		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_table_idx=#{question_table_idx}
+	</select>
 	
-<update id="getArtView" parameterType="com.careme.model.dto.QuestionBoardDto">
-	update question_board set 
-		view_count=view_count+1 
-		where question_table_idx=#{question_table_idx}
-</update>
+	<update id="getArtView" parameterType="com.careme.model.dto.QuestionBoardDto">
+		update question_board set 
+			view_count=view_count+1 
+			where question_table_idx=#{question_table_idx}
+	</update>
+
+	<select id="getArtComments" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
+		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
+	</select>
+
+
 
 <!-- 게시판글 검색 -->
 	<select id="getSrchArticle" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.SearchBoardCommand">
@@ -34,11 +40,9 @@
 			</choose>
 	</select>  
 
+
+
 <!-- 게시판글 작성 수정 삭제 -->
-	
-	<select id="getSpec" resultType="com.careme.model.dto.QuestionBoardDto">
-		select pet_species_idx from pet_species
-	</select>
 	
 	<insert id="insertArt" parameterType="com.careme.model.dto.QuestionBoardDto">
 		insert into question_board (member_idx, title, question_type, doctor_idx, pet_idx, pet_species_idx, content, view_count, is_private, reg_date, update_date, del_yn) 
@@ -53,4 +57,24 @@
 	<delete id="deleteArticle" parameterType="int">
 		delete from question_board where question_table_idx=#{question_table_idx}
 	</delete>
+
+
+	
+<!-- comment 작성 수정 삭제 -->
+
+	<insert id="insertComment" parameterType="com.careme.model.dto.BoardCommentDto">
+		insert into question_board_comment (question_table_idx, member_idx, content, heart, reg_date, del_yn) 
+		values (#{question_table_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
+	</insert>
+	
+    <update id="updateComment" parameterType="com.careme.model.dto.BoardCommentDto">
+		update question_board_comment set member_idx=#{member_idx}, content=#{content}, heart=#{heart}, reg_date=#{reg_date}, del_yn=#{del_yn} 
+		where question_board_comment_idx=#{question_board_comment_idx}
+	</update>
+
+	<delete id="deleteComment" parameterType="int">
+		delete from question_board_comment where question_board_comment_idx=#{question_board_comment_idx}
+	</delete>
+
+	
 </mapper>
