@@ -3,9 +3,9 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="story">
-	<!-- 글목록 -->
+	<!-- 글목록 O-->
 	<select id="list" resultType="com.careme.model.dto.StoryBoardDto">
-		select story_board.title, member_id, heart, view_count 
+		select story_board.title, members.member_id, heart, view_count 
 		from story_board, members 
 		where story_board.member_idx = members.member_idx 
 		order by story_board_idx desc
@@ -46,7 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 상세보기 O -->
 	<select id="selectOne" parameterType="int" resultType="com.careme.model.dto.StoryBoardDto">
 		select title, content, story_board.member_idx, tag_name, reg_date
-		from story_board join tag
+		from story_board natural join tag
 		where story_board_idx = #{story_board_idx}
 	</select>
 	

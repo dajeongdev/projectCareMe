@@ -15,7 +15,7 @@ public class StoryFileCommand {
 		int index = name.lastIndexOf(".");
 		String ext = name.substring(index);
 		String n_name = System.currentTimeMillis() + "_" + new Random().nextInt(50) + "." + ext;
-		File n_file = new File("/Users/bagdajeong/git/project/projectCareMe//" + n_name);
+		File n_file = new File("d://ParkDajeong/PORTFOLIO/upload//" + n_name);
 		try {
 			file.transferTo(n_file);
 		} catch(IllegalStateException e) {

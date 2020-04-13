@@ -50,15 +50,39 @@ public class StoryController {
 		return mav;
 	}
 	
+	// 글작성
+	/*
+	 * @RequestMapping(value = "/storyForm", method = RequestMethod.GET) public
+	 * String insertView() { return "/story/storyForm"; }
+	 */
+		
+	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
+	public ModelAndView articleInsert(StoryBoardDto dto, StoryFileDto fileDto) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		int i = service.insert(dto, fileDto);
+		mav.addObject("insert", i);
+		mav.setViewName("/story/storyDetail");
+		return mav;
+	}
+		
+	@RequestMapping(value = "/insertCom")
+	public ModelAndView insertCom(StoryCommentDto dto) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		service.insertCom(dto);
+		mav.addObject("story_board_idx", dto.getStory_board_idx());
+		mav.setViewName("redirect:/story/storyDetail");
+		return mav;
+	}
+	
 	// 상세보기
-	@RequestMapping(value = "/view/story/storyDetail", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/story/storyDetail", method = RequestMethod.POST)
 	public ModelAndView articleDetail(StoryBoardDto dto) {
 		ModelAndView mav = new ModelAndView();
 		dto = service.select(dto.getStory_board_idx());
-		List<StoryCommentDto> comList = service.readCom(dto.getStory_board_idx());
+		//List<StoryCommentDto> comList = service.readCom(dto.getStory_board_idx());
 		mav.setViewName("/story/storyDetail");
 		mav.addObject("detail", dto);
-		mav.addObject("comList", comList);
+		//mav.addObject("comList", comList);
 		return mav;
 	}
 	
@@ -84,28 +108,6 @@ public class StoryController {
 		return mav;
 	}
 	
-	// 글작성
-	@RequestMapping(value = "/storyForm", method = RequestMethod.GET)
-	public String insertView() {
-		return "/view/story/storyForm";
-	}
 	
-	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
-	public ModelAndView articleInsert(@ModelAttribute("insert")StoryBoardDto dto, StoryFileDto fileDto) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		int i = service.insert(dto, fileDto);
-		mav.addObject("insert", i);
-		mav.setViewName("/story/storyDetail");
-		return mav;
-	}
-	
-	@RequestMapping(value = "/insertCom")
-	public ModelAndView insertCom(StoryCommentDto dto) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		service.insertCom(dto);
-		mav.addObject("story_board_idx", dto.getStory_board_idx());
-		mav.setViewName("redirect:/story/storyDetail");
-		return mav;
-	}
 	
 }

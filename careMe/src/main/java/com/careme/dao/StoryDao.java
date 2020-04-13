@@ -41,8 +41,16 @@ public class StoryDao extends SqlSessionDaoSupport {
 		getSqlSession().update("story.update", dto);
 	}
 	
+	public void updateTag(TagDto tagDto) {
+		getSqlSession().update("story.updateTag", tagDto);
+	}
+	
 	public void delete(int story_board_idx) {
 		getSqlSession().delete("story.delete", story_board_idx);
+	}
+	
+	public void deleteTag(String tag_name) {
+		getSqlSession().delete("story.deleteTag", tag_name);
 	}
 	
 	public void insertCom(StoryCommentDto dto) {

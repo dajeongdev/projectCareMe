@@ -126,7 +126,7 @@ $(function (){
 </div>
 <div class="story_form">
 	<div class="container">
-		<form id="insert" method="post" action="storyForm" enctype="multipart/form-data">
+		<form id="insert" method="post" action="storyDetail" enctype="multipart/form-data">
 			<input type="hidden" name="story_board_idx" value="${insert.story_board.idx}" readonly="readonly">
 			<label for="title"></label>
 			<input type="text" id="title" name="title" placeholder="제목을 입력해주세요.">
@@ -148,7 +148,7 @@ $(function (){
 				</div>
 			</div>
 			<button type="submit" class="insert_btn">등록</button>
-			<button type="submit" class="list_btn">목록</button>
+			<button type="submit" class="list_btn" onclick="location.href='storyMain'">목록</button>
 		</form>
 	</div>
 </div>
