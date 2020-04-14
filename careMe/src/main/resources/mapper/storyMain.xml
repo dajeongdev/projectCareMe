@@ -4,11 +4,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="story">
 	<!-- 글목록 O-->
-	<select id="list" resultType="com.careme.model.command.StoryCommand">
-		select * 
-		from story_board inner join members 
-		on story_board.member_idx = members.member_idx 
-		order by story_board_idx desc
+	<select id="list" resultType="com.careme.model.dto.StoryBoardDto">
+		select * from story_board inner join members where story_board.member_idx = members.member_idx order by story_board_idx desc 
 	</select>
 	
 	<!-- paging 
@@ -17,10 +14,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select> -->
 	
 	<!-- 상세보기 O -->
-	<select id="read" parameterType="int" resultType="com.careme.model.command.StoryCommand">
+	<select id="read" parameterType="int" resultType="com.careme.model.dto.StoryBoardDto">
 		select title, content, file_path, reg_date
 		from story_board inner join story_file
-		where story_board_idx = #{story_board_idx}
+		on story_board_idx = #{story_board_idx}
 	</select>
 	<select id="readTag" parameterType="map" resultType="com.careme.model.dto.TagDto">
 		select b.tag_name 
@@ -36,34 +33,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where story_board_idx = #{story_board_idx}
 	</select>
 	<!-- 조회수 증가 O-->
-	<update id="viewCount" parameterType="com.careme.model.command.StoryCommand">
+	<update id="viewCount" parameterType="com.careme.model.dto.StoryBoardDto">
 		update story_board
 		set view_count = view_count + 1
 		where story_board_idx = #{story_board_idx}
 	</update>
+	<select id="hit" parameterType="com.careme.model.dto.StoryBoardDto" resultType="com.careme.model.dto.StoryBoardDto">
+		select * from story_board inner join members where story_board.member_idx = members.member_idx order by heart desc limit 3
+	</select>
 	
 	
 	<!-- 글작성 -->
-	<insert id="insert" parameterType="com.careme.model.command.StoryCommand">
+	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto">
 		insert into story_board (story_board_idx, member_idx, tag_idx, title, content, heart, view_count, reg_date, update_date, del_yn)
 		values (0, #{member_idx}, #{tag_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
 	</insert>
 	<insert id="insertTag" parameterType="com.careme.model.dto.TagDto">
-		insert into tag values(#{tag_idx}, #{tag_name}, #{member_idx})
+		insert into tag values(#{tag_idx}, #{tag_name}, #{member_idx}, 'n')
 	</insert>
-	<insert id="insertFile" parameterType="com.careme.model.dto.StoryFileDto">
-		insert into story_file(story_file_idx, story_board_idx, origin_file_name, save_file_name, file_path, file_size) 
-		values(0, #{story_board_idx}, #{origin_file_name}, #{save_file_name}, #{file_path}, #{file_size})
+	<insert id="insertFile" parameterType="com.careme.model.dto.StoryBoardDto">
+		insert into story_file(story_board_idx, file_name, file_path, file_size, del_yn) 
+		values(#{story_board_idx}, #{file_name}, #{file_path}, #{file_size}, 'n')
 	</insert>
 	<!-- 댓글 작성  -->
 	<insert id="insertCom" parameterType="com.careme.model.dto.StoryCommentDto">
-		insert into story_comment(story_comment_idx, story_board_idx, member_idx, content, heart, reg_date)
-		values(0, #{story_board_idx}, #{member_idx}, #{content}, 0, #{reg_date})
+		insert into story_comment(story_comment_idx, story_board_idx, member_idx, content, heart, reg_date, del_yn)
+		values(0, #{story_board_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
 	</insert>
 	
 	
 	<!-- 글수정 O -->
-	<update id="update" parameterType="com.careme.model.command.StoryCommand">
+	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto">
 		update story_board
 		<set> 
 			<if test="title != null">title = #{title},</if>
@@ -71,8 +71,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</set>
 		<where>story_board_idx = #{story_board_idx}</where>
 	</update>
-	<update id="updateFile" parameterType="com.careme.model.dto.StoryFileDto">
-		update story_file set file_path = #{file_path}
+	<update id="updateFile" parameterType="com.careme.model.dto.StoryBoardDto">
+		update story_file set file_name = #{file_name}, file_path = #{file_path}, file_size = #{file_size}
 	</update>
 	<update id="updateTag" parameterType="com.careme.model.dto.TagDto">
 		update tag set tag_name = #{tag_name} where tag_idx = ${tag_idx}

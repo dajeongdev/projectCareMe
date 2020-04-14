@@ -31,54 +31,24 @@
     <div class="container">
     
 	<div class="row">
+	<c:forEach items="${hlist}" var="hlist">
         <div class="col-md-4">
           <div class="card mb-4 shadow-sm">
             <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
             <div class="card-body">
               <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-              <h5 class="card-text">제목</h5>
-              <p class="card-text">사용자</p>
+              <h5 class="card-text">${hlist.title}</h5>
+              <p class="card-text">${hlist.member_id }</p>
               <div class="d-flex justify-content-between align-items-center">
                <div class="btn-group">
-                  <i class="fas fa-heart"></i>&nbsp<span class="card-heart">39</span>&nbsp&nbsp
-              	  <i class="far fa-comments"></i>&nbsp<span class="card-count">885</span>
+                  <i class="fas fa-heart"></i>&nbsp<span class="card-heart">${hlist.heart}</span>&nbsp&nbsp
+              	  <i class="far fa-comments"></i>&nbsp<span class="card-count">${hlist.view_count}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-     	 <div class="col-md-4">
-          <div class="card mb-4 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
-            <div class="card-body">
-              <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-              <h5 class="card-text">제목</h5>
-              <p class="card-text">사용자</p>
-              <div class="d-flex justify-content-between align-items-center">
-               <div class="btn-group">
-                  <i class="fas fa-heart"></i>&nbsp<span class="card-heart">55</span>&nbsp&nbsp
-              	  <i class="far fa-comments"></i>&nbsp<span class="card-count">1095</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      <div class="col-md-4">
-          <div class="card mb-4 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
-            <div class="card-body">
-              <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
-              <h5 class="card-text">제목</h5>
-              <p class="card-text">사용자</p>
-              <div class="d-flex justify-content-between align-items-center">
-               <div class="btn-group">
-                  <i class="fas fa-heart"></i>&nbsp<span class="card-heart">26</span>&nbsp&nbsp
-              	  <i class="far fa-comments"></i>&nbsp<span class="card-count">402</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+     	</c:forEach>
        </div>
         
 
@@ -125,7 +95,7 @@
 		<input type="text" name="search" size="20" maxLength="40">
 		<input type="submit" value="검색">
 	</form>
-</div>
+</div> 
 
 
 	

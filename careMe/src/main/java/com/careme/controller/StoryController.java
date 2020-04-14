@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
+import com.careme.model.dto.StoryCommentDto;
 import com.careme.service.FileUploadService;
 import com.careme.service.StoryService;
 
@@ -40,73 +41,75 @@ public class StoryController {
 
 	// 글목록
 	@RequestMapping(value = "/view/story/storyMain", method = RequestMethod.GET)
-	public ModelAndView listing(Model model) {
+	public ModelAndView listing() {
 		ModelAndView mav = new ModelAndView();
-		List<StoryCommand> list = service.list();
+		List<StoryBoardDto> list = service.list();
+		List<StoryBoardDto> hlist = service.hitList();
 		mav.addObject("list", list);
+		mav.addObject("hlist", hlist);
 		mav.setViewName("/story/storyMain");
 		return mav;
 	}
 	
+	// 상세보기
+	@RequestMapping(value = "/view/story/storyDetail", method = RequestMethod.GET)
+	public ModelAndView articleDetail(int story_board_idx) {
+		ModelAndView mav = new ModelAndView();
+		service.counting(story_board_idx);
+		StoryBoardDto list = service.read(story_board_idx);
+		List<StoryCommentDto> comList = service.readCom(story_board_idx);
+		int comCount = comList.size();
+		int viewCount = service.counting(story_board_idx);
+		mav.addObject("list", list);
+		mav.addObject("comList", comList);
+		mav.addObject("comCount", comCount);
+		mav.addObject("viewCount", viewCount);
+		mav.setViewName("story/storyMain");
+		return mav;
+	}
+	
 	// 글작성
-	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST) 
-	public String insertView(MultipartHttpServletRequest request) { 
-		service.insert(request);
+	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.GET)
+	public String insertForm() {
 		return "/story/storyForm";
 	}
-		
-	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.GET)
-	public ModelAndView articleInsert(MultipartHttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("/story/storyForm");
-		mav.addObject("file", )
-		mav.addObject("insert", service.list());
+	
+	@RequestMapping(value = "/view/story/storyFormAdd", method = RequestMethod.POST) 
+	public ModelAndView articleInsert(StoryBoardDto dto, MultipartHttpServletRequest request) { 
+		ModelAndView mav = new ModelAndView("redirect:/view/story/storyDetail");
+		mav.addObject("insert", service.insert(dto));
+		mav.addObject("file", file.upload(request, "/img/story/"));
 		return mav;
 	}
 	
-	// 상세보기
-	@RequestMapping(value = "/view/story/storyDetail", method = RequestMethod.POST)
-	public ModelAndView articleDetail(StoryCommand dto) {
-		ModelAndView mav = new ModelAndView("/story/storyDetail");
-		mav.addObject("read", service.read(dto.getStory_board_idx()));
-		return mav;
-	}
-
-	/*
-	// 댓글 보기
-	@RequestMapping(value = "/insertCom")
-	public ModelAndView insertCom(int story_board_idx) throws Exception {
-		ModelAndView mav = new ModelAndView();
-		List<StoryCommentDto> list = service.readCom(story_board_idx);
-		mav.addObject("story_board_idx", list);
-		mav.setViewName("redirect:/story/storyDetail");
-		return mav;
-	}
-	
-	*/
 	// 글수정
-	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.POST)
-	public String updateForm(MultipartHttpServletRequest request) {
-		service.update(request);
-		return "redirect:/story/storyDetail";
+	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.GET)
+	public ModelAndView updateForm(int story_board_idx) {
+		ModelAndView mav = new ModelAndView("/story/storyUpdate");
+		mav.addObject("story_board_idx", story_board_idx);
+		return mav;
 	}
 	
-	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.GET)
-	public ModelAndView articleUpdate(MultipartHttpServletRequest request, int i) throws Exception {
-		ModelAndView mav = new ModelAndView("/story/storyUpdate");
-		
-		StoryCommand com = service.read(i);
-		request.getSession().setAttribute("story_board_idx", i);
-		
-		mav.addObject("list", service.list());
-		mav.addObject("update", com);
-		return mav;
+	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.POST)
+	public String articleUpdate(StoryBoardDto dto) throws Exception {
+		int result = service.update(dto);
+		if(result > 0) {
+			return "redirect:/view/story/storyDetail";
+		} else {
+			return "redirect:/view/story/storyMain";
+		}
 	}
 	
 	// 글삭제
 	@RequestMapping(value = "/story/delete")
-	public String articleDelete(HttpServletRequest request) throws Exception {
-		service.delete(request);
-		return "redirect:/story/storyMain";
+	public String articleDelete(int story_board_idx) throws Exception {
+		int result = service.delete(story_board_idx);
+		if(result > 0) {
+			return "redirect:/story/storyMain";
+		} else {
+			System.out.println("error");
+			return "redirect:/story/storyMain";
+		}
 	}
 	
 }

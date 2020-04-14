@@ -7,18 +7,24 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
-.story_form { width: 100%; height: 100%; position: relative; }
-.container {
+/* .container {
 	width: 1000px;
 	width: 1000px;
-	position: absolute;
+	position: absolue;
 	left: 50%;
 	top: 50%;
-	margin-left: -350px;
+	margin-left: -150px;
 	margin-top: 100px;
-}
-#hash-search, #content, #title {
+} */
+#hash-search, #content, #title, .custom-file-label {
 	width: 700px;
+}
+.custom-file-label {
+	position: relative;
+	margin-botton: 40px;
+}
+#content {
+	height: 300px;
 }
 #hash-inbox { 
 	margin-top:2px;
@@ -40,15 +46,6 @@
 #preview img {
 	width: 100px;
 	height: 100px;
-}
-#preview p {
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
-.preview-box {
-	border: 1px solid;
-	padding: 5px;
-	margin-bottom: 10px;
 }
 </style>
 <title>스토리 글쓰기</title>
@@ -81,25 +78,6 @@ $(function (){
 	  });
 });
 
-$("#testUploadFile").change(function() {
-	var formData = new FormData($("#fileForm")[0]);
-
-	$.ajax({
-		type: 'post',
-		url: 'resources/img/story',
-		data: formData,
-		processdata: false,
-		dataType: "json",
-		contentType: false,
-		async: false,
-		success : function(data) {
-			alert("파일 업로드 성공");
-		}, 
-		error : function(error) {
-			alert("파일 업로드에 실패하였습니다.");
-		}
-	});
-});
 </script>
 </head>
 <body>
@@ -107,36 +85,34 @@ $("#testUploadFile").change(function() {
 <div class="container-fluid" style="padding:0;">
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
-<div class="story_form">
+<div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="container">
-		<form name="story_insert" method="post" action="/story/storyDetail" enctype="multipart/form-data">
+		<form name="insertForm" method="POST" action="storyFormAdd" enctype="multipart/form-data">
 			<input type="hidden" name="story_board_idx" value="0">
-			<input type="text" class="form-control" id="title" name="title" 
-				placeholder="제목을 입력해주세요.">
+			<input type="hidden" name="member_idx" value="1">
 			<div class="story_content">
-				<div id="attach">
-					<span class="file" id="file">
-					<input type="file" name="file filedata" id="file testUploadFile" multiple/>
-					</span>
-				</div>
+				<input type="text" class="form-control" id="title" name="title" 
+				placeholder="제목을 입력해주세요.">
+				<input type="file" name="file" id="file customFile" class="custom-file-input" multiple/>
+				<label class="custom-file-label" for="customFile">사진을 선택해주세요.</label>
 				<div id="preview">
 				</div>
-				<a href="#this" name="delete" class="btn">X</a>
 			<div class="form-group">
 			 	<textarea class="form-control" name="content"
     			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
   			</div>
   			</div>
-			<div id="info-tag">
+			<!-- <div id="info-tag">
 				<input type="text" class="form-control" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
 					<div id="hash-inbox">
 					</div>
 				</div>
-			</div>
+			</div>  -->
+			<input type="hidden" name="tag_idx" value="3">
 			<div class="btn-group">
-				<button type="submit" class="insert_btn btn btn-outline-dark"><a href="#" title="등록" class="btnline">등록</a></button>
-				<button type="submit" class="list_btn btn btn-outline-dark">목록</button>
+				<button type="submit" class="insert_btn btn btn-outline-dark">등록</button>
+				<button type="submit" class="list_btn btn btn-outline-dark" OnClick="location.href='storyDetail'">목록</button>
 			</div>
 		</form>
 	</div>

@@ -1,21 +1,14 @@
 package com.careme.service;
 
+import java.time.LocalDateTime;
+
 import java.util.List;
-
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.StoryDao;
-import com.careme.model.command.FileUploadCommand;
-import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
-import com.careme.model.dto.StoryFileDto;
 
 @Service("StoryService")
 public class StoryServiceImpl implements StoryService {
@@ -26,32 +19,19 @@ public class StoryServiceImpl implements StoryService {
 		this.dao = dao;
 	}
 	
-	StoryCommand com;
-	
-	public void setCom(StoryCommand com) {
-		this.com = com;
-	}
-	
-	@Autowired
-	FileUploadService fileUpload;
+	StoryBoardDto dto;
 
-	public void setFileUpload(FileUploadService fileUpload) {
-		this.fileUpload = fileUpload;
+	public void setDto(StoryBoardDto dto) {
+		this.dto = dto;
 	}
 
 	@Override
-	public List<StoryCommand> list() {
+	public List<StoryBoardDto> list() {
 		return dao.listing();
 	}
 
 	@Override
-	public int insert(MultipartHttpServletRequest request) {
-		com = requesting(request);
-		return dao.insert(com);
-	}
-
-	@Override
-	public StoryCommand read(int story_board_idx) {
+	public StoryBoardDto read(int story_board_idx) {
 		return dao.read(story_board_idx);
 	}
 
@@ -61,54 +41,52 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public int update(MultipartHttpServletRequest request) {
-		int i = 0;
-		com = requesting(request);
-		i = dao.update(com);
-		request.getSession().removeAttribute("story_board_idx");
-		return i;
+	public List<StoryCommentDto> readCom(int story_board_idx) {
+		return dao.readCom(story_board_idx);
 	}
 
 	@Override
-	public int delete(HttpServletRequest request) {
-		return dao.delete((int) request.getSession().getAttribute("story_board_idx"));
+	public int insert(StoryBoardDto dto) {
+		dto.setReg_date(LocalDateTime.now());
+		return dao.insert(dto);
 	}
 
-	
-	 public StoryCommand requesting(MultipartHttpServletRequest request) { 
-		 com = new StoryCommand();
-	  
-		 int member_idx = 1;
-		 
-		 if(request.getParameter("p") != null && request.getParameter("p") != "") 
-			 com.setStory_board_idx(Integer.parseInt(request.getParameter("p"))); 
-		 
-		 Integer story_board_idx = (Integer)request.getSession().getAttribute("story_board_idx");
-		 if(story_board_idx != null) { 
-			 com.setStory_board_idx(story_board_idx); 
-		 }
-		 
-		 com.setMember_idx(member_idx); 
-		 com.setTitle(request.getParameter("title"));
-		 com.setContent(request.getParameter("content"));
-		 com.setHeart(Integer.parseInt(request.getParameter("heart")));
-		 com.setView_count(Integer.parseInt(request.getParameter("view_count")));
-		 com.setTag_idx(Integer.parseInt(request.getParameter("tag_idx")));
-		 com.setStory_file_idx(Integer.parseInt(request.getParameter("story_file_idx")));
-		 com.setMember_id(request.getParameter("member_id"));
-		 com.setHeart(Integer.parseInt(request.getParameter("heart")));
-		 com.setView_count(Integer.parseInt(request.getParameter("view_count")));
-		 
-		 if(!request.getFile(request.getFileNames().next()).isEmpty()) {
-			 List<FileUploadCommand> files = fileUpload.upload(request,"/img/story/upload/"); 
-			 FileUploadCommand file = files.get(0);
-			 com.setOrigin_file_name(file.getFileOriginName());
-			 com.setFile_size(file.getFileSize());
-			 com.setFile_path(file.getFilePath());
-		 } 
-		 return com; 
+	@Override
+	public int insertFile(StoryBoardDto dto) {
+		return dao.insertFile(dto);
 	}
 
+	@Override
+	public int insertCom(StoryCommentDto comDto) {
+		comDto.setReg_date(LocalDateTime.now());
+		return dao.insertCom(comDto);
+	}
 
+	@Override
+	public int update(StoryBoardDto dto) {
+		dto.setReg_date(LocalDateTime.now());
+		return dao.update(dto);
+	}
+
+	@Override
+	public int updateCom(StoryCommentDto comDto) {
+		comDto.setReg_date(LocalDateTime.now());
+		return dao.updateCom(comDto);
+	}
+
+	@Override
+	public int delete(int story_board_idx) {
+		return dao.delete(story_board_idx);
+	}
+
+	@Override
+	public int deleteCom(int story_comment_idx) {
+		return dao.deleteCom(story_comment_idx);
+	}
+
+	@Override
+	public List<StoryBoardDto> hitList() {
+		return dao.hitList();
+	}
 
 }
