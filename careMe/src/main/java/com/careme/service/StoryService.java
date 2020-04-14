@@ -1,64 +1,46 @@
 package com.careme.service;
 
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.careme.dao.StoryDao;
-import com.careme.model.command.StoryFileCommand;
+import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
-import com.careme.model.dto.StoryFileDto;
 
-@Service
-public class StoryService {
-	@Autowired
-	StoryDao dao;
+public interface StoryService {
+	// 글목록
+	public List<StoryBoardDto> list();
 	
-	@Resource
-	StoryFileCommand com;
-
-	// 게시글 목록
-	public List<StoryBoardDto> listing() {
-		return dao.listing();
-	}
-
-	// 게시글 작성
-	public int insert(StoryBoardDto dto, StoryFileDto fileDto) throws Exception {
-		int i = dao.insert(dto);
-		i += dao.insertFile(fileDto);
-		return i;
-	}
+	// 글 상세보기
+	public StoryBoardDto read(int story_board_idx);
 	
-	// 게시글 상세보기
-	public StoryBoardDto select(int story_board_idx) {
-		return dao.selectOne(story_board_idx);
-	}
+	// 조회수
+	public int counting(int story_board_idx);
 	
-	// 게시글 수정
-	public void update(StoryBoardDto dto) {
-		dao.update(dto);
-	}
+	// 댓글 보기
+	public List<StoryCommentDto> readCom(int story_board_idx);
 	
-	// 게시글 삭제
-	public void delete(int story_board_idx) {
-		dao.delete(story_board_idx);
-	}
+	// 인기글
+	public List<StoryBoardDto> hitList();
 	
-	// 댓글 조회
-	public List<StoryCommentDto> readCom(int story_board_idx) {
-		return dao.readCom(story_board_idx);
-	}
+	// 작성
+	public int insert(StoryBoardDto dto);
 	
-	// 댓글 작성
-	public void insertCom(StoryCommentDto dto) {
-		dao.insertCom(dto);
-	}
+	public int insertFile(StoryBoardDto dto);
+	
+	public int insertCom(StoryCommentDto comDto);
+	
+	// 수정
+	public int update(StoryBoardDto dto);
+	
+	public int updateCom(StoryCommentDto comDto);
+	
+	// 삭제
+	public int delete(int story_board_idx);
+	
+	public int deleteCom(int story_comment_idx);
+	
 }

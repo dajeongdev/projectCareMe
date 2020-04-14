@@ -1,59 +1,83 @@
 package com.careme.dao;
 
 import java.util.List;
-import java.util.Map;
-
 import org.mybatis.spring.support.SqlSessionDaoSupport;
-
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
-import com.careme.model.dto.StoryFileDto;
 import com.careme.model.dto.TagDto;
 
 public class StoryDao extends SqlSessionDaoSupport {
-
-	
+	// 글목록
 	public List<StoryBoardDto> listing() {
 		return getSqlSession().selectList("story.list");
 	}
 	
+	// 글 상세보기
+	public StoryBoardDto read(int story_board_idx) {
+		return getSqlSession().selectOne("story.read", story_board_idx);
+	}
+	
+	// 조회수
+	public int counting(int story_board_idx) {
+		return getSqlSession().update("story.viewCount", story_board_idx);
+	}
+	
+	// 댓글 읽기
+	public List<StoryCommentDto> readCom(int story_board_idx) {
+		return getSqlSession().selectList("story.readCom", story_board_idx);
+	}
+	
+	// 인기글
+	public List<StoryBoardDto> hitList() {
+		return getSqlSession().selectList("story.hit");
+	}
+	
+	// 작성
 	public int insert(StoryBoardDto dto) {
 		return getSqlSession().insert("story.insert", dto);
+	}
+	
+	public int insertFile(StoryBoardDto dto) {
+		return getSqlSession().insert("story.insertFile", dto);
 	}
 	
 	public int insertTag(TagDto tagDto) {
 		return getSqlSession().insert("insert.insertTag", tagDto);
 	}
 	
-	public int insertFile(StoryFileDto fileDto) throws Exception {
-		return getSqlSession().insert("story.insertFile", fileDto);
+	public int insertCom(StoryCommentDto comDto) {
+		return getSqlSession().insert("story.insertCom", comDto);
 	}
 	
-	public StoryBoardDto selectOne(int story_board_idx) {
-		return getSqlSession().selectOne("story.select", story_board_idx);
+	// 수정
+	public int update(StoryBoardDto dto) {
+		return getSqlSession().update("story.update", dto);
 	}
 	
-	public List<StoryCommentDto> readCom(int story_board_idx) {
-		return getSqlSession().selectList("story.readCom", story_board_idx);
+	public int updateFfile(StoryBoardDto dto) {
+		return getSqlSession().update("story.updateFile", dto);
+	} 
+	
+	public int updateTag(TagDto tagDto) {
+		return getSqlSession().update("story.updateTag", tagDto);
 	}
 	
-	public void update(StoryBoardDto dto) {
-		getSqlSession().update("story.update", dto);
+	public int updateCom(StoryCommentDto comDto) {
+		return getSqlSession().update("story.updateCom", comDto);
 	}
 	
-	public void updateTag(TagDto tagDto) {
-		getSqlSession().update("story.updateTag", tagDto);
+	// 삭제(del_yn 'y')
+	public int delete(int story_board_idx) {
+		return getSqlSession().update("story.delete", story_board_idx);
 	}
 	
-	public void delete(int story_board_idx) {
-		getSqlSession().delete("story.delete", story_board_idx);
+	public int deleteTag(int tag_idx) {
+		return getSqlSession().update("story.deleteTag", tag_idx);
 	}
 	
-	public void deleteTag(String tag_name) {
-		getSqlSession().delete("story.deleteTag", tag_name);
+	public int deleteCom(int story_comment_idx) {
+		return getSqlSession().update("story.deleteCom", story_comment_idx);
 	}
 	
-	public void insertCom(StoryCommentDto dto) {
-		getSqlSession().insert("story.insertCom", dto);
-	}
+
 }

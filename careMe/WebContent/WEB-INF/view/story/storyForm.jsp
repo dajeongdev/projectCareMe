@@ -7,22 +7,29 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
-.story_form { width: 100%; height: 100%; position: relative; }
-.container {
+/* .container {
 	width: 1000px;
 	width: 1000px;
-	position: absolute;
+	position: absolue;
 	left: 50%;
 	top: 50%;
-	margin-left: -250px;
+	margin-left: -150px;
 	margin-top: 100px;
+} */
+#hash-search, #content, #title, .custom-file-label {
+	width: 700px;
 }
-#hash-search, #content, #title {
-	width: 600px;
+.custom-file-label {
+	position: relative;
+	margin-botton: 40px;
+}
+#content {
+	height: 300px;
 }
 #hash-inbox { 
+	margin-top:2px;
 	background: #bdbdbd;
-	width: 600px;
+	width: 700px;
 	height: 100px;
 }
 .added-tag {
@@ -31,6 +38,14 @@
 	margin: 5px 5px;
 	border-radius: 10%;
 	display: inline-block;
+}
+.btn-group { 
+	float: right; 
+	margin-top: 10px;
+}
+#preview img {
+	width: 100px;
+	height: 100px;
 }
 </style>
 <title>스토리 글쓰기</title>
@@ -61,61 +76,7 @@ $(function (){
 	      }
 	    }
 	  });
-	  
-	$("#hash-inbox").on("click", ".added-tag", function () {
-		    $(this).remove();
-	});
 });
-	
-	$(document).ready(function() {
-		var formObj = $("form[name='insert']");
-
-		// 수정
-		$(".insert_btn").on("click", function() {
-			if(fn_valiChk()) {
-				return false;
-			}
-			formObj.attr("action", "/story/storyDetail");
-			formObj.attr("method", "post");
-			formObj.submit();
-		})
-		// 삭제
-		$(".delete_btn").on("click", function() {
-			formObj.attr("action", "/story/stoyDelete");
-			formObj.attr("method", "post");
-			formObj.submit();
-		})
-
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileDelete($(this));
-		})
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileAdd($(this));
-		})
-	});
-	function fn_valiChk() {
-		var regForm = $("form[name='insert']) .chk").length;
-		for(var i = 0; i < regForm; i++) {
-			if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null) {
-				alert($(".chk").eq(i).attr("title"));
-				return true;
-			});
-		}
-	}
-	function fn_fileDelete(obj) {
-		obj.parent.remove();
-	}
-	function fn_fileAdd() {
-		var str = "<p><input type='file' name='file' /><a href='#this' name='delete' class='btn'>삭제</a>";
-		$("#fileDiv").append(str);
-	
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileDelete($(this));
-		});
-	}
 
 </script>
 </head>
@@ -124,31 +85,35 @@ $(function (){
 <div class="container-fluid" style="padding:0;">
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
-<div class="story_form">
+<div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="container">
-		<form id="insert" method="post" action="storyDetail" enctype="multipart/form-data">
-			<input type="hidden" name="story_board_idx" value="${insert.story_board.idx}" readonly="readonly">
-			<label for="title"></label>
-			<input type="text" id="title" name="title" placeholder="제목을 입력해주세요.">
-			<button type="button" class="btn btn-outline-dark">사진추가</button>
+		<form name="insertForm" method="POST" action="storyFormAdd" enctype="multipart/form-data">
+			<input type="hidden" name="story_board_idx" value="0">
+			<input type="hidden" name="member_idx" value="1">
 			<div class="story_content">
-				<input type="file" name="insert"/>
-				<a href="#this" name="delete" class="btn">삭제</a>
+				<input type="text" class="form-control" id="title" name="title" 
+				placeholder="제목을 입력해주세요.">
+				<input type="file" name="file" id="file customFile" class="custom-file-input" multiple/>
+				<label class="custom-file-label" for="customFile">사진을 선택해주세요.</label>
+				<div id="preview">
+				</div>
 			<div class="form-group">
-			 	<label for="content"></label>
-    			<textarea class="form-control" name="content"
-    			id="exampleFormControlTextarea1 content" rows="3" placeholder="스토리를 들려주세요."></textarea>
+			 	<textarea class="form-control" name="content"
+    			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
   			</div>
   			</div>
-			<div id="info-tag">
-				<input type="text" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+			<!-- <div id="info-tag">
+				<input type="text" class="form-control" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
 					<div id="hash-inbox">
 					</div>
 				</div>
+			</div>  -->
+			<input type="hidden" name="tag_idx" value="3">
+			<div class="btn-group">
+				<button type="submit" class="insert_btn btn btn-outline-dark">등록</button>
+				<button type="submit" class="list_btn btn btn-outline-dark" OnClick="location.href='storyDetail'">목록</button>
 			</div>
-			<button type="submit" class="insert_btn">등록</button>
-			<button type="submit" class="list_btn" onclick="location.href='storyMain'">목록</button>
 		</form>
 	</div>
 </div>
