@@ -12,4 +12,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectBigDef" resultType="com.careme.model.dto.DefecationDto">
 		select * from defecation where defecation_type = 'b'
 	</select>
+	
+	<insert id="writeDiary" parameterType="com.careme.model.dto.PetCareDto">
+		insert into pet_care (pet_idx, title, exercise, urine, feces, memo, weight, diary_date)
+		values ( #{pet_idx}, #{title}, #{exerciese}, #{urine}, #{feces}, #{memo}, #{weight}, #{diary_date} )
+
+		<selectKey keyProperty="id" resultType="int">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+	</insert>
+	
+
+	
+
 </mapper>

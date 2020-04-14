@@ -27,10 +27,10 @@
 		
 		</div>
 		
-		<div class="row mb-2 col-md-12">
+		<div class="row mb-2">
 		
 			<div class="col-2 text-left">
-				<button class="btn btn-success">일기작성</button>
+				<button class="btn btn-success" onclick="location.href='carediary/write'">일기작성</button>
 			</div>
 			
 			<div class="col-10 text-right">
@@ -40,111 +40,117 @@
 		</div>
 		
 		<!-- S:diary -->
-		<div class="col-md-12">
-		
-		    <div class="card b-1 hover-shadow mb-20">
-		    	<footer class="card-footer flexbox align-items-center">
-		            <div>
-		                <strong>오늘의 일기 : </strong>
-		                <span>21 Jan, 2018</span>
-		            </div>
-		            <div class="card-hover-show">
-		                <a class="btn btn-xs fs-10 btn-bold btn-info" href="#">수정</a>
-		                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">질문하기</a>
-		                <button type="button" class="btn btn-xs fs-10 btn-bold btn-warning" data-toggle="collapse" data-target="#images" aria-expanded="false" aria-controls="images">열기</button>
-		                <!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
-		            </div>
-		        </footer>
-		        
-		        <div class="media card-body table-responsive">
-		        	<div class="row">
-		        	
-			        	<div class="col-md-6 p-2">
-			        		<div class="card-body">
-				        		<table class="table-sm w-100 text-center">
-					        		<thead class="border-bottom">
-					        			<tr>
-					        				<th>날짜</th>
-					        				<th>산책</th>
-					        				<th>소변</th>
-					        				<th>대변</th>
-					        				<th>몸무게</th>
-					        			</tr>
-					        		</thead>
-					        		<tbody>
-						        		<tr>
-					        				<td>2020/03/26</td>
-					        				<td>50/m</td>
-					        				<td>
-					        					<div class="color-circle"></div>
-											</td>
-					        				<td>무름</td>
-					        				<td>20/kg</td>
-					        			</tr>
-					        		</tbody>
-				        		</table>
-			        		</div>
-			        	</div>
+		<div class="row">
+			<div class="col-md-12">
+			    <div class="card b-1 hover-shadow mb-20">
+			    	<footer class="card-footer flexbox align-items-center">
+			            <div>
+			                <strong>오늘의 일기 : </strong>
+			                <span>21 Jan, 2018</span>
+			            </div>
+			            <div class="card-hover-show">
+			                <a class="btn btn-xs fs-10 btn-bold btn-info" href="#">수정</a>
+			                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">질문하기</a>
+			                <button type="button" class="btn btn-xs fs-10 btn-bold btn-warning" data-toggle="collapse" data-target="#images" aria-expanded="false" aria-controls="images">열기</button>
+			                <!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
+			            </div>
+			        </footer>
+			        
+			        <div class="media card-body table-responsive">
+			        	<div class="row">
 			        	
-			        	<div class="col-md-6 p-2">
-			        		<div class="card-body">
-				        		<p>
-				        			오늘의 일기 오늴의일기 오늘의 일기 오늴의일기 오늘의 일기 오늴의일기
-				        			오늘의 일기 오늴의일기  오늘의 일기 오늴의일기
-				        		</p>
-		        			</div>
-			        	</div>
-			        	
-			        	<div class="col-md-12 p-2 collapse" id="images">
-			        		<div class="card-body">
-			        			<div class="row">
-			        				<div class="col-md-3">
-			        					<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
-				        			</div>
-				        			<div class="col-md-3">
-					        			<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
-				        			</div>
-				        			<div class="col-md-3">
-					        			<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
-				        			</div>
+				        	<div class="col-md-6 p-2">
+				        		<div class="card-body">
+					        		<table class="table-sm w-100 text-center">
+						        		<thead class="border-bottom">
+						        			<tr>
+						        				<th>날짜</th>
+						        				<th>산책</th>
+						        				<th>소변</th>
+						        				<th>대변</th>
+						        				<th>몸무게</th>
+						        			</tr>
+						        		</thead>
+						        		<tbody>
+							        		<tr>
+						        				<td>2020/03/26</td>
+						        				<td>50/m</td>
+						        				<td>
+						        					<div class="color-circle"></div>
+												</td>
+						        				<td>무름</td>
+						        				<td>20/kg</td>
+						        			</tr>
+						        		</tbody>
+					        		</table>
+				        		</div>
+				        	</div>
+				        	
+				        	<div class="col-md-6 p-2">
+				        		<div class="card-body">
+					        		<p>
+					        			오늘의 일기 오늴의일기 오늘의 일기 오늴의일기 오늘의 일기 오늴의일기
+					        			오늘의 일기 오늴의일기  오늘의 일기 오늴의일기
+					        		</p>
 			        			</div>
-			        		</div>
+				        	</div>
+				        	
+				        	<div class="col-md-12 p-2 collapse" id="images">
+				        		<div class="card-body">
+				        			<div class="row">
+				        				<div class="col-md-3">
+				        					<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
+					        			</div>
+					        			<div class="col-md-3">
+						        			<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
+					        			</div>
+					        			<div class="col-md-3">
+						        			<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
+					        			</div>
+				        			</div>
+				        		</div>
+				        	</div>
+				        	
 			        	</div>
-		        	</div>
-		        </div>
-		    </div>
+			        </div>
+			    </div>
+			
+			    <div class="card b-1 hover-shadow mb-20">
+			        <footer class="card-footer flexbox align-items-center">
+			            <div>
+			                <strong>산책일기 : </strong>
+			                <span>18 Jan, 2017</span>
+			            </div>
+			            <div class="card-hover-show">
+			                <a class="btn btn-xs fs-10 btn-bold btn-info" href="#">Download CV</a>
+			                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">Contact</a>
+			                <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">Delete</a>
+			            </div>
+			        </footer>
+			        
+			        <div class="media card-body">
+			            <div class="media-left pr-12">
+			                <img class="avatar avatar-xl no-radius" src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="...">
+			            </div>
+			            <div class="media-body">
+			                <div class="mb-2">
+			                    <span class="fs-20 pr-16">Maryam Amiri</span>
+			                </div>
+			                <small class="fs-16 fw-300 ls-1">Designer</small>
+			            </div>
+			            <div class="media-right text-right d-none d-md-block">
+			                <p class="fs-14 text-fade mb-12"><i class="fa fa-map-marker pr-1"></i> Fairfield, IA</p>
+			                <span class="text-fade"><i class="fa fa-money pr-1"></i> $45 per hour</span>
+			            </div>
+			        </div>
+			    </div>
+			    
+			</div>
+		</div>
+		<!-- E:diary -->
 		
-		    <div class="card b-1 hover-shadow mb-20">
-		        <footer class="card-footer flexbox align-items-center">
-		            <div>
-		                <strong>산책일기 : </strong>
-		                <span>18 Jan, 2017</span>
-		            </div>
-		            <div class="card-hover-show">
-		                <a class="btn btn-xs fs-10 btn-bold btn-info" href="#">Download CV</a>
-		                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">Contact</a>
-		                <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">Delete</a>
-		            </div>
-		        </footer>
-		        
-		        <div class="media card-body">
-		            <div class="media-left pr-12">
-		                <img class="avatar avatar-xl no-radius" src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="...">
-		            </div>
-		            <div class="media-body">
-		                <div class="mb-2">
-		                    <span class="fs-20 pr-16">Maryam Amiri</span>
-		                </div>
-		                <small class="fs-16 fw-300 ls-1">Designer</small>
-		            </div>
-		            <div class="media-right text-right d-none d-md-block">
-		                <p class="fs-14 text-fade mb-12"><i class="fa fa-map-marker pr-1"></i> Fairfield, IA</p>
-		                <span class="text-fade"><i class="fa fa-money pr-1"></i> $45 per hour</span>
-		            </div>
-		        </div>
-		    </div>
-		    
-		    <div class="mb-3">
+		<div class="row">
+		    <div class="col-8 mx-auto mb-3">
 		    	<form action="" class="form-inline text-right">
 					<div class="w-100">
 						<input type="date" class="form-control mr-sm-2">
@@ -154,21 +160,25 @@
 				</form>
 		    </div>
 		
-		    <nav>
-		        <ul class="pagination justify-content-center">
-		            <li class="page-item active">
-		                <a class="page-link" href="#">1</a>
-		            </li>
-		            <li class="page-item"><a class="page-link" href="#">2</a></li>
-		            <li class="page-item"><a class="page-link" href="#">3</a></li>
-		            <li class="page-item"><a class="page-link" href="#">4</a></li>
-		            <li class="page-item"><a class="page-link" href="#">5</a></li>
-		        </ul>
-		    </nav>
-		    <br>
+			<div class="col-8 mx-auto">
+				<nav>
+			        <ul class="pagination justify-content-center">
+			            <li class="page-item active">
+			                <a class="page-link" href="#">1</a>
+			            </li>
+			            <li class="page-item"><a class="page-link" href="#">2</a></li>
+			            <li class="page-item"><a class="page-link" href="#">3</a></li>
+			            <li class="page-item"><a class="page-link" href="#">4</a></li>
+			            <li class="page-item"><a class="page-link" href="#">5</a></li>
+			        </ul>
+			    </nav>
+			    <br>
+			</div>
+		    
 		    
 		</div>
-		<!-- E:diary -->
+	
+		
 
 		
 	

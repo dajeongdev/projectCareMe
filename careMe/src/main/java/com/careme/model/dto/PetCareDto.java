@@ -1,16 +1,15 @@
 package com.careme.model.dto;
 
-import java.time.LocalDateTime;
-
 public class PetCareDto {
 	private int pet_care_idx;
 	private int pet_idx;
+	private String title;
 	private int exercise;
 	private int urine;
 	private int feces;
 	private String memo;
 	private Double weight;
-	private String del_yn;
+	private String diary_date;
 	private String reg_date;
 	
 	public int getPet_care_idx() {
@@ -24,6 +23,12 @@ public class PetCareDto {
 	}
 	public void setPet_idx(int pet_idx) {
 		this.pet_idx = pet_idx;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	public int getExercise() {
 		return exercise;
@@ -55,11 +60,11 @@ public class PetCareDto {
 	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
-	public String getDel_yn() {
-		return del_yn;
+	public String getDiary_date() {
+		return diary_date;
 	}
-	public void setDel_yn(String del_yn) {
-		this.del_yn = del_yn;
+	public void setDiary_date(String diary_date) {
+		this.diary_date = diary_date;
 	}
 	public String getReg_date() {
 		return reg_date;
@@ -67,12 +72,10 @@ public class PetCareDto {
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
-	
 	@Override
 	public String toString() {
-		return "PetCareDto [pet_care_idx=" + pet_care_idx + ", pet_idx=" + pet_idx + ", exercise=" + exercise
-				+ ", urine=" + urine + ", feces=" + feces + ", memo=" + memo + ", weight=" + weight + ", del_yn="
-				+ del_yn + ", reg_date=" + reg_date + "]";
+		return "PetCareDto [pet_care_idx=" + pet_care_idx + ", pet_idx=" + pet_idx + ", title=" + title + ", exercise="
+				+ exercise + ", urine=" + urine + ", feces=" + feces + ", memo=" + memo + ", weight=" + weight
+				+ ", diary_date=" + diary_date + ", reg_date=" + reg_date + "]";
 	}
-
 }
