@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.dao.CarediaryDao;
+import com.careme.model.command.CarediaryCommand;
 import com.careme.service.CarediaryService;
 
 @Controller
@@ -31,4 +32,11 @@ public class CarediaryController {
 		mav.addObject("bigDef", carediaryService.selectBigDef());
 		return mav;
 	}
+	
+	@RequestMapping(value= "/carediary/write", method = RequestMethod.POST)
+	public String registWrite(CarediaryCommand command, MultipartHttpServletRequest request) {
+		
+		return "/carediary/main";
+	}
+	
 }

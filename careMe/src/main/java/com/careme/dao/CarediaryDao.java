@@ -5,6 +5,7 @@ import java.util.List;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import com.careme.model.dto.DefecationDto;
+import com.careme.model.dto.PetCareDto;
 
 public class CarediaryDao  extends SqlSessionDaoSupport {
 	
@@ -16,5 +17,8 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("carediary.selectBigDef");
 	}
 	
+	public int writeDiary(PetCareDto dto) {
+		return getSqlSession().insert("carediary.writeDiary", dto);
+	}
 
 }
