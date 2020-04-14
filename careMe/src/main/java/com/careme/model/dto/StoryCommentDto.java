@@ -12,6 +12,12 @@ public class StoryCommentDto {
 	private LocalDateTime update_date;
 	private String del_yn;
 	
+	public int getMember_idx() {
+		return member_idx;
+	}
+	public void setMember_idx(int member_idx) {
+		this.member_idx = member_idx;
+	}
 	public int getStory_comment_idx() {
 		return story_comment_idx;
 	}
@@ -29,12 +35,6 @@ public class StoryCommentDto {
 	}
 	public void setStory_board_idx(int story_board_idx) {
 		this.story_board_idx = story_board_idx;
-	}
-	public int getMember_idx() {
-		return member_idx;
-	}
-	public void setMember_idx(int member_idx) {
-		this.member_idx = member_idx;
 	}
 	public String getContent() {
 		return content;

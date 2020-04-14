@@ -52,7 +52,7 @@
 				href="/careMe/view/doctorBoardView/doctorBoard">전문가 상담</a></li>
 			
 			
-			<li class="nav-item"><a class="nav-link" href="#">케어일기</a></li>
+			<li class="nav-item"><a class="nav-link" href="/careMe/carediary">케어일기</a></li>
 			
 			
 			<li class="nav-item"><a class="nav-link" href="#">전문의 찾기</a></li>
@@ -66,11 +66,12 @@
 				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Community</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown04">
 					<a class="dropdown-item"
-						href="/careMe/view/infoBoardView/infoBoard">자주 묻는 질문</a> <a
-						class="dropdown-item"
+						href="/careMe/view/myPageView/myPageDoctor">의사 마이페이지 (임시)</a>
+					<a class="dropdown-item"
+						href="/careMe/view/myPageView/myPageCasual">일반 마이페이지 (임시)</a> 
+					<a class="dropdown-item"
 						href="/careMe/view/casualBoardView/casualBoard">고민상담</a>
 				</div></li>
-
 		</ul>
 	</div>
 </nav>

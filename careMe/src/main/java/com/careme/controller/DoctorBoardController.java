@@ -2,28 +2,50 @@ package com.careme.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.service.FileUploadService;
+import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
+import com.google.gson.Gson;
 
 @Controller
 public class DoctorBoardController {
 
 	@Autowired
 	QuestionBoardService bs;
-	QuestionBoardDao boardDao;
 
-	// ∞‘Ω√∆« ª—∏Æ±‚
+	public void setQuestionBoardService(QuestionBoardService bs) {
+		this.bs = bs;
+	}
+	
+	@Autowired
+	PetService petService;
+	
+	public void setPetService(PetService petService) {
+		this.petService = petService;
+	}
+
+	@Autowired
+	FileUploadService fus;
+	
+	public void setFileUploadService(FileUploadService fus) {
+		this.fus = fus;
+	}
+	
+//Í≤åÏãúÌåê ÎøåÎ¶¨Í∏∞(Í≤åÏãúÍ∏Ä / ÎåìÍ∏Ä / Í∏ÄÍ∞úÏàò)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
 	public ModelAndView toDoctorBoard() {
 		List<QuestionBoardDto> getArts = bs.getDoctorBoard();
@@ -34,18 +56,23 @@ public class DoctorBoardController {
 		return listPro;
 	}
 
-	// ∞‘Ω√±€ ≥ªøÎ ∫“∑Øø¿±‚
+//Í≤åÏãúÍ∏Ä ÎÇ¥Ïö© Î∂àÎü¨Ïò§Í∏∞
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardContent", method = RequestMethod.GET)
-	public ModelAndView doctorBoardContents(@RequestParam int question_table_idx, HttpSession session)
-			throws Exception {
-		ModelAndView list = new ModelAndView();
-		list.addObject("list", bs.getDoctorBoardContents(question_table_idx, session));
-		bs.getDoctorBoardViews(question_table_idx, session);
-		list.setViewName("doctorBoardView/doctorBoardContent");
-		return list;
+	public ModelAndView doctorBoardContents(@RequestParam int question_table_idx) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		bs.getDoctorBoardViews(question_table_idx);
+		QuestionBoardDto mlist=bs.getDoctorBoardContents(question_table_idx);
+		List<BoardCommentDto> clist = bs.getDoctorBoardComments(question_table_idx);
+		int commentCount = clist.size();
+		mav.addObject("mlist", mlist);
+		mav.addObject("clist", clist);
+		mav.addObject("commCount", commentCount);
+		mav.setViewName("doctorBoardView/doctorBoardContent");
+		return mav;
 	}
 
-	// ∞‘Ω√∆« ∞Àªˆ
+	
+// Í≤åÏãúÌåê Í≤ÄÏÉâÍ∏∞Îä•
 	@RequestMapping(value = "/view/doctorBoardSearch")
 	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
@@ -79,55 +106,51 @@ public class DoctorBoardController {
 		return list;
 	}
 
-	//∞‘Ω√∆« ±€æ≤±‚
+// Í≤åÏãúÍ∏Ä ÏûëÏÑ±
 	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm")
 	public ModelAndView toWriteForm() throws Exception {
-		ModelAndView write = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpeciesForDoctor();
-		
-		if(getSpecs==null) {
-			write.setViewName("doctorBoardView/doctorWriteForm");
-			return write;
-		}else {
-			write.addObject("specs", getSpecs);
-			write.setViewName("doctorBoardView/doctorWriteForm");
-			System.out.println(write);
-			return write;
-		}
-	}
-
-	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
-	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.addDoctorArticles(boardDto);
-		System.out.println(boardDto);
-		if(result>0) {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-		}else {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-		}
+		ModelAndView write = new ModelAndView("doctorBoardView/doctorWriteForm");
+		write.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+		return write;
 	}
 	
-	// ∞‘Ω√∆« ±€ºˆ¡§
+	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm/pet_species_idx", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")
+	@ResponseBody
+	public String getDoctorPetSpeciesList(int level, int ancestor) {
+		List<PetSpeciesDto> items = null;
+		
+		if(level==1) items = petService.selectPetSpeciesLevel1();
+		else if(level==2) items = petService.selectPetSpeciesLevel2(ancestor);
+		
+		Gson json = new Gson();
+		return json.toJson(items);
+	}
+	
+	
+	
+	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
+	public ModelAndView writeDoctorBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("/view/doctorBoardView/doctorBoard");
+		mav.addObject("written", bs.addDoctorArticles(dto));
+		mav.addObject("files", fus.upload(request, "img/boardUpload"));
+		return mav;
+	}
+	
+	
+// Í≤åÏãúÍ∏Ä ÏàòÏ†ï
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
-	public ModelAndView toUpdatePro(@RequestParam int question_table_idx) throws Exception {
-		ModelAndView update = new ModelAndView();
-		List<QuestionBoardDto> getSpecs = bs.getSpeciesForDoctor();
+	public ModelAndView toDoctorUpdate(@RequestParam int question_table_idx) throws Exception {
+		ModelAndView update = new ModelAndView("doctorBoardView/doctorBoardUpdateForm");
 		int idx = question_table_idx;
-
-		if (getSpecs == null) {
-			update.setViewName("doctorBoardView/doctorBoardUpdateForm");
-			return update;
-		} else {
-			update.addObject("specs", getSpecs);
+			update.addObject("speciesOption", petService.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
-			update.setViewName("doctorBoardView/doctorBoardUpdateForm");
 			return update;
-		}
 	}
 
+
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.updateDoctorArticle(boardDto);
+	public String updateDoctorArticle(QuestionBoardDto dto) throws Exception {
+		int result = bs.updateDoctorArticle(dto);
 		if (result > 0) {
 			return "redirect:/view/doctorBoardView/doctorBoard";
 		} else {
@@ -136,18 +159,59 @@ public class DoctorBoardController {
 	}
 
 	
-	//∞‘Ω√∆« ±€ªË¡¶
-		@RequestMapping(value="/view/doctorBoardView/deleteArticle")
-		public String deleteArticle(@RequestParam int question_table_idx) {
-			int idx = question_table_idx;
-			int result = bs.deleteDoctorArticle(idx);
-			if(result>0) {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-			}else {
+// Í≤åÏãúÍ∏Ä ÏÇ≠Ï†ú
+	@RequestMapping(value="/view/doctorBoardView/deleteArticle")
+	public String deleteDoctorArticle(@RequestParam int question_table_idx) {
+		int idx = question_table_idx;
+		int result = bs.deleteDoctorArticle(idx);
+		if(result>0) {
+		return "redirect:/view/doctorBoardView/doctorBoard";
+		}else {
+			System.out.println("no!!!");
+		return "redirect:/view/doctorBoardView/doctorBoard";
+		}
+	}
+
+//==================================================================================
+		
+	// comment ÏûëÏÑ±
+		@RequestMapping(value="/view/doctorBoardView/doctorCommentAdd")
+		public String writeDoctorComment(BoardCommentDto commentDto) throws Exception {
+			int result = bs.addDoctorComment(commentDto);
+			int backToPage=commentDto.getQuestion_table_idx();
+			if (result > 0) {
+				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
+			} else {
 				System.out.println("no!!!");
-			return "redirect:/view/doctorBoardView/doctorBoard";
+				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
 			}
 		}
 
-
+			
+	// comment ÏàòÏ†ï
+		@RequestMapping(value = "/view/doctorBoardView/doctorCommentUpdate", method = RequestMethod.POST)
+		public String updateDoctorComment(BoardCommentDto commentDto) throws Exception {
+			int result = bs.updateDoctorComment(commentDto);
+			int backToPage=commentDto.getQuestion_table_idx();
+			if (result > 0) {
+				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
+			} else {
+				System.out.println("no!!!");
+				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
+			}
+		}
+			
+			
+	// comment ÏÇ≠Ï†ú
+		@RequestMapping(value="/view/doctorBoardView/doctorCommentDelete")
+		public String deleteDoctorComment(@RequestParam int question_board_comment_idx) {
+			int idx = question_board_comment_idx;
+			int result = bs.deleteDoctorComment(idx);
+			if(result>0) {
+			return "redirect:history.go(-1)";
+			}else {
+				System.out.println("no!!!");
+			return "redirect:history.go(-1)";
+			}
+		}
 }
