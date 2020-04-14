@@ -65,14 +65,14 @@ public class MemberController {
 	}
 
 	// 회원가입폼
-	@RequestMapping(value = "login/signup", method = RequestMethod.GET)
+	@RequestMapping(value = "login/signup")
 	public String form2() {
 		return "login/signup";
 	}
 
 	// 아이디 중복체크
-
-	@RequestMapping(value = "login/idChk") 
+	@RequestMapping(value = "login/idChk", method = RequestMethod.POST)
+	@ResponseBody
 	public int idcheck(LoginCommand lc) { 
 		int i2 = memberService.idcheck(lc);
 		return i2;
@@ -81,12 +81,14 @@ public class MemberController {
 	// 회원가입 성공
 	@RequestMapping(value = "login/insertok")
 	public String insertOk(MemberDto mdto, HttpSession session) {
-		int i3 = memberService.insertOk(mdto); // 0이나 1리턴
+		System.out.println("test"+ mdto);
+		int i3 = memberService.insertOk(mdto);
+		System.out.println(i3);// 0이나 1리턴
 		if (i3 == 0) { // 없으면 가입
 			session.setAttribute("sussess", mdto.getMember_id());
-			return "signupsu"; // 성공
-		} else { // 실패
-			return "signupfa";
+			return "login/signupsu"; // 성공
+		} else { 
+			return "redirect:signup"; //실패
 		}
 	}
 }

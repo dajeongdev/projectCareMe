@@ -30,7 +30,6 @@ public class MemberService {
 	//중복아이디체크
 	public int idcheck(LoginCommand lc) {
 		return dao.idChk(lc);
-	
 	}
 	
 	//회원가입 성공

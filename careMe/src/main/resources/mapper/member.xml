@@ -18,7 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<!-- 아이디 중복 체크 -->
-	<select id="idChk" resultType="int">
+	<select id="idchk" resultType="int">
 		SELECT COUNT(*) FROM members
 		WHERE
 		member_id = #{member_id}
@@ -34,9 +34,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 
 	<!-- 정보수정 -->
-	<update id="update" parameterType="String">
+	<update id="update" parameterType="com.careme.model.dto.MemberDto">
 		update set members
-		member_pass,member_phone,member_email where member_id
+		member_pass,member_phone,member_email where member_id=#{member_id},
+		member_phone=#{member_phone},member_pass=#{member_pass}
 	</update>
 
 	<!-- 회원탈퇴 -->
