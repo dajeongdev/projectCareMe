@@ -1,7 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="Spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -41,26 +40,102 @@
 </script>
 
 
+<script>
+    $(document).ready(function () {
+
+        var tag = {};
+        var counter = 0;
+
+        // 태그를 추가
+        function addTag (value) {
+            tag[counter] = value; // Object 안에 tag 추가
+            counter++; // counter 증가 삭제를 위한 del-btn id
+        }
+
+        // 최종적으로 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘김
+        function marginTag () {
+            return Object.values(tag).filter(function (word) {
+                return word !== "";
+            });
+        }
+    
+        // 서버로 제출
+        $(document).on("submit", function (e) {
+            var value = marginTag(); // return array
+            $("#rdTag").val(value); 
+
+            $(this).submit();
+        });
+
+        $("#tag").on("keypress", function (e) {
+            var self = $(this);
+
+            if (e.key === "Enter" || e.keyCode == 32) {
+
+                var tagValue = self.val();
+                var url ="casualWriteForm/tagCompare?tagValue="+tagValue;
+
+              /*  $.ajax(
+            			{type:"get",
+            			url:url,
+            			dataType:"json"})
+            			.done(function(list){
+					if (list.length>0){
+						for (i in list){
+						var hlist = list[i]
+						var taging = "<li class='tag-item'>#"+hlist.tag_name+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
+						$("#tag-list").append(taging);
+						}
+					}).fail(function(e){
+						alert(e.responseText);
+						});
+            			} */
+
+                if (tagValue !== "") {
+                    // 중복검사 겹치면 해당값 array 로 return
+                    var result = Object.values(tag).filter(function (word) {
+                        return word === tagValue;
+                    })
+                    // 태그 중복 검사
+                    if (result.length == 0) { 
+                    	 $("#tag-list").append("<li class='tag-item'>#"+tagValue+"<span class='del-btn' idx='"+counter+"'>X</span></li>");
+                         addTag(tagValue);
+                         self.val("");
+                    } else {
+                        alert("태그값이 중복됩니다!");
+                    }
+                }
+                e.preventDefault();
+            }
+        });
+
+        // 삭제 버튼 
+        $(document).on("click", ".del-btn", function (e) {
+            var index = $(this).attr("idx");
+            tag[index] = "";
+            $(this).parent().remove();
+        });
+})
+</script>
+
+
 </head>
 <body>
-
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 
-	<div
-		class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
+	<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 		<div class="container min-vh-100 pt-3 text-center">
 
+		<form name="addWrite" action="casualBoardWriteAdd" method="POST" enctype="multipart/form-data">
 			<div class="row">
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+					
 					<h2 align="left">고민 상담</h2>
 					<p></p>
-
-
-					<form action="casualBoardWriteAdd" method="post" name="addWrites" enctype="multipart/form-data">
-
-						<div style="width: 900px; height: 100px" align="left">
-							<input placeholder="제목" type="text" name="title">
-						</div>
+						<div class="mb-3" align="left">
+			          		<label for="title">제목</label>
+          					<input id="title" name="title" type="text" class="form-control"/>
+        				</div>
 						<input name="question_type" type="hidden" value="n" /> 
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
@@ -90,31 +165,40 @@
 						<div align="left">
 							내용<br>
 							<textarea name="content" style="width: 900px; height: 500px"></textarea>
-							<br> <input name="member_idx" type="text" id="subject"><br>
+							<br> 
 						</div>
-
-						<div>
-							<p>tag 추가하기</p>
-							<input type="text" name="tagArea" placeholder="#">
-
+						
+						<p><input name="member_idx" type="text" id="subject"></p>
+						
+						<div align="left">
+						<label for="file">파일첨부</label><br>
+							<input name="file" type="file" />
 						</div>
+    					<br>
+    					
+    					
+						
+					<div class="content" align="left">
+       					<input type="hidden" value="" name="tag" id="rdTag" />
+    			   	<div>
+     			       <input type="text" id="tag" size="7" placeholder="태그입력" />
+     			    </div><br>  
+    			    
+    			    <ul id="tag-list"></ul>
 
-						<!-- <div align="left">
-						파일첨부<br>
-						<form name="fileUpload" enctype="multipart/form-data">
-							<input type="file" id="file_name" aria-describedby="inputGroupFileAddon01"  >
-    					</form>
-    					</div> -->
+    			   	</div> 
+						
+						
+						
+					<input type="submit" value="제출"> 
+					<input type="reset" value="다시쓰기"> 
+					<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
 
-						<input type="submit" value="제출"> 
-						<input type="reset" value="다시쓰기"> 
-						<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
-
-					</form>
+					
 				</main>
 			</div>
-
-
+			
+		</form>
 		</div>
 	</div>
 </body>

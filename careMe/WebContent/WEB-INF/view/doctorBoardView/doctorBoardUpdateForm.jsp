@@ -10,6 +10,36 @@
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>메인 화면</title>
+
+<script>
+	$(function(){
+		$("#petSpeciesLevel1").on("change", function(){
+		var ancestor=$(this).find("option:selected").data("num");
+			if(!ancestor){
+				$("#petSpeciesLevel2 option").remove();
+				return false;
+			}
+		var url ="doctorWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
+		$.ajax(
+			{type:"get",
+			url:url,
+			dataType:"json"})
+			.done(function(items){
+			$("#petSpeciesLevel2 option").remove();
+				if (items.length > 0) {
+					for (item in items) {
+					var s = items[item];
+					var option = "<option value=" + s.pet_species_idx + ">" + s.pet_species_name + "</option>"
+					$("#petSpeciesLevel2").append(option);
+					}
+				}
+				}).fail(function(e) {
+					alert(e.responseText);
+				});
+			})
+		})
+</script>
+
 </head>
 <body>
 
