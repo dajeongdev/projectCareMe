@@ -18,11 +18,14 @@ public class QuestionBoardDto {
 	LocalDateTime update_date;
 	String del_yn;
 	
+	private String file_name;
+	private String file_path;
+	private Long file_size;
+	
 	int pet_idx;
 	int pet_species_idx;
 	int pet_species_level;
 	String pet_species_name;
-	
 	public int getQuestion_table_idx() {
 		return question_table_idx;
 	}
@@ -34,6 +37,12 @@ public class QuestionBoardDto {
 	}
 	public void setMember_idx(int member_idx) {
 		this.member_idx = member_idx;
+	}
+	public int getDoctor_idx() {
+		return doctor_idx;
+	}
+	public void setDoctor_idx(int doctor_idx) {
+		this.doctor_idx = doctor_idx;
 	}
 	public String getMember_id() {
 		return member_id;
@@ -52,24 +61,6 @@ public class QuestionBoardDto {
 	}
 	public void setQuestion_type(String question_type) {
 		this.question_type = question_type;
-	}
-	public int getDoctor_idx() {
-		return doctor_idx;
-	}
-	public void setDoctor_idx(int doctor_idx) {
-		this.doctor_idx = doctor_idx;
-	}
-	public int getPet_idx() {
-		return pet_idx;
-	}
-	public void setPet_idx(int pet_idx) {
-		this.pet_idx = pet_idx;
-	}
-	public int getPet_species_idx() {
-		return pet_species_idx;
-	}
-	public void setPet_species_idx(int pet_species_idx) {
-		this.pet_species_idx = pet_species_idx;
 	}
 	public String getContent() {
 		return content;
@@ -107,8 +98,36 @@ public class QuestionBoardDto {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
-	
-	
+	public String getFile_name() {
+		return file_name;
+	}
+	public void setFile_name(String file_name) {
+		this.file_name = file_name;
+	}
+	public String getFile_path() {
+		return file_path;
+	}
+	public void setFile_path(String file_path) {
+		this.file_path = file_path;
+	}
+	public Long getFile_size() {
+		return file_size;
+	}
+	public void setFile_size(Long file_size) {
+		this.file_size = file_size;
+	}
+	public int getPet_idx() {
+		return pet_idx;
+	}
+	public void setPet_idx(int pet_idx) {
+		this.pet_idx = pet_idx;
+	}
+	public int getPet_species_idx() {
+		return pet_species_idx;
+	}
+	public void setPet_species_idx(int pet_species_idx) {
+		this.pet_species_idx = pet_species_idx;
+	}
 	public int getPet_species_level() {
 		return pet_species_level;
 	}
@@ -121,24 +140,24 @@ public class QuestionBoardDto {
 	public void setPet_species_name(String pet_species_name) {
 		this.pet_species_name = pet_species_name;
 	}
-	
 	@Override
 	public String toString() {
 		return "QuestionBoardDto [question_table_idx=" + question_table_idx + ", member_idx=" + member_idx
 				+ ", doctor_idx=" + doctor_idx + ", member_id=" + member_id + ", title=" + title + ", question_type="
 				+ question_type + ", content=" + content + ", view_count=" + view_count + ", is_private=" + is_private
-				+ ", reg_date=" + reg_date + ", update_date=" + update_date + ", del_yn=" + del_yn + ", pet_idx="
-				+ pet_idx + ", pet_species_idx=" + pet_species_idx + ", pet_species_level=" + pet_species_level
+				+ ", reg_date=" + reg_date + ", update_date=" + update_date + ", del_yn=" + del_yn + ", file_name="
+				+ file_name + ", file_path=" + file_path + ", file_size=" + file_size + ", pet_idx=" + pet_idx
+				+ ", pet_species_idx=" + pet_species_idx + ", pet_species_level=" + pet_species_level
 				+ ", pet_species_name=" + pet_species_name + ", getQuestion_table_idx()=" + getQuestion_table_idx()
-				+ ", getMember_idx()=" + getMember_idx() + ", getMember_id()=" + getMember_id() + ", getTitle()="
-				+ getTitle() + ", getQuestion_type()=" + getQuestion_type() + ", getDoctor_idx()=" + getDoctor_idx()
-				+ ", getPet_idx()=" + getPet_idx() + ", getPet_species_idx()=" + getPet_species_idx()
+				+ ", getMember_idx()=" + getMember_idx() + ", getDoctor_idx()=" + getDoctor_idx() + ", getMember_id()="
+				+ getMember_id() + ", getTitle()=" + getTitle() + ", getQuestion_type()=" + getQuestion_type()
 				+ ", getContent()=" + getContent() + ", getView_count()=" + getView_count() + ", getIs_private()="
 				+ getIs_private() + ", getReg_date()=" + getReg_date() + ", getUpdate_date()=" + getUpdate_date()
-				+ ", getDel_yn()=" + getDel_yn() + ", getPet_species_level()=" + getPet_species_level()
-				+ ", getPet_species_name()=" + getPet_species_name() + ", getClass()=" + getClass() + ", hashCode()="
-				+ hashCode() + ", toString()=" + super.toString() + "]";
+				+ ", getDel_yn()=" + getDel_yn() + ", getFile_name()=" + getFile_name() + ", getFile_path()="
+				+ getFile_path() + ", getFile_size()=" + getFile_size() + ", getPet_idx()=" + getPet_idx()
+				+ ", getPet_species_idx()=" + getPet_species_idx() + ", getPet_species_level()="
+				+ getPet_species_level() + ", getPet_species_name()=" + getPet_species_name() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 	
-
 }

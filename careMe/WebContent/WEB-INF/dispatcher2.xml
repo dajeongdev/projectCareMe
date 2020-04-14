@@ -6,6 +6,10 @@
 	<bean id="petDao" class="com.careme.dao.PetDao">
 		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
 	</bean>
+	
+	<bean id="carediaryDao" class="com.careme.dao.CarediaryDao">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	</bean>
 
 
 </beans>

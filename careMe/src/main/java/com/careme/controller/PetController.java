@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.PetRegistCommand;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.service.PetService;

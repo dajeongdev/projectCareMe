@@ -7,7 +7,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 
-public class PetDao  extends SqlSessionDaoSupport {
+public class PetDao extends SqlSessionDaoSupport {
 	public List<PetSpeciesDto> selectPetSpeciesLevel1 () {
 		return getSqlSession().selectList("pet.selectSpeciesLevel1"); 
 	}

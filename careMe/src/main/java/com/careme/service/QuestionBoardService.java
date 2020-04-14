@@ -2,9 +2,12 @@ package com.careme.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
 
 public interface QuestionBoardService {
 
@@ -21,9 +24,9 @@ public interface QuestionBoardService {
 	
 	
 // Doctor Board 작성, 수정, 삭제
-	public int addDoctorArticles (QuestionBoardDto boardDto);
+	public int addDoctorArticles (QuestionBoardDto dto);
 	
-	public int updateDoctorArticle (QuestionBoardDto boardDto);
+	public int updateDoctorArticle (QuestionBoardDto dto);
 	
 	public int deleteDoctorArticle (int idx);
 	
@@ -49,9 +52,11 @@ public interface QuestionBoardService {
 	
 	
 // Casual Board 작성, 수정, 삭제
-	public int addCasualArticles (QuestionBoardDto boardDto);
+	public int addCasualArticles (QuestionBoardDto dto);
 	
-	public int updateCasualArticle (QuestionBoardDto boardDto);
+	public int addArtFileForCasual (QuestionBoardDto dto);
+	
+	public int updateCasualArticle (QuestionBoardDto dto);
 	
 	public int deleteCasualArticle (int idx);
 	
@@ -62,6 +67,8 @@ public interface QuestionBoardService {
 	
 	public int deleteCasualComment (int idx);
 	
+// Casual Board Hashtags
+	public List<TagDto> compareHashtag(String tagValue);
 	
 }
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.QuestionBoardDao;
@@ -15,6 +16,7 @@ import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.service.FileUploadService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
 import com.google.gson.Gson;
@@ -24,9 +26,10 @@ public class DoctorBoardController {
 
 	@Autowired
 	QuestionBoardService bs;
-	
-	@Autowired
-	QuestionBoardDao boardDao;
+
+	public void setQuestionBoardService(QuestionBoardService bs) {
+		this.bs = bs;
+	}
 	
 	@Autowired
 	PetService petService;
@@ -35,6 +38,13 @@ public class DoctorBoardController {
 		this.petService = petService;
 	}
 
+	@Autowired
+	FileUploadService fus;
+	
+	public void setFileUploadService(FileUploadService fus) {
+		this.fus = fus;
+	}
+	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
 	public ModelAndView toDoctorBoard() {
@@ -119,14 +129,13 @@ public class DoctorBoardController {
 	
 	
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
-	public String writeDoctorBoardArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.addDoctorArticles(boardDto);
-		if(result>0) {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-		}else {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-		}
+	public ModelAndView writeDoctorBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("/view/doctorBoardView/doctorBoard");
+		mav.addObject("written", bs.addDoctorArticles(dto));
+		mav.addObject("files", fus.upload(request, "img/boardUpload"));
+		return mav;
 	}
+	
 	
 // 게시글 수정
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
@@ -138,9 +147,10 @@ public class DoctorBoardController {
 			return update;
 	}
 
+
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateDoctorArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.updateDoctorArticle(boardDto);
+	public String updateDoctorArticle(QuestionBoardDto dto) throws Exception {
+		int result = bs.updateDoctorArticle(dto);
 		if (result > 0) {
 			return "redirect:/view/doctorBoardView/doctorBoard";
 		} else {
