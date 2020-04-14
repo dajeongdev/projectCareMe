@@ -82,8 +82,9 @@ public class PetServiceImpl implements PetService  {
 		// MemberDto member =  (MemberDto) request.getSession().getAttribute("member");
 		int memberIdx = 1;
 		
-		if (request.getParameter("p") != null && request.getParameter("p") != "")
+		if (request.getParameter("p") != null && request.getParameter("p") != "") {
 			pet.setPet_idx(Integer.parseInt(request.getParameter("p")));
+		}
 		
 		Integer pet_idx = (Integer) request.getSession().getAttribute("pet_idx");
 		if (pet_idx != null) {
@@ -97,8 +98,10 @@ public class PetServiceImpl implements PetService  {
 		pet.setBirth(request.getParameter("birth"));
 		pet.setGender(request.getParameter("gender"));
 		
-		if (request.getParameter("weight") != null && request.getParameter("weight") != "")
-		pet.setWeight(Double.parseDouble(request.getParameter("weight")));
+		if (request.getParameter("weight") != null && !request.getParameter("weight").isEmpty()) {
+			System.out.println("weight 이 empty인가... : " + request.getParameter("weight"));
+			pet.setWeight(Double.parseDouble(request.getParameter("weight")));
+		}
 			
 		pet.setVaccination(request.getParameter("vaccination"));
 		pet.setBlood_type(request.getParameter("bloodType"));

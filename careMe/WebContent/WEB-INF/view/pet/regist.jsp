@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<spring:url value="/resources/img/profile_dog.jpg" var="default_image" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -76,11 +77,15 @@
 		
 			<!-- S: 필수 -->
 			<div class="my-3 p-3 bg-white rounded shadow-sm">
+				<div class="row mb-3 col-12" style="font-size:20px">
+					<strong>필수정보</strong>
+				</div>
+				<hr>
 			
 				<div class="row mb-3">
 					<div class="col-12">
-						<label for="name">프로필 사진</label>
-						<img id="previewImg" class="w-100">
+						<label for="name" for="previewImg">프로필 사진</label>
+						<img id="previewImg" class="w-100" src="${default_image}">
 						<input type="file" class="form-control" id="profileImage" name="profileImage" placeholder="" max="20" required>
 					</div>					
 				</div>
@@ -140,7 +145,7 @@
 			
 				<div class="row">
 					<div class="col-6">
-						<div class="h-100 pt-2" style="font-size:20px;">추가정보</div>
+						<div class="h-100 pt-2" style="font-size:20px;"><strong>추가정보</strong></div>
 					</div>
 					<div class="col-6 text-right">
 						<button class="btn btn-white" type="button" data-toggle="collapse" data-target="#additional" aria-expanded="false" aria-controls="additional">
