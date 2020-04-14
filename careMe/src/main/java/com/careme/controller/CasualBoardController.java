@@ -1,6 +1,8 @@
 package com.careme.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
@@ -224,14 +227,31 @@ public class CasualBoardController {
 			}
 		}
 	
+	// hashtag 기능
+		@RequestMapping(value="casualWriteForm/tagCompare")
+		public List<TagDto> hashtagCompare(@RequestParam String tagValue) {
+			
+			List<TagDto> compared = bs.compareHashtag(tagValue);
+			return compared;
+		}
+		
+		
 	
-	
-// 자주 묻는 질문 링크
-	@RequestMapping(value = "/view/infoBoardView/infoBoard")
-	public ModelAndView infoLink() throws Exception{
+// 임시 마이페이지 링크
+	@RequestMapping(value = "/view/myPageView/myPageDoctor")
+	public ModelAndView doctorMyPage() throws Exception{
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("infoBoardView/infoBoard");
+		mav.setViewName("myPageView/myPageDoctor");
 		return mav;
 	}
+	
+	@RequestMapping(value = "/view/myPageView/myPageCasual")
+	public ModelAndView infoLink() throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("myPageView/myPageCasual");
+		return mav;
+	}
+	
+	
 	
 }

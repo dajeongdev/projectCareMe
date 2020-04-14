@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
 
 public interface QuestionBoardService {
 
@@ -66,6 +67,8 @@ public interface QuestionBoardService {
 	
 	public int deleteCasualComment (int idx);
 	
+// Casual Board Hashtags
+	public List<TagDto> compareHashtag(String tagValue);
 	
 }
 

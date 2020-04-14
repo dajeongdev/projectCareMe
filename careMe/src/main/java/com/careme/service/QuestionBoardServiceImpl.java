@@ -13,6 +13,7 @@ import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
 
 @Service
 public class QuestionBoardServiceImpl implements QuestionBoardService {
@@ -29,13 +30,8 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		this.dto = dto;
 	}
 
-	@Autowired
-	private FileUploadService fileUploadService;
-
-	public void setFileUploadService(FileUploadService fileUploadService) {
-		this.fileUploadService = fileUploadService;
-	}
-
+	
+	
 // Doctor Board 게시글 뿌리기
 	public List<QuestionBoardDto> getDoctorBoard() {
 		return dao.getDoctorBoard();
@@ -164,33 +160,11 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteCommentForCasual(idx);
 	}
 
-
-	/*
-	 * public QuestionBoardDto requestToBoardDto(MultipartHttpServletRequest
-	 * request) { dto = new QuestionBoardDto();
-	 * 
-	 * dto.setMember_idx(Integer.parseInt(request.getParameter("member_idx")));
-	 * dto.setPet_species_idx(Integer.parseInt(request.getParameter(
-	 * "pet_species_idx")));
-	 * dto.setDoctor_idx(Integer.parseInt(request.getParameter("doctor_idx")));
-	 * dto.setMember_id(request.getParameter("member_id"));
-	 * dto.setTitle(request.getParameter("title"));
-	 * dto.setContent(request.getParameter("content"));
-	 * dto.setQuestion_type(request.getParameter("question_type"));
-	 * dto.setIs_private(request.getParameter("is_private"));
-	 * dto.setPet_idx(Integer.parseInt(request.getParameter("pet_idx")));
-	 * dto.setReg_date(LocalDateTime.now()); dto.setUpdate_date(null);
-	 * dto.setDel_yn(request.getParameter("del_yn"));
-	 * 
-	 * 
-	 * if (!request.getFile(request.getFileNames().next()).isEmpty()) {
-	 * 
-	 * List<FileUploadCommand> files = fileUploadService.upload(request,
-	 * "/img/boardUpload/"); FileUploadCommand file = files.get(0);
-	 * dto.setFile_name(file.getFileOriginName());
-	 * dto.setFile_path(file.getFilePath()); dto.setFile_size(file.getFileSize()); }
-	 * return dto; }
-	 */
-	 
+// Hashtag 비교 후 가져오기
+	public List<TagDto> compareHashtag(String tagValue){
+		return dao.getHashtag(tagValue);
+	}
+	
+	
 
 }

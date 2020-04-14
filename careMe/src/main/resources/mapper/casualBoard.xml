@@ -79,5 +79,10 @@
 		delete from question_board_comment where question_board_comment_idx=#{question_board_comment_idx}
 	</delete>
 
+<!-- hashtag 확인 -->
+
+	<select id="hashtagFind" parameterType="com.careme.model.dto.TagDto">
+		select tag_idx, tag_name from tag where tag_name like concat('%', #{tagValue},'%')
+	</select>
 
 </mapper>

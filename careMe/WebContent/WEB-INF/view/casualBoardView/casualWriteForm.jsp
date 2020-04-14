@@ -40,6 +40,85 @@
 </script>
 
 
+<script>
+    $(document).ready(function () {
+
+        var tag = {};
+        var counter = 0;
+
+        // 태그를 추가
+        function addTag (value) {
+            tag[counter] = value; // Object 안에 tag 추가
+            counter++; // counter 증가 삭제를 위한 del-btn id
+        }
+
+        // 최종적으로 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘김
+        function marginTag () {
+            return Object.values(tag).filter(function (word) {
+                return word !== "";
+            });
+        }
+    
+        // 서버로 제출
+        $(document).on("submit", function (e) {
+            var value = marginTag(); // return array
+            $("#rdTag").val(value); 
+
+            $(this).submit();
+        });
+
+        $("#tag").on("keypress", function (e) {
+            var self = $(this);
+
+            if (e.key === "Enter" || e.keyCode == 32) {
+
+                var tagValue = self.val();
+                var url ="casualWriteForm/tagCompare?tagValue="+tagValue;
+
+              /*  $.ajax(
+            			{type:"get",
+            			url:url,
+            			dataType:"json"})
+            			.done(function(list){
+					if (list.length>0){
+						for (i in list){
+						var hlist = list[i]
+						var taging = "<li class='tag-item'>#"+hlist.tag_name+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
+						$("#tag-list").append(taging);
+						}
+					}).fail(function(e){
+						alert(e.responseText);
+						});
+            			} */
+
+                if (tagValue !== "") {
+                    // 중복검사 겹치면 해당값 array 로 return
+                    var result = Object.values(tag).filter(function (word) {
+                        return word === tagValue;
+                    })
+                    // 태그 중복 검사
+                    if (result.length == 0) { 
+                    	 $("#tag-list").append("<li class='tag-item'>#"+tagValue+"<span class='del-btn' idx='"+counter+"'>X</span></li>");
+                         addTag(tagValue);
+                         self.val("");
+                    } else {
+                        alert("태그값이 중복됩니다!");
+                    }
+                }
+                e.preventDefault();
+            }
+        });
+
+        // 삭제 버튼 
+        $(document).on("click", ".del-btn", function (e) {
+            var index = $(this).attr("idx");
+            tag[index] = "";
+            $(this).parent().remove();
+        });
+})
+</script>
+
+
 </head>
 <body>
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
@@ -86,31 +165,40 @@
 						<div align="left">
 							내용<br>
 							<textarea name="content" style="width: 900px; height: 500px"></textarea>
-							<br> <input name="member_idx" type="text" id="subject"><br>
+							<br> 
 						</div>
+						
+						<p><input name="member_idx" type="text" id="subject"></p>
+						
 						<div align="left">
-						<label for="file">파일첨부</label>
+						<label for="file">파일첨부</label><br>
 							<input name="file" type="file" />
 						</div>
     					<br>
-    					<div align="left">
-						<label for="tagArea">태그 추가</label>  					
-							<input type="text" name="tagArea" placeholder="#">
-						</div>
-						<br>
+    					
+    					
+						
+					<div class="content" align="left">
+       					<input type="hidden" value="" name="tag" id="rdTag" />
+    			   	<div>
+     			       <input type="text" id="tag" size="7" placeholder="태그입력" />
+     			    </div><br>  
+    			    
+    			    <ul id="tag-list"></ul>
+
+    			   	</div> 
 						
 						
-						<input type="submit" value="제출"> 
-						<input type="reset" value="다시쓰기"> 
-						<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
+						
+					<input type="submit" value="제출"> 
+					<input type="reset" value="다시쓰기"> 
+					<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
 
 					
 				</main>
 			</div>
 			
 		</form>
-					
-
 		</div>
 	</div>
 </body>

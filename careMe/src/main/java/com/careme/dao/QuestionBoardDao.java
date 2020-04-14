@@ -7,6 +7,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
 
 public class QuestionBoardDao extends SqlSessionDaoSupport {
 
@@ -125,6 +126,11 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().delete("casualQuestionBrd.deleteComment", idx);
 	}
 	
+// Hashtag 확인
+	
+	public List<TagDto> getHashtag(String tagValue){
+		return getSqlSession().selectList("casualQuestionBrd.hastagfind", tagValue);
+	}
 		
 		
 }
