@@ -13,33 +13,25 @@
 <title>회원가입폼</title>
 <script type="text/javascript">
 	/* 아이디 중복체크 */
+function fn_idChk(){
+			$.ajax({
+				url : "login/idChk",
+				type : "post",
+				dataType : "json",
+				data : {"member_id" : $("#member_id").val()},
+				success : function(data){
+					if(data == 1){
+						alert("중복된 아이디입니다.");
+					}else if(data == 0){
+						$("#idChk").attr("value", "Y");
+						alert("사용가능한 아이디입니다.");
+					}
+				}
+			})
+		}
 	
-	$(function(){
+	//$(function(){
 //아이디 중복체크
-    $('#member_id').blur(function(){
-        $.ajax({
-	     type:"POST",
-	     url:"checkSignup",
-	     data:{
-	            "member_id":$('#member_id').val()
-	     },
-	     success:function(data){	//data : checkSignup에서 넘겨준 결과값
-	            if($.trim(data)=="YES"){
-	               if($('#member_id').val()!=''){ 
-	               	alert("사용가능한 아이디입니다.");
-	               }
-	           	}else{
-	               if($('#member_id').val()!=''){
-	                  alert("중복된 아이디입니다.");
-	                  $('#member_id').val('');
-	                  $('#member_id').focus();
-	               }
-	            }
-	         }
-	    }) 
-     })
-
-});
 
 
 	 function checkValue()
@@ -71,7 +63,6 @@
                 location.href="'signup'";
             }    
             
-
 	/* 유효성 검사 */
 	/* function validate() {
 		var re = /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
@@ -137,12 +128,11 @@
 						onkeydown="InputIdChk" placeholder="※4-12자의 영문 대소문자와 숫자로만 입력" /></td>
 
 					<!-- 아이디 중복확인 버튼 -->
-					<td><input type="button" class="btn btn-dark btn-sm btn-block"
-						value="중복확인" onclick="openIdChk()" id="checkbtn"> <input
-						type="hidden" name="idDuplicateion" value="IdUncheck"></td>
-						
+					<td><button type="button" class="btn btn-dark btn-sm btn-block"
+						 value="N" onclick="fn_idChk()" id="idChk">중복확인</button></td>
+
 				</tr>
-				
+
 				<tr>
 					<!-- 비밀번호 입력 -->
 					<td><b>PW:</b></td>
@@ -197,8 +187,7 @@
 				<input type="submit" name="join" value="회원 가입"
 					class="btn btn-dark btn-sm btn-block"> <input type="reset"
 					name="reset" value="다시 입력" class="btn btn-dark btn-sm btn-block"> -->
-	</div>
-	</form>
+		</form>
 	</div>
 </body>
 </html>

@@ -29,8 +29,8 @@ public class MemberService {
 	}
 	//중복아이디체크
 	public int idcheck(LoginCommand lc) {
-		List<MemberDto> lok = dao.idChk(lc);
-		return lok.size();
+		return dao.idChk(lc);
+	
 	}
 	
 	//회원가입 성공
@@ -38,4 +38,6 @@ public class MemberService {
 		List<MemberDto> lok = dao.insert(mdto);
 		return lok.size();
 	}
+	
+	
 }

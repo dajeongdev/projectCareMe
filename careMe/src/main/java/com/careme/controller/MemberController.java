@@ -35,6 +35,7 @@ public class MemberController {
 		this.memberDao = memberDao;
 	}
 
+	// 메인
 	@RequestMapping("/main")
 	public ModelAndView selectAll() {
 		ModelAndView mav = new ModelAndView();
@@ -63,29 +64,27 @@ public class MemberController {
 		}
 	}
 
-	/*
-	 * // 아이디 중복체크
-	 * 
-	 * @RequestMapping(value = "login/Idcheck") public String idcheck(LoginCommand
-	 * lc, HttpSession session) { int i2 = memberService.idcheck(lc);// 1이나 0 리턴
-	 * try{ if (i2 == 1) { return "redirect:signup"; } else if (i2 == 0) {
-	 * session.setAttribute("use", lc.getMember_id()); return ""; } return "";
-	 * 
-	 * }
-	 */
-
 	// 회원가입폼
 	@RequestMapping(value = "login/signup", method = RequestMethod.GET)
 	public String form2() {
 		return "login/signup";
 	}
 
+	// 아이디 중복체크
+
+	@RequestMapping(value = "login/idChk") 
+	public int idcheck(LoginCommand lc) { 
+		int i2 = memberService.idcheck(lc);
+		return i2;
+	  }
+
 	// 회원가입 성공
+	@RequestMapping(value = "login/insertok")
 	public String insertOk(MemberDto mdto, HttpSession session) {
 		int i3 = memberService.insertOk(mdto); // 0이나 1리턴
 		if (i3 == 0) { // 없으면 가입
 			session.setAttribute("sussess", mdto.getMember_id());
-			return "signupsu";
+			return "signupsu"; // 성공
 		} else { // 실패
 			return "signupfa";
 		}

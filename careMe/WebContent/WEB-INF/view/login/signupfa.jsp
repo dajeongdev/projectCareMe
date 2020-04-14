@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-가입 
+가입 실패
 </body>
 </html>
