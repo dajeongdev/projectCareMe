@@ -25,24 +25,30 @@ public class FileUploadService {
 		String resourcesPath = "resources/upload";
 		
 		while (fileNames.hasNext()) {
-			FileUploadCommand command = new FileUploadCommand();
+			List<MultipartFile> requestFiles = request.getFiles(fileNames.next());
 			
-			MultipartFile file = request.getFile(fileNames.next());
-			String originName = file.getOriginalFilename();
-			String ext = originName.substring(originName.lastIndexOf("."), originName.length());
-			Long size = file.getSize();
+			System.out.println("requestFiles" + requestFiles);
 			
-			String saveFileName = getSaveFileName(ext);
-			String fileSavePath = rootPath + resourcesPath + path;
-			System.out.println("fileSavePath:" + fileSavePath);
-			try {
-				writeFile(file, saveFileName, fileSavePath);
-				command.setFileOriginName(originName);
-				command.setFilePath(resourcesPath + path + saveFileName);
-				command.setFileSize(size);
-				files.add(command);
-			} catch (Exception e) {
-				e.printStackTrace();
+			for (MultipartFile file : requestFiles) {
+				FileUploadCommand command = new FileUploadCommand();
+				String originName = file.getOriginalFilename();
+				String ext = originName.substring(originName.lastIndexOf("."), originName.length());
+				Long size = file.getSize();
+				
+				// 저장할 파일이름을 랜덤하게 변경
+				String saveFileName = getSaveFileName(ext);
+				// 실제 저장경로
+				String fileSavePath = rootPath + resourcesPath + path;
+				//System.out.println("fileSavePath:" + fileSavePath);
+				try {
+					writeFile(file, saveFileName, fileSavePath);
+					command.setFileOriginName(originName);
+					command.setFilePath(resourcesPath + path + saveFileName);
+					command.setFileSize(size);
+					files.add(command);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
