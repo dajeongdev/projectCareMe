@@ -1,6 +1,8 @@
 package com.careme.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,13 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
+import com.careme.service.FileUploadService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
 import com.google.gson.Gson;
@@ -22,19 +26,28 @@ import com.google.gson.Gson;
 
 @Controller
 public class CasualBoardController {
-
+	
 	@Autowired
 	QuestionBoardService bs;
 	
-	@Autowired
-	QuestionBoardDao boardDao;
-	
-	@Autowired
-	PetService petService;
-	
-	public void setPetService(PetService petService) {
-		this.petService = petService;
+	public void setQuestionBoardService(QuestionBoardService bs) {
+		this.bs = bs;
 	}
+	
+	@Autowired
+	PetService ps;
+	
+	public void setPetService(PetService ps) {
+		this.ps = ps;
+	}
+	
+	@Autowired
+	FileUploadService fus;
+	
+	public void setFileUploadService(FileUploadService fus) {
+		this.fus = fus;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
@@ -82,9 +95,7 @@ public class CasualBoardController {
 
 		} else if (searchn == 1) {
 
-			sbc.setSearch_option(""
-					+ ""
-					+ "");
+			sbc.setSearch_option("title");
 			sbc.setSearchKeyword(searchKeyword);
 			items = bs.getCasualBoardSearch(sbc);
 			list.addObject("list", items);
@@ -109,18 +120,17 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
-		write.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 		return write;
 	}
-	
 	
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getCasualPetSpeciesList(int level, int ancestor) {
 		List<PetSpeciesDto> items = null;
 		
-		if (level == 1) items = petService.selectPetSpeciesLevel1();
-		else if (level == 2) items = petService.selectPetSpeciesLevel2(ancestor);
+		if (level == 1) items = ps.selectPetSpeciesLevel1();
+		else if (level == 2) items = ps.selectPetSpeciesLevel2(ancestor);
 		
 		Gson json = new Gson();
 		return json.toJson(items);
@@ -128,13 +138,11 @@ public class CasualBoardController {
 	
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public String writeCasualBoardArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.addCasualArticles(boardDto);
-		if (result > 0) {
-			return "redirect:/view/casualBoardView/casualBoard";
-		} else {
-			return "redirect:/view/casualBoardView/casualBoard";
-		}
+	public ModelAndView writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("redirect:/view/casualBoardView/casualBoard");
+		mav.addObject("written", bs.addCasualArticles(dto));
+		mav.addObject("files", fus.upload(request, "/img/boardUpload"));
+		return mav;
 	}
 
 	
@@ -143,15 +151,15 @@ public class CasualBoardController {
 	public ModelAndView toCasualUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView("casualBoardView/casualBoardUpdateForm");
 		int idx = question_table_idx;
-			update.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+			update.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
 			return update;
 	}
 	
 
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateCasualArticle(QuestionBoardDto boardDto) throws Exception {
-		int result = bs.updateCasualArticle(boardDto);
+	public String updateCasualArticle(QuestionBoardDto dto) throws Exception {
+		int result = bs.updateCasualArticle(dto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
 		} else {
@@ -219,14 +227,31 @@ public class CasualBoardController {
 			}
 		}
 	
+	// hashtag 기능
+		@RequestMapping(value="casualWriteForm/tagCompare")
+		public List<TagDto> hashtagCompare(@RequestParam String tagValue) {
+			
+			List<TagDto> compared = bs.compareHashtag(tagValue);
+			return compared;
+		}
+		
+		
 	
-	
-// 자주 묻는 질문 링크
-	@RequestMapping(value = "/view/infoBoardView/infoBoard")
-	public ModelAndView infoLink() throws Exception{
+// 임시 마이페이지 링크
+	@RequestMapping(value = "/view/myPageView/myPageDoctor")
+	public ModelAndView doctorMyPage() throws Exception{
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("infoBoardView/infoBoard");
+		mav.setViewName("myPageView/myPageDoctor");
 		return mav;
 	}
+	
+	@RequestMapping(value = "/view/myPageView/myPageCasual")
+	public ModelAndView infoLink() throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("myPageView/myPageCasual");
+		return mav;
+	}
+	
+	
 	
 }

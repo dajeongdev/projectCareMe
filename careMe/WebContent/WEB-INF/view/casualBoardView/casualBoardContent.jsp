@@ -23,7 +23,6 @@
 			<p></p>
 
 			<!-- 게시글 본문 -->
-			<!-- 게시글 본문 -->
 			
 			<div class="blog-post">
       			<h2 class="blog-post-title" align="left"><c:out value="${mlist.title}" /></h2>
