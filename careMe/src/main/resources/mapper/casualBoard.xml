@@ -81,7 +81,7 @@
 
 <!-- hashtag 확인 -->
 
-	<select id="hashtagFind" parameterType="com.careme.model.dto.TagDto">
+	<select id="hashtagFind" resultType="com.careme.model.dto.TagDto" parameterType="String">
 		select tag_idx, tag_name from tag where tag_name like concat('%', #{tagValue},'%')
 	</select>
 

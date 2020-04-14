@@ -1,8 +1,6 @@
 package com.careme.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
@@ -140,11 +139,31 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public ModelAndView writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView("redirect:/view/casualBoardView/casualBoard");
+		
 		mav.addObject("written", bs.addCasualArticles(dto));
-		mav.addObject("files", fus.upload(request, "/img/boardUpload"));
-		return mav;
+		
+		if (!request.getFile(request.getFileNames().next()).isEmpty()) {
+			List<FileUploadCommand> files = fus.upload(request, "/img/pet/profile/");
+			FileUploadCommand file = files.get(0);
+			dto.setFile_name(file.getFileOriginName());
+			dto.setFile_path(file.getFilePath());
+			dto.setFile_size(file.getFileSize());
+			return mav;
+		}else {
+			mav.addObject("files", fus.upload(request, "/img/boardUpload"));
+			return mav;
+		}
 	}
 
+	// hashtag 기능
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public List<TagDto> hashtagCompare(String tagValue) {
+		List<TagDto> compared = bs.compareHashtag(tagValue);
+		System.out.println(tagValue);
+		return compared;
+	}
+	
 	
 // 게시글 수정
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
@@ -220,20 +239,14 @@ public class CasualBoardController {
 			
 			int result = bs.deleteCasualComment(idx);
 			if(result>0) {
-			return "redirect:history.go(-1)";
+			return "redirect:/view/casualBoardView/casualBoard";
 			}else {
 				System.out.println("no!!!");
-			return "redirect:history.go(-1)";
+			return "redirect:/view/casualBoardView/casualBoard";
 			}
 		}
 	
-	// hashtag 기능
-		@RequestMapping(value="casualWriteForm/tagCompare")
-		public List<TagDto> hashtagCompare(@RequestParam String tagValue) {
-			
-			List<TagDto> compared = bs.compareHashtag(tagValue);
-			return compared;
-		}
+
 		
 		
 	

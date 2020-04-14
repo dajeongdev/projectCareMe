@@ -129,7 +129,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Hashtag 확인
 	
 	public List<TagDto> getHashtag(String tagValue){
-		return getSqlSession().selectList("casualQuestionBrd.hastagfind", tagValue);
+		return getSqlSession().selectList("casualQuestionBrd.hashtagFind", tagValue);
 	}
 		
 		

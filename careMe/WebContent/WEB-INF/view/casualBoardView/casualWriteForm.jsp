@@ -46,51 +46,12 @@
         var tag = {};
         var counter = 0;
 
-        // 태그를 추가
-        function addTag (value) {
-            tag[counter] = value; // Object 안에 tag 추가
-            counter++; // counter 증가 삭제를 위한 del-btn id
-        }
-
-        // 최종적으로 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘김
-        function marginTag () {
-            return Object.values(tag).filter(function (word) {
-                return word !== "";
-            });
-        }
-    
-        // 서버로 제출
-        $(document).on("submit", function (e) {
-            var value = marginTag(); // return array
-            $("#rdTag").val(value); 
-
-            $(this).submit();
-        });
-
         $("#tag").on("keypress", function (e) {
             var self = $(this);
 
             if (e.key === "Enter" || e.keyCode == 32) {
 
                 var tagValue = self.val();
-                var url ="casualWriteForm/tagCompare?tagValue="+tagValue;
-
-              /*  $.ajax(
-            			{type:"get",
-            			url:url,
-            			dataType:"json"})
-            			.done(function(list){
-					if (list.length>0){
-						for (i in list){
-						var hlist = list[i]
-						var taging = "<li class='tag-item'>#"+hlist.tag_name+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
-						$("#tag-list").append(taging);
-						}
-					}).fail(function(e){
-						alert(e.responseText);
-						});
-            			} */
-
                 if (tagValue !== "") {
                     // 중복검사 겹치면 해당값 array 로 return
                     var result = Object.values(tag).filter(function (word) {
@@ -115,8 +76,60 @@
             tag[index] = "";
             $(this).parent().remove();
         });
-})
+
+     // 태그를 추가
+        function addTag (value) {
+            tag[counter] = value; // Object 안에 tag 추가
+            counter++; // counter 증가 삭제를 위한 del-btn id
+        }
+        // 최종적으로 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘김
+        function marginTag () {
+            return Object.values(tag).filter(function (word) {
+                return word !== "";
+            });
+        }
+        // 서버로 제출
+        $(document).on("submit", function (e) {
+            var value = marginTag(); // return array
+            $("#rdTag").val(value); 
+            $(this).submit();
+        });
+        
+	})
 </script>
+
+<!-- <script>
+$(function(){
+	$("#tag").on("keypress", function (e) {
+   	 var self = $(this);
+   	 if (e.key === "Enter" || e.keyCode == 32) {
+	    var tagValue = self.val();
+		var url ="casualWriteForm/hashCheck?tagValue="+tagValue;
+		$.ajax(
+			{type:"get",
+			url:url,
+			dataType:"json"})
+			.done(function(compared){
+			
+			if (compared.length>0){
+				for (i in compared){
+					var h = compared[i]
+					var taging = "<li class='tag-item'>#"+h.tag_name+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
+					$("#tag-list").append(taging);
+				}
+			}else{
+				var taging = "<li class='tag-item'>#"+tagValue+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
+				$("#tag-list").append(taging);
+			}
+			}).fail(function(e){
+				alert(e.responseText);
+				});
+			}
+    	})
+	})
+
+</script>
+-->
 
 
 </head>
