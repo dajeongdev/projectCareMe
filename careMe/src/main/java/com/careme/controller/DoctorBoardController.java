@@ -38,6 +38,13 @@ public class DoctorBoardController {
 		this.petService = petService;
 	}
 
+	@Autowired
+	FileUploadService fus;
+	
+	public void setFileUploadService(FileUploadService fus) {
+		this.fus = fus;
+	}
+	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
 	public ModelAndView toDoctorBoard() {
@@ -122,14 +129,13 @@ public class DoctorBoardController {
 	
 	
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
-	public String writeDoctorBoardArticle(MultipartHttpServletRequest request) throws Exception {
-		int result = bs.addDoctorArticles(request);
-		if(result>0) {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-		}else {
-			return "redirect:/view/doctorBoardView/doctorBoard";
-		}
+	public ModelAndView writeDoctorBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("/view/doctorBoardView/doctorBoard");
+		mav.addObject("written", bs.addDoctorArticles(dto));
+		mav.addObject("files", fus.upload(request, "img/boardUpload"));
+		return mav;
 	}
+	
 	
 // 게시글 수정
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
@@ -141,9 +147,10 @@ public class DoctorBoardController {
 			return update;
 	}
 
+
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateDoctorArticle(MultipartHttpServletRequest request) throws Exception {
-		int result = bs.updateDoctorArticle(request);
+	public String updateDoctorArticle(QuestionBoardDto dto) throws Exception {
+		int result = bs.updateDoctorArticle(dto);
 		if (result > 0) {
 			return "redirect:/view/doctorBoardView/doctorBoard";
 		} else {

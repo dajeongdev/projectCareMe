@@ -23,9 +23,9 @@ public interface QuestionBoardService {
 	
 	
 // Doctor Board 작성, 수정, 삭제
-	public int addDoctorArticles (MultipartHttpServletRequest request);
+	public int addDoctorArticles (QuestionBoardDto dto);
 	
-	public int updateDoctorArticle (MultipartHttpServletRequest request);
+	public int updateDoctorArticle (QuestionBoardDto dto);
 	
 	public int deleteDoctorArticle (int idx);
 	
@@ -51,11 +51,11 @@ public interface QuestionBoardService {
 	
 	
 // Casual Board 작성, 수정, 삭제
-	public int addCasualArticles (MultipartHttpServletRequest request);
+	public int addCasualArticles (QuestionBoardDto dto);
 	
-	public int addArtFileForCasual (MultipartHttpServletRequest request);
+	public int addArtFileForCasual (QuestionBoardDto dto);
 	
-	public int updateCasualArticle (MultipartHttpServletRequest request);
+	public int updateCasualArticle (QuestionBoardDto dto);
 	
 	public int deleteCasualArticle (int idx);
 	

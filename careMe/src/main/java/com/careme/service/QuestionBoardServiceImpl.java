@@ -61,15 +61,15 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	// 게시글 작성
 
-	public int addDoctorArticles(MultipartHttpServletRequest request) {
-		dto = requestToBoardDto(request);
+	public int addDoctorArticles(QuestionBoardDto dto) {
+		dto.setReg_date(LocalDateTime.now());
 		return dao.insertArticleForDoctor(dto);
 	}
 
 	// 게시글 수정
 
-	public int updateDoctorArticle(MultipartHttpServletRequest request) {
-		dto = requestToBoardDto(request);
+	public int updateDoctorArticle(QuestionBoardDto dto) {
+		dto.setReg_date(LocalDateTime.now());
 		return dao.updateArticlesForDoctor(dto);
 	}
 
@@ -122,21 +122,19 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	// 게시글 작성
 
-	public int addCasualArticles(MultipartHttpServletRequest request) {
-		dto = requestToBoardDto(request);
+	public int addCasualArticles(QuestionBoardDto dto) {
+		dto.setReg_date(LocalDateTime.now());
 		return dao.insertArticleForCasual(dto);
 	}
 
-	public int addArtFileForCasual(MultipartHttpServletRequest request) {
-		dto = requestToBoardDto(request);
-		int idx = addCasualArticles(request);
-		dto.setQuestion_table_idx(idx);
+	public int addArtFileForCasual(QuestionBoardDto dto) {
+		dto.setReg_date(LocalDateTime.now());
 		return dao.insertArtFileForCasual(dto);
 	}
 
 	// 게시글 수정
 
-	public int updateCasualArticle(MultipartHttpServletRequest request) {
+	public int updateCasualArticle(QuestionBoardDto dto) {
 
 		dto.setUpdate_date(LocalDateTime.now());
 		return dao.updateArticlesForCasual(dto);
@@ -167,31 +165,32 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	}
 
 
-	 public QuestionBoardDto requestToBoardDto(MultipartHttpServletRequest
-	 request) { dto = new QuestionBoardDto();
-	 
-	 dto.setMember_idx(Integer.parseInt(request.getParameter("member_idx")));
-	 dto.setPet_species_idx(Integer.parseInt(request.getParameter(
-	 "pet_species_idx")));
-	 dto.setDoctor_idx(Integer.parseInt(request.getParameter("doctor_idx")));
-	 dto.setMember_id(request.getParameter("member_id"));
-	 dto.setTitle(request.getParameter("title"));
-	 dto.setContent(request.getParameter("content"));
-	 dto.setQuestion_type(request.getParameter("question_type"));
-	 dto.setIs_private(request.getParameter("is_private"));
-	 dto.setPet_idx(Integer.parseInt(request.getParameter("pet_idx")));
-	 dto.setReg_date(LocalDateTime.now());
-	 dto.setUpdate_date(null);
-	 dto.setDel_yn(request.getParameter("del_yn"));
-	 
-	 
-	  if (!request.getFile(request.getFileNames().next()).isEmpty()) {
-	  
-	  List<FileUploadCommand> files = fileUploadService.upload(request,
-	  "/img/boardUpload/"); FileUploadCommand file = files.get(0);
-	  dto.setFile_name(file.getFileOriginName());
-	  dto.setFile_path(file.getFilePath()); dto.setFile_size(file.getFileSize()); }
-	  return dto; }
+	/*
+	 * public QuestionBoardDto requestToBoardDto(MultipartHttpServletRequest
+	 * request) { dto = new QuestionBoardDto();
+	 * 
+	 * dto.setMember_idx(Integer.parseInt(request.getParameter("member_idx")));
+	 * dto.setPet_species_idx(Integer.parseInt(request.getParameter(
+	 * "pet_species_idx")));
+	 * dto.setDoctor_idx(Integer.parseInt(request.getParameter("doctor_idx")));
+	 * dto.setMember_id(request.getParameter("member_id"));
+	 * dto.setTitle(request.getParameter("title"));
+	 * dto.setContent(request.getParameter("content"));
+	 * dto.setQuestion_type(request.getParameter("question_type"));
+	 * dto.setIs_private(request.getParameter("is_private"));
+	 * dto.setPet_idx(Integer.parseInt(request.getParameter("pet_idx")));
+	 * dto.setReg_date(LocalDateTime.now()); dto.setUpdate_date(null);
+	 * dto.setDel_yn(request.getParameter("del_yn"));
+	 * 
+	 * 
+	 * if (!request.getFile(request.getFileNames().next()).isEmpty()) {
+	 * 
+	 * List<FileUploadCommand> files = fileUploadService.upload(request,
+	 * "/img/boardUpload/"); FileUploadCommand file = files.get(0);
+	 * dto.setFile_name(file.getFileOriginName());
+	 * dto.setFile_path(file.getFilePath()); dto.setFile_size(file.getFileSize()); }
+	 * return dto; }
+	 */
 	 
 
 }

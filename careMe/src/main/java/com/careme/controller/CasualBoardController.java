@@ -15,6 +15,7 @@ import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.service.FileUploadService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
 import com.google.gson.Gson;
@@ -36,6 +37,14 @@ public class CasualBoardController {
 	public void setPetService(PetService ps) {
 		this.ps = ps;
 	}
+	
+	@Autowired
+	FileUploadService fus;
+	
+	public void setFileUploadService(FileUploadService fus) {
+		this.fus = fus;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
@@ -83,9 +92,7 @@ public class CasualBoardController {
 
 		} else if (searchn == 1) {
 
-			sbc.setSearch_option(""
-					+ ""
-					+ "");
+			sbc.setSearch_option("title");
 			sbc.setSearchKeyword(searchKeyword);
 			items = bs.getCasualBoardSearch(sbc);
 			list.addObject("list", items);
@@ -128,19 +135,12 @@ public class CasualBoardController {
 	
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public String writeCasualBoardArticle(MultipartHttpServletRequest request) throws Exception {
-		
-		bs.addCasualArticles(request);
-		int result = bs.addArtFileForCasual(request);
-		
-		if (result > 0) {
-			return "redirect:/view/casualBoardView/casualBoard";
-		} else {
-			return "redirect:/view/casualBoardView/casualBoard";
-		}
+	public ModelAndView writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView("redirect:/view/casualBoardView/casualBoard");
+		mav.addObject("written", bs.addCasualArticles(dto));
+		mav.addObject("files", fus.upload(request, "/img/boardUpload"));
+		return mav;
 	}
-	
-
 
 	
 // 게시글 수정
@@ -155,8 +155,8 @@ public class CasualBoardController {
 	
 
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
-	public String updateCasualArticle(MultipartHttpServletRequest request) throws Exception {
-		int result = bs.updateCasualArticle(request);
+	public String updateCasualArticle(QuestionBoardDto dto) throws Exception {
+		int result = bs.updateCasualArticle(dto);
 		if (result > 0) {
 			return "redirect:/view/casualBoardView/casualBoard";
 		} else {
