@@ -4,10 +4,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="story">
 	<!-- 글목록 O-->
-	<select id="list" resultType="com.careme.model.dto.StoryBoardDto">
-		select story_board.title, members.member_id, heart, view_count 
-		from story_board, members 
-		where story_board.member_idx = members.member_idx 
+	<select id="list" resultType="com.careme.model.command.StoryCommand">
+		select * 
+		from story_board inner join members 
+		on story_board.member_idx = members.member_idx 
 		order by story_board_idx desc
 	</select>
 	
@@ -17,9 +17,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select> -->
 	
 	<!-- 상세보기 O -->
-	<select id="read" parameterType="int" resultType="com.careme.model.dto.StoryBoardDto">
-		select title, content, story_board.member_idx, tag_name, reg_date
-		from story_board natural join tag
+	<select id="read" parameterType="int" resultType="com.careme.model.command.StoryCommand">
+		select title, content, file_path, reg_date
+		from story_board inner join story_file
 		where story_board_idx = #{story_board_idx}
 	</select>
 	<select id="readTag" parameterType="map" resultType="com.careme.model.dto.TagDto">
@@ -35,8 +35,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		on story_comment.member_idx = members.member_idx
 		where story_board_idx = #{story_board_idx}
 	</select>
-	<!-- 조회수 증가 -->
-	<update id="viewCount" parameterType="com.careme.model.dto.StoryBoardDto">
+	<!-- 조회수 증가 O-->
+	<update id="viewCount" parameterType="com.careme.model.command.StoryCommand">
 		update story_board
 		set view_count = view_count + 1
 		where story_board_idx = #{story_board_idx}
@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 글작성 -->
-	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto">
+	<insert id="insert" parameterType="com.careme.model.command.StoryCommand">
 		insert into story_board (story_board_idx, member_idx, tag_idx, title, content, heart, view_count, reg_date, update_date, del_yn)
 		values (0, #{member_idx}, #{tag_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
 	</insert>
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 글수정 O -->
-	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto">
+	<update id="update" parameterType="com.careme.model.command.StoryCommand">
 		update story_board
 		<set> 
 			<if test="title != null">title = #{title},</if>
@@ -80,12 +80,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 글삭제 -->
-	<update id="delete">
+	<update id="delete" parameterType="int">
 		update story_board set del_yn = 'y' where story_board_idx = #{story_board_idx}
 	</update>
 	<!-- 태그 삭제 -->
-	<update id="deleteTag">
+	<update id="deleteTag" parameterType="int">
 		update tag set del_yn = 'y' where tag_idx = #{tag_idx}
+	</update>
+	<!-- 댓글 삭제 -->
+	<update id="deleteCom" parameterType="int">
+		update story_comment set del_yn = 'y' where story_comment_idx = #{story_comment_idx}
 	</update>
 	
 </mapper>

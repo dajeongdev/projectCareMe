@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.StoryDao;
 import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -25,78 +26,88 @@ public class StoryServiceImpl implements StoryService {
 		this.dao = dao;
 	}
 	
-	StoryBoardDto dto;
+	StoryCommand com;
 	
-	public void setDto(StoryBoardDto dto) {
-		this.dto = dto;
+	public void setCom(StoryCommand com) {
+		this.com = com;
 	}
 	
-	StoryFileDto fileDto;
+	@Autowired
+	FileUploadService fileUpload;
 
-	public void setFileDto(StoryFileDto fileDto) {
-		this.fileDto = fileDto;
+	public void setFileUpload(FileUploadService fileUpload) {
+		this.fileUpload = fileUpload;
 	}
-	
+
 	@Override
-	public List<StoryBoardDto> list() {
+	public List<StoryCommand> list() {
 		return dao.listing();
 	}
 
 	@Override
-	public void insert(StoryBoardDto dto) {
-		dao.insert(dto);
+	public int insert(MultipartHttpServletRequest request) {
+		com = requesting(request);
+		return dao.insert(com);
 	}
 
 	@Override
-	public StoryBoardDto read(int story_board_idx) {
+	public StoryCommand read(int story_board_idx) {
 		return dao.read(story_board_idx);
 	}
 
 	@Override
-	public List<StoryCommentDto> readCom(int story_board_idx) {
-		return dao.readCom(story_board_idx);
+	public int counting(int story_board_idx) {
+		return dao.counting(story_board_idx);
 	}
+
+	@Override
+	public int update(MultipartHttpServletRequest request) {
+		int i = 0;
+		com = requesting(request);
+		i = dao.update(com);
+		request.getSession().removeAttribute("story_board_idx");
+		return i;
+	}
+
+	@Override
+	public int delete(HttpServletRequest request) {
+		return dao.delete((int) request.getSession().getAttribute("story_board_idx"));
+	}
+
 	
-	@Override
-	public void counting(int story_board_idx) {
-		dao.counting(story_board_idx);
-	}
-
-
-	@Override
-	public void update(StoryBoardDto dto) {
-		dao.update(dto);
-	}
-
-	@Override
-	public void delete(int story_board_idx) {
-		dao.delete(story_board_idx);
-	}
-	
-	 /*private StoryBoardDto requesting(MultipartHttpServletRequest request) { 
-		 fileDto = new StoryFileDto();
+	 public StoryCommand requesting(MultipartHttpServletRequest request) { 
+		 com = new StoryCommand();
 	  
 		 int member_idx = 1;
 		 
-		 if(request.getParameter("p") != null && request.getParameter("p") != "") {
-		 dto.setStory_board_idx(Integer.parseInt(request.getParameter("p"))); }
+		 if(request.getParameter("p") != null && request.getParameter("p") != "") 
+			 com.setStory_board_idx(Integer.parseInt(request.getParameter("p"))); 
 		 
-		 Integer story_board_idx =
-		 (Integer)request.getSession().getAttribute("story_board_idx");
-		 if(story_board_idx != null) { dto.setStory_board_idx(story_board_idx); }
-		  
-		 dto.setMember_idx(member_idx); dto.setTitle(request.getParameter("title"));
-		 dto.setContent(request.getParameter("content"));
-		 dto.setHeart(Integer.parseInt(request.getParameter("heart")));
-		 dto.setView_count(Integer.parseInt(request.getParameter("view_count")));
-		 dto.setTag_idx(Integer.parseInt(request.getParameter("tag_idx")));
+		 Integer story_board_idx = (Integer)request.getSession().getAttribute("story_board_idx");
+		 if(story_board_idx != null) { 
+			 com.setStory_board_idx(story_board_idx); 
+		 }
+		 
+		 com.setMember_idx(member_idx); 
+		 com.setTitle(request.getParameter("title"));
+		 com.setContent(request.getParameter("content"));
+		 com.setHeart(Integer.parseInt(request.getParameter("heart")));
+		 com.setView_count(Integer.parseInt(request.getParameter("view_count")));
+		 com.setTag_idx(Integer.parseInt(request.getParameter("tag_idx")));
+		 com.setStory_file_idx(Integer.parseInt(request.getParameter("story_file_idx")));
+		 com.setMember_id(request.getParameter("member_id"));
+		 com.setHeart(Integer.parseInt(request.getParameter("heart")));
+		 com.setView_count(Integer.parseInt(request.getParameter("view_count")));
+		 
 		 if(!request.getFile(request.getFileNames().next()).isEmpty()) {
-		 List<FileUploadCommand> files = service.upload(request,"/img/story/upload/"); 
-		 FileUploadCommand file = files.get(0);
-		 fileDto.setFile_path(file.getFilePath()); 
+			 List<FileUploadCommand> files = fileUpload.upload(request,"/img/story/upload/"); 
+			 FileUploadCommand file = files.get(0);
+			 com.setOrigin_file_name(file.getFileOriginName());
+			 com.setFile_size(file.getFileSize());
+			 com.setFile_path(file.getFilePath());
 		 } 
-		 return dto; 
-	}*/
+		 return com; 
+	}
 
 
 

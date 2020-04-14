@@ -6,22 +6,21 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 
 public interface StoryService {
-	public List<StoryBoardDto> list();
+	public List<StoryCommand> list();
 	
-	public void insert(StoryBoardDto dto);
+	public int insert(MultipartHttpServletRequest request);
 
-	public StoryBoardDto read(int story_board_idx);
+	public StoryCommand read(int story_board_idx);
 	
-	public List<StoryCommentDto> readCom(int story_board_idx);
+	public int counting(int story_board_idx);
 	
-	public void counting(int story_board_idx);
+	public int update(MultipartHttpServletRequest request);
 	
-	public void update(StoryBoardDto dto);
-	
-	public void delete(int story_board_idx);
+	public int delete(HttpServletRequest request);
 	
 }

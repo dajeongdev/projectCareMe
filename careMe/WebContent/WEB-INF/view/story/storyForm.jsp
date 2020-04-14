@@ -14,15 +14,16 @@
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin-left: -250px;
+	margin-left: -350px;
 	margin-top: 100px;
 }
 #hash-search, #content, #title {
-	width: 600px;
+	width: 700px;
 }
 #hash-inbox { 
+	margin-top:2px;
 	background: #bdbdbd;
-	width: 600px;
+	width: 700px;
 	height: 100px;
 }
 .added-tag {
@@ -31,6 +32,23 @@
 	margin: 5px 5px;
 	border-radius: 10%;
 	display: inline-block;
+}
+.btn-group { 
+	float: right; 
+	margin-top: 10px;
+}
+#preview img {
+	width: 100px;
+	height: 100px;
+}
+#preview p {
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.preview-box {
+	border: 1px solid;
+	padding: 5px;
+	margin-bottom: 10px;
 }
 </style>
 <title>스토리 글쓰기</title>
@@ -61,62 +79,27 @@ $(function (){
 	      }
 	    }
 	  });
-	  
-	$("#hash-inbox").on("click", ".added-tag", function () {
-		    $(this).remove();
+});
+
+$("#testUploadFile").change(function() {
+	var formData = new FormData($("#fileForm")[0]);
+
+	$.ajax({
+		type: 'post',
+		url: 'resources/img/story',
+		data: formData,
+		processdata: false,
+		dataType: "json",
+		contentType: false,
+		async: false,
+		success : function(data) {
+			alert("파일 업로드 성공");
+		}, 
+		error : function(error) {
+			alert("파일 업로드에 실패하였습니다.");
+		}
 	});
 });
-	
-	$(document).ready(function() {
-		var formObj = $("form[name='insert']");
-
-		// 수정
-		$(".insert_btn").on("click", function() {
-			if(fn_valiChk()) {
-				return false;
-			}
-			formObj.attr("action", "/story/storyDetail");
-			formObj.attr("method", "post");
-			formObj.submit();
-		})
-		// 삭제
-		$(".delete_btn").on("click", function() {
-			formObj.attr("action", "/story/stoyDelete");
-			formObj.attr("method", "post");
-			formObj.submit();
-		})
-
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileDelete($(this));
-		})
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileAdd($(this));
-		})
-	});
-	function fn_valiChk() {
-		var regForm = $("form[name='insert']) .chk").length;
-		for(var i = 0; i < regForm; i++) {
-			if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null) {
-				alert($(".chk").eq(i).attr("title"));
-				return true;
-			});
-		}
-	}
-	function fn_fileDelete(obj) {
-		obj.parent.remove();
-	}
-	function fn_fileAdd() {
-		var str = "<p><input type='file' name='file' /><a href='#this' name='delete' class='btn'>삭제</a>";
-		$("#fileDiv").append(str);
-	
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileDelete($(this));
-		});
-	}
-
 </script>
 </head>
 <body>
@@ -126,29 +109,35 @@ $(function (){
 </div>
 <div class="story_form">
 	<div class="container">
-		<form id="insert" method="post" action="/story/storyDetail" enctype="multipart/form-data">
-			<input type="hidden" name="story_board_idx" value="${insert.story_board.idx}">
-			<label for="title"></label>
+		<form name="story_insert" method="post" action="/story/storyDetail" enctype="multipart/form-data">
+			<input type="hidden" name="story_board_idx" value="0">
 			<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
 			<div class="story_content">
-				<input type="file" name="file"/>
-				<a href="#this" name="delete" class="btn">삭제</a>
+				<div id="attach">
+					<span class="file" id="file">
+					<input type="file" name="file filedata" id="file testUploadFile" multiple/>
+					</span>
+				</div>
+				<div id="preview">
+				</div>
+				<a href="#this" name="delete" class="btn">X</a>
 			<div class="form-group">
-			 	<label for="content"></label>
-    			<textarea class="form-control" name="content"
+			 	<textarea class="form-control" name="content"
     			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
   			</div>
   			</div>
 			<div id="info-tag">
-				<input type="text" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+				<input type="text" class="form-control" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
 					<div id="hash-inbox">
 					</div>
 				</div>
 			</div>
-			<button type="submit" class="insert_btn">등록</button>
-			<button type="submit" class="list_btn" onclick="location.href='storyMain'">목록</button>
+			<div class="btn-group">
+				<button type="submit" class="insert_btn btn btn-outline-dark"><a href="#" title="등록" class="btnline">등록</a></button>
+				<button type="submit" class="list_btn btn btn-outline-dark">목록</button>
+			</div>
 		</form>
 	</div>
 </div>

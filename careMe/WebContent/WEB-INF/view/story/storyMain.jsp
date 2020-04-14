@@ -6,86 +6,80 @@
 <head>
 <style>
 .storyMain { margin: 40px; }
+.card-text, .card-heart, .card-count { font-size: 15px; }
+.searching { margin: 0 auto; }
+.card-s { position:none; }
+.rounded-circle { position: inline;}
+.card-t { position: block; }
 </style>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <title>스토리 메인</title>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </head>
 <body>
 
 <div class="container-fluid" style="padding:0;">
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
-<form action="/story/storyForm" method="post">
+
 <div class="storyMain">
+	<form action="/story/storyForm" method="post">
 	<h3><strong>인기글</strong></h3>
 	<hr>
 	<div class="album py-5 bg-light">
     <div class="container">
     
 	<div class="row">
-        <div class="col-md-3">
-          <div class="card mb-3 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
             <div class="card-body">
-              <p class="card-text">제목</p>
+              <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+              <h5 class="card-text">제목</h5>
               <p class="card-text">사용자</p>
               <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+               <div class="btn-group">
+                  <i class="fas fa-heart"></i>&nbsp<span class="card-heart">39</span>&nbsp&nbsp
+              	  <i class="far fa-comments"></i>&nbsp<span class="card-count">885</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-         <div class="col-md-3">
-          <div class="card mb-3 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+     	 <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
             <div class="card-body">
-              <p class="card-text">제목</p>
+              <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+              <h5 class="card-text">제목</h5>
               <p class="card-text">사용자</p>
               <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+               <div class="btn-group">
+                  <i class="fas fa-heart"></i>&nbsp<span class="card-heart">55</span>&nbsp&nbsp
+              	  <i class="far fa-comments"></i>&nbsp<span class="card-count">1095</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="card mb-3 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+      <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
             <div class="card-body">
-              <p class="card-text">제목</p>
+              <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+              <h5 class="card-text">제목</h5>
               <p class="card-text">사용자</p>
               <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+               <div class="btn-group">
+                  <i class="fas fa-heart"></i>&nbsp<span class="card-heart">26</span>&nbsp&nbsp
+              	  <i class="far fa-comments"></i>&nbsp<span class="card-count">402</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="card mb-3 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
-            <div class="card-body">
-              <p class="card-text">제목</p>
-              <p class="card-text">사용자</p>
-              <p class="card-text">조회수</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-       
+       </div>
         
 
 	
@@ -97,19 +91,20 @@
 	
 	<hr>
 	<div>
+	<div class="row">
     <c:forEach items="${list}" var="list">
-         <div class="col-md-3">
-          <div class="card mb-3 shadow-sm">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+         <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
             <div class="card-body">
-              <p class="card-text">${list.title}</p>
+              <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+              <h5 class="card-text">${list.title}</h5>
               <p class="card-text">${list.member_id}</p>
-              <p class="card-text">${list.view_count}</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+              <div class="btn-group">
+                  <i class="fas fa-heart"></i>&nbsp<span class="card-heart">${list.heart}</span>&nbsp&nbsp
+              	  <i class="far fa-comments"></i>&nbsp<span class="card-count">${list.view_count}</span>
                 </div>
+              <div class="d-flex justify-content-between align-items-center">
               </div>
             </div>
           </div>
@@ -120,11 +115,8 @@
      </div>
     </div>
 	
-
-</div>
-</form>
-
-	<form action="view/story/storyBoardSearch">
+	</form>
+	<form class="searching" action="view/story/storyBoardSearch">
 		<select name="search">
 			<option value="0">작성자</option>
 			<option value="1">제목</option>
@@ -133,5 +125,9 @@
 		<input type="text" name="search" size="20" maxLength="40">
 		<input type="submit" value="검색">
 	</form>
+</div>
+
+
+	
 </body>
 </html>
