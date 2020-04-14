@@ -48,7 +48,7 @@
 		         , processData: false
 	             , data : formData
             	 , success : function() {
-                     console.log("hi");
+                     console.log("성공");
                  }
 	        })
 		}
@@ -122,8 +122,8 @@
 			
 			<div class="row mb-3">
 				<div class="col-12">
-					<label for="date">날짜</label>
-					<input type="date" class="form-control" id="date" name="date">
+					<label for="diaryDate">날짜</label>
+					<input type="date" class="form-control" id="diaryDate" name="diaryDate">
 				</div>					
 			</div>
 			

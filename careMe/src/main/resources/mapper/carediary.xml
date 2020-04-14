@@ -15,11 +15,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<insert id="writeDiary" parameterType="com.careme.model.dto.PetCareDto">
 		insert into pet_care (pet_idx, title, exercise, urine, feces, memo, weight, diary_date)
-		values ( #{pet_idx}, #{title}, #{exerciese}, #{urine}, #{feces}, #{memo}, #{weight}, #{diary_date} )
+		values ( #{pet_idx}, #{title}, #{exercise}, #{urine}, #{feces}, #{memo}, #{weight}, #{diary_date} )
 
-		<selectKey keyProperty="id" resultType="int">
+		<selectKey keyProperty="pet_care_idx" resultType="int">
 	        SELECT LAST_INSERT_ID()
 	    </selectKey>
+	</insert>
+	
+	<insert id="writeDiaryFile" parameterType="com.careme.model.dto.PetCareFileDto">
+		insert into pet_care_file (pet_care_idx, file_path, file_size, file_name)
+		values ( #{pet_care_idx}, #{file_path}, #{file_size}, #{file_name} )
 	</insert>
 	
 

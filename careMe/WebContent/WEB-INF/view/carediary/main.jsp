@@ -30,7 +30,7 @@
 		<div class="row mb-2">
 		
 			<div class="col-2 text-left">
-				<button class="btn btn-success" onclick="location.href='carediary/write'">일기작성</button>
+				<button class="btn btn-success" onclick="location.href='write'">일기작성</button>
 			</div>
 			
 			<div class="col-10 text-right">

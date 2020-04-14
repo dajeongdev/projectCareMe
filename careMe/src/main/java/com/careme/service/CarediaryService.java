@@ -1,5 +1,6 @@
 package com.careme.service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.FileUploadCommand;
 import com.careme.model.dto.DefecationDto;
 import com.careme.model.dto.PetCareDto;
+import com.careme.model.dto.PetCareFileDto;
 
 @Service
 public class CarediaryService {
@@ -36,10 +38,9 @@ public class CarediaryService {
 		return careDiaryDao.selectBigDef();
 	}
 	
-	public int writeDiary(CarediaryCommand command, MultipartHttpServletRequest request) {
+	public void writeDiary(CarediaryCommand command, MultipartHttpServletRequest request) throws SQLException {
 		PetCareDto dto = new PetCareDto();
-		
-		dto.setPet_idx((int) request.getSession().getAttribute("selectedPet"));
+		dto.setPet_idx((int) request.getSession().getAttribute("pet_idx"));
 		dto.setTitle(command.getTitle());
 		dto.setExercise(command.getExercise());
 		dto.setWeight(command.getWeight());
@@ -47,18 +48,26 @@ public class CarediaryService {
 		dto.setFeces(command.getFeces());
 		dto.setMemo(command.getMemo());
 		dto.setDiary_date(command.getDiaryDate());
+		
+		System.out.println("지금 선택된 pet ::" + dto.getPet_idx());
 				
-		int diaryIdx = careDiaryDao.writeDiary(dto);
+		careDiaryDao.writeDiary(dto);
+		int diaryIdx = dto.getPet_care_idx();
 		
 		if (diaryIdx > 0) {
-			List<FileUploadCommand> files; 
+			List<FileUploadCommand> files;			
 			files = fileuploadService.upload(request, "/img/pet/carediary/");
+			
+			for (FileUploadCommand file : files) {
+				PetCareFileDto fileDto = new PetCareFileDto();
+				fileDto.setPet_care_idx(diaryIdx);
+				fileDto.setFile_name(file.getFileOriginName());
+				fileDto.setFile_path(file.getFilePath());
+				fileDto.setFile_size(file.getFileSize());
+				
+				careDiaryDao.writeDiaryFile(fileDto);
+			}
 		}
-		
-		// file loop 파일 data insert
-		
-		
-		return 0;
 	}
 
 }

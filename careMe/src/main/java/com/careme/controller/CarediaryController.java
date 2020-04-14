@@ -1,7 +1,13 @@
 package com.careme.controller;
 
+import java.sql.SQLException;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -19,10 +25,18 @@ public class CarediaryController {
 		this.carediaryService = carediaryService;
 	}
 	
+	@RequestMapping("/carediary/{pet_idx}")
+	public String toCarediaryMain(@PathVariable("pet_idx") int pet_idx, HttpServletRequest request) {
+		System.out.println("pet 선택:: " + pet_idx);
+		request.getSession().setAttribute("pet_idx", pet_idx);
+		return "/carediary/main";
+	}
 	
 	@RequestMapping("/carediary")
 	public String toCarediaryMain() {
-		return "/carediary/main";
+		System.out.println("pet 선택:: 안함");
+		// login했을때 pet idx 구해서 넣기
+		return "redirect:/carediary/9";
 	}
 	
 	@RequestMapping(value= "/carediary/write", method = RequestMethod.GET)
@@ -34,8 +48,8 @@ public class CarediaryController {
 	}
 	
 	@RequestMapping(value= "/carediary/write", method = RequestMethod.POST)
-	public String registWrite(CarediaryCommand command, MultipartHttpServletRequest request) {
-		
+	public String writeDairy(CarediaryCommand command, MultipartHttpServletRequest request) throws SQLException, Exception {
+		carediaryService.writeDiary(command, request);
 		return "/carediary/main";
 	}
 	

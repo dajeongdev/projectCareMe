@@ -6,6 +6,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import com.careme.model.dto.DefecationDto;
 import com.careme.model.dto.PetCareDto;
+import com.careme.model.dto.PetCareFileDto;
 
 public class CarediaryDao  extends SqlSessionDaoSupport {
 	
@@ -19,6 +20,10 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 	
 	public int writeDiary(PetCareDto dto) {
 		return getSqlSession().insert("carediary.writeDiary", dto);
+	}
+	
+	public int writeDiaryFile(PetCareFileDto dto) {
+		return getSqlSession().insert("carediary.writeDiaryFile", dto);
 	}
 
 }
