@@ -11,7 +11,7 @@ public class PetCareDto {
 	private String memo;
 	private Double weight;
 	private String del_yn;
-	private LocalDateTime reg_date;
+	private String reg_date;
 	
 	public int getPet_care_idx() {
 		return pet_care_idx;
@@ -61,10 +61,10 @@ public class PetCareDto {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
-	public LocalDateTime getReg_date() {
+	public String getReg_date() {
 		return reg_date;
 	}
-	public void setReg_date(LocalDateTime reg_date) {
+	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
 	

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-
+<spring:url value="/resources/img/Tux.svg" var="default_image" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,8 +33,8 @@
 				<button class="btn btn-success">일기작성</button>
 			</div>
 			
-			<div class="col-10">
-				
+			<div class="col-10 text-right">
+				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSample">목록</button>
 			</div>
 		
 		</div>
@@ -51,7 +51,8 @@
 		            <div class="card-hover-show">
 		                <a class="btn btn-xs fs-10 btn-bold btn-info" href="#">수정</a>
 		                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">질문하기</a>
-		                <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a>
+		                <button type="button" class="btn btn-xs fs-10 btn-bold btn-warning" data-toggle="collapse" data-target="#images" aria-expanded="false" aria-controls="images">열기</button>
+		                <!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
 		            </div>
 		        </footer>
 		        
@@ -85,7 +86,6 @@
 			        		</div>
 			        	</div>
 			        	
-			        	
 			        	<div class="col-md-6 p-2">
 			        		<div class="card-body">
 				        		<p>
@@ -93,6 +93,22 @@
 				        			오늘의 일기 오늴의일기  오늘의 일기 오늴의일기
 				        		</p>
 		        			</div>
+			        	</div>
+			        	
+			        	<div class="col-md-12 p-2 collapse" id="images">
+			        		<div class="card-body">
+			        			<div class="row">
+			        				<div class="col-md-3">
+			        					<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
+				        			</div>
+				        			<div class="col-md-3">
+					        			<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
+				        			</div>
+				        			<div class="col-md-3">
+					        			<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
+				        			</div>
+			        			</div>
+			        		</div>
 			        	</div>
 		        	</div>
 		        </div>
@@ -128,7 +144,7 @@
 		        </div>
 		    </div>
 		    
-		    <div>
+		    <div class="mb-3">
 		    	<form action="" class="form-inline text-right">
 					<div class="w-100">
 						<input type="date" class="form-control mr-sm-2">
@@ -136,7 +152,6 @@
 			    		<button class="btn btn-secondary">검색</button>						
 					</div>
 				</form>
-		    	
 		    </div>
 		
 		    <nav>
@@ -155,10 +170,10 @@
 		</div>
 		<!-- E:diary -->
 
-		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSample">modal</button>
+		
 	
 		<div class="modal fade" id="modalSample" tabindex="-1" role="dialog">
-		  <div class="modal-dialog modal-lg" role="document">
+		  <div class="modal-dialog modal-md" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
 		        <h5 class="modal-title">나의 반려동물</h5>
@@ -167,12 +182,49 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		      	<ul>
-		      		<li>강아지1</li>
-		      		<li>강아지2</li>
-		      		<li>강아지3</li>
-		      		<li>강아지4</li>
-		      	</ul>
+		      	<div class="row">
+		      		<div class="col-md-12">
+		      			<div class="people-nearby">
+
+		      				<div class="nearby-user">
+		      					<div class="row">
+		      						<div class="col-md-2 col-sm-2">
+		      							<img src="${default_image}" alt="user" class="profile-photo-lg">
+		      						</div>
+		      						<div class="col-md-7 col-sm-7">
+			      						<h5><a href="#" class="profile-link">강아지1</a></h5>
+			      						<p class="text-muted">2020/04/12 updated</p>
+			      					</div>
+			      					<div class="col-md-3 col-sm-3">
+			      						<button class="btn btn-primary pull-right">선택</button>
+		      						</div>
+		      					</div>
+		      				</div>
+		      				
+		      				<div class="nearby-user">
+		      					<div class="row">
+		      						<div class="col-md-2 col-sm-2">
+		      							<img src="${default_image }" alt="user" class="profile-photo-lg">
+		      						</div>
+		      						<div class="col-md-7 col-sm-7">
+			      						<h5><a href="#" class="profile-link">강아지2</a></h5>
+			      						<p class="text-muted">2020/04/11 updated</p>
+			      					</div>
+			      					<div class="col-md-3 col-sm-3">
+			      						<button class="btn btn-primary pull-right">선택</button>
+		      						</div>
+		      					</div>
+		      				</div>
+		      				
+	      					<div class="row text-center">
+	      						<div class="col-8 m-auto">
+	      							<button class="btn btn-success">추가</button>
+	      						</div>
+	      					</div>
+		      				
+		      			</div>
+		      		</div>
+		      	</div>
 		      </div>
 		      <div class="modal-footer text-center">		        
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
