@@ -1,6 +1,7 @@
 package com.careme.controller;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.CarediaryCommand;
 import com.careme.model.dto.PetCareDto;
 import com.careme.service.CarediaryService;
 
@@ -26,10 +28,15 @@ public class CarediaryController {
 	}
 	
 	@RequestMapping("/carediary/{pet_idx}")
-	public String toCarediaryMain(@PathVariable("pet_idx") int pet_idx, HttpServletRequest request) {
-		System.out.println("pet 선택:: " + pet_idx);
-		request.getSession().setAttribute("pet_idx", pet_idx);
-		return "/carediary/main";
+	public ModelAndView toCarediaryMain(@PathVariable("pet_idx") int pet_idx, HttpServletRequest request) {
+		//carediary 화면으로 들어와서 선택한 펫idx session에 저장
+		//SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		//sc.setPet_idx(pet_idx);
+		List<CarediaryCommand> list = carediaryService.getCarediaryListByPetIdx(pet_idx);
+		ModelAndView mav = new ModelAndView("/carediary/main");
+		mav.addObject("articles", list);
+		
+		return mav;
 	}
 	
 	@RequestMapping("/carediary")
@@ -67,7 +74,6 @@ public class CarediaryController {
 	
 	@RequestMapping(value= "/carediary/update", method = RequestMethod.POST)
 	public String updateDiary(PetCareDto dto, Integer[] deletedFiles, MultipartHttpServletRequest request) {
-		System.out.println("컨트롤러 도착 ");
 		carediaryService.updateCarediary(dto, deletedFiles, request);
 		return "/carediary/main";
 	}

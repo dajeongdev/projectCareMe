@@ -87,7 +87,7 @@ public class CarediaryService {
 	}
 	
 	public List<CarediaryCommand> getCarediaryListByPetIdx(int petIdx) {
-		List<CarediaryCommand> commandList = new ArrayList<CarediaryCommand>();
+		List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
 		List<PetCareDto> dtoList = carediaryDao.selectCarediaryListByPetIdx(petIdx);
 		
 		for (PetCareDto dto : dtoList) {
@@ -95,10 +95,10 @@ public class CarediaryService {
 			command.setDiary(dto);
 			command.setFiles(carediaryDao.selectCarediaryFileList(dto.getPet_care_idx()));
 			
-			commandList.add(command);
+			list.add(command);
 		}
 		
-		return commandList;
+		return list;
 	}
 	
 	public void processFile(int diaryIdx, MultipartHttpServletRequest request) {

@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <spring:url value="/resources/img/Tux.svg" var="default_image" />
+<% String hostname = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
+<c:set var="hostname" value="<%=hostname%>" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,124 +33,96 @@
 		<div class="row mb-2">
 		
 			<div class="col-2 text-left">
-				<button class="btn btn-success" onclick="location.href='write'">일기작성</button>
+				<button class="btn btn-dark btn-sm" onclick="location.href='write'">일기작성</button>
 			</div>
 			
 			<div class="col-10 text-right">
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalSample">목록</button>
+				<button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#modalSample">목록</button>
 			</div>
 		
 		</div>
 		
-		<!-- S:diary -->
+		<!-- S:diary list box -->
 		<div class="row">
 			<div class="col-md-12">
-			    <div class="card b-1 hover-shadow mb-20">
-			    	<footer class="card-footer flexbox align-items-center">
-			            <div>
-			                <strong>오늘의 일기 : </strong>
-			                <span>21 Jan, 2018</span>
-			            </div>
-			            <div class="card-hover-show">
-			                <a class="btn btn-xs fs-10 btn-bold btn-info" href="update?d_id=20">수정</a>
-			                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">질문하기</a>
-			                <button type="button" class="btn btn-xs fs-10 btn-bold btn-warning" data-toggle="collapse" data-target="#images" aria-expanded="false" aria-controls="images">열기</button>
-			                <!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
-			            </div>
-			        </footer>
-			        
-			        <div class="media card-body table-responsive">
-			        	<div class="row">
-			        	
-				        	<div class="col-md-6 p-2">
-				        		<div class="card-body">
-					        		<table class="table-sm w-100 text-center">
-						        		<thead class="border-bottom">
-						        			<tr>
-						        				<th>날짜</th>
-						        				<th>산책</th>
-						        				<th>소변</th>
-						        				<th>대변</th>
-						        				<th>몸무게</th>
-						        			</tr>
-						        		</thead>
-						        		<tbody>
-							        		<tr>
-						        				<td>2020/03/26</td>
-						        				<td>50/m</td>
-						        				<td>
-						        					<div class="color-circle"></div>
-												</td>
-						        				<td>무름</td>
-						        				<td>20/kg</td>
-						        			</tr>
-						        		</tbody>
-					        		</table>
-				        		</div>
-				        	</div>
-				        	
-				        	<div class="col-md-6 p-2">
-				        		<div class="card-body">
-					        		<p>
-					        			오늘의 일기 오늴의일기 오늘의 일기 오늴의일기 오늘의 일기 오늴의일기
-					        			오늘의 일기 오늴의일기  오늘의 일기 오늴의일기
-					        		</p>
-			        			</div>
-				        	</div>
-				        	
-				        	<div class="col-md-12 p-2 collapse" id="images">
-				        		<div class="card-body">
-				        			<div class="row">
-				        				<div class="col-md-3">
-				        					<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
+				<!-- S:diary -->
+				<c:if test="${articles.size() > 0}">
+					<c:forEach var="article" items="${articles}" varStatus="status">
+						<div class="card b-1 hover-shadow mb-20">
+					    	<footer class="card-footer flexbox align-items-center">
+					            <div>
+					                <strong>${article.diary.title} : </strong>
+					                <span>${article.diary.reg_date}</span>
+					            </div>
+					            <div class="card-hover-show">
+					                <a class="btn btn-xs fs-10 btn-dark btn-sm" href="update?d_id=${article.diary.pet_care_idx}">수정</a>
+					                <a class="btn btn-xs fs-10 btn-bold btn-dark btn-sm" href="#" data-toggle="modal" data-target="#modal-contact">질문하기</a>
+					                <button type="button" class="btn btn-xs fs-10 btn-dark btn-sm" data-toggle="collapse" data-target="#image${status.index}" aria-expanded="false" aria-controls="image${status.index}">열기</button>
+					                <!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
+					            </div>
+					        </footer>
+					        
+					        <div class="media card-body table-responsive row">
+					        
+					        	<div class="row mb-2 w-100">
+						        	<div class="col-md-6 p-2">
+						        		<div class="card-body">
+							        		<table class="table-sm w-100 text-center">
+								        		<thead class="border-bottom">
+								        			<tr>
+								        				<th>날짜</th>
+								        				<th>산책</th>
+								        				<th>소변</th>
+								        				<th>대변</th>
+								        				<th>몸무게</th>
+								        			</tr>
+								        		</thead>
+								        		<tbody>
+									        		<tr>
+								        				<td>${article.diary.diary_date}</td>
+								        				<td>${article.diary.exercise}/m</td>
+								        				<td>
+								        					<div class="color-circle"></div>
+														</td>
+								        				<td>무름</td>
+								        				<td>${article.diary.weight}111/kg</td>
+								        			</tr>
+								        		</tbody>
+							        		</table>
+						        		</div>
+						        	</div>
+						        	<div class="col-md-6 p-2">
+						        		<div class="card-body">
+							        		<p>
+							        			${article.diary.memo}
+							        		</p>
 					        			</div>
-					        			<div class="col-md-3">
-						        			<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
-					        			</div>
-					        			<div class="col-md-3">
-						        			<img src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1">
-					        			</div>
-				        			</div>
-				        		</div>
-				        	</div>
-				        	
-			        	</div>
-			        </div>
-			    </div>
-			
-			    <div class="card b-1 hover-shadow mb-20">
-			        <footer class="card-footer flexbox align-items-center">
-			            <div>
-			                <strong>산책일기 : </strong>
-			                <span>18 Jan, 2017</span>
-			            </div>
-			            <div class="card-hover-show">
-			                <a class="btn btn-xs fs-10 btn-bold btn-info" href="#">Download CV</a>
-			                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">Contact</a>
-			                <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">Delete</a>
-			            </div>
-			        </footer>
-			        
-			        <div class="media card-body">
-			            <div class="media-left pr-12">
-			                <img class="avatar avatar-xl no-radius" src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="...">
-			            </div>
-			            <div class="media-body">
-			                <div class="mb-2">
-			                    <span class="fs-20 pr-16">Maryam Amiri</span>
-			                </div>
-			                <small class="fs-16 fw-300 ls-1">Designer</small>
-			            </div>
-			            <div class="media-right text-right d-none d-md-block">
-			                <p class="fs-14 text-fade mb-12"><i class="fa fa-map-marker pr-1"></i> Fairfield, IA</p>
-			                <span class="text-fade"><i class="fa fa-money pr-1"></i> $45 per hour</span>
-			            </div>
-			        </div>
-			    </div>
-			    
+						        	</div>
+						        </div>
+						        
+						        <div class="row">
+						        	<div class="col-md-12 p-2 collapse" id="image${status.index}">
+						        		<div class="card-body">
+						        			<div class="row">
+						        				<c:if test="${article.files.size() > 0}">
+						        					<c:forEach var="image" items="${article.files}">
+						        						<div class="col-md-3"><img src="${hostname}${image.file_path}"></div>
+						        					</c:forEach>
+						        				</c:if>
+						        			</div>
+						        		</div>
+						        	</div>
+					        	</div>
+					        	
+					        </div>
+					    </div>
+						<!-- E:diary -->
+					</c:forEach>
+				</c:if>
+
 			</div>
 		</div>
-		<!-- E:diary -->
+		<!-- E:diary list box -->
 		
 		<div class="row">
 		    <div class="col-8 mx-auto mb-3">

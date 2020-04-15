@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectCarediaryListByPetIdx" resultType="com.careme.model.dto.PetCareDto">
-		select * from pet_care where del_yn = 'n' and pet_idx = #{pet_idx} 
+		select * from pet_care where del_yn = 'n' and pet_idx = #{pet_idx} order by pet_care_idx desc
 	</select>
 	
 	<select id="selectCarediaryFileList" resultType="com.careme.model.dto.PetCareFileDto">
@@ -57,14 +57,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<update id="deleteCarediaryFiles" parameterType="java.util.HashMap">
-		update pet_care_file del_yn = 'y'
+		update pet_care_file set del_yn = 'y'
 		where pet_care_file_idx in
 		<foreach collection="deleteList" item="item" index="index" separator="," open="(" close=")">
          	#{item}
         </foreach>
 	</update>
-	
-
 	
 
 </mapper>

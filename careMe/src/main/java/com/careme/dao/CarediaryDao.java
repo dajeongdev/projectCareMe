@@ -32,7 +32,7 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 	}
 	
 	public List<PetCareDto> selectCarediaryListByPetIdx(int petIdx) {
-		return getSqlSession().selectList("carediary.selectCarediaryByIdx", petIdx);
+		return getSqlSession().selectList("carediary.selectCarediaryListByPetIdx", petIdx);
 	}
 	
 	public List<PetCareFileDto> selectCarediaryFileList(int carediaryIdx) {
@@ -40,7 +40,7 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 	}
 	
 	public int updateCarediary(PetCareDto dto) {
-		return getSqlSession().update("carediary.updateDiary", dto);
+		return getSqlSession().update("carediary.updateCarediary", dto);
 	}
 	
 	public int deleteCarediaryFiles(Map<String, Object> list) {
