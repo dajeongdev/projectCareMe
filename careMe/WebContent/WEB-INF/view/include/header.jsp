@@ -20,10 +20,12 @@
 		<div class="col-12 text-center">
 			<a class="blog-header-logo text-dark" href="#">LOGO</a>
 		</div>
+
 		<div
 			class="col-12 d-flex justify-content-end align-items-center position-absolute">
 			<img src="${profile}" style="padding: 5px; width: 60px;"> <a
-				class="btn btn-sm btn-outline-secondary" href="#">Sign up</a>
+				class="btn btn-sm btn-outline-secondary" href="/careMe/login/loginform">Sign up</a>
+
 		</div>
 	</div>
 </header>
