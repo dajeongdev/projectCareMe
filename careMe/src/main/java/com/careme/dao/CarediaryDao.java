@@ -43,7 +43,7 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 		return getSqlSession().update("carediary.updateDiary", dto);
 	}
 	
-	public int deleteCarediaryFiles(Map<Object, String> list) {
+	public int deleteCarediaryFiles(Map<String, Object> list) {
 		return getSqlSession().update("carediary.deleteCarediaryFiles", list);
 	}
 	

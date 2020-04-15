@@ -44,43 +44,34 @@ public class CarediaryService {
 	
 	public void writeCarediary(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException {
 		dto.setPet_idx((int) request.getSession().getAttribute("pet_idx"));
-
+		
+		// carediary 메인 테이블에 insert 하고 insert 한 데이터 idx를 pet_care_idx 멤버에 저장
 		carediaryDao.writeCarediary(dto);
 		
 		int diaryIdx = dto.getPet_care_idx();
 		
-		if (diaryIdx > 0) {
-			List<FileUploadCommand> files;			
-			files = fileuploadService.upload(request, "/img/pet/carediary/");
-			
-			for (FileUploadCommand file : files) {
-				PetCareFileDto fileDto = new PetCareFileDto();
-				fileDto.setPet_care_idx(diaryIdx);
-				fileDto.setFile_name(file.getFileOriginName());
-				fileDto.setFile_path(file.getFilePath());
-				fileDto.setFile_size(file.getFileSize());
-				
-				carediaryDao.writeCarediaryFile(fileDto);
-			}
-		}
+		if (diaryIdx > 0) processFile(diaryIdx, request);		
 	}
 	
-	public int updateCarediary(PetCareDto dto, Integer[] deletedFiles, MultipartHttpServletRequest request) {
+	public void updateCarediary(PetCareDto dto, Integer[] deletedFiles, MultipartHttpServletRequest request) {
+		System.out.println("서비스 도착");
 		int res = carediaryDao.updateCarediary(dto);
+		int diaryIdx = dto.getPet_care_idx();
+		System.out.println("삭제파일 길이: " + deletedFiles.length);
 		if (res == 1) {
 			// 파일삭제
 			if (deletedFiles.length > 0) {
+				System.out.println("삭제파일 길이: " + deletedFiles.length);
 				Map<String, Object> deleteList = new HashMap<String, Object>();
 				List<Integer> list = Arrays.asList(deletedFiles);
 				deleteList.put("deleteList", list);
+				
+				carediaryDao.deleteCarediaryFiles(deleteList);
 			}
 			
 			// 추가된 파일 등록
-
+			if (request.getFileMap().size() > 0) processFile(diaryIdx, request);
 		}
-		
-		System.out.println(dto);	
-		return 1;
 	}
 	
 	public CarediaryCommand getCarediaryByIdx(int carediaryIdx) {
@@ -108,6 +99,23 @@ public class CarediaryService {
 		}
 		
 		return commandList;
+	}
+	
+	public void processFile(int diaryIdx, MultipartHttpServletRequest request) {
+		
+		List<FileUploadCommand> files;			
+		files = fileuploadService.upload(request, "/img/pet/carediary/");
+		
+		for (FileUploadCommand file : files) {
+			PetCareFileDto fileDto = new PetCareFileDto();
+			fileDto.setPet_care_idx(diaryIdx);
+			fileDto.setFile_name(file.getFileOriginName());
+			fileDto.setFile_path(file.getFilePath());
+			fileDto.setFile_size(file.getFileSize());
+			
+			carediaryDao.writeCarediaryFile(fileDto);
+		}
+		
 	}
 	
 	

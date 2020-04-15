@@ -42,7 +42,7 @@
 		         , processData: false
 	             , data : formData
             	 , success : function() {
-                     console.log("성공");
+            		 location.href="/careMe/carediary";
                  }
 	        })
 		}

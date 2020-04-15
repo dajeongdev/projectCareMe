@@ -49,7 +49,6 @@ public class CarediaryController {
 	
 	@RequestMapping(value= "/carediary/write", method = RequestMethod.POST)
 	public String writeDairy(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException, Exception {
-		System.out.println(dto);
 		carediaryService.writeCarediary(dto, request);
 		return "/carediary/main";
 	}
@@ -67,9 +66,10 @@ public class CarediaryController {
 	}
 	
 	@RequestMapping(value= "/carediary/update", method = RequestMethod.POST)
-	public String updateDiary(PetCareDto dto, Integer[] deletedFiles) {
-		
-		return "asd";
+	public String updateDiary(PetCareDto dto, Integer[] deletedFiles, MultipartHttpServletRequest request) {
+		System.out.println("컨트롤러 도착 ");
+		carediaryService.updateCarediary(dto, deletedFiles, request);
+		return "/carediary/main";
 	}
 	
 }
