@@ -1,14 +1,19 @@
 package com.careme.service;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
-
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.StoryDao;
+import com.careme.model.command.FileUploadCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
+import com.careme.service.FileUploadService;
 
 @Service("StoryService")
 public class StoryServiceImpl implements StoryService {
@@ -23,6 +28,13 @@ public class StoryServiceImpl implements StoryService {
 
 	public void setDto(StoryBoardDto dto) {
 		this.dto = dto;
+	}
+	
+	@Autowired
+	FileUploadService service;
+	
+	public void setService(FileUploadService service) {
+		this.service = service;
 	}
 
 	@Override
@@ -46,14 +58,58 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public int insert(StoryBoardDto dto) {
-		dto.setReg_date(LocalDateTime.now());
+	public int insert(MultipartHttpServletRequest request) {
+		dto = requesting(request);
 		return dao.insert(dto);
 	}
 
+	public StoryBoardDto requesting(MultipartHttpServletRequest request) {
+		dto = new StoryBoardDto();
+		
+		int member_idx = 1;
+		if (request.getParameter("p") != null && request.getParameter("p") != "") {
+			dto.setStory_board_idx(Integer.parseInt(request.getParameter("p")));
+		}
+		Integer story_board_idx = (Integer) request.getSession().getAttribute("story_board_idx");
+		if(story_board_idx != null) {
+			dto.setStory_board_idx(story_board_idx);
+		}
+		dto.setMember_idx(member_idx);
+		dto.setContent(request.getParameter("content"));
+		dto.setTitle(request.getParameter("title"));
+		
+		int tag_idx = 1;
+		dto.setTag_idx(tag_idx);
+		dto.setReg_date(LocalDateTime.now());
+		return dto;
+	}
+	
 	@Override
-	public int insertFile(StoryBoardDto dto) {
+	public int insertFile(MultipartHttpServletRequest request) {
+		dto = fileRequesting(request);
 		return dao.insertFile(dto);
+	}
+	
+	public StoryBoardDto fileRequesting(MultipartHttpServletRequest request) {
+		dto = new StoryBoardDto();
+	
+		if(request.getParameter("s") != null && request.getParameter("s") != "") {
+			dto.setStory_board_idx(Integer.parseInt(request.getParameter("s")));
+		}
+		
+		Integer story_board_idx = (Integer) request.getSession().getAttribute("story_board_idx");
+		if(story_board_idx != null) {
+			dto.setStory_board_idx(story_board_idx);
+		}
+
+		if(!request.getFile(request.getFileNames().next()).isEmpty()) {
+			List<FileUploadCommand> files = service.upload(request, "/img/story/");
+			FileUploadCommand com = files.get(0);
+			dto.setFile_name(com.getFileOriginName());
+			dto.setFile_path(com.getFilePath());
+			dto.setFile_size(com.getFileSize());
+		}
+		return dto;
 	}
 
 	@Override

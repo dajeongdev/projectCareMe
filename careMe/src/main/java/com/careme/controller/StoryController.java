@@ -1,23 +1,15 @@
 package com.careme.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Path;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.service.FileUploadService;
@@ -48,6 +40,7 @@ public class StoryController {
 		mav.addObject("list", list);
 		mav.addObject("hlist", hlist);
 		mav.setViewName("/story/storyMain");
+		System.out.println(hlist);
 		return mav;
 	}
 	
@@ -55,30 +48,31 @@ public class StoryController {
 	@RequestMapping(value = "/view/story/storyDetail", method = RequestMethod.GET)
 	public ModelAndView articleDetail(int story_board_idx) {
 		ModelAndView mav = new ModelAndView();
-		service.counting(story_board_idx);
-		StoryBoardDto list = service.read(story_board_idx);
+		StoryBoardDto dList = service.read(story_board_idx);
 		List<StoryCommentDto> comList = service.readCom(story_board_idx);
 		int comCount = comList.size();
-		int viewCount = service.counting(story_board_idx);
-		mav.addObject("list", list);
+		service.counting(story_board_idx);
+		mav.addObject("dList", dList);
 		mav.addObject("comList", comList);
 		mav.addObject("comCount", comCount);
-		mav.addObject("viewCount", viewCount);
-		mav.setViewName("story/storyMain");
+		mav.setViewName("/story/storyDetail");
+		System.out.println(dList);
 		return mav;
 	}
 	
 	// 글작성
-	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.GET)
-	public String insertForm() {
+	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
+	public String insertForm(MultipartHttpServletRequest request) {
+		service.insert(request);
+		service.insertFile(request);
 		return "/story/storyForm";
 	}
 	
-	@RequestMapping(value = "/view/story/storyFormAdd", method = RequestMethod.POST) 
-	public ModelAndView articleInsert(StoryBoardDto dto, MultipartHttpServletRequest request) { 
-		ModelAndView mav = new ModelAndView("redirect:/view/story/storyDetail");
-		mav.addObject("insert", service.insert(dto));
-		mav.addObject("file", file.upload(request, "/img/story/"));
+	@RequestMapping(value = "/view/story/storyFormAdd", method = RequestMethod.GET) 
+	public ModelAndView articleInsert() { 
+		ModelAndView mav = new ModelAndView("/story/storyDetail");
+		mav.addObject("insert", service.insert(request));
+		mav.addObject("file", service.insertFile(request));
 		return mav;
 	}
 	
@@ -96,6 +90,7 @@ public class StoryController {
 		if(result > 0) {
 			return "redirect:/view/story/storyDetail";
 		} else {
+			System.out.println("error");
 			return "redirect:/view/story/storyMain";
 		}
 	}
@@ -103,12 +98,45 @@ public class StoryController {
 	// 글삭제
 	@RequestMapping(value = "/story/delete")
 	public String articleDelete(int story_board_idx) throws Exception {
-		int result = service.delete(story_board_idx);
+		service.delete(story_board_idx);
+		return "redirect:/story/storyMain";
+	}
+	
+	// 댓글 작성
+	@RequestMapping(value = "/view/story/insertCom")
+	public String insertCom(StoryCommentDto comDto) {
+		int result = service.insertCom(comDto);
+		int i = comDto.getStory_board_idx();
 		if(result > 0) {
-			return "redirect:/story/storyMain";
+			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
 		} else {
 			System.out.println("error");
-			return "redirect:/story/storyMain";
+			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+		}
+	}
+	
+	// 댓글 수정
+	@RequestMapping(value = "/view/story/updateCom", method = RequestMethod.POST)
+	public String updateCom(StoryCommentDto comDto) {
+		int result = service.updateCom(comDto);
+		int i = comDto.getStory_board_idx();
+		if(result > 0) {
+			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+		} else {
+			System.out.println("error");
+			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+		}
+	}
+	
+	// 댓글 삭제
+	@RequestMapping(value = "/view/story/deleteCom")
+	public String deleteCom(int story_comment_idx) {
+		int result = service.deleteCom(story_comment_idx);
+		if(result > 0) {
+			return "redirect:/history.go(-1)";
+		} else {
+			System.out.println("error");
+			return "redirect:/history.go(-1)";
 		}
 	}
 	

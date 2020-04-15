@@ -15,32 +15,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 상세보기 O -->
 	<select id="read" parameterType="int" resultType="com.careme.model.dto.StoryBoardDto">
-		select title, content, file_path, reg_date
-		from story_board inner join story_file
-		on story_board_idx = #{story_board_idx}
+		select title, content, file_path, reg_date, heart from story_board inner join story_file on story_board.story_board_idx = story_file.story_board_idx where story_board.story_board_idx = #{story_board_idx}
 	</select>
 	<select id="readTag" parameterType="map" resultType="com.careme.model.dto.TagDto">
 		select b.tag_name 
 		from board_use_tag a 
-		inner join tag b on a.tag_idx = b.tag_idx
-		where board_idx = 1 and board_type = 's';
+		inner join tag b on a.tag_idx = b.tag_idx 
+		where board_idx = 1 and board_type = 's'
 	</select>
 	<!-- 댓글 보기 O -->
 	<select id="readCom" parameterType="int" resultType="com.careme.model.dto.StoryCommentDto">
-		select story_comment_idx, content, member_idx, reg_date
-		from story_comment inner join members
-		on story_comment.member_idx = members.member_idx
-		where story_board_idx = #{story_board_idx}
+		select content, members.member_id, story_comment.reg_date, story_comment.heart 
+		from story_comment inner join members 
+		on story_comment.member_idx = members.member_idx 
+		where story_comment.story_board_idx = #{story_board_idx}
 	</select>
 	<!-- 조회수 증가 O-->
 	<update id="viewCount" parameterType="com.careme.model.dto.StoryBoardDto">
-		update story_board
-		set view_count = view_count + 1
+		update story_board 
+		set view_count = view_count + 1 
 		where story_board_idx = #{story_board_idx}
 	</update>
+	<update id="heart" parameterType="com.careme.model.dto.StoryBoardDto">
+		update story_board set heart = heart + 1 where story_board_idx = #{story_board_idx}
+	</update>
+	<!-- 인기글 -->
 	<select id="hit" parameterType="com.careme.model.dto.StoryBoardDto" resultType="com.careme.model.dto.StoryBoardDto">
 		select * from story_board inner join members where story_board.member_idx = members.member_idx order by heart desc limit 3
 	</select>
+	
 	
 	
 	<!-- 글작성 -->
@@ -52,8 +55,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into tag values(#{tag_idx}, #{tag_name}, #{member_idx}, 'n')
 	</insert>
 	<insert id="insertFile" parameterType="com.careme.model.dto.StoryBoardDto">
-		insert into story_file(story_board_idx, file_name, file_path, file_size, del_yn) 
-		values(#{story_board_idx}, #{file_name}, #{file_path}, #{file_size}, 'n')
+		insert into story_file(story_file_idx, story_board_idx, file_name, file_path, file_size, del_yn) 
+		values(0, #{story_board_idx}, #{file_name}, #{file_path}, #{file_size}, 'n')
 	</insert>
 	<!-- 댓글 작성  -->
 	<insert id="insertCom" parameterType="com.careme.model.dto.StoryCommentDto">

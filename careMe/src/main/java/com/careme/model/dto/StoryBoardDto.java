@@ -15,17 +15,25 @@ public class StoryBoardDto {
 	private String del_yn;
 	
 	private String member_id;
+	
+	private int story_file_idx;
 	private String file_name;
 	private String file_path;
 	private Long file_size;
 	
+	
+	public int getStory_file_idx() {
+		return story_file_idx;
+	}
+	public void setStory_file_idx(int story_file_idx) {
+		this.story_file_idx = story_file_idx;
+	}
 	public void setMember_id(String member_id) {
 		this.member_id = member_id;
 	}
 	public String getMember_id() {
 		return member_id;
 	}
-
 	public String getFile_name() {
 		return file_name;
 	}

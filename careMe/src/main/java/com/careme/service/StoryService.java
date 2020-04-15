@@ -27,9 +27,9 @@ public interface StoryService {
 	public List<StoryBoardDto> hitList();
 	
 	// 작성
-	public int insert(StoryBoardDto dto);
+	public int insert(MultipartHttpServletRequest request);
 	
-	public int insertFile(StoryBoardDto dto);
+	public int insertFile(MultipartHttpServletRequest request);
 	
 	public int insertCom(StoryCommentDto comDto);
 	
