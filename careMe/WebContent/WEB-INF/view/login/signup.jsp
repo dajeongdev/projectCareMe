@@ -111,7 +111,7 @@
 		<!-- 성공하면 insertok로 감  -->
 		<form name="form2" action=insertok method="get"
 			onsubmit="return Signup()">
-			<table width="600" height="400" align="center" cellspacing="0">
+			<table width="670" height="400" align="center" cellspacing="0">
 				<tr height="10" align="center">
 				</tr>
 
@@ -128,11 +128,7 @@
 							id="idChk" onclick="fn_idChk();">중복확인</button></td>
 
 				</tr>
-				<!-- <tr>
-					<td colspan="2">
-						<p id="memid" style="display: hidden"></p>
-					</td>
-				</tr> -->
+		
 				<tr>
 					<!-- 비밀번호 입력 -->
 					<td><b>PW:</b></td>
@@ -169,8 +165,8 @@
 
 					<!-- 이메일 인증 버튼 -->
 					<td><button type="button"
-							class="btn btn-dark btn-sm btn-block" name="idChk" value="N"
-							id="idChk" onclick="fn_idChk();">중복확인</button></td>
+							class="btn btn-dark btn-sm btn-block" name="eChk" value="N"
+							id="eChk" onclick="fn_edChk();">중복확인</button></td>
 				</tr>
 
 				<tr>
