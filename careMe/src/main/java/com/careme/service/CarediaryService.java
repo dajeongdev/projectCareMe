@@ -1,6 +1,7 @@
 package com.careme.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,10 @@ import com.careme.model.dto.PetCareFileDto;
 @Service
 public class CarediaryService {
 	@Autowired
-	CarediaryDao careDiaryDao;
+	CarediaryDao carediaryDao;
 	
-	public void setDao(CarediaryDao careDiaryDao) {
-		this.careDiaryDao = careDiaryDao;
+	public void setDao(CarediaryDao carediaryDao) {
+		this.carediaryDao = carediaryDao;
 	}
 	
 	@Autowired
@@ -31,29 +32,21 @@ public class CarediaryService {
 	}
 
 	public List<DefecationDto> selectSmallDef() {
-		return careDiaryDao.selectSmallDef();
+		return carediaryDao.selectSmallDef();
 	}
 	
 	public List<DefecationDto> selectBigDef() {
-		return careDiaryDao.selectBigDef();
+		return carediaryDao.selectBigDef();
 	}
 	
-	public void writeDiary(CarediaryCommand command, MultipartHttpServletRequest request) throws SQLException {
-		PetCareDto dto = new PetCareDto();
+	public void writeCarediary(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException {
 		dto.setPet_idx((int) request.getSession().getAttribute("pet_idx"));
-		dto.setTitle(command.getTitle());
-		dto.setExercise(command.getExercise());
-		dto.setWeight(command.getWeight());
-		dto.setUrine(command.getUrine());
-		dto.setFeces(command.getFeces());
-		dto.setMemo(command.getMemo());
-		dto.setDiary_date(command.getDiaryDate());
-		
+
 		System.out.println("지금 선택된 pet ::" + dto.getPet_idx());
 				
-		careDiaryDao.writeDiary(dto);
+		carediaryDao.writeCarediary(dto);
 		int diaryIdx = dto.getPet_care_idx();
-		
+		System.out.println("dto 정보:: " + dto);
 		if (diaryIdx > 0) {
 			List<FileUploadCommand> files;			
 			files = fileuploadService.upload(request, "/img/pet/carediary/");
@@ -65,9 +58,38 @@ public class CarediaryService {
 				fileDto.setFile_path(file.getFilePath());
 				fileDto.setFile_size(file.getFileSize());
 				
-				careDiaryDao.writeDiaryFile(fileDto);
+				carediaryDao.writeCarediaryFile(fileDto);
 			}
 		}
 	}
+	
+	public CarediaryCommand getCarediaryByIdx(int carediaryIdx) {
+		CarediaryCommand command = new CarediaryCommand();
+		
+		PetCareDto dto = carediaryDao.selectCarediaryByIdx(carediaryIdx);
+		List<PetCareFileDto> filesDto = carediaryDao.selectCarediaryFileList(carediaryIdx);
+		
+		command.setDiary(dto);
+		command.setFiles(filesDto);
+		
+		return command;
+	}
+	
+	public List<CarediaryCommand> getCarediaryListByPetIdx(int petIdx) {
+		List<CarediaryCommand> commandList = new ArrayList<CarediaryCommand>();
+		List<PetCareDto> dtoList = carediaryDao.selectCarediaryListByPetIdx(petIdx);
+		
+		for (PetCareDto dto : dtoList) {
+			CarediaryCommand command = new CarediaryCommand();
+			command.setDiary(dto);
+			command.setFiles(carediaryDao.selectCarediaryFileList(dto.getPet_care_idx()));
+			
+			commandList.add(command);
+		}
+		
+		return commandList;
+	}
+
+	
 
 }

@@ -1,19 +1,21 @@
 package com.careme.controller;
 
 import java.sql.SQLException;
-import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.model.command.CarediaryCommand;
+import com.careme.model.dto.PetCareDto;
 import com.careme.service.CarediaryService;
 
 @Controller
@@ -48,9 +50,28 @@ public class CarediaryController {
 	}
 	
 	@RequestMapping(value= "/carediary/write", method = RequestMethod.POST)
-	public String writeDairy(CarediaryCommand command, MultipartHttpServletRequest request) throws SQLException, Exception {
-		carediaryService.writeDiary(command, request);
+	public String writeDairy(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException, Exception {
+		System.out.println(dto);
+		carediaryService.writeCarediary(dto, request);
 		return "/carediary/main";
+	}
+	
+	@RequestMapping(value= "/carediary/update", method = RequestMethod.GET)
+	public ModelAndView updateForm(@RequestParam("d_id") int carediaryIdx) {
+		ModelAndView mav = new ModelAndView("/carediary/update");
+		//HttpServletResponse response = new HttpServletResponse
+		
+		mav.addObject("smallDef", carediaryService.selectSmallDef());
+		mav.addObject("bigDef", carediaryService.selectBigDef());
+		mav.addObject("diaryInfo", carediaryService.getCarediaryByIdx(carediaryIdx));
+		
+		return mav;
+	}
+	
+	@RequestMapping(value= "/carediary/update", method = RequestMethod.POST)
+	public String updateDiary(PetCareDto dto, int[] deletetedFiles) {
+		System.out.println(deletetedFiles);
+		return "asd";
 	}
 	
 }

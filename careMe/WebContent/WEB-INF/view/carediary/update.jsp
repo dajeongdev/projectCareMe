@@ -4,7 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <spring:url value="/resources/img/profile_dog.jpg" var="default_image" />
-
+<% String hostname = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
+<c:set var="hostname" value="<%=hostname%>" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,19 +15,10 @@
 <title>메인 화면</title>
 <script>
 	var storedFiles = [];
+	var deletedFiles = [];
 	var selDivs = "";
 
 	$(function() {
-
-		/* $("input[type=file]").on("change", function(e) {
-			if (this.files.length > 5) {
-				alert("파일 최대5개 업로드 가능");
-				this.value = "";				
-			} else {
-				readURL(this);
-			}
-		}); */
-
 		selDiv = $("#selectedFiles");
 
 		$("#files").on("change", handleFileSelect);
@@ -41,14 +33,16 @@
 				formData.append("files", storedFiles[i]);
 			}
 
+			formData.append("deletedFiles", deletedFiles);
+
 			 $.ajax({
-		         url: "write"
+		         url: "update"
 	             , type : "POST"
 		         , contentType: false
 		         , processData: false
 	             , data : formData
             	 , success : function() {
-                     location.href="/careMe/carediary";
+                     console.log("성공");
                  }
 	        })
 		}
@@ -81,6 +75,10 @@
 
 	function removeFile(e) {
 		var file = $(this).data("file");
+		var idx = $(this).data("idx");
+
+		if (idx) deletedFiles.push(idx);
+		
 		for(var i=0;i<storedFiles.length;i++) {
 			if(storedFiles[i].name === file) {
 				storedFiles.splice(i,1);
@@ -113,6 +111,8 @@
 	<div class="container min-vh-100 pt-3"  style="max-width:720px">
 	
 		<form name="pet_regist" enctype="multipart/form-data">
+		
+		<input type="hidden" name="pet_care_idx" value="${diaryInfo.diary.pet_care_idx}">
 
 		<div class="my-3 p-3 bg-white rounded shadow-sm">
 			<div class="row mb-3 col-12" style="font-size:20px">
@@ -123,21 +123,21 @@
 			<div class="row mb-3">
 				<div class="col-12">
 					<label for="diary_date">날짜</label>
-					<input type="date" class="form-control" id="diary_date" name="diary_date">
+					<input type="date" class="form-control" id="diary_date" name="diary_date" value="${diaryInfo.diary.diary_date}">
 				</div>					
 			</div>
 			
 			<div class="row mb-3">
 				<div class="col-12">
 					<label for="title">제목</label>
-					<input type="text" class="form-control" id="title" name="title" placeholder="" max="40" required>
+					<input type="text" class="form-control" id="title" name="title" placeholder="" max="40" value="${diaryInfo.diary.title}" required>
 				</div>					
 			</div>
 			
 			<div class="row mb-3">
 				<div class="col-12">
 					<label for="exercise">산책(운동시간)</label>
-					<input type="number" class="form-control" id="exercise" name="exercise" placeholder="" >
+					<input type="number" class="form-control" id="exercise" name="exercise" placeholder="" value="${diaryInfo.diary.exercise}">
 				</div>					
 			</div>
 			
@@ -148,7 +148,9 @@
 						  <c:if test="${smallDef != null}">
 								<c:forEach var="sDef" items="${smallDef}">
 									<div class="d-inline-block pr-3">
-							            <input id="urine${sDef.defecation_idx}" name="urine" type="radio" class="u-control-input" value="${sDef.defecation_idx}" style="display:none;" required>
+							            <input id="urine${sDef.defecation_idx}" name="urine" type="radio" class="u-control-input" value="${sDef.defecation_idx}" style="display:none;" required
+							            	<c:if test="${sDef.defecation_idx == diaryInfo.diary.urine}">checked</c:if>
+							            >
 							            <label class="u-control-label" for="urine${sDef.defecation_idx}" style="background-color:${sDef.defecation_content}">
 							            	<span></span>
 							            </label>
@@ -166,7 +168,9 @@
 						<c:if test="${bigDef != null}">
 							<c:forEach var="bDef" items="${bigDef}">
 								<div class="d-inline-block custom-control custom-radio pr-2">
-						            <input id="feces${bDef.defecation_idx}" name="feces" type="radio" class="custom-control-input" value="${bDef.defecation_idx}" required>
+						            <input id="feces${bDef.defecation_idx}" name="feces" type="radio" class="custom-control-input" value="${bDef.defecation_idx}" required
+						            	<c:if test="${bDef.defecation_idx == diaryInfo.diary.feces}">checked</c:if>
+						            >
 						            <label class="custom-control-label" for="feces${bDef.defecation_idx}">${bDef.defecation_content}</label>
 						        </div>
 							</c:forEach>
@@ -178,7 +182,7 @@
 			<div class="row mb-3">
 				<div class="col-12">
 					<label for="memo">기타 특이사항</label>
-					<textarea class="form-control" id="memo" name="memo" placeholder=""></textarea>
+					<textarea class="form-control" id="memo" name="memo" placeholder="">${diaryInfo.diary.memo}</textarea>
 				</div>					
 			</div>
 			
@@ -190,11 +194,20 @@
 							<span class="btn btn-success">등록</span>
 						</label>						
 					</div>
-					
-					<div class="row" id="selectedFiles"></div>
+					<div class="row" id="selectedFiles">
+						<c:if test="${diaryInfo.files.size() > 0}">
+							<c:forEach var="image" items="${diaryInfo.files}">
+								
+									<div class='col-md-3 mb-5'>
+										<img src="${hostname}${image.file_path}" class='w-100 h-80'>
+										<i class='fa fa-trash' data-file="${image.file_name}"  data-idx="${image.pet_care_file_idx}" title='Click to remove'></i>
+									</div>
+								
+							</c:forEach>
+						</c:if>
+					</div>
 				</div>					
 			</div>
-				
 			
 			<div class="row p-3">
 				<div class="col-12 text-center">

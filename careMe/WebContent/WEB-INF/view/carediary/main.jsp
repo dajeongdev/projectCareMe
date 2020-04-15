@@ -49,7 +49,7 @@
 			                <span>21 Jan, 2018</span>
 			            </div>
 			            <div class="card-hover-show">
-			                <a class="btn btn-xs fs-10 btn-bold btn-info" href="#">수정</a>
+			                <a class="btn btn-xs fs-10 btn-bold btn-info" href="update?d_id=20">수정</a>
 			                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">질문하기</a>
 			                <button type="button" class="btn btn-xs fs-10 btn-bold btn-warning" data-toggle="collapse" data-target="#images" aria-expanded="false" aria-controls="images">열기</button>
 			                <!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->

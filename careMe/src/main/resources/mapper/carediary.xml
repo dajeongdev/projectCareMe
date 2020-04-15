@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from defecation where defecation_type = 'b'
 	</select>
 	
-	<insert id="writeDiary" parameterType="com.careme.model.dto.PetCareDto">
+	<insert id="writeCarediary" parameterType="com.careme.model.dto.PetCareDto">
 		insert into pet_care (pet_idx, title, exercise, urine, feces, memo, weight, diary_date)
 		values ( #{pet_idx}, #{title}, #{exercise}, #{urine}, #{feces}, #{memo}, #{weight}, #{diary_date} )
 
@@ -22,10 +22,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    </selectKey>
 	</insert>
 	
-	<insert id="writeDiaryFile" parameterType="com.careme.model.dto.PetCareFileDto">
+	<insert id="writeCarediaryFile" parameterType="com.careme.model.dto.PetCareFileDto">
 		insert into pet_care_file (pet_care_idx, file_path, file_size, file_name)
 		values ( #{pet_care_idx}, #{file_path}, #{file_size}, #{file_name} )
 	</insert>
+	
+	<select id="selectCarediaryByIdx" resultType="com.careme.model.dto.PetCareDto">
+		select * from pet_care where del_yn = 'n' and pet_care_idx = #{pet_care_idx}
+	</select>
+	
+	<select id="selectCarediaryListByPetIdx" resultType="com.careme.model.dto.PetCareDto">
+		select * from pet_care where del_yn = 'n' and pet_idx = #{pet_idx} 
+	</select>
+	
+	<select id="selectCarediaryFileList" resultType="com.careme.model.dto.PetCareFileDto">
+		select * from pet_care_file where del_yn = 'n' and pet_care_idx = #{pet_care_idx} 
+	</select>
 	
 
 	

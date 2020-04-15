@@ -18,12 +18,24 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("carediary.selectBigDef");
 	}
 	
-	public int writeDiary(PetCareDto dto) {
-		return getSqlSession().insert("carediary.writeDiary", dto);
+	public int writeCarediary(PetCareDto dto) {
+		return getSqlSession().insert("carediary.writeCarediary", dto);
 	}
 	
-	public int writeDiaryFile(PetCareFileDto dto) {
-		return getSqlSession().insert("carediary.writeDiaryFile", dto);
+	public int writeCarediaryFile(PetCareFileDto dto) {
+		return getSqlSession().insert("carediary.writeCarediaryFile", dto);
+	}
+	
+	public PetCareDto selectCarediaryByIdx(int idx) {
+		return getSqlSession().selectOne("carediary.selectCarediaryByIdx", idx);
+	}
+	
+	public List<PetCareDto> selectCarediaryListByPetIdx(int petIdx) {
+		return getSqlSession().selectList("carediary.selectCarediaryByIdx", petIdx);
+	}
+	
+	public List<PetCareFileDto> selectCarediaryFileList(int carediaryIdx) {
+		return getSqlSession().selectList("carediary.selectCarediaryFileList", carediaryIdx);
 	}
 
 }
