@@ -13,14 +13,56 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from defecation where defecation_type = 'b'
 	</select>
 	
-	<insert id="writeDiary" parameterType="com.careme.model.dto.PetCareDto">
+	<insert id="writeCarediary" parameterType="com.careme.model.dto.PetCareDto">
 		insert into pet_care (pet_idx, title, exercise, urine, feces, memo, weight, diary_date)
-		values ( #{pet_idx}, #{title}, #{exerciese}, #{urine}, #{feces}, #{memo}, #{weight}, #{diary_date} )
+		values ( #{pet_idx}, #{title}, #{exercise}, #{urine}, #{feces}, #{memo}, #{weight}, #{diary_date} )
 
-		<selectKey keyProperty="id" resultType="int">
+		<selectKey keyProperty="pet_care_idx" resultType="int">
 	        SELECT LAST_INSERT_ID()
 	    </selectKey>
 	</insert>
+	
+	<insert id="writeCarediaryFile" parameterType="com.careme.model.dto.PetCareFileDto">
+		insert into pet_care_file (pet_care_idx, file_path, file_size, file_name)
+		values ( #{pet_care_idx}, #{file_path}, #{file_size}, #{file_name} )
+	</insert>
+	
+	<select id="selectCarediaryByIdx" resultType="com.careme.model.dto.PetCareDto">
+		select * from pet_care where del_yn = 'n' and pet_care_idx = #{pet_care_idx}
+	</select>
+	
+	<select id="selectCarediaryListByPetIdx" resultType="com.careme.model.dto.PetCareDto">
+		select * from pet_care where del_yn = 'n' and pet_idx = #{pet_idx} 
+	</select>
+	
+	<select id="selectCarediaryFileList" resultType="com.careme.model.dto.PetCareFileDto">
+		select * from pet_care_file where del_yn = 'n' and pet_care_idx = #{pet_care_idx} 
+	</select>
+	
+	<update id="updateCarediary" parameterType="com.careme.model.dto.PetCareFileDto">
+		update pet_care
+		<set>
+			<if test="title != null">title=#{title},</if>
+			<if test="exercise != null">exercise=#{exercise},</if>
+			<if test="urine != null">urine=#{urine},</if>
+			<if test="feces != null">feces=#{feces},</if>
+			<if test="memo != null">memo=#{memo},</if>
+			<if test="weight != null">weight=#{weight},</if>
+			<if test="diary_date != null">diary_date=#{diary_date},</if>
+			<if test="exercise != null">exercise=#{exercise},</if>
+			reg_date = CURRENT_TIMESTAMP
+		</set>
+		
+		where pet_care_idx = #{pet_care_idx}
+	</update>
+	
+	<update id="deleteCarediaryFiles" parameterType="java.util.HashMap">
+		update pet_care_file del_yn = 'y'
+		where pet_care_file_idx in
+		<foreach collection="deleteList" item="item" index="index" separator="," open="(" close=")">
+         	#{item}
+        </foreach>
+	</update>
 	
 
 	
