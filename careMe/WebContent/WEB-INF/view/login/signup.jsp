@@ -68,6 +68,9 @@
 					form.member_phone.focus();
 					return false;
 			      }
+				if(form.)
+
+			      
 
 	  // form.submit();
 	     
@@ -90,14 +93,6 @@
 		});
 	}
 
-	//휴대폰인증
-	function sendSMS(pageName){
-
-    	console.log("문자를 전송합니다.");
-    	$("#form2").attr("action", pageName);
-    	$("#form2").submit();
-    }
-        
 
 </script>
 
@@ -116,7 +111,7 @@
 		<!-- 성공하면 insertok로 감  -->
 		<form name="form2" action=insertok method="get"
 			onsubmit="return Signup()">
-			<table width="600" height="400" align="center" cellspacing="0">
+			<table width="670" height="400" align="center" cellspacing="0">
 				<tr height="10" align="center">
 				</tr>
 
@@ -133,11 +128,7 @@
 							id="idChk" onclick="fn_idChk();">중복확인</button></td>
 
 				</tr>
-				<!-- <tr>
-					<td colspan="2">
-						<p id="memid" style="display: hidden"></p>
-					</td>
-				</tr> -->
+		
 				<tr>
 					<!-- 비밀번호 입력 -->
 					<td><b>PW:</b></td>
@@ -152,12 +143,30 @@
 						id="member_pass2" name="member_pass2" maxlength="12"
 						class="form-control" /></td>
 				</tr>
+
+				<tr>
+					<!-- 닉네임 입력 -->
+					<td><b>Nick:</b></td>
+					<td><input type="text" style="width: 530px" id="member_nick"
+						name="member_nick" class="form-control" placeholder="ex)petlove" /></td>
+
+					<!-- 닉네임 중복확인 버튼 -->
+					<td><button type="button"
+							class="btn btn-dark btn-sm btn-block" name="nChk" value="N"
+							id="nChk" onclick="fn_nChk();">중복확인</button></td>
+				</tr>
+
 				<tr>
 					<!-- 이메일 선택 -->
 					<td><b>email:</b></td>
 					<td><input type="text" style="width: 530px" id="member_email"
 						name="member_email" class="form-control"
 						placeholder="ex)your@email.com" /></td>
+
+					<!-- 이메일 인증 버튼 -->
+					<td><button type="button"
+							class="btn btn-dark btn-sm btn-block" name="eChk" value="N"
+							id="eChk" onclick="fn_edChk();">중복확인</button></td>
 				</tr>
 
 				<tr>
@@ -166,11 +175,7 @@
 					<td><input type="text" style="width: 530px" id="member_phone"
 						name="member_phone" class="form-control"
 						placeholder="000-0000-0000" /></td>
-						
-						
-					<!-- 연락처 인증 -->
-					<td><input type="button" class="btn btn-dark btn-sm btn-block"
-						value="인증하기" onclick="sendSMS('sendSms')"></td>
+
 				</tr>
 
 			</table>
