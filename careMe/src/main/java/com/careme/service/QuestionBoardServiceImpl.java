@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.QuestionBoardDto;
@@ -165,8 +166,8 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.getHashtag(tagValue);
 	}
 	
-	public String addHashtag(String tagValue) {
-		return dao.addHashtag(tagValue);
+	public List<TagDto> addHashtag(TagCommand tc) {
+		return dao.addHashtag(tc);
 	}
 	
 

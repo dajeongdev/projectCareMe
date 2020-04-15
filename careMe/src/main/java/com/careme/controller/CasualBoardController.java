@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
@@ -158,21 +159,25 @@ public class CasualBoardController {
 	// hashtag 기능
 	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String hashtagCompare(String tagValue) {
+	public String hashtagCompare(@RequestParam String tagValue, int member_idx) {
 		List<TagDto> compared = bs.compareHashtag(tagValue);
 		Gson json = new Gson();
 		int listsize = compared.size();
-		
+		int idx = member_idx;
 		
 		if(listsize==0){
-			bs.h
 			
+			TagCommand tc = new TagCommand();
+			tc.setTag_name(tagValue);
+			tc.setMember_idx(idx);
+			tc.setDel_yn("n");
+			List<TagDto> added = bs.addHashtag(tc);
+			compared=added;
+			return json.toJson(compared);
 			
+		}else {
+		return json.toJson(compared);
 		}
-		
-		
-		
-		return compared;
 	}
 	
 	

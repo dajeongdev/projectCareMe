@@ -5,6 +5,7 @@ import java.util.List;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
@@ -132,8 +133,8 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("casualQuestionBrd.hashtagFind", tagValue);
 	}
 	
-	public String addHashtag(String tagValue) {
-		return getSqlSession().selectList("casualQuestionBrd.hashtagAdd", tagValue);
+	public List<TagDto> addHashtag(TagCommand tc) {
+		return getSqlSession().selectList("casualQuestionBrd.hashtagAdd", tc);
 	}
 		
 		

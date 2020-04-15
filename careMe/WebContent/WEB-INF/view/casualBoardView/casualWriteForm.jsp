@@ -46,38 +46,7 @@
         var tag = {};
         var counter = 0;
 
-        $("#tag").on("keypress", function (e) {
-            var self = $(this);
-
-            if (e.key === "Enter" || e.keyCode == 32) {
-
-                var tagValue = self.val();
-                if (tagValue !== "") {
-                    // 중복검사 겹치면 해당값 array 로 return
-                    var result = Object.values(tag).filter(function (word) {
-                        return word === tagValue;
-                    })
-                    // 태그 중복 검사
-                    if (result.length == 0) { 
-                    	 $("#tag-list").append("<li class='tag-item'>#"+tagValue+"<span class='del-btn' idx='"+counter+"'>X</span></li>");
-                         addTag(tagValue);
-                         self.val("");
-                    } else {
-                        alert("태그값이 중복됩니다!");
-                    }
-                }
-                e.preventDefault();
-            }
-        });
-
-        // 삭제 버튼 
-        $(document).on("click", ".del-btn", function (e) {
-            var index = $(this).attr("idx");
-            tag[index] = "";
-            $(this).parent().remove();
-        });
-
-     // 태그를 추가
+        // 태그를 추가
         function addTag (value) {
             tag[counter] = value; // Object 안에 tag 추가
             counter++; // counter 증가 삭제를 위한 del-btn id
@@ -94,7 +63,51 @@
             $("#rdTag").val(value); 
             $(this).submit();
         });
-        
+
+        $("#tag").on("keypress", function (e) {
+            var self = $(this);
+
+            if (e.key === "Enter" || e.keyCode == 32) {
+
+                var tagValue = self.val();
+                if (tagValue !== "") {
+                    // 중복검사 겹치면 해당값 array 로 return
+                    var result = Object.values(tag).filter(function (word) {
+                        return word === tagValue;
+                    })
+                    // 태그 중복 검사
+                    if (result.length == 0) { 
+						var url = "casualWriteFrom?tagValue="+tagValue+"&member_idx="+member_idx;
+                        $.ajax({
+                            type:"get",
+                            url=url
+                            dataType:"json"})
+                            .done(function(compared){
+                                if(compared.length>0){
+                                    for(i in compared){
+                                        var list=compared[i]
+                                        $("#tag-list").append("<li class='tag-item'>#"+list.tag_name+"<span class='del-btn' idx='"+counter+"'>X</span></li>");
+                                        addTag(list.tag_name);
+                                        self.val("");
+                                        } 
+                                    }
+                                }).fail(function(e) {
+                					alert(e.responseText);
+                				});
+                     } else {
+                        alert("태그값이 중복됩니다!");
+                    }
+                }
+                e.preventDefault();
+            }
+        });
+
+        // 삭제 버튼 
+        $(document).on("click", ".del-btn", function (e) {
+            var index = $(this).attr("idx");
+            tag[index] = "";
+            $(this).parent().remove();
+        });
 	})
 </script>
 

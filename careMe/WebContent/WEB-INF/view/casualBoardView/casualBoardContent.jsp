@@ -24,18 +24,28 @@
 
 			<!-- 게시글 본문 -->
 			
-			<div class="blog-post">
-      			<h2 class="blog-post-title" align="left"><c:out value="${mlist.title}" /></h2>
+			<div class="row blog-post">
+				<div class="col-md-2">
         			<img align="left" height="100" width="80" src="<%=request.getContextPath()%>/resources/img/dog.jpg">
+				</div>
+			
+				<div class="col-md-10">
+      				<h2 class="blog-post-title" align="left"><c:out value="${mlist.title}" /></h2>
         			<p class="blog-post-meta" align="left"><c:out value="${mlist.reg_date}" /> by <c:out value="${mlist.member_id}"/></p>
-       		 	<hr>
-        			<blockquote>
-          			<p style="font:20" align="left">
-							<c:out value="${mlist.content}" />
-					</p>
-        			</blockquote>
+				</div>
 			</div>
+			
 			<hr>
+			
+			<div class="row">
+       		 	<blockquote>
+          			<p style="font:20" align="left">
+						<c:out value="${mlist.content}" />
+					</p>
+        		</blockquote>
+			</div>
+			<hr>	
+				
 					
 			<!-- 고정되는 하단 -->
 			<table align="right">
