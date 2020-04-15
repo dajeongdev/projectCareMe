@@ -20,6 +20,11 @@ public class MemberDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("member.login", lc);
 	}
 	
+	//
+	public MemberDto selectMember(String id) {
+		return getSqlSession().selectOne("member.selectMember", id);
+	}
+	
 	//아이디 중복체크
 	public int idChk(LoginCommand lc){
 		return getSqlSession().selectOne("member.idchk", lc);

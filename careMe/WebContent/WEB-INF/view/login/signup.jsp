@@ -26,7 +26,7 @@
 	                          return false;
 	                  }
 	                  //아이디 입력 문자수를 4~12자로 제한하는 조건문
-	                  if (form.member_id.value.length < 4 || form.member_id.value.length > 12)
+	                  if (form.member_id.value.length < 4 || form.member_id.value.length > 45)
 	                  {
 	                   alert("아이디는 4~12자 이내로 입력 가능합니다!");
 
@@ -42,7 +42,7 @@
 	                 return false;
 	            }
 	            //아이디 중복검사 했는지
-	            if(!form.idChk.value){
+	            if(form.idChk.value=='N'){
 		            alert("아이디 중복검사를해야합니다!");
 					return false;
 		            }
@@ -72,7 +72,7 @@
 	  // form.submit();
 	     
 	   }
-	   
+	//아이디 중복확인   
 	function fn_idChk(){
 		$.ajax({
 			url : "idChk",
@@ -89,6 +89,14 @@
 			}
 		});
 	}
+
+	//휴대폰인증
+	function sendSMS(pageName){
+
+    	console.log("문자를 전송합니다.");
+    	$("#form2").attr("action", pageName);
+    	$("#form2").submit();
+    }
         
 
 </script>
@@ -116,7 +124,7 @@
 					<!-- 아이디 입력 -->
 					<td><b>ID:</b></td>
 					<td><input type="text" style="width: 530px" id="member_id"
-						name="member_id" maxlength="12" class="form-control"
+						name="member_id" maxlength="45" class="form-control"
 						placeholder="※4-12자의 영문 대소문자와 숫자로만 입력" /></td>
 
 					<!-- 아이디 중복확인 버튼 -->
@@ -158,9 +166,11 @@
 					<td><input type="text" style="width: 530px" id="member_phone"
 						name="member_phone" class="form-control"
 						placeholder="000-0000-0000" /></td>
+						
+						
 					<!-- 연락처 인증 -->
 					<td><input type="button" class="btn btn-dark btn-sm btn-block"
-						value="인증하기" onclick=""></td>
+						value="인증하기" onclick="sendSMS('sendSms')"></td>
 				</tr>
 
 			</table>
