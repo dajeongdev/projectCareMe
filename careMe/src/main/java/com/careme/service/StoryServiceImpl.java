@@ -1,9 +1,5 @@
 package com.careme.service;
-
-import java.sql.Time;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,8 +63,8 @@ public class StoryServiceImpl implements StoryService {
 		dto = new StoryBoardDto();
 		
 		int member_idx = 1;
-		if (request.getParameter("p") != null && request.getParameter("p") != "") {
-			dto.setStory_board_idx(Integer.parseInt(request.getParameter("p")));
+		if (request.getParameter("story_board_idx") != null && request.getParameter("story_board_idx") != "") {
+			dto.setStory_board_idx(Integer.parseInt(request.getParameter("story_board_idx")));
 		}
 		Integer story_board_idx = (Integer) request.getSession().getAttribute("story_board_idx");
 		if(story_board_idx != null) {
@@ -92,18 +88,16 @@ public class StoryServiceImpl implements StoryService {
 	
 	public StoryBoardDto fileRequesting(MultipartHttpServletRequest request) {
 		dto = new StoryBoardDto();
-	
-		if(request.getParameter("s") != null && request.getParameter("s") != "") {
-			dto.setStory_board_idx(Integer.parseInt(request.getParameter("s")));
+		if (request.getParameter("story_board_idx") != null && request.getParameter("story_board_idx") != "") {
+			dto.setStory_board_idx(Integer.parseInt(request.getParameter("story_board_idx")));
 		}
-		
 		Integer story_board_idx = (Integer) request.getSession().getAttribute("story_board_idx");
 		if(story_board_idx != null) {
 			dto.setStory_board_idx(story_board_idx);
 		}
-
 		if(!request.getFile(request.getFileNames().next()).isEmpty()) {
 			List<FileUploadCommand> files = service.upload(request, "/img/story/");
+			
 			FileUploadCommand com = files.get(0);
 			dto.setFile_name(com.getFileOriginName());
 			dto.setFile_path(com.getFilePath());

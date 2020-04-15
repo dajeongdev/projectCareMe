@@ -61,20 +61,20 @@ public class StoryController {
 	}
 	
 	// 글작성
-	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
-	public String insertForm(MultipartHttpServletRequest request) {
-		service.insert(request);
-		service.insertFile(request);
+	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.GET) 
+	public String articleInsert() { 
 		return "/story/storyForm";
 	}
 	
-	@RequestMapping(value = "/view/story/storyFormAdd", method = RequestMethod.GET) 
-	public ModelAndView articleInsert() { 
-		ModelAndView mav = new ModelAndView("/story/storyDetail");
+	@RequestMapping(value = "/view/story/storyFormAdd", method = RequestMethod.POST)
+	public ModelAndView insertForm(MultipartHttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("redirect:/view/story/storyEdit");
 		mav.addObject("insert", service.insert(request));
-		mav.addObject("file", service.insertFile(request));
+		mav.addObject("insertFile", service.insertFile(request));
 		return mav;
 	}
+	
+	
 	
 	// 글수정
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.GET)

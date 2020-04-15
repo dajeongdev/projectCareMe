@@ -85,7 +85,6 @@ $(function (){
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="container">
 		<form name="insertForm" method="POST" action="storyFormAdd" enctype="multipart/form-data">
-			<input type="hidden" name="story_board_idx" value="0">
 			<input type="hidden" name="member_idx" value="1">
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 

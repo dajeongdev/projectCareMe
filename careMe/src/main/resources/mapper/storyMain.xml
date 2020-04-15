@@ -48,15 +48,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 글작성 -->
 	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto">
-		insert into story_board (story_board_idx, member_idx, tag_idx, title, content, heart, view_count, reg_date, update_date, del_yn)
-		values (0, #{member_idx}, #{tag_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
+		insert into story_board (member_idx, tag_idx, title, content, heart, view_count, reg_date, update_date, del_yn) 
+		values (#{member_idx}, #{tag_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
 	</insert>
 	<insert id="insertTag" parameterType="com.careme.model.dto.TagDto">
 		insert into tag values(#{tag_idx}, #{tag_name}, #{member_idx}, 'n')
 	</insert>
 	<insert id="insertFile" parameterType="com.careme.model.dto.StoryBoardDto">
-		insert into story_file(story_file_idx, story_board_idx, file_name, file_path, file_size, del_yn) 
-		values(0, #{story_board_idx}, #{file_name}, #{file_path}, #{file_size}, 'n')
+		insert into story_file(story_board_idx, file_name, file_path, file_size, del_yn) 
+		values(#{story_board_idx}, #{file_name}, #{file_path}, #{file_size}, 'n')
+		
+		<selectKey keyProperty="story_board_idx" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 	</insert>
 	<!-- 댓글 작성  -->
 	<insert id="insertCom" parameterType="com.careme.model.dto.StoryCommentDto">
