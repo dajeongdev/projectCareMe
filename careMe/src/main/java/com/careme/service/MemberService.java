@@ -36,7 +36,7 @@ public class MemberService {
 		return dao.selectMember(id);
 	}
 
-	
+	//서비스
 	public void setSession(HttpSession session, LoginCommand lc) {
 		MemberDto member = memberInfo(lc.getMember_id());
 		

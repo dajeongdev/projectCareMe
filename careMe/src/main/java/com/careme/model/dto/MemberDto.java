@@ -11,6 +11,7 @@ public class MemberDto {
 	private String member_token;
 	private String member_join_type;
 	private LocalDateTime reg_date;
+	private String member_nick;
 	private String del_yn;
 	
 	public int getMember_idx() {
@@ -85,11 +86,21 @@ public class MemberDto {
 		this.del_yn = del_yn;
 	}
 
+	public String getMember_nick() {
+		return member_nick;
+	}
+
+	public void setMember_nick(String member_nick) {
+		this.member_nick = member_nick;
+	}
+
 	@Override
 	public String toString() {
 		return "MemberDto [member_idx=" + member_idx + ", member_id=" + member_id + ", member_pass=" + member_pass
 				+ ", member_email=" + member_email + ", member_phone=" + member_phone + ", member_token=" + member_token
-				+ ", member_join_type=" + member_join_type + ", reg_date=" + reg_date + ", del_yn=" + del_yn + "]";
-	}	
+				+ ", member_join_type=" + member_join_type + ", reg_date=" + reg_date + ", member_nick=" + member_nick
+				+ ", del_yn=" + del_yn + "]";
+	}
 
+	
 }
