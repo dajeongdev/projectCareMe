@@ -7,8 +7,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.StoryDao;
 import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
+import com.careme.model.dto.StoryFileDto;
 import com.careme.service.FileUploadService;
 
 @Service("StoryService")
@@ -81,29 +83,42 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
-	public int insertFile(MultipartHttpServletRequest request) {
-		dto = fileRequesting(request);
-		return dao.insertFile(dto);
+	public void insertFile(StoryFileDto dto, MultipartHttpServletRequest request) {
+		dto.setStory_board_idx((int)request.getSession().getAttribute("story_board_idx"));
+		dao.insertFile(dto);
+		
+		int story_board_idx = dto.getStory_board_idx();
+		System.out.println(story_board_idx);
+		if(story_board_idx > 0) fileRequesting(story_board_idx, request);
 	}
 	
-	public StoryBoardDto fileRequesting(MultipartHttpServletRequest request) {
-		dto = new StoryBoardDto();
-		if (request.getParameter("story_board_idx") != null && request.getParameter("story_board_idx") != "") {
-			dto.setStory_board_idx(Integer.parseInt(request.getParameter("story_board_idx")));
-		}
-		Integer story_board_idx = (Integer) request.getSession().getAttribute("story_board_idx");
-		if(story_board_idx != null) {
+	public void fileRequesting(int story_board_idx, MultipartHttpServletRequest request) {
+		List<FileUploadCommand> files = service.upload(request, "/img/story/");
+		
+		for(FileUploadCommand file : files) {
+			StoryFileDto dto = new StoryFileDto();
 			dto.setStory_board_idx(story_board_idx);
-		}
-		if(!request.getFile(request.getFileNames().next()).isEmpty()) {
-			List<FileUploadCommand> files = service.upload(request, "/img/story/");
+			dto.setFile_name(file.getFileOriginName());
+			dto.setFile_path(file.getFilePath());
+			dto.setFile_size(file.getFileSize());
 			
-			FileUploadCommand com = files.get(0);
-			dto.setFile_name(com.getFileOriginName());
-			dto.setFile_path(com.getFilePath());
-			dto.setFile_size(com.getFileSize());
+			dao.insertFile(dto);
 		}
-		return dto;
+	}
+	
+	@Override
+	public List<StoryFileDto> insertFile(int story_board_idx) {
+		return dao.readFile(story_board_idx);
+	}
+
+	public StoryCommand getIdx(int story_board_idx) {
+		StoryCommand com = new StoryCommand();
+		StoryBoardDto dto = dao.read(story_board_idx);
+		List<StoryFileDto> files = dao.readFile(story_board_idx);
+		
+		com.setFileDto(dto);
+		com.setFiles(files);
+		return com;
 	}
 
 	@Override
@@ -138,5 +153,8 @@ public class StoryServiceImpl implements StoryService {
 	public List<StoryBoardDto> hitList() {
 		return dao.hitList();
 	}
+
+	
+
 
 }

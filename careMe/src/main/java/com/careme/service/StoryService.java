@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
+import com.careme.model.dto.StoryFileDto;
 
 public interface StoryService {
 	// 글목록
@@ -16,6 +17,7 @@ public interface StoryService {
 	
 	// 글 상세보기
 	public StoryBoardDto read(int story_board_idx);
+	public List<StoryFileDto> insertFile(int story_board_idx);
 	
 	// 조회수
 	public int counting(int story_board_idx);
@@ -29,7 +31,7 @@ public interface StoryService {
 	// 작성
 	public int insert(MultipartHttpServletRequest request);
 	
-	public int insertFile(MultipartHttpServletRequest request);
+	public void insertFile(StoryFileDto fileDto, MultipartHttpServletRequest request);
 	
 	public int insertCom(StoryCommentDto comDto);
 	
@@ -42,5 +44,7 @@ public interface StoryService {
 	public int delete(int story_board_idx);
 	
 	public int deleteCom(int story_comment_idx);
+
+	
 	
 }

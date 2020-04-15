@@ -16,41 +16,11 @@ public class StoryBoardDto {
 	
 	private String member_id;
 	
-	private int story_file_idx;
-	private String file_name;
-	private String file_path;
-	private Long file_size;
-	
-	
-	public int getStory_file_idx() {
-		return story_file_idx;
-	}
-	public void setStory_file_idx(int story_file_idx) {
-		this.story_file_idx = story_file_idx;
-	}
 	public void setMember_id(String member_id) {
 		this.member_id = member_id;
 	}
 	public String getMember_id() {
 		return member_id;
-	}
-	public String getFile_name() {
-		return file_name;
-	}
-	public void setFile_name(String file_name) {
-		this.file_name = file_name;
-	}
-	public String getFile_path() {
-		return file_path;
-	}
-	public void setFile_path(String file_path) {
-		this.file_path = file_path;
-	}
-	public Long getFile_size() {
-		return file_size;
-	}
-	public void setFile_size(Long file_size) {
-		this.file_size = file_size;
 	}
 	public int getTag_idx() {
 		return tag_idx;

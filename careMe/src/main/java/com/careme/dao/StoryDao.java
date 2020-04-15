@@ -4,6 +4,7 @@ import java.util.List;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
+import com.careme.model.dto.StoryFileDto;
 import com.careme.model.dto.TagDto;
 
 public class StoryDao extends SqlSessionDaoSupport {
@@ -15,6 +16,10 @@ public class StoryDao extends SqlSessionDaoSupport {
 	// 글 상세보기
 	public StoryBoardDto read(int story_board_idx) {
 		return getSqlSession().selectOne("story.read", story_board_idx);
+	}
+	
+	public List<StoryFileDto> readFile(int story_board_idx) {
+		return getSqlSession().selectList("story.readFile", story_board_idx);
 	}
 	
 	// 조회수
@@ -37,8 +42,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 		return getSqlSession().insert("story.insert", dto);
 	}
 	
-	public int insertFile(StoryBoardDto dto) {
-		return getSqlSession().insert("story.insertFile", dto);
+	public int insertFile(StoryFileDto fileDto) {
+		return getSqlSession().insert("story.insertFile", fileDto);
 	}
 	
 	public int insertTag(TagDto tagDto) {

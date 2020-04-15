@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
+import com.careme.model.dto.StoryFileDto;
 import com.careme.service.FileUploadService;
 import com.careme.service.StoryService;
 
@@ -66,15 +67,13 @@ public class StoryController {
 		return "/story/storyForm";
 	}
 	
-	@RequestMapping(value = "/view/story/storyFormAdd", method = RequestMethod.POST)
-	public ModelAndView insertForm(MultipartHttpServletRequest request) {
-		ModelAndView mav = new ModelAndView("redirect:/view/story/storyEdit");
-		mav.addObject("insert", service.insert(request));
-		mav.addObject("insertFile", service.insertFile(request));
-		return mav;
+	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
+	public String insertForm(StoryFileDto dto, MultipartHttpServletRequest request) {
+		service.insert(request);
+		System.out.println(dto.getStory_board_idx());
+		service.insertFile(dto, request);
+		return "/story/storyDetail";
 	}
-	
-	
 	
 	// 글수정
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.GET)

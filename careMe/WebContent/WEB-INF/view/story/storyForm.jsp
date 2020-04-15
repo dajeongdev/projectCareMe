@@ -75,6 +75,66 @@ $(function (){
 	  });
 });
 
+	var saveFiles = [];
+	var selDiv = "";
+
+	$(function() {
+		selDiv = $("#selectedFiles");
+		$("#files").on("change", handleSelectedFile);
+		$("body").on("click", ".fa-trash", removeFile);
+
+		form = $("form[name=insert']")[0];
+		form.onsubmit = function (e) {
+			e.preventDefault();
+			var formData = new FormData(form);
+			for(var i = 0; i < saveFiles.length; i++) {
+				formData.append("files". saveFiles[i]);
+			}
+
+			$.ajax({
+				url: "storyForm",
+				type: "POST",
+				contentType: false,
+				processData: false,
+				data: formData,
+				success: function() {
+					location.href="/careMe/story"
+				}
+			})
+		}
+	})
+	
+	function handleSelectedFile(e) {
+		var files = e.target.files;
+		var filesArr = Array.prototype.slice.call(files);
+		filesArr.forEach(function (f) {
+			if(!f.type.match("image.*")) {
+				return;
+			}
+			saveFiles.push(f);
+
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var html = "<div class='col-md-3 mb-5'>";
+					html += "<img src=\"" + e.target.result + "\" class='w-100 h-80>'";
+					html += "<i class='fa fa-trash' data-file='"+f.name+"' title='Click to remove'></i></div>";
+				selDiv.append(html);
+			}
+			reader.readAsDataURL(f); 
+		});
+	}
+
+	function removeFile(e) {
+		var file = $(this).data("file");
+		for(var i = 0; i < saveFiles.length; i++) {
+			if(saveFiles[i].name == file) {
+				saveFiles.splice(i, 1);
+				break;
+			}
+		}
+		$(this).parent().remove();
+	}
+
 </script>
 </head>
 <body>
@@ -84,13 +144,14 @@ $(function (){
 </div>
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="container">
-		<form name="insertForm" method="POST" action="storyFormAdd" enctype="multipart/form-data">
+		<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
 			<input type="hidden" name="member_idx" value="1">
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
-				<input type="file" name="file" id="file customFile" class="custom-file-input" multiple/>
+				<input type="file" name="file" id="files" class="custom-file-input" multiple/>
 				<label class="custom-file-label" for="customFile">사진을 선택해주세요.</label>
+				<div class="row" id="selectedFiles"></div>
 				<div id="preview">
 				</div>
 			<div class="form-group">
