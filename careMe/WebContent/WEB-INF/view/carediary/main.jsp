@@ -155,7 +155,7 @@
 					<div class="w-100">
 						<input type="date" class="form-control mr-sm-2">
 						<input type="text" class="form-control mr-sm-2">
-			    		<button class="btn btn-secondary">검색</button>						
+			    		<button class="btn btn-dark btn-sm">검색</button>						
 					</div>
 				</form>
 		    </div>
@@ -228,7 +228,7 @@
 		      				
 	      					<div class="row text-center">
 	      						<div class="col-8 m-auto">
-	      							<button class="btn btn-success">추가</button>
+	      							<button class="btn btn-dark btn-sm">추가</button>
 	      						</div>
 	      					</div>
 		      				

@@ -187,7 +187,7 @@
 					<label for="">사진등록</label>
 					<div>
 						<label for="files">
-							<span class="btn btn-success">등록</span>
+							<span class="btn btn-dark btn-sm">등록</span>
 						</label>						
 					</div>
 					
@@ -198,7 +198,7 @@
 			
 			<div class="row p-3">
 				<div class="col-12 text-center">
-					<button type="submit" class="btn btn-success">제출</button>
+					<button type="submit" class="btn btn-dark btn-sm">제출</button>
 				</div>
 			</div>
 			

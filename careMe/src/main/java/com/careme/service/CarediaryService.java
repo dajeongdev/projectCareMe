@@ -2,7 +2,10 @@ package com.careme.service;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,11 +45,10 @@ public class CarediaryService {
 	public void writeCarediary(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException {
 		dto.setPet_idx((int) request.getSession().getAttribute("pet_idx"));
 
-		System.out.println("지금 선택된 pet ::" + dto.getPet_idx());
-				
 		carediaryDao.writeCarediary(dto);
+		
 		int diaryIdx = dto.getPet_care_idx();
-		System.out.println("dto 정보:: " + dto);
+		
 		if (diaryIdx > 0) {
 			List<FileUploadCommand> files;			
 			files = fileuploadService.upload(request, "/img/pet/carediary/");
@@ -61,6 +63,24 @@ public class CarediaryService {
 				carediaryDao.writeCarediaryFile(fileDto);
 			}
 		}
+	}
+	
+	public int updateCarediary(PetCareDto dto, Integer[] deletedFiles, MultipartHttpServletRequest request) {
+		int res = carediaryDao.updateCarediary(dto);
+		if (res == 1) {
+			// 파일삭제
+			if (deletedFiles.length > 0) {
+				Map<String, Object> deleteList = new HashMap<String, Object>();
+				List<Integer> list = Arrays.asList(deletedFiles);
+				deleteList.put("deleteList", list);
+			}
+			
+			// 추가된 파일 등록
+
+		}
+		
+		System.out.println(dto);	
+		return 1;
 	}
 	
 	public CarediaryCommand getCarediaryByIdx(int carediaryIdx) {
@@ -89,6 +109,8 @@ public class CarediaryService {
 		
 		return commandList;
 	}
+	
+	
 
 	
 

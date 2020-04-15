@@ -3,8 +3,6 @@ package com.careme.controller;
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -69,8 +67,8 @@ public class CarediaryController {
 	}
 	
 	@RequestMapping(value= "/carediary/update", method = RequestMethod.POST)
-	public String updateDiary(PetCareDto dto, int[] deletetedFiles) {
-		System.out.println(deletetedFiles);
+	public String updateDiary(PetCareDto dto, Integer[] deletedFiles) {
+		
 		return "asd";
 	}
 	

@@ -1,6 +1,7 @@
 package com.careme.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
@@ -37,5 +38,14 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 	public List<PetCareFileDto> selectCarediaryFileList(int carediaryIdx) {
 		return getSqlSession().selectList("carediary.selectCarediaryFileList", carediaryIdx);
 	}
+	
+	public int updateCarediary(PetCareDto dto) {
+		return getSqlSession().update("carediary.updateDiary", dto);
+	}
+	
+	public int deleteCarediaryFiles(Map<Object, String> list) {
+		return getSqlSession().update("carediary.deleteCarediaryFiles", list);
+	}
+	
 
 }
