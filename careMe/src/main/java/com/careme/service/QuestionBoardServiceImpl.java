@@ -160,11 +160,14 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteCommentForCasual(idx);
 	}
 
-// Hashtag 비교 후 가져오기
+// Hashtag 추가 및 비교
 	public List<TagDto> compareHashtag(String tagValue){
 		return dao.getHashtag(tagValue);
 	}
 	
+	public String addHashtag(String tagValue) {
+		return dao.addHashtag(tagValue);
+	}
 	
 
 }

@@ -158,11 +158,24 @@ public class CasualBoardController {
 	// hashtag 기능
 	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public List<TagDto> hashtagCompare(String tagValue) {
+	public String hashtagCompare(String tagValue) {
 		List<TagDto> compared = bs.compareHashtag(tagValue);
-		System.out.println(tagValue);
+		Gson json = new Gson();
+		int listsize = compared.size();
+		
+		
+		if(listsize==0){
+			bs.h
+			
+			
+		}
+		
+		
+		
 		return compared;
 	}
+	
+	
 	
 	
 // 게시글 수정

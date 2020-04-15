@@ -70,5 +70,7 @@ public interface QuestionBoardService {
 // Casual Board Hashtags
 	public List<TagDto> compareHashtag(String tagValue);
 	
+	public String addHashtag(String tagValue);
+	
 }
 

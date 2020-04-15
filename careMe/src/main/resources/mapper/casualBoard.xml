@@ -84,5 +84,9 @@
 	<select id="hashtagFind" resultType="com.careme.model.dto.TagDto" parameterType="String">
 		select tag_idx, tag_name from tag where tag_name like concat('%', #{tagValue},'%')
 	</select>
+	
+	<insert id="hastagAdd" parameterType="com.careme.model.dto.TagDto" keyProperty="tag_name">
+		insert into tag (tag_name, member_idx, del_yn) values (#{tag_name}, #{member_idx}, #{del_yn})
+	</insert>
 
 </mapper>
