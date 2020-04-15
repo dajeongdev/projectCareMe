@@ -36,7 +36,7 @@
 									<th>작성일자</th>
 									<th>조회</th>
 								</tr>
-							</thead>
+							</thead>	
 							<tbody>
 
 								<!-- 글 들어가는 곳 -->

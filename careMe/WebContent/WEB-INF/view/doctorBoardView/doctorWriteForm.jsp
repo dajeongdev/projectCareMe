@@ -18,13 +18,14 @@
 				$("#petSpeciesLevel2 option").remove();
 				return false;
 			}
-		var url ="casualWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
+		var url ="doctorWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
 		$.ajax(
 			{type:"get",
 			url:url,
 			dataType:"json"})
 			.done(function(items){
 			$("#petSpeciesLevel2 option").remove();
+
 				if (items.length > 0) {
 					for (item in items) {
 					var s = items[item];
