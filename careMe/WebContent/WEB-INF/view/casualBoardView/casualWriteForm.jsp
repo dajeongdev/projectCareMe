@@ -80,7 +80,7 @@
 						var url = "casualWriteFrom?tagValue="+tagValue+"&member_idx="+member_idx;
                         $.ajax({
                             type:"get",
-                            url=url
+                            url=url,
                             dataType:"json"})
                             .done(function(compared){
                                 if(compared.length>0){

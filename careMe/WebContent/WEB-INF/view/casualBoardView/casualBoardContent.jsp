@@ -17,8 +17,9 @@
 	<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 	<div class="container min-vh-100 pt-3 text-center">
 
+
 		<div class="row">
-			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+			<main role="main" class="col-md-12 col-lg-10 px-4">
 			<h2 align="left">고민 상담</h2>
 			<p></p>
 
@@ -37,7 +38,7 @@
 			
 			<hr>
 			
-			<div class="row">
+			<div class="row my-3 p-3 bg-white rounded shadow-sm">
        		 	<blockquote>
           			<p style="font:20" align="left">
 						<c:out value="${mlist.content}" />
@@ -65,26 +66,26 @@
 				<h5 class="uppercase"><c:out value="${commCount}"/> Comments</h5>
 				<hr>
 			<div>
+			
 			<c:forEach var="item" items="${clist}">
-			<div>
-				<div>
-					<p style="strong"  align="left">
+			<div class="row">
+				<div class="col-md-2">
+					<p align="left">
 						<img height="100" width="80" src="<%=request.getContextPath()%>/resources/img/dog.jpg">
+					</p><br>	
+					<p style="strong"  align="left">	
 						작성자: <c:out value="${item.member_id}" /> on <i><c:out value="${item.reg_date}" /></i>
 					</p>
 				</div>
 				
-				<div align="left" class="card-body">
-					<div>
-						<p style="font:20">
-							<c:out value="${item.content}" />
-						</p>
-					</div>
+				<div align="left" class="card-body col-md-10 my-3 p-3 bg-white rounded shadow-sm">
+					<p style="font:20">
+						<c:out value="${item.content}" />
+					</p>
 				</div>
 			</div>
 			<hr>
 			</c:forEach>
-
 
 			<!-- comment 작성 -->
 				<h5>

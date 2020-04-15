@@ -52,9 +52,9 @@
 		<div class="container min-vh-100 pt-3 text-center">
 		
 		<form action="doctorBoardWriteAdd" method="post" enctype="multipart/form-data">
-			<div class="my-3 p-3 bg-white rounded shadow-sm">
-			<div class="row">
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+			
+			<div class="row my-3 p-3 bg-white rounded shadow-sm">
+				<main role="main" class="col-md-12 col-lg-10 px-4">
 					
 					<h2 align="left">전문 상담</h2>
 					<p></p>
@@ -111,7 +111,7 @@
 					
 				</main>
 			</div>
-			</div>
+			
 		</form>
 
 
