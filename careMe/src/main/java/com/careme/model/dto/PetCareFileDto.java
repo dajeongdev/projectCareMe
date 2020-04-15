@@ -2,11 +2,11 @@ package com.careme.model.dto;
 
 import java.time.LocalDateTime;
 
-public class PetCareFile {
+public class PetCareFileDto {
 	private int pet_care_file_idx;
 	private int pet_care_idx;
 	private String file_path;
-	private int file_size;
+	private Long file_size;
 	private String file_name;
 	private LocalDateTime reg_date;
 	private String del_yn;
@@ -29,10 +29,10 @@ public class PetCareFile {
 	public void setFile_path(String file_path) {
 		this.file_path = file_path;
 	}
-	public int getFile_size() {
+	public Long getFile_size() {
 		return file_size;
 	}
-	public void setFile_size(int file_size) {
+	public void setFile_size(Long file_size) {
 		this.file_size = file_size;
 	}
 	public String getFile_name() {

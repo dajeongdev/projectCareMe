@@ -1,7 +1,6 @@
 package com.careme.service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,19 +16,17 @@ import com.careme.model.command.FileUploadCommand;
 public class FileUploadService {
 	
 	public List<FileUploadCommand> upload(MultipartHttpServletRequest request, String path) {
+		String rootPath = request.getSession().getServletContext().getRealPath("/");
+		String resourcesPath = "resources/upload";
 		
 		// upload 한 file정보를 담고있는 command
 		List<FileUploadCommand> files = new ArrayList<FileUploadCommand>(); 
 		Iterator<String> fileNames = request.getFileNames();
-		String rootPath = request.getSession().getServletContext().getRealPath("/");
-		String resourcesPath = "resources/upload";
 		
 		while (fileNames.hasNext()) {
-			List<MultipartFile> requestFiles = request.getFiles(fileNames.next());
+			List<MultipartFile> uploadFiles = request.getFiles(fileNames.next());
 			
-			System.out.println("requestFiles" + requestFiles);
-			
-			for (MultipartFile file : requestFiles) {
+			for (MultipartFile file : uploadFiles) {
 				FileUploadCommand command = new FileUploadCommand();
 				String originName = file.getOriginalFilename();
 				String ext = originName.substring(originName.lastIndexOf("."), originName.length());
@@ -52,10 +49,8 @@ public class FileUploadService {
 			}
 		}
 		
-		System.out.println(files);
 		return files;
 	}
-	
 	
 	private void writeFile(MultipartFile multipartFile, String saveFileName, String path) throws IOException {
 			File dest = new File(path + saveFileName); 
