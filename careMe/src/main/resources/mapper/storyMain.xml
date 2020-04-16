@@ -44,10 +44,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	<!-- 인기글 -->
 	<select id="hit" parameterType="com.careme.model.dto.StoryBoardDto" resultType="com.careme.model.dto.StoryBoardDto">
-		select * from story_board inner join members where story_board.member_idx = members.member_idx order by heart desc limit 3
+		select * from story_board inner join members where story_board.member_idx = members.member_idx order by view_count desc limit 3
 	</select>
-	
-	
+	<!-- 검색 
+	<select id="search">
+		<if test="searchType != null">
+			<if test="seartType == 't'.toString">and title like '%' || #{keyword} || '%'</if>
+		</if>
+	</select>-->
 	
 	<!-- 글작성 -->
 	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
@@ -72,16 +76,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 글수정 O -->
-	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto">
+	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
 		update story_board
 		<set> 
 			<if test="title != null">title = #{title},</if>
 			<if test="content != null">content = #{content}</if>
 		</set>
 		<where>story_board_idx = #{story_board_idx}</where>
+		<selectKey keyProperty="story_board_idx" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 	</update>
 	<update id="updateFile" parameterType="com.careme.model.dto.StoryFileDto">
-		update story_file set file_name = #{file_name}, file_path = #{file_path}, file_size = #{file_size}
+		update story_file 
+		<set>file_name = #{file_name}, file_path = #{file_path}, file_size = #{file_size}</set>
+		<where>story_board_idx = #{story_board_idx}</where>
 	</update>
 	<update id="updateTag" parameterType="com.careme.model.dto.TagDto">
 		update tag set tag_name = #{tag_name} where tag_idx = ${tag_idx}
@@ -91,6 +100,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 글삭제 -->
 	<update id="delete" parameterType="int">
 		update story_board set del_yn = 'y' where story_board_idx = #{story_board_idx}
+	</update>
+	<!-- 파일 삭제 -->
+	<update id="deleteFile" parameterType="int">
+		update story_file set del_yn = 'y' where story_board_idx = #{story_board_idx}
 	</update>
 	<!-- 태그 삭제 -->
 	<update id="deleteTag" parameterType="int">

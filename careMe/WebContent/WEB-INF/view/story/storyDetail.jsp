@@ -23,7 +23,8 @@ hr { width: 1000px; }
 .comL > div { float: left; margin: 10px; }
 .profile { margin-right: 10px; }
 .comId { font-size: 18px; font-weight: 500;}
-.btn-list { float: right; }
+.btn-group { float: right; position:block;}
+.hr { position: block;}
 .input-group { margin-top: 10px;}
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -32,31 +33,22 @@ hr { width: 1000px; }
 $(document).ready(function(){
 	var formObj = $("form[name='readForm']");
 
-	// 수정
-	$(".update_btn").on("click", function() {
-		if(fn_valiChk()) {
-			return false;
-		}
-		formObj.attr("action", "/story/storyEdit");
-		formObj.attr("method", "post");
-		formObj.submit();
-	})
 	// 삭제
 	$(".delete_btn").on("click", function() {
-		var deleteYN = confirm("삭제하시겠습니까?");
+		var deleteYN = confirm("정말 삭제하시겠습니까?");
 		if(deleteYN == true) {
-			formObj.attr("action", "/delete");
+			formObj.attr("action", "/story/delete");
 			formObj.attr("method", "post");
 			formObj.submit();
 		}
 	})
 	//목록
 	$(".list_btn").on("click", function() {
-		location.href="/story/storyMain";
+		location.href="/careMe/view/story/storyMain";
 	});
 });
 function fn_valiChk() {
-	var regForm = $("form[name='detail']) .chk").length;
+	var regForm = $("form[name='readForm']) .chk").length;
 	for(var i = 0; i < regForm; i++) {
 		if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null)) {
 			alert($(".chk").eq(i).attr("title"));
@@ -71,7 +63,7 @@ function fn_valiChk() {
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
 <div class="detail-form">
-	<form name="detail" >
+	<form name="readForm" >
 	<div class="container">
 		<div class="top">
 		<h3><strong>펫스토리</strong></h3>
@@ -82,9 +74,9 @@ function fn_valiChk() {
 				</div>
 				<div class="rest">
 				<h4><c:out value="${dto.title}"/></h4>
-				<span class="date"><c:out value="${dto.reg_date}"/></span>
-				<span class="view"><c:out value="${dto.view_count}"/></span>
-				<span class="heart"><i class="fas fa-heart"></i><c:out value="${dto.heart}"/></span>
+				<span class="date"><c:out value="${dto.reg_date}"/></span>&nbsp
+				<span class="view"><i class="fas fa-eye"></i><c:out value="${dto.view_count}"/></span>
+				<span class="heart"><i class="fas fa-heart"></i>&nbsp<c:out value="${dto.heart}"/></span>
 				</div>
 			</div>
 			<div class="img">
@@ -98,9 +90,9 @@ function fn_valiChk() {
 				<a href="">#산책</a>
 			</div>
 			<div class="btn-group">
-				<button type="button" class="update_btn btn btn-outline-dark" onClick="document.location.href='/story/storyEdit?story_board_idx=${list.story_board_idx}'">수정</button>
-				<button type="button" class="delete_btn btn btn-outline-dark" onClick="document.location.href='delete/${list.story_board_idx}'">삭제</button>
-				<button type="button" class="list_btn btn btn-outline-dark" onClick="document.location.href='storyMain'">목록</button>
+				<button type="button" class="update_btn btn btn-outline-dark" OnClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
+				<button type="button" class="delete_btn btn btn-outline-dark">삭제</button>
+				<button type="button" class="list_btn btn btn-outline-dark">목록</button>
 			</div>
 		</div>
 		<div class="hr"><hr></div>

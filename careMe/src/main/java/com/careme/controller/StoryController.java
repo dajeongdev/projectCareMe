@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -83,20 +83,18 @@ public class StoryController {
 	// 글수정
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.GET)
 	public ModelAndView updateForm(int story_board_idx) {
-		ModelAndView mav = new ModelAndView("/story/storyUpdate");
+		ModelAndView mav = new ModelAndView("/story/storyEdit");
 		mav.addObject("story_board_idx", story_board_idx);
 		return mav;
 	}
 	
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.POST)
-	public String articleUpdate(StoryBoardDto dto) throws Exception {
-		int result = service.update(dto);
-		if(result > 0) {
-			return "redirect:/view/story/storyDetail";
-		} else {
-			System.out.println("error");
-			return "redirect:/view/story/storyMain";
-		}
+	public ModelAndView articleUpdate(StoryBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		dto.getStory_board_idx();
+		mav.addObject("update", service.update(dto));
+		mav.setViewName("/story/storyDetail");
+		return mav;
 	}
 	
 	// 글삭제

@@ -26,16 +26,15 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public StoryFileDto readFile(int story_board_idx) {
 		return getSqlSession().selectOne("story.readFile", story_board_idx);
 	}
+	public List<StoryCommentDto> readCom(int story_board_idx) {
+		return getSqlSession().selectList("story.readCom", story_board_idx);
+	}
 	
 	// 조회수
 	public int counting(int story_board_idx) {
 		return getSqlSession().update("story.viewCount", story_board_idx);
 	}
 	
-	// 댓글 읽기
-	public List<StoryCommentDto> readCom(int story_board_idx) {
-		return getSqlSession().selectList("story.readCom", story_board_idx);
-	}
 	
 	// 인기글
 	public List<StoryBoardDto> hitList() {
@@ -47,7 +46,6 @@ public class StoryDao extends SqlSessionDaoSupport {
 		getSqlSession().insert("story.insert", dto);
 		return dto.getStory_board_idx();
 	}
-	
 	public int insertFile(StoryFileDto fileDto) {
 		return getSqlSession().insert("story.insertFile", fileDto);
 	}
@@ -65,9 +63,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 		getSqlSession().update("story.update", dto);
 		return dto.getStory_board_idx();
 	}
-	
-	public int updateFfile(StoryBoardDto dto) {
-		return getSqlSession().update("story.updateFile", dto);
+	public int updateFfile(StoryFileDto fileDto) {
+		return getSqlSession().update("story.updateFile", fileDto);
 	} 
 	
 	public int updateTag(TagDto tagDto) {
@@ -82,11 +79,12 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int delete(int story_board_idx) {
 		return getSqlSession().update("story.delete", story_board_idx);
 	}
-	
+	public int deleteFile(int story_file_idx) {
+		return getSqlSession().update("story.deleteFile", story_file_idx);
+	}
 	public int deleteTag(int tag_idx) {
 		return getSqlSession().update("story.deleteTag", tag_idx);
 	}
-	
 	public int deleteCom(int story_comment_idx) {
 		return getSqlSession().update("story.deleteCom", story_comment_idx);
 	}

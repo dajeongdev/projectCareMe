@@ -5,6 +5,7 @@
 <html>
 <head>
 <% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
+<c:set var="fullName" value="<%=fullName%>" />
 <style>
 .storyMain { margin: 40px; }
 .card-text, .card-heart, .card-count { font-size: 15px; }
@@ -25,16 +26,22 @@
 
 <div class="storyMain">
 	<form action="/story/storyForm" method="post">
-	<h3><strong>인기 스토리</strong></h3>
+	<h2><strong>펫스토리</strong></h2>
 	<hr>
 	<div class="album py-5 bg-light">
     <div class="container">
     
+    <h4><strong>인기 스토리</strong></h4>
+    <hr>
 	<div class="row">
 	<c:forEach items="${hlist}" var="hlist">
         <div class="col-md-4">
           <div class="card mb-4 shadow-sm"  onClick="location.href='storyDetail?story_board_idx=${hlist.story_board_idx}'">
-            <img width="100%" height="170" class="img" src="${fullName}${hlist.file_path}">
+             <c:forEach items="${fList}" var="fList">
+             	<c:if test="${fList.story_board_idx == hlist.story_board_idx}">
+            	 <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
+             	</c:if>
+             </c:forEach>
             <div class="card-body">
              <div class="part">
               <div class="profile">
@@ -44,7 +51,7 @@
                <h5 class="card-text">${hlist.title}</h5>
                <span class="card-text">${hlist.member_id}</span>
                <i class="fas fa-heart"></i>&nbsp<c:out value="${hlist.heart}"/>&nbsp&nbsp
-               <i class="far fa-comments"></i>&nbsp<c:out value="${hlist.view_count}"/>
+               <i class="fas fa-eye"></i>&nbsp<c:out value="${hlist.view_count}"/>
               </div>
               </div>
               <div class="d-flex justify-content-between align-items-center">
@@ -71,7 +78,9 @@
          <div class="col-md-4">
           <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${item.story_board_idx}'">
            	<c:forEach items="${fList}" var="items">
+           	<c:if test="${items.story_board_idx == item.story_board_idx}">
            	<img width="100%" height="170" class="img" src="${fullName}${items.file_path}">
+           	</c:if>
             </c:forEach>
             <div class="card-body">
             <div class="part">
@@ -82,7 +91,7 @@
               <h5 class="card-text">${item.title}</h5>
               <span class="card-text">${item.member_id}</span>
               <i class="fas fa-heart"></i>&nbsp<span class="card-heart">${item.heart}</span>&nbsp&nbsp
-              <i class="far fa-comments"></i>&nbsp<span class="card-count">${item.view_count}</span>
+              <i class="fas fa-eye"></i>&nbsp<span class="card-count">${item.view_count}</span>
               </div>
               </div>
               
