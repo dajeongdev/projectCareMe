@@ -4,8 +4,16 @@
 <mapper namespace="casualQuestionBrd">
 
 <!-- 게시판 뿌리기 -->
-	<select id="getArt" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.PageNumberCommand">
-		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n' order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
+	<select id="getTotal" resultType="com.careme.model.dto.QuestionBoardDto">
+		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n' order by question_table_idx desc
+	</select>
+	
+	<select id="getArticles" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="HashMap">
+		select SQL_CALC_FOUND_ROWS * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n' order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
+	</select>
+	
+	<select id="selectTotal" resultType="int">
+		select FOUND_ROWS()
 	</select>
 	
 	<select id="getArtContent" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.dto.QuestionBoardDto">
