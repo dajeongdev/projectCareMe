@@ -3,18 +3,18 @@ package com.careme.service;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
 
 public interface StoryService {
 	// 글목록
-	public List<StoryCommand> list(int story_board_idx);
+	public List<StoryBoardDto> list();
+	public List<StoryFileDto> fileList();
 	
 	// 글 상세보기
-	public StoryCommand read(int story_board_idx);
+	public StoryBoardDto read(int story_board_idx);
+	public StoryFileDto readFile(int story_board_idx);
 	
 	// 조회수
 	public int counting(int story_board_idx);

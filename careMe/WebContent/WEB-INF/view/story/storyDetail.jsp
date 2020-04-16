@@ -81,17 +81,17 @@ function fn_valiChk() {
 					<svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
 				</div>
 				<div class="rest">
-				<h4><c:out value="${dList.title}"/></h4>
-				<span class="date"><c:out value="${dList.reg_date}"/></span>
-				<span class="view"><c:out value="${dList.view_count}"/></span>
-				<span class="heart"><i class="fas fa-heart"></i><c:out value="${dList.heart}"/></span>
+				<h4><c:out value="${dto.title}"/></h4>
+				<span class="date"><c:out value="${dto.reg_date}"/></span>
+				<span class="view"><c:out value="${dto.view_count}"/></span>
+				<span class="heart"><i class="fas fa-heart"></i><c:out value="${dto.heart}"/></span>
 				</div>
 			</div>
 			<div class="img">
-				<img width="700" height="500" src="${fullName}${dList.file_path}">
+				<img width="700" height="500" src="${fullName}${fileDto.file_path}">
 			</div>
 			<div>
-				<p><c:out value="${dList.content}"/></p>
+				<p><c:out value="${dto.content}"/></p>
 			</div>
 			<div class="box_tag">
 				<a href="">#강아지</a>

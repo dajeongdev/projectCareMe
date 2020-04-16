@@ -22,4 +22,4 @@ public class StoryCommand {
 		this.files = files;
 	}
 	
-}
+} 

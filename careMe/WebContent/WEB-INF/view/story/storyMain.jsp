@@ -34,7 +34,7 @@
 	<c:forEach items="${hlist}" var="hlist">
         <div class="col-md-4">
           <div class="card mb-4 shadow-sm"  onClick="location.href='storyDetail?story_board_idx=${hlist.story_board_idx}'">
-            <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
+            <img width="100%" height="170" class="img" src="${fullName}${hlist.file_path}">
             <div class="card-body">
              <div class="part">
               <div class="profile">
@@ -70,7 +70,9 @@
     <c:forEach items="${list}" var="item">
          <div class="col-md-4">
           <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${item.story_board_idx}'">
-            <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
+           	<c:forEach items="${fList}" var="items">
+           	<img width="100%" height="170" class="img" src="${fullName}${items.file_path}">
+            </c:forEach>
             <div class="card-body">
             <div class="part">
              <div class="profile">

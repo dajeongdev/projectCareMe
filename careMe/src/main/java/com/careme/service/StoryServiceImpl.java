@@ -36,13 +36,20 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public List<StoryCommand> list(int story_board_idx) {
-		return dao.listing(story_board_idx);
+	public List<StoryBoardDto> list() {
+		return dao.listing();
+	}
+	public List<StoryFileDto> fileList() {
+		return dao.fileListing();
 	}
 	
 	@Override
-	public StoryCommand read(int story_board_idx) {
+	public StoryBoardDto read(int story_board_idx) {
 		return dao.read(story_board_idx);
+	}
+	@Override
+	public StoryFileDto readFile(int story_board_idx) {
+		return dao.readFile(story_board_idx);
 	}
 
 	@Override

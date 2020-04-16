@@ -35,11 +35,13 @@ public class StoryController {
 
 	// 글목록
 	@RequestMapping(value = "/view/story/storyMain", method = RequestMethod.GET)
-	public ModelAndView listing(int story_board_idx) {
+	public ModelAndView listing() {
 		ModelAndView mav = new ModelAndView();
-		List<StoryCommand> list = service.list(story_board_idx);
+		List<StoryBoardDto> list = service.list();
+		List<StoryFileDto> fList = service.fileList();
 		List<StoryBoardDto> hlist = service.hitList();
 		mav.addObject("list", list);
+		mav.addObject("fList", fList);
 		mav.addObject("hlist", hlist);
 		mav.setViewName("/story/storyMain");
 		System.out.println(hlist);
@@ -50,15 +52,16 @@ public class StoryController {
 	@RequestMapping(value = "/view/story/storyDetail", method = RequestMethod.GET)
 	public ModelAndView articleDetail(int story_board_idx) {
 		ModelAndView mav = new ModelAndView();
-		StoryCommand dList = service.read(story_board_idx);
+		StoryBoardDto dto = service.read(story_board_idx);
+		StoryFileDto fileDto = service.readFile(story_board_idx);
 		List<StoryCommentDto> comList = service.readCom(story_board_idx);
 		int comCount = comList.size();
 		service.counting(story_board_idx);
-		mav.addObject("dList", dList);
+		mav.addObject("dto", dto);
+		mav.addObject("fileDto", fileDto);
 		mav.addObject("comList", comList);
 		mav.addObject("comCount", comCount);
 		mav.setViewName("/story/storyDetail");
-		System.out.println(dList);
 		return mav;
 	}
 	

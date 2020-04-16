@@ -12,13 +12,19 @@ import com.careme.model.dto.TagDto;
 
 public class StoryDao extends SqlSessionDaoSupport {
 	// 글목록
-	public List<StoryCommand> listing(int story_board_idx) {
-		return getSqlSession().selectList("story.list", story_board_idx);
+	public List<StoryBoardDto> listing() {
+		return getSqlSession().selectList("story.list");
+	}
+	public List<StoryFileDto> fileListing() {
+		return getSqlSession().selectList("story.fileList");
 	}
 	
 	// 글 상세보기
-	public StoryCommand read(int story_board_idx) {
+	public StoryBoardDto read(int story_board_idx) {
 		return getSqlSession().selectOne("story.read", story_board_idx);
+	}	
+	public StoryFileDto readFile(int story_board_idx) {
+		return getSqlSession().selectOne("story.readFile", story_board_idx);
 	}
 	
 	// 조회수

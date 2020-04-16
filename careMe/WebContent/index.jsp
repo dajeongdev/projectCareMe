@@ -13,11 +13,6 @@
 
 
 
-<<<<<<< HEAD
- </body>
-</html>
-=======
-</html>
 
-
->>>>>>> master
+</body>
+</html>
