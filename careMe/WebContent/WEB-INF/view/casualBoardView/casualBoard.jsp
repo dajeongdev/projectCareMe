@@ -36,29 +36,31 @@
 							</thead>	
 							<tbody>
 
-								<!-- 글 들어가는 곳 -->
-								<c:forEach var="item" items="${list}">
-									<tr onClick="location.href='casualBoardContent?question_table_idx=${item.question_table_idx}'">
-										<td><c:out value="${item.question_table_idx}" /></td>
-										<td><c:out value="${item.title}"/></td>
-										<td><c:out value="${item.member_id}" /></td>
-										<td><c:out value="${item.reg_date}" /></td>
-										<td><c:out value="${item.view_count}" /></td>
-									</tr>
-								</c:forEach>
+							<!-- 글 들어가는 곳 -->
+							<c:forEach var="item" items="${list}">
+								<tr onClick="location.href='casualBoardContent?question_table_idx=${item.question_table_idx}'">
+									<td><c:out value="${item.question_table_idx}" /></td>
+									<td><c:out value="${item.title}"/></td>
+									<td><c:out value="${item.member_id}" /></td>
+									<td><c:out value="${item.reg_date}" /></td>
+									<td><c:out value="${item.view_count}" /></td>
+								</tr>
+							</c:forEach>
+							
 							</tbody>
 						</table>
 
 						<!-- 게시판 페이지넘버링 및 글쓰기 -->
 						
-						<div class="row mb-3" >
-						<div class="col-md-2" align="left">
-							<jsp:include page="/WEB-INF/view/include/paging.jsp" flush="false"/>
-						</div>
-						<div class="col-md-8"></div>
-						<div class="col-md-2" align="right">
+						<div class="row lg-3" >
+						<div class="col-lg-10"></div>
+						<div class="col-lg-2" align="right">
 							<button class="btn btn-dark btn-sm btn-block" onClick="location.href='casualWriteForm'">글쓰기</button>	
 						</div>
+						</div>
+						
+						<div class="row lg-3" align="center">
+							<jsp:include page="/WEB-INF/view/include/paging.jsp" flush="false"/>
 						</div>
 						
 					</div>

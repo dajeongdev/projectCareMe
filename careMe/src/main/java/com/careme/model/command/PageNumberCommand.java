@@ -2,7 +2,7 @@ package com.careme.model.command;
 
 public class PageNumberCommand {
 	
-	
+	private int start_idx;
 	private int totalCount;
 	private int contentPerPage;
 	private int currentPage;
@@ -11,6 +11,13 @@ public class PageNumberCommand {
 	private int totalPage;
 	private String path;
 	
+	
+	public int getStart_idx() {
+		return start_idx;
+	}
+	public void setStart_idx(int start_idx) {
+		this.start_idx = start_idx;
+	}
 	public int getTotalCount() {
 		return totalCount;
 	}

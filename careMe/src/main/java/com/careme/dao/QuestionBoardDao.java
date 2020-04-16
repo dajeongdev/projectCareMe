@@ -74,8 +74,8 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	
 // Casual Board 내용 및 검색
 	
-	public List<QuestionBoardDto> getCasualBoard(){
-		return getSqlSession().selectList("casualQuestionBrd.getArt");
+	public List<QuestionBoardDto> getCasualBoard(PageNumberCommand pnc){
+		return getSqlSession().selectList("casualQuestionBrd.getArt", pnc);
 	}
 	
 	public QuestionBoardDto getCasualBoardContents(int question_table_idx){
