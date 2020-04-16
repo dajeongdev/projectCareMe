@@ -54,17 +54,46 @@
 							</tbody>
 
 						</table>
-						<!-- 게시판 글쓰기 -->
-						<div class="row mb-3" >
-						<div class="col-md-2" align="left">page numbering</div>
-						<div class="col-md-8"></div>
-						<div class="col-md-2" align="right">
-							<button class="btn btn-dark btn-sm btn-block" onClick="location.href='doctorWriteForm'">글쓰기</button>	
+						<!-- 게시판 페이지넘버링 및 글쓰기 -->
+						<!-- 글쓰기 버튼 -->
+						<div class="row lg-3" >
+							<div class="col-lg-10"></div>
+							<div class="col-lg-2" align="right">
+								<button class="btn btn-dark btn-sm btn-block" onClick="location.href='doctorWriteForm'">글쓰기</button>	
+							</div>
 						</div>
+						
+						<div class="row lg-3" >
+							<div class="col-lg-12" align="center">
+							<ul class="pagination pagination-lg pagination-dark">
+  
+							 <!-- 왼쪽 화살표 -->  
+							 <li class="page-item disabled">
+   		  					 <a class="page-link" href="#">&laquo;</a>
+   							 </li>
+    
+   							 <c:forEach var="page" begin="${pages.startPage}" end="${pages.endPage}">
+							 	<c:choose>
+    						 		<c:when test="${page eq pages.currentPage}">
+    						 			<li class="page-item active">
+      						 			<a class="page-link" style="font-weight: bold;" href="doctorBoard?currentPage=${page}">${page}</a>
+    						 			</li>	
+    								</c:when>
+ 	   								<c:otherwise>
+    									<li class="page-item active">
+      									<a class="page-link" href="doctorBoard?currentPage=${page}">${page}</a>
+    									</li>
+   					 				</c:otherwise>
+								</c:choose>
+							</c:forEach>
+    
+						  	<!-- 오른쪽 화살표 -->
+							<li class="page-item">
+							<a class="page-link" href="#">&raquo;</a>
+    						</li>
+  							</ul>
+							</div>
 						</div>
-					</div>
-				</main>
-			</div>
 
 			<!-- 게시판 검색 -->
 			<form action="view/doctorBoardView/doctorBoardSearch">

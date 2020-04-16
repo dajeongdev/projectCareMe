@@ -2,19 +2,19 @@ package com.careme.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.careme.dao.QuestionBoardDao;
-import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 
-@Service
+@Service("QuestionBoardService")
 public class QuestionBoardServiceImpl implements QuestionBoardService {
 	@Autowired
 	QuestionBoardDao dao = new QuestionBoardDao();
@@ -23,36 +23,13 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		this.dao = dao;
 	}
 
-	QuestionBoardDto dto;
-
-	public void setDto(QuestionBoardDto dto) {
-		this.dto = dto;
-	}
-	
-	PageNumberCommand pnc;
-	
-	public PageNumberCommand getPnc() {
-		return pnc;
-	}
-
-	public void setPnc(PageNumberCommand pnc) {
-		this.pnc=pnc;
-	}
-	
-	public PageNumberService pns;
-	
-	
-	public PageNumberService getPns() {
-		return pns;
-	}
-
-	public void setPns(PageNumberService pns) {
-		this.pns = pns;
-	}
-
 	// Doctor Board 게시글 뿌리기
-	public List<QuestionBoardDto> getDoctorBoard(int start_idx, int contentPerPage) {
+	public List<QuestionBoardDto> getDoctorBoard() {
 		return dao.getDoctorBoard();
+	}
+
+	public List<QuestionBoardDto> getDoctorBoardPage(QuestionBoardDto dto){
+		return dao.getDoctorBoardList(dto);
 	}
 
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx) {
@@ -112,18 +89,18 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	}
 
 // Casual Board 내용 구현
-	public List<QuestionBoardDto> getCasualBoard(int currentPage, int contentPerPage) {
-		
-		PageNumberCommand pnc = new PageNumberCommand();
-		
-		int start_idx = pns.getStart_idx(currentPage, contentPerPage);
-		
-		pnc.setStart_idx(start_idx);
-		pnc.setContentPerPage(contentPerPage);
-		
-		return dao.getCasualBoard(pnc);
+	public List<QuestionBoardDto> getCasualBoard() {
+		return dao.getCasualBoard();
 	}
 
+	public List<QuestionBoardDto> getCasualBoardPage(Map<String,Integer>param){
+		return dao.getCasualBoardList(param);
+	}
+	
+	public int getTotal() {
+		return dao.getTotal();
+	}
+	
 	public QuestionBoardDto getCasualBoardContents(int question_table_idx) {
 		return dao.getCasualBoardContents(question_table_idx);
 	}

@@ -24,7 +24,7 @@
     	<c:choose>
     		<c:when test="${page eq pages.currentPage}">
     			<li class="page-item active">
-      				<a class="page-link" href="#"><c:out value="${page}"/></a>
+      				<a class="page-link" style="font-weight: bold;" href="#"><c:out value="${page}"/></a>
     			</li>	
     		</c:when>
     		<c:otherwise>

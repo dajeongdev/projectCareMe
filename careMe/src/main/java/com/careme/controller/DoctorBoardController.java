@@ -1,6 +1,8 @@
 package com.careme.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,21 +57,24 @@ public class DoctorBoardController {
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
-	public ModelAndView toDoctorBoard() {
-		
-		ModelAndView listPro = new ModelAndView();
+	public ModelAndView toDoctorBoard(@RequestParam int currentPage) {
+		ModelAndView listPro = new ModelAndView("/doctorBoardView/doctorBoard");
+		QuestionBoardDto dto = new QuestionBoardDto();
 		PageNumberCommand paging = new PageNumberCommand();
-		int currentPage = 1;
 		int contentPerPage = 10;
 		
-		List<QuestionBoardDto> getArts = bs.getDoctorBoard(currentPage, contentPerPage);
+		Map<String,Integer> param = new HashMap<String,Integer>();
+		param.put("start_idx", pns.getStartIdx(currentPage, contentPerPage));
+		param.put("contentPerPage", contentPerPage);
 		
-		paging = pns.paging(getArts.size(), contentPerPage, currentPage, "casualBoardView/casualBoardContent?question_board_idx="+currentPage);
+		dto.setParam(param);
 		
-		listPro.addObject("listPro", getArts);
-		listPro.addObject("countPro", getArts.size());
+		List<QuestionBoardDto> getArticles = bs.getDoctorBoard();
+		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "doctorBoardView/doctorBoard");
+		List<QuestionBoardDto> getArticlesList = bs.getDoctorBoardPage(dto);
+	
+		listPro.addObject("listPro", getArticlesList);
 		listPro.addObject("pages", paging);
-		listPro.setViewName("/doctorBoardView/doctorBoard");
 		return listPro;
 	}
 

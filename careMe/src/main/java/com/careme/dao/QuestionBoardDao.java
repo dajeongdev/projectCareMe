@@ -1,6 +1,7 @@
 package com.careme.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
@@ -17,7 +18,11 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Doctor Board 내용 및 검색
 	
 	public List<QuestionBoardDto> getDoctorBoard(){
-		return getSqlSession().selectList("doctorQuestionBrd.getArt");
+		return getSqlSession().selectList("doctorQuestionBrd.getTotal");
+	}
+	
+	public List<QuestionBoardDto> getDoctorBoardList(QuestionBoardDto dto){
+		return getSqlSession().selectList("doctorQuestionBrd.getArticles", dto);
 	}
 	
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx){
@@ -74,8 +79,16 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	
 // Casual Board 내용 및 검색
 	
-	public List<QuestionBoardDto> getCasualBoard(PageNumberCommand pnc){
-		return getSqlSession().selectList("casualQuestionBrd.getArt", pnc);
+	public List<QuestionBoardDto> getCasualBoard(){
+		return getSqlSession().selectList("casualQuestionBrd.getTotal");
+	}
+	
+	public List<QuestionBoardDto> getCasualBoardList(Map<String,Integer>param){
+		return getSqlSession().selectList("casualQuestionBrd.getArticles", param);
+	}
+	
+	public int getTotal() {
+		return getSqlSession().selectOne("casualQuestionBrd.selectTotal");
 	}
 	
 	public QuestionBoardDto getCasualBoardContents(int question_table_idx){
