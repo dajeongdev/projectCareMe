@@ -80,9 +80,18 @@
 					return false;
 			      }
 			     //이메일 인증받기 했는지
-		         if(form.eChk.value=='N'){
+		         if(form.sendMail.value=='N'){
 			            alert("이메일 인증하기를 눌러주세요!");
 						return false; 
+			            }
+		            if(form.mailNum.value==""){
+			            alert("인증번호를 입력해주세요!")
+			            form.mailNum.focus();
+			            return false;
+			            }
+		            if(form.emailNChk.value=='N'){
+			            alert("인증번호 확인을 눌러주세요!")
+			            return false;
 			            }
 		           
 	  // form.submit();
@@ -195,15 +204,15 @@
 
 					<!-- 이메일 인증 버튼 -->
 					<td><button type="button"
-							class="btn btn-dark btn-sm btn-block" name="eChk" value="N"
-							id="eChk" onclick="fn_edChk();">인증받기</button></td>
+							class="btn btn-dark btn-sm btn-block" name="sendMail" value="N"
+							id="sendMail" onclick="fn_sendChk();">인증받기</button></td>
 				</tr>
 
 				<tr>
 					<!--인증 -->
 					<td><b></b></td>
-					<td><input type="text" style="width: 530px" id=""
-						name="" class="form-control" placeholder="인증번호를 입력해주세요" /></td>
+					<td><input type="text" style="width: 530px" id="mailNum"
+						name="mailNum" class="form-control" placeholder="인증번호를 입력해주세요" /></td>
 						
 						<!-- 인증번호 확인 버튼 -->
 					<td><button type="button"
