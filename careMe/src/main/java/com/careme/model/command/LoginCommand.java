@@ -4,7 +4,14 @@ public class LoginCommand {
 	
 	private String member_id;
 	private String member_pass;
+	private String member_nick;
 	
+	public String getMember_nick() {
+		return member_nick;
+	}
+	public void setMember_nick(String member_nick) {
+		this.member_nick = member_nick;
+	}
 	public String getMember_id() {
 		return member_id;
 	}
@@ -19,7 +26,8 @@ public class LoginCommand {
 	}
 	@Override
 	public String toString() {
-		return "LoginCommand [member_id=" + member_id + ", member_pass=" + member_pass + "]";
+		return "LoginCommand [member_id=" + member_id + ", member_pass=" + member_pass + ", member_nick=" + member_nick
+				+ "]";
 	}
 	
 	

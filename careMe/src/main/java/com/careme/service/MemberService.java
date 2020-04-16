@@ -55,6 +55,11 @@ public class MemberService {
 		return dao.idChk(lc);
 	}
 	
+	//중복 닉네임체크
+	public int ncheck(LoginCommand lc) {
+		return dao.nickChk(lc);
+	}
+	
 	//회원가입 성공
 	public int insertOk(MemberDto mdto) {
 		List<MemberDto> lok = dao.insert(mdto);

@@ -57,10 +57,10 @@ public class MemberController {
 	public String loginOk(LoginCommand lc, HttpSession session) {
 		int i = memberService.loginOk(lc);// 1이나 0리턴
 		// System.out.println(i);
-		if (i == 0) {
+		if (i == 0) {//실패
 			return "redirect:loginform";
-		} else {
-			session.setAttribute("OK", lc.getMember_id());
+		} else {//성공
+			session.setAttribute("MINFO", lc.getMember_nick());//이제 닉네임 들고다님
 			return "redirect:/main";
 		}
 	}
@@ -78,6 +78,14 @@ public class MemberController {
 		int i2 = memberService.idcheck(lc);
 		return i2;
 	}
+	
+	//닉네임 중복체크
+	@RequestMapping(value = "login/nickChk" , method = RequestMethod.POST)
+	@ResponseBody
+	public int ncheck(LoginCommand lc) {
+		int i4 = memberService.ncheck(lc);
+		return i4;
+	}
 
 	// 이메일 인증
 
@@ -85,9 +93,9 @@ public class MemberController {
 	// 회원가입 성공
 	@RequestMapping(value = "login/insertok")
 	public String insertOk(MemberDto mdto, HttpSession session) {
-		// System.out.println("test"+ mdto);
+		System.out.println("test"+ mdto);
 		int i3 = memberService.insertOk(mdto);// 0이나 1리턴
-		// System.out.println(i3);
+		 System.out.println(i3);
 		if (i3 == 0) { // 없으면 가입
 			session.setAttribute("sussess", mdto.getMember_id());
 			return "login/signupsu"; // 성공
