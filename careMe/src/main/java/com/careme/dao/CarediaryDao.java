@@ -33,8 +33,12 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("carediary.selectCarediaryByIdx", idx);
 	}
 	
-	public List<CarediaryCommand> selectCarediaryListByPetIdx(Map<String, Object> params) {
-		return getSqlSession().selectList("carediary.selectCarediaryWithDefecation", params);
+	public List<CarediaryCommand> selectCarediaryListByPetIdx(HashMap<String, Integer> params) {
+		return getSqlSession().selectList("carediary.selectCarediaryList", params);
+	}
+	
+	public int selectTotalCount() {
+		return getSqlSession().selectOne("carediary.selectTotalCount");
 	}
 	
 	public List<PetCareFileDto> selectCarediaryFileList(int carediaryIdx) {

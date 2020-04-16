@@ -134,21 +134,9 @@
 					</div>
 				</form>
 		    </div>
-		
-			<div class="col-8 mx-auto">
-				<nav>
-			        <ul class="pagination justify-content-center">
-			            <li class="page-item active">
-			                <a class="page-link" href="#">1</a>
-			            </li>
-			            <li class="page-item"><a class="page-link" href="#">2</a></li>
-			            <li class="page-item"><a class="page-link" href="#">3</a></li>
-			            <li class="page-item"><a class="page-link" href="#">4</a></li>
-			            <li class="page-item"><a class="page-link" href="#">5</a></li>
-			        </ul>
-			    </nav>
-			    <br>
-			</div>
+		</div>
+		<div class="row">
+			<jsp:include page="/WEB-INF/view/include/paging.jsp" flush="false"/>
 		</div>
 	
 	

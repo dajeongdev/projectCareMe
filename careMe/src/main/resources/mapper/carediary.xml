@@ -30,15 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectCarediaryByIdx" resultType="com.careme.model.dto.PetCareDto">
 		select * from pet_care where del_yn = 'n' and pet_care_idx = #{pet_care_idx}
 	</select>
-	
-	<select id="selectCarediaryListByPetIdx" parameterType="HashMap<String, Object>">
-		select SQL_CALC_FOUND_ROWS, * from pet_care 
-		where del_yn = 'n' 
-		and pet_idx = #{pet_idx} 
-		order by pet_care_idx desc
-		limit 0, 10
-	</select>
-	
+
 	<select id="selectCarediaryFileList" resultType="com.careme.model.dto.PetCareFileDto">
 		select * from pet_care_file where del_yn = 'n' and pet_care_idx = #{pet_care_idx} 
 	</select>
@@ -68,16 +60,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
 	</update>
 	
-	<select id="selectCarediaryWithDefecation" resultMap="careDiaryWithDefecation" parameterType="HashMap<String, Object>">
+	<select id="selectTotalCount" resultType="int">
+		SELECT FOUND_ROWS()
+	</select>
+	
+	<select id="selectCarediaryList" resultMap="careDiaryWithDefecation" parameterType="HashMap">
 		select SQL_CALC_FOUND_ROWS
-			   , care.*, u.defecation_content as urine_content, f.defecation_content as feces_content
-			   , FOUND_ROWS() as totalCount
+			    care.*
+			  , u.defecation_content as urine_content
+			  , f.defecation_content as feces_content
 		from pet_care care
 		inner join defecation u on care.urine = u.defecation_idx
 		inner join defecation f on care.feces = f.defecation_idx
 		where pet_idx = #{pet_idx}
 		and del_yn = 'n'
-	</select>
+		order by care.diary_date desc
+		limit #{start}, #{contentPerPage}
+	</select>	
 	
 	<resultMap id="careDiaryWithDefecation" type="com.careme.model.command.CarediaryCommand">
 		<association property="diary" column="pet_care_idx" resultMap="petCareDto"/>
@@ -88,8 +87,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<association property="diary" column="weight"  resultMap="petCareDto"/>
 		<association property="diary" column="diary_date"  resultMap="petCareDto"/>
 		<association property="diary" column="reg_date"  resultMap="petCareDto"/>
-		<association property="urineContent" column="urine_content" javaType="String" resultMap="urineContent"/>
-		<association property="fecesContent" column="feces_content" javaType="String" resultMap="fecesContent"/>
+		
+		<association property="urineContent" column="urine_content" javaType="String" resultMap="careDiaryCommandExceptDto"/>
+		<association property="fecesContent" column="feces_content" javaType="String" resultMap="careDiaryCommandExceptDto"/>
 	</resultMap>
 	
 	<resultMap id="petCareDto" type="com.careme.model.dto.PetCareDto">
@@ -102,11 +102,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="diary_date" column="diary_date"/>
 		<result property="reg_date" column="reg_date"/>
 	</resultMap>
-	<resultMap id="urineContent" type="String">
+	<resultMap id="careDiaryCommandExceptDto" type="String">
 		<result property="urineContent" column="urine_content"/>
-	</resultMap>
-	<resultMap id="fecesContent" type="String">
 		<result property="fecesContent" column="feces_content"/>
 	</resultMap>
 	
+
+	
+
 </mapper>

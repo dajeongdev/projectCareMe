@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.dao.CarediaryDao;
 import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.dto.DefecationDto;
 import com.careme.model.dto.PetCareDto;
 import com.careme.model.dto.PetCareFileDto;
@@ -91,7 +92,8 @@ public class CarediaryService {
 		return command;
 	}
 	
-	public List<CarediaryCommand> getCarediaryListByPetIdx(int petIdx, int currentPage) {
+	public HashMap<String, Object> getCarediaryListByPetIdx(int petIdx, int currentPage, int contentPerPage) {
+		HashMap<String, Object> data = new HashMap<String, Object>();
 		//String path = petIdx + "?page="; 
 		// 리턴받아야 하는 항목 =  totalCount
 		// 쿼리실행시 필요한 항목 startIndex, 조건, contentPerPage
@@ -99,17 +101,26 @@ public class CarediaryService {
 		//PageNumberCommand pageCommand = pageService.paging(totalCount, currentPage);
 		//contentPerPage, , path
 		List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("pet_idx", petIdx);
-		params.put("currentPage", currentPage);
-		list = carediaryDao.selectCarediaryListByPetIdx(params);
+		HashMap<String, Integer> param = new HashMap<String, Integer>();
+		int start = pageService.getStartIdx(currentPage, contentPerPage);
+		param.put("pet_idx", petIdx);
+		param.put("start", start);
+		param.put("contentPerPage", contentPerPage);
+		list = carediaryDao.selectCarediaryListByPetIdx(param);
+		int totalCount = carediaryDao.selectTotalCount();
 		
 		for (CarediaryCommand command : list) {
 			int diaryIdx = command.getDiary().getPet_care_idx();
 			command.setFiles(carediaryDao.selectCarediaryFileList(diaryIdx));
 		}
 		
-		return list;
+		String path = petIdx + "?page=";
+		System.out.println("토탈카운트:: " + totalCount);
+		PageNumberCommand paging = pageService.paging(totalCount, contentPerPage, currentPage, path);
+		
+		data.put("list", list);
+		data.put("paging", paging);
+		return data;
 	}
 	
 	public void processFile(int diaryIdx, MultipartHttpServletRequest request) {

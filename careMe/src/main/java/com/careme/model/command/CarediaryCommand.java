@@ -35,11 +35,11 @@ public class CarediaryCommand {
 	public void setFecesContent(String fecesContent) {
 		this.fecesContent = fecesContent;
 	}
+
 	@Override
 	public String toString() {
 		return "CarediaryCommand [diary=" + diary + ", files=" + files + ", urineContent=" + urineContent
 				+ ", fecesContent=" + fecesContent + "]";
 	}
-	
 	
 }

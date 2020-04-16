@@ -1,6 +1,7 @@
 package com.careme.controller;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.CarediaryCommand;
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.dto.PetCareDto;
 import com.careme.service.CarediaryService;
 
@@ -28,13 +30,23 @@ public class CarediaryController {
 	}
 	
 	@RequestMapping("/carediary/{pet_idx}")
-	public ModelAndView toCarediaryMain(@PathVariable("pet_idx") int pet_idx, HttpServletRequest request) {
+	public ModelAndView toCarediaryMain(@PathVariable("pet_idx") int pet_idx, Integer page, HttpServletRequest request) {
 		//carediary 화면으로 들어와서 선택한 펫idx session에 저장
 		//SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
 		//sc.setPet_idx(pet_idx);
-		List<CarediaryCommand> list = carediaryService.getCarediaryListByPetIdx(pet_idx, 1);
+		
+		request.getSession().setAttribute("pet_idx", pet_idx);
+		if (page == null) page = 1;
+		HashMap<String, Object> data = carediaryService.getCarediaryListByPetIdx(pet_idx, page, 2);
+		@SuppressWarnings("unchecked")
+		List<CarediaryCommand> list = (List<CarediaryCommand>) data.get("list");
+		PageNumberCommand paging = (PageNumberCommand) data.get("paging");
+		
 		ModelAndView mav = new ModelAndView("/carediary/main");
 		mav.addObject("articles", list);
+		mav.addObject("paging", paging);
+		
+		System.out.println(paging);
 		
 		return mav;
 	}
