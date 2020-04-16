@@ -5,57 +5,83 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="story">
 	<!-- 글목록 O-->
 	<select id="list" resultType="com.careme.model.dto.StoryBoardDto">
-		select story_board.title, members.member_id, heart, view_count 
-		from story_board, members 
-		where story_board.member_idx = members.member_idx 
-		order by story_board_idx desc
+		select * from story_board inner join members where story_board.member_idx = members.member_idx order by story_board.story_board_idx desc
 	</select>
-	
-	<!-- paging
-	<select id="listPage" parameterType="" resultType="com.careme.model.dto.StoryBoardDto">
-		
-	</select> -->
-	
-	
-	<!-- 글작성 -->
-	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto">
-		insert into story_board(title, content, member_idx, reg_date)
-		values(#{title}, #{content}, #{member_idx}, #{reg_date})
-	</insert>
-	<insert id="insertTag" parameterType="com.careme.model.dto.TagDto">
-		insert into tag values(#{tag_idx}, #{tag_name}, #{member_idx})
-	</insert>
-	<insert id="insertFile" parameterType="com.careme.model.dto.StoryFileDto">
-		insert into story_file(story_file_idx, story_board_idx, file_path) 
-		values(#{story_file_idx}, #{story_board_idx}, #{file_path})
-	</insert>
-	<!-- 댓글 작성 
-	<insert id="insertCom" parameterType="com.careme.model.dto.StoryCommentDto">
-		insert into story_comment(story_comment_idx, story_board_idx, member_idx, content, reg_date)
-		values(#{story_board_idx}, #{member_idx}, #{content}, #{reg_date})
-	</insert> -->
-	
-	
-	<!-- 댓글 보기 O -->
-	<select id="readCom" parameterType="int" resultType="com.careme.model.dto.StoryCommentDto">
-		select story_comment_idx, content, member_idx, reg_date
-		from story_comment
-		where story_board_idx = #{story_board_idx}
+	<select id="fileList" resultType="com.careme.model.dto.StoryFileDto">
+		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc
 	</select>
 	
 	<!-- 상세보기 O -->
-	<select id="selectOne" parameterType="int" resultType="com.careme.model.dto.StoryBoardDto">
-		select title, content, story_board.member_idx, tag_name, reg_date
-		from story_board natural join tag
-		where story_board_idx = #{story_board_idx}
+	<select id="read" resultType="com.careme.model.dto.StoryBoardDto">
+		select * from story_board where story_board.del_yn = 'n' and story_board.story_board_idx = #{story_board_idx}
 	</select>
+	<select id="readFile" resultType="com.careme.model.dto.StoryFileDto">
+		select * from story_board inner join story_file 
+		on story_board.story_board_idx = story_file.story_board_idx 
+		where story_board.del_yn = 'n' and story_board.story_board_idx = #{story_board_idx}
+	</select>
+	<select id="readTag" resultType="com.careme.model.dto.TagDto">
+		select b.tag_name 
+		from board_use_tag a 
+		inner join tag b on a.tag_idx = b.tag_idx 
+		where board_idx = 1 and board_type = 's'
+	</select>
+	<!-- 댓글 보기 O -->
+	<select id="readCom" parameterType="int" resultType="com.careme.model.dto.StoryCommentDto">
+		select content, members.member_id, story_comment.reg_date, story_comment.heart 
+		from story_comment inner join members 
+		on story_comment.member_idx = members.member_idx 
+		where story_comment.story_board_idx = #{story_board_idx}
+	</select>
+	<!-- 조회수 증가 O-->
+	<update id="viewCount" parameterType="com.careme.model.dto.StoryBoardDto">
+		update story_board 
+		set view_count = view_count + 1 
+		where story_board_idx = #{story_board_idx}
+	</update>
+	<update id="heart" parameterType="com.careme.model.dto.StoryBoardDto">
+		update story_board set heart = heart + 1 where story_board_idx = #{story_board_idx}
+	</update>
+	<!-- 인기글 -->
+	<select id="hit" parameterType="com.careme.model.dto.StoryBoardDto" resultType="com.careme.model.dto.StoryBoardDto">
+		select * from story_board inner join members where story_board.member_idx = members.member_idx order by heart desc limit 3
+	</select>
+	
+	
+	
+	<!-- 글작성 -->
+	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
+		insert into story_board (member_idx, tag_idx, title, content, heart, view_count, reg_date, update_date, del_yn) 
+		values (#{member_idx}, #{tag_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
+		<selectKey keyProperty="story_board_idx" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	<insert id="insertTag" parameterType="com.careme.model.dto.TagDto">
+		insert into tag values(#{tag_idx}, #{tag_name}, #{member_idx}, 'n')
+	</insert>
+	<insert id="insertFile" parameterType="com.careme.model.dto.StoryFileDto">
+		insert into story_file(story_board_idx, file_name, file_path, file_size, del_yn) 
+		values(#{story_board_idx}, #{file_name}, #{file_path}, #{file_size}, 'n')
+	</insert>
+	<!-- 댓글 작성  -->
+	<insert id="insertCom" parameterType="com.careme.model.dto.StoryCommentDto">
+		insert into story_comment(story_comment_idx, story_board_idx, member_idx, content, heart, reg_date, del_yn)
+		values(0, #{story_board_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
+	</insert>
 	
 	
 	<!-- 글수정 O -->
 	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto">
 		update story_board
-		set title = #{title}, content = #{content}
-		where story_board_idx = #{story_board_idx}
+		<set> 
+			<if test="title != null">title = #{title},</if>
+			<if test="content != null">content = #{content}</if>
+		</set>
+		<where>story_board_idx = #{story_board_idx}</where>
+	</update>
+	<update id="updateFile" parameterType="com.careme.model.dto.StoryFileDto">
+		update story_file set file_name = #{file_name}, file_path = #{file_path}, file_size = #{file_size}
 	</update>
 	<update id="updateTag" parameterType="com.careme.model.dto.TagDto">
 		update tag set tag_name = #{tag_name} where tag_idx = ${tag_idx}
@@ -63,14 +89,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 글삭제 -->
-	<delete id="delete" parameterType="int">
-		delete from story_board where story_board_idx = #{story_board_idx}
-	</delete>
+	<update id="delete" parameterType="int">
+		update story_board set del_yn = 'y' where story_board_idx = #{story_board_idx}
+	</update>
 	<!-- 태그 삭제 -->
-	<delete id="deleteTag" parameterType="String">
-		delete from tag where tag_name = #{tag_name}
-	</delete>
-	
-
+	<update id="deleteTag" parameterType="int">
+		update tag set del_yn = 'y' where tag_idx = #{tag_idx}
+	</update>
+	<!-- 댓글 삭제 -->
+	<update id="deleteCom" parameterType="int">
+		update story_comment set del_yn = 'y' where story_comment_idx = #{story_comment_idx}
+	</update>
 	
 </mapper>
