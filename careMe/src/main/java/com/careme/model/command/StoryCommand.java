@@ -1,9 +1,7 @@
 package com.careme.model.command;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import com.careme.model.dto.PetCareFileDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryFileDto;
 

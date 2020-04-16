@@ -36,12 +36,12 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public List<StoryBoardDto> list() {
-		return dao.listing();
+	public List<StoryCommand> list(int story_board_idx) {
+		return dao.listing(story_board_idx);
 	}
-
+	
 	@Override
-	public StoryBoardDto read(int story_board_idx) {
+	public StoryCommand read(int story_board_idx) {
 		return dao.read(story_board_idx);
 	}
 
@@ -84,12 +84,9 @@ public class StoryServiceImpl implements StoryService {
 	
 	@Override
 	public void insertFile(StoryFileDto dto, MultipartHttpServletRequest request) {
-		dto.setStory_board_idx((int)request.getSession().getAttribute("story_board_idx"));
-		dao.insertFile(dto);
-		
 		int story_board_idx = dto.getStory_board_idx();
-		System.out.println(story_board_idx);
 		if(story_board_idx > 0) fileRequesting(story_board_idx, request);
+		
 	}
 	
 	public void fileRequesting(int story_board_idx, MultipartHttpServletRequest request) {
@@ -104,21 +101,6 @@ public class StoryServiceImpl implements StoryService {
 			
 			dao.insertFile(dto);
 		}
-	}
-	
-	@Override
-	public List<StoryFileDto> insertFile(int story_board_idx) {
-		return dao.readFile(story_board_idx);
-	}
-
-	public StoryCommand getIdx(int story_board_idx) {
-		StoryCommand com = new StoryCommand();
-		StoryBoardDto dto = dao.read(story_board_idx);
-		List<StoryFileDto> files = dao.readFile(story_board_idx);
-		
-		com.setFileDto(dto);
-		com.setFiles(files);
-		return com;
 	}
 
 	@Override
@@ -153,8 +135,5 @@ public class StoryServiceImpl implements StoryService {
 	public List<StoryBoardDto> hitList() {
 		return dao.hitList();
 	}
-
-	
-
 
 }

@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
+<c:set var="fullName" value="<%=fullName%>" />
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <title>스토리 글보기</title>
 <style>
@@ -56,10 +58,10 @@ $(document).ready(function(){
 function fn_valiChk() {
 	var regForm = $("form[name='detail']) .chk").length;
 	for(var i = 0; i < regForm; i++) {
-		if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null) {
+		if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null)) {
 			alert($(".chk").eq(i).attr("title"));
 			return true;
-		});
+		}
 	}
 }
 </script>
@@ -86,7 +88,7 @@ function fn_valiChk() {
 				</div>
 			</div>
 			<div class="img">
-				<img width="700" height="500" src="">
+				<img width="700" height="500" src="${fullName}${dList.file_path}">
 			</div>
 			<div>
 				<p><c:out value="${dList.content}"/></p>
@@ -95,7 +97,7 @@ function fn_valiChk() {
 				<a href="">#강아지</a>
 				<a href="">#산책</a>
 			</div>
-			<div class="btn-list">
+			<div class="btn-group">
 				<button type="button" class="update_btn btn btn-outline-dark" onClick="document.location.href='/story/storyEdit?story_board_idx=${list.story_board_idx}'">수정</button>
 				<button type="button" class="delete_btn btn btn-outline-dark" onClick="document.location.href='delete/${list.story_board_idx}'">삭제</button>
 				<button type="button" class="list_btn btn btn-outline-dark" onClick="document.location.href='storyMain'">목록</button>

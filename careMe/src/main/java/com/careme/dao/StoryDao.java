@@ -1,7 +1,10 @@
 package com.careme.dao;
 
 import java.util.List;
+
 import org.mybatis.spring.support.SqlSessionDaoSupport;
+
+import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -9,17 +12,13 @@ import com.careme.model.dto.TagDto;
 
 public class StoryDao extends SqlSessionDaoSupport {
 	// 글목록
-	public List<StoryBoardDto> listing() {
-		return getSqlSession().selectList("story.list");
+	public List<StoryCommand> listing(int story_board_idx) {
+		return getSqlSession().selectList("story.list", story_board_idx);
 	}
 	
 	// 글 상세보기
-	public StoryBoardDto read(int story_board_idx) {
+	public StoryCommand read(int story_board_idx) {
 		return getSqlSession().selectOne("story.read", story_board_idx);
-	}
-	
-	public List<StoryFileDto> readFile(int story_board_idx) {
-		return getSqlSession().selectList("story.readFile", story_board_idx);
 	}
 	
 	// 조회수
@@ -39,7 +38,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 	
 	// 작성
 	public int insert(StoryBoardDto dto) {
-		return getSqlSession().insert("story.insert", dto);
+		getSqlSession().insert("story.insert", dto);
+		return dto.getStory_board_idx();
 	}
 	
 	public int insertFile(StoryFileDto fileDto) {
@@ -56,7 +56,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 	
 	// 수정
 	public int update(StoryBoardDto dto) {
-		return getSqlSession().update("story.update", dto);
+		getSqlSession().update("story.update", dto);
+		return dto.getStory_board_idx();
 	}
 	
 	public int updateFfile(StoryBoardDto dto) {

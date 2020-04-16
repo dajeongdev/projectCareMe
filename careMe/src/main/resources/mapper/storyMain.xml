@@ -4,21 +4,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="story">
 	<!-- 글목록 O-->
-	<select id="list" resultType="com.careme.model.dto.StoryBoardDto">
+	<select id="list" parameterType="int" resultType="com.careme.model.command.StoryCommand">
 		select * from story_board inner join members where story_board.member_idx = members.member_idx order by story_board_idx desc 
 	</select>
 	
-<!-- 	paging 
-	<select id="pageListing" parameterType="" resultType="com.careme.model.dto.StoryBoardDto">
-		
-	</select> -->
-	
 	<!-- 상세보기 O -->
-	<select id="read" resultType="com.careme.model.dto.StoryBoardDto">
-		select * from story_board where story_board.story_board_idx = #{story_board_idx}
-	</select>
-	<select id="readFile" resultType="com.careme.model.dto.StoryFileDto">
-		select * from story_file where del_yn = 'n' and story_board_idx = #{story_board_idx}
+	<select id="read" resultType="com.careme.model.command.StoryCommand">
+		select * from story_board inner join story_file 
+		on story_board.story_board_idx = story_file.story_board_idx 
+		where story_board.del_yn = 'n' and story_board.story_board_idx = #{story_board_idx}
 	</select>
 	<select id="readTag" resultType="com.careme.model.dto.TagDto">
 		select b.tag_name 
@@ -50,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 글작성 -->
-	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto">
+	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
 		insert into story_board (member_idx, tag_idx, title, content, heart, view_count, reg_date, update_date, del_yn) 
 		values (#{member_idx}, #{tag_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
 		<selectKey keyProperty="story_board_idx" resultType="int">

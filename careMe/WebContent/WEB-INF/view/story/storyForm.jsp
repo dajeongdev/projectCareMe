@@ -44,6 +44,9 @@
 	width: 100px;
 	height: 100px;
 }
+#preview {
+	display: inline-block;
+}
 </style>
 <title>스토리 글쓰기</title>
 <script>
@@ -73,67 +76,94 @@ $(function (){
 	      }
 	    }
 	  });
-});
+})
 
-	var saveFiles = [];
-	var selDiv = "";
+	var files = [];
+	var previewIndex = 0;
 
-	$(function() {
-		selDiv = $("#selectedFiles");
-		$("#files").on("change", handleSelectedFile);
-		$("body").on("click", ".fa-trash", removeFile);
+	// image preview 기능, input = file object[]
+	function addPreview(input) {
+		if(input[0].files) {
+			for(var f = 0; f < input[0].files.length; f++) {
+				var file = input[0].files[f];
+				
+				if(validation(file.name)) continue;
+				
+				setPreviewForm(file);
+			}
+		} else {
+			alert("invalid file input");
+		}
+	}
+	function setPreviewForm(file, img) {
+		var reader = new FileReader();
+		reader.onload = function(img) {
+			var imgNum = previewIndex++;
+			$("#preview").append("<div class=\"preview-box\" value=\"" + imgNum + "\">"
+					+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
+					+ "<p>" + file.name + "</p>"
+					+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
+					+ "삭제" + "</a>" + "</div>");
+			files[imgNum] = file;
+		};
+		reader.readAsDataURL(file);
+	}
+	
+	// preview에서 삭제 버튼 클릭시 미리보기 이미지 영역 삭제
+	function deletePreview(obj) {
+		var imgNum = obj.attributes['value'].value;
+		delete files[imgNum];
+		$("#preview .preview-box[value=" + imgNum + "]").remove();
+		resizeHeight();
+	}
 
-		form = $("form[name=insert']")[0];
-		form.onsubmit = function (e) {
-			e.preventDefault();
+	// client-side validation
+	// always server-side validation required
+	function validation(fileName) {
+		fileName = fileName + "";
+		var fileNameExtensionIndex = fileName.lastIndexOf(".") + 1;
+		var fileNameExtension = fileName.toLowerCase().substring(fileNameExtensionIndex, fileName.length);
+		if(!((fileNameExtension == 'jpg') || (fileNameExtension == 'gif') || (fileNameExtension == 'png'))) {
+			alert("jpg, gif, png 확장자만 업로드 가능합니다.");
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	$(document).ready(function() {
+		$(".submit a").on("click", function() {
+			var form = $("#insert")[0];
 			var formData = new FormData(form);
-			for(var i = 0; i < saveFiles.length; i++) {
-				formData.append("files". saveFiles[i]);
+
+			for(var i = 0; i < Object.keys(files).length; i++) {
+				formData.append("files", files[i]);
 			}
 
 			$.ajax({
-				url: "storyForm",
 				type: "POST",
-				contentType: false,
+				enctype: "multipart/form-data",
 				processData: false,
+				contentType: false,
+				cache: false,
+				url: "/storyForm",
+				dataType: "json",
 				data: formData,
-				success: function() {
-					location.href="/careMe/story"
+				success: function(result) {
+					if(result = -1) {
+						alert("jpg, gif, png 확장자만 업로드 가능합니다.");
+					} else if(result = -2) {
+						alert("파일이 10MB를 초과하였습니다.");
+					} else {
+						alert("이미지 업로드 성공");
+					}
 				}
-			})
-		}
-	})
-	
-	function handleSelectedFile(e) {
-		var files = e.target.files;
-		var filesArr = Array.prototype.slice.call(files);
-		filesArr.forEach(function (f) {
-			if(!f.type.match("image.*")) {
-				return;
-			}
-			saveFiles.push(f);
-
-			var reader = new FileReader();
-			reader.onload = function(e) {
-				var html = "<div class='col-md-3 mb-5'>";
-					html += "<img src=\"" + e.target.result + "\" class='w-100 h-80>'";
-					html += "<i class='fa fa-trash' data-file='"+f.name+"' title='Click to remove'></i></div>";
-				selDiv.append(html);
-			}
-			reader.readAsDataURL(f); 
+			});
 		});
-	}
-
-	function removeFile(e) {
-		var file = $(this).data("file");
-		for(var i = 0; i < saveFiles.length; i++) {
-			if(saveFiles[i].name == file) {
-				saveFiles.splice(i, 1);
-				break;
-			}
-		}
-		$(this).parent().remove();
-	}
+		$("input[type=file]").change(function() {
+			addPreview($(this));
+		});
+	});
 
 </script>
 </head>
@@ -149,8 +179,7 @@ $(function (){
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
-				<input type="file" name="file" id="files" class="custom-file-input" multiple/>
-				<label class="custom-file-label" for="customFile">사진을 선택해주세요.</label>
+				<input type="file" name="file" id="file" multiple/>
 				<div class="row" id="selectedFiles"></div>
 				<div id="preview">
 				</div>

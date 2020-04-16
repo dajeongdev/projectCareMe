@@ -1,15 +1,16 @@
 package com.careme.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -34,9 +35,9 @@ public class StoryController {
 
 	// 글목록
 	@RequestMapping(value = "/view/story/storyMain", method = RequestMethod.GET)
-	public ModelAndView listing() {
+	public ModelAndView listing(int story_board_idx) {
 		ModelAndView mav = new ModelAndView();
-		List<StoryBoardDto> list = service.list();
+		List<StoryCommand> list = service.list(story_board_idx);
 		List<StoryBoardDto> hlist = service.hitList();
 		mav.addObject("list", list);
 		mav.addObject("hlist", hlist);
@@ -49,7 +50,7 @@ public class StoryController {
 	@RequestMapping(value = "/view/story/storyDetail", method = RequestMethod.GET)
 	public ModelAndView articleDetail(int story_board_idx) {
 		ModelAndView mav = new ModelAndView();
-		StoryBoardDto dList = service.read(story_board_idx);
+		StoryCommand dList = service.read(story_board_idx);
 		List<StoryCommentDto> comList = service.readCom(story_board_idx);
 		int comCount = comList.size();
 		service.counting(story_board_idx);
@@ -63,14 +64,15 @@ public class StoryController {
 	
 	// 글작성
 	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.GET) 
-	public String articleInsert() { 
-		return "/story/storyForm";
+	public ModelAndView articleInsert() { 
+		ModelAndView mav = new ModelAndView("/story/storyForm");
+		return mav;
 	}
 	
 	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
 	public String insertForm(StoryFileDto dto, MultipartHttpServletRequest request) {
-		service.insert(request);
-		System.out.println(dto.getStory_board_idx());
+		int no = service.insert(request);
+		dto.setStory_board_idx(no);
 		service.insertFile(dto, request);
 		return "/story/storyDetail";
 	}

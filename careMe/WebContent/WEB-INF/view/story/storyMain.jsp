@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
 <style>
 .storyMain { margin: 40px; }
 .card-text, .card-heart, .card-count { font-size: 15px; }
@@ -33,7 +34,7 @@
 	<c:forEach items="${hlist}" var="hlist">
         <div class="col-md-4">
           <div class="card mb-4 shadow-sm"  onClick="location.href='storyDetail?story_board_idx=${hlist.story_board_idx}'">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+            <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
             <div class="card-body">
              <div class="part">
               <div class="profile">
@@ -69,7 +70,7 @@
     <c:forEach items="${list}" var="item">
          <div class="col-md-4">
           <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${item.story_board_idx}'">
-            <svg class="bd-placeholder-img card-img-top" width="100%" height="170" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#55595c"/></svg>
+            <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
             <div class="card-body">
             <div class="part">
              <div class="profile">
