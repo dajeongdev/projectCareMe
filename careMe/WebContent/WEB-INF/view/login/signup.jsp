@@ -79,16 +79,24 @@
 					form.member_email.focus();
 					return false;
 			      }
+			      //이메일 중복검사를 했는지
+			      if(form.mailChk.value=='N'){
+					      alert("이메일 중복검사를 해야합니다!");
+					      return false;
+					      }
+			      
 			     //이메일 인증받기 했는지
 		         if(form.sendMail.value=='N'){
 			            alert("이메일 인증하기를 눌러주세요!");
 						return false; 
 			            }
+		            //인증번호를 입력했는지
 		            if(form.mailNum.value==""){
 			            alert("인증번호를 입력해주세요!")
 			            form.mailNum.focus();
 			            return false;
 			            }
+		            //인증번호 확인을 눌렀는지
 		            if(form.emailNChk.value=='N'){
 			            alert("인증번호 확인을 눌러주세요!")
 			            return false;
@@ -132,6 +140,25 @@
 			}
 		});
 	}
+
+	//이메일 중복 체크
+	function fn_mmChk(){
+		$.ajax({
+			url : "mailChk",
+			type : "post",
+			dataType : "json",
+			data : {"member_email" : $("#member_email").val()},
+			success : function(data){
+				if(data == 1){
+					alert("중복된 이메일 입니다.");
+				}else if(data == 0){
+					$("#mailChk").attr("value", "Y");
+					alert("사용가능한 닉네임입니다.");
+				}
+			}
+		});
+	}
+
 
 </script>
 
@@ -202,19 +229,22 @@
 						name="member_email" class="form-control"
 						placeholder="ex)your@email.com" /></td>
 
-					<!-- 이메일 인증 버튼 -->
+					<!-- 이메일 중복 확인 -->
 					<td><button type="button"
-							class="btn btn-dark btn-sm btn-block" name="sendMail" value="N"
-							id="sendMail" onclick="fn_sendChk();">인증받기</button></td>
+							class="btn btn-dark btn-sm btn-block" name="mailChk" value="N"
+							id="mailChk" onclick="fn_mmChk();">중복확인</button></td>
 				</tr>
 
 				<tr>
 					<!--인증 -->
-					<td><b></b></td>
+					<td><button type="button"
+							class="btn btn-dark btn-sm btn-block" name="sendMail" value="N"
+							id="sendMail">인증받기</button></td>
+							<!-- onclick="fn_sendChk(); -->
 					<td><input type="text" style="width: 530px" id="mailNum"
 						name="mailNum" class="form-control" placeholder="인증번호를 입력해주세요" /></td>
-						
-						<!-- 인증번호 확인 버튼 -->
+
+					<!-- 인증번호 확인 버튼 -->
 					<td><button type="button"
 							class="btn btn-dark btn-sm btn-block" name="enChk" value="N"
 							id="enChk" onclick="fn_endChk();">확 인</button></td>

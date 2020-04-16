@@ -60,6 +60,11 @@ public class MemberService {
 		return dao.nickChk(lc);
 	}
 	
+	//중복 이메일 체크
+	public int mailcheck(LoginCommand lc) {
+		return dao.mailChk(lc);
+	}
+	
 	//회원가입 성공
 	public int insertOk(MemberDto mdto) {
 		List<MemberDto> lok = dao.insert(mdto);

@@ -46,6 +46,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE
 		member_nick = #{member_nick}
 	</select>
+	
+	
+	<!-- 이메일 중복체크 -->
+	<select id="mailchk" resultType="int">
+	SELECT COUNT(*) FROM members
+	where 
+	member_email=#{member_email}
+	</select>
 
 	<!-- 정보수정 -->
 	<update id="update"

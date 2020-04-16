@@ -35,6 +35,13 @@ public class MemberDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("member.nickchk", lc);
 	}
 	
+	//이메일 중복체크
+	public int mailChk(LoginCommand lc) {
+		return getSqlSession().selectOne("member.mailchk", lc);
+	}
+	
+	
+	
 	//회원가입
 	public List<MemberDto> insert(MemberDto mdto){
 		return getSqlSession().selectList("member.insert", mdto);

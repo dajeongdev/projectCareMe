@@ -5,7 +5,16 @@ public class LoginCommand {
 	private String member_id;
 	private String member_pass;
 	private String member_nick;
+	private String member_email;
 	
+	
+	
+	public String getMember_email() {
+		return member_email;
+	}
+	public void setMember_email(String member_email) {
+		this.member_email = member_email;
+	}
 	public String getMember_nick() {
 		return member_nick;
 	}
@@ -27,7 +36,7 @@ public class LoginCommand {
 	@Override
 	public String toString() {
 		return "LoginCommand [member_id=" + member_id + ", member_pass=" + member_pass + ", member_nick=" + member_nick
-				+ "]";
+				+ ", member_email=" + member_email + "]";
 	}
 	
 	
