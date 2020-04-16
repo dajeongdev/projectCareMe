@@ -4,19 +4,15 @@ import org.springframework.stereotype.Service;
 
 import com.careme.model.command.PageNumberCommand;
 
-@Service
+@Service("PageNumberService")
 public class PageNumberServiceImpl implements PageNumberService {
-	static int pageBlock = 10;
-
 	public PageNumberCommand paging (int totalCount, int contentPerPage, int currentPage, String path) {
 		PageNumberCommand pnc = new PageNumberCommand();
 		
 		int totalPage = totalCount / contentPerPage;
 		int startPage = (currentPage / pageBlock) + 1;
 		int endPage = (totalPage / pageBlock) * pageBlock + (totalPage % pageBlock);
-		int start_idx=(currentPage-1)*contentPerPage;
 		
-		pnc.setStart_idx(start_idx);
 		pnc.setContentPerPage(contentPerPage);
 		pnc.setCurrentPage(currentPage);
 		pnc.setEndPage(endPage);
@@ -29,12 +25,9 @@ public class PageNumberServiceImpl implements PageNumberService {
 		return pnc;
 	}
 	
-	public int getStart_idx(int currentPage, int contentPerPage) {
-		
-		int start_idx=(currentPage-1)*contentPerPage;
-		
+	public int getStartIdx(int currentPage, int contentPerPage) {
+		int start_idx=(currentPage-1)*contentPerPage+1;
 		return start_idx;
 	}
-	
 	
 }
