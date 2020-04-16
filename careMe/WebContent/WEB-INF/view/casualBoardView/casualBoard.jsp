@@ -51,13 +51,16 @@
 
 						<!-- 게시판 페이지넘버링 및 글쓰기 -->
 						
-						<div class="row mb-3" >
-						<div class="col-md-2" align="left">
-							<jsp:include page="/WEB-INF/view/include/paging.jsp" flush="false"/>
-						</div>
-						<div class="col-md-8"></div>
-						<div class="col-md-2" align="right">
+						<div class="row lg-3" >
+						<div class="col-lg-10"></div>
+						<div class="col-lg-2" align="right">
 							<button class="btn btn-dark btn-sm btn-block" onClick="location.href='casualWriteForm'">글쓰기</button>	
+						</div>
+						</div>
+						
+						<div class="row mb-3" >
+						<div class="col-lg-12" align="center">
+							<jsp:include page="/WEB-INF/view/include/paging.jsp" flush="false"/>
 						</div>
 						</div>
 						
