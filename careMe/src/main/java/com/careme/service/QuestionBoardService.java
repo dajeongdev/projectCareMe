@@ -2,7 +2,6 @@ package com.careme.service;
 
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
@@ -13,7 +12,7 @@ import com.careme.model.dto.TagDto;
 public interface QuestionBoardService {
 
 // Doctor Board 게시글 뿌리기
-	public List<QuestionBoardDto> getDoctorBoard();
+	public List<QuestionBoardDto> getDoctorBoard(int start_idx, int contentPerPage);
 	
 	public QuestionBoardDto getDoctorBoardContents (int question_tbale_idx);
 	
@@ -41,7 +40,7 @@ public interface QuestionBoardService {
 	
 	
 // Casual Board 내용 구현
-	public List<QuestionBoardDto> getCasualBoard();
+	public List<QuestionBoardDto> getCasualBoard(int start_idx, int contentPerPage);
 	
 	public QuestionBoardDto getCasualBoardContents (int question_table_idx);
 	

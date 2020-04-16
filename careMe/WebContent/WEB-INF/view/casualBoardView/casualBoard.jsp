@@ -36,16 +36,17 @@
 							</thead>	
 							<tbody>
 
-								<!-- 글 들어가는 곳 -->
-								<c:forEach var="item" items="${list}">
-									<tr onClick="location.href='casualBoardContent?question_table_idx=${item.question_table_idx}'">
-										<td><c:out value="${item.question_table_idx}" /></td>
-										<td><c:out value="${item.title}"/></td>
-										<td><c:out value="${item.member_id}" /></td>
-										<td><c:out value="${item.reg_date}" /></td>
-										<td><c:out value="${item.view_count}" /></td>
-									</tr>
-								</c:forEach>
+							<!-- 글 들어가는 곳 -->
+							<c:forEach var="item" items="${list}">
+								<tr onClick="location.href='casualBoardContent?question_table_idx=${item.question_table_idx}'">
+									<td><c:out value="${item.question_table_idx}" /></td>
+									<td><c:out value="${item.title}"/></td>
+									<td><c:out value="${item.member_id}" /></td>
+									<td><c:out value="${item.reg_date}" /></td>
+									<td><c:out value="${item.view_count}" /></td>
+								</tr>
+							</c:forEach>
+							
 							</tbody>
 						</table>
 
@@ -58,10 +59,8 @@
 						</div>
 						</div>
 						
-						<div class="row mb-3" >
-						<div class="col-lg-12" align="center">
+						<div class="row lg-3" align="center">
 							<jsp:include page="/WEB-INF/view/include/paging.jsp" flush="false"/>
-						</div>
 						</div>
 						
 					</div>

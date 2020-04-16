@@ -6,4 +6,5 @@ public interface PageNumberService {
 
 	public PageNumberCommand paging (int totalCount, int contentPerPage, int currentPage, String path);
 	
+	public int getStart_idx(int currentPage, int contentPerPage);
 }
