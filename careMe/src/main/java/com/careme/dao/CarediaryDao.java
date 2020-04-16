@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import com.careme.model.command.CarediaryCommand;
 import com.careme.model.dto.DefecationDto;
 import com.careme.model.dto.PetCareDto;
 import com.careme.model.dto.PetCareFileDto;
@@ -31,8 +32,14 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("carediary.selectCarediaryByIdx", idx);
 	}
 	
-	public List<PetCareDto> selectCarediaryListByPetIdx(int petIdx) {
-		return getSqlSession().selectList("carediary.selectCarediaryListByPetIdx", petIdx);
+	/*
+	 * public List<PetCareDto> selectCarediaryListByPetIdx(int petIdx) { //return
+	 * getSqlSession().selectList("carediary.selectCarediaryListByPetIdx", petIdx);
+	 * }
+	 */
+	
+	public List<CarediaryCommand> selectCarediaryListByPetIdx(int petIdx) {
+		return getSqlSession().selectList("carediary.selectCarediaryWithDefecation", petIdx);
 	}
 	
 	public List<PetCareFileDto> selectCarediaryFileList(int carediaryIdx) {

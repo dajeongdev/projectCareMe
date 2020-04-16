@@ -88,14 +88,12 @@ public class CarediaryService {
 	
 	public List<CarediaryCommand> getCarediaryListByPetIdx(int petIdx) {
 		List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
-		List<PetCareDto> dtoList = carediaryDao.selectCarediaryListByPetIdx(petIdx);
+		list = carediaryDao.selectCarediaryListByPetIdx(petIdx);
 		
-		for (PetCareDto dto : dtoList) {
-			CarediaryCommand command = new CarediaryCommand();
-			command.setDiary(dto);
-			command.setFiles(carediaryDao.selectCarediaryFileList(dto.getPet_care_idx()));
-			
-			list.add(command);
+		for (CarediaryCommand command : list) {
+			int diaryIdx = command.getDiary().getPet_care_idx();
+			command.setFiles(carediaryDao.selectCarediaryFileList(diaryIdx));
+			System.out.println("command 내용!!::::=====" + command);
 		}
 		
 		return list;

@@ -64,5 +64,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
 	</update>
 	
-
+	<select id="selectCarediaryWithDefecation" resultMap="careDiaryWithDefecation">
+		select care.*, u.defecation_content as urine_content, f.defecation_content as feces_content
+		from pet_care care
+		inner join defecation u on care.urine = u.defecation_idx
+		inner join defecation f on care.feces = f.defecation_idx
+		where pet_idx = #{pet_idx}
+		and del_yn = 'n'
+	</select>
+	
+	<resultMap id="careDiaryWithDefecation" type="com.careme.model.command.CarediaryCommand">
+		<association property="diary" column="pet_care_idx" resultMap="petCareDto"/>
+		<association property="diary" column="pet_idx"  resultMap="petCareDto"/>
+		<association property="diary" column="title"  resultMap="petCareDto"/>
+		<association property="diary" column="exercise"  resultMap="petCareDto"/>
+		<association property="diary" column="memo"  resultMap="petCareDto"/>
+		<association property="diary" column="weight"  resultMap="petCareDto"/>
+		<association property="diary" column="diary_date"  resultMap="petCareDto"/>
+		<association property="diary" column="reg_date"  resultMap="petCareDto"/>
+		<association property="urineContent" column="urine_content" javaType="String" resultMap="urineContent"/>
+		<association property="fecesContent" column="feces_content" javaType="String" resultMap="fecesContent"/>
+	</resultMap>
+	
+	<resultMap id="petCareDto" type="com.careme.model.dto.PetCareDto">
+		<result property="pet_care_idx" column="pet_care_idx"/>
+		<result property="pet_idx" column="pet_idx"/>
+		<result property="title" column="title"/>
+		<result property="exercise" column="exercise"/>
+		<result property="memo" column="memo"/>
+		<result property="weight" column="weight"/>
+		<result property="diary_date" column="diary_date"/>
+		<result property="reg_date" column="reg_date"/>
+	</resultMap>
+	<resultMap id="urineContent" type="String">
+		<result property="urineContent" column="urine_content"/>
+	</resultMap>
+	<resultMap id="fecesContent" type="String">
+		<result property="fecesContent" column="feces_content"/>
+	</resultMap>
+	
 </mapper>

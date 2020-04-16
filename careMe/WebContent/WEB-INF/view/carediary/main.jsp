@@ -82,9 +82,9 @@
 								        				<td>${article.diary.diary_date}</td>
 								        				<td>${article.diary.exercise}/m</td>
 								        				<td>
-								        					<div class="color-circle"></div>
+								        					<div class="color-circle" style="background-color:${article.urineContent};"></div>
 														</td>
-								        				<td>무름</td>
+								        				<td>${article.fecesContent}</td>
 								        				<td>${article.diary.weight}111/kg</td>
 								        			</tr>
 								        		</tbody>
@@ -149,13 +149,8 @@
 			    </nav>
 			    <br>
 			</div>
-		    
-		    
 		</div>
 	
-		
-
-		
 	
 		<div class="modal fade" id="modalSample" tabindex="-1" role="dialog">
 		  <div class="modal-dialog modal-md" role="document">
