@@ -20,14 +20,6 @@
 		<div class="col-md-2"></div>
 		<div class="col-md-5"><div class="author-card pb-3"><div class="author-card-cover" style="background-image: url(https://demo.createx.studio/createx-html/img/widgets/author/cover.jpg);"><a class="btn btn-style-1 btn-white btn-sm" href="#" data-toggle="tooltip" title="" data-original-title="You currently have 290 Reward points to spend"><div class="d-inline-block font-weight-medium text-uppercase">Orders List</div></div><span class="badge badge-secondary">6</span></div> </a><a class="list-group-item" href="#"><i class="fa fa-user text-muted"></i>Profile Settings</a><a class="list-group-item" href="#"><i class="fa fa-map-marker text-muted"></i>Addresses</a> <a class="list-group-item" href="#"><div class="d-flex justify-content-between align-items-center"><div><i class="fa fa-heart mr-1 text-muted"></i><div class="d-inline-block font-weight-medium text-uppercase">My Wishlist</div></div><span class="badge badge-secondary">3</span></div> </a> <a class="list-group-item" href="#"><div class="d-flex justify-content-between align-items-center"><div><i class="fa fa-tag mr-1 text-muted"></i><div class="d-inline-block font-weight-medium text-uppercase">My Tickets</div></div><span class="badge badge-secondary">4</span></div> </a> </nav></div></div>		
 		
-		
-		
-		<div class="row mb3 jumbotron">
-			<div class="col-md-6">나의 정보</div>
-			<div class="col-md-6">의사 정보</div>
-		</div>
-		
-
 		<div class="row mb3 jumbotron">
 			<div class="col-md-6">게시판 1</div>
 			<div class="col-md-6">게시판 2</div>

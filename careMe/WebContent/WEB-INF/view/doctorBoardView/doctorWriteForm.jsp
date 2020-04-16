@@ -18,13 +18,14 @@
 				$("#petSpeciesLevel2 option").remove();
 				return false;
 			}
-		var url ="casualWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
+		var url ="doctorWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
 		$.ajax(
 			{type:"get",
 			url:url,
 			dataType:"json"})
 			.done(function(items){
 			$("#petSpeciesLevel2 option").remove();
+
 				if (items.length > 0) {
 					for (item in items) {
 					var s = items[item];
@@ -51,9 +52,9 @@
 		<div class="container min-vh-100 pt-3 text-center">
 		
 		<form action="doctorBoardWriteAdd" method="post" enctype="multipart/form-data">
-			<div class="my-3 p-3 bg-white rounded shadow-sm">
-			<div class="row">
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+			
+			<div class="row my-3 p-3 bg-white rounded shadow-sm">
+				<main role="main" class="col-md-12 col-lg-10 px-4">
 					
 					<h2 align="left">전문 상담</h2>
 					<p></p>
@@ -110,7 +111,7 @@
 					
 				</main>
 			</div>
-			</div>
+			
 		</form>
 
 
