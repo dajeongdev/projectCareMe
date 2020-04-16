@@ -1,5 +1,6 @@
 package com.careme.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,14 +33,8 @@ public class CarediaryDao  extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("carediary.selectCarediaryByIdx", idx);
 	}
 	
-	/*
-	 * public List<PetCareDto> selectCarediaryListByPetIdx(int petIdx) { //return
-	 * getSqlSession().selectList("carediary.selectCarediaryListByPetIdx", petIdx);
-	 * }
-	 */
-	
-	public List<CarediaryCommand> selectCarediaryListByPetIdx(int petIdx) {
-		return getSqlSession().selectList("carediary.selectCarediaryWithDefecation", petIdx);
+	public List<CarediaryCommand> selectCarediaryListByPetIdx(Map<String, Object> params) {
+		return getSqlSession().selectList("carediary.selectCarediaryWithDefecation", params);
 	}
 	
 	public List<PetCareFileDto> selectCarediaryFileList(int carediaryIdx) {

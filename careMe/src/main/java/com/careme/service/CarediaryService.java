@@ -22,17 +22,22 @@ import com.careme.model.dto.PetCareFileDto;
 public class CarediaryService {
 	@Autowired
 	CarediaryDao carediaryDao;
-	
 	public void setDao(CarediaryDao carediaryDao) {
 		this.carediaryDao = carediaryDao;
 	}
 	
 	@Autowired
 	FileUploadService fileuploadService;
-
 	public void setFileuploadService(FileUploadService fileuploadService) {
 		this.fileuploadService = fileuploadService;
 	}
+	
+	@Autowired
+	PageNumberServiceImpl pageService;
+	public void setPageService(PageNumberServiceImpl pageNumberServiceImple) {
+		this.pageService = pageNumberServiceImple;
+	}
+	
 
 	public List<DefecationDto> selectSmallDef() {
 		return carediaryDao.selectSmallDef();
@@ -86,9 +91,18 @@ public class CarediaryService {
 		return command;
 	}
 	
-	public List<CarediaryCommand> getCarediaryListByPetIdx(int petIdx) {
+	public List<CarediaryCommand> getCarediaryListByPetIdx(int petIdx, int currentPage) {
+		//String path = petIdx + "?page="; 
+		// 리턴받아야 하는 항목 =  totalCount
+		// 쿼리실행시 필요한 항목 startIndex, 조건, contentPerPage
+		// startIndex 를 static으로 해서 command 구하기전에 얻기
+		//PageNumberCommand pageCommand = pageService.paging(totalCount, currentPage);
+		//contentPerPage, , path
 		List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
-		list = carediaryDao.selectCarediaryListByPetIdx(petIdx);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("pet_idx", petIdx);
+		params.put("currentPage", currentPage);
+		list = carediaryDao.selectCarediaryListByPetIdx(params);
 		
 		for (CarediaryCommand command : list) {
 			int diaryIdx = command.getDiary().getPet_care_idx();

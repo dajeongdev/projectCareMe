@@ -32,7 +32,7 @@ public class CarediaryController {
 		//carediary 화면으로 들어와서 선택한 펫idx session에 저장
 		//SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
 		//sc.setPet_idx(pet_idx);
-		List<CarediaryCommand> list = carediaryService.getCarediaryListByPetIdx(pet_idx);
+		List<CarediaryCommand> list = carediaryService.getCarediaryListByPetIdx(pet_idx, 1);
 		ModelAndView mav = new ModelAndView("/carediary/main");
 		mav.addObject("articles", list);
 		

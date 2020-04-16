@@ -31,8 +31,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from pet_care where del_yn = 'n' and pet_care_idx = #{pet_care_idx}
 	</select>
 	
-	<select id="selectCarediaryListByPetIdx" resultType="com.careme.model.dto.PetCareDto">
-		select * from pet_care where del_yn = 'n' and pet_idx = #{pet_idx} order by pet_care_idx desc
+	<select id="selectCarediaryListByPetIdx" parameterType="HashMap<String, Object>">
+		select SQL_CALC_FOUND_ROWS, * from pet_care 
+		where del_yn = 'n' 
+		and pet_idx = #{pet_idx} 
+		order by pet_care_idx desc
+		limit 0, 10
 	</select>
 	
 	<select id="selectCarediaryFileList" resultType="com.careme.model.dto.PetCareFileDto">
@@ -64,8 +68,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
 	</update>
 	
-	<select id="selectCarediaryWithDefecation" resultMap="careDiaryWithDefecation">
-		select care.*, u.defecation_content as urine_content, f.defecation_content as feces_content
+	<select id="selectCarediaryWithDefecation" resultMap="careDiaryWithDefecation" parameterType="HashMap<String, Object>">
+		select SQL_CALC_FOUND_ROWS
+			   , care.*, u.defecation_content as urine_content, f.defecation_content as feces_content
+			   , FOUND_ROWS() as totalCount
 		from pet_care care
 		inner join defecation u on care.urine = u.defecation_idx
 		inner join defecation f on care.feces = f.defecation_idx
