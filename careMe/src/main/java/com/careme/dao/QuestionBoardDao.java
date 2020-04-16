@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
@@ -136,6 +137,15 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	public List<TagDto> addHashtag(TagCommand tc) {
 		return getSqlSession().selectList("casualQuestionBrd.hashtagAdd", tc);
 	}
-		
+
+// Page Numbering
+	
+	public List<PageNumberCommand> getPages(){
+		return getSqlSession().selectList("causalQuestionBrd.contentCount");
+	}
+	
+	public List<QuestionBoardDto> getContents(){
+		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
+	}
 		
 }

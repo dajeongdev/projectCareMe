@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
@@ -19,6 +20,7 @@ import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
 import com.google.gson.Gson;
@@ -48,18 +50,31 @@ public class CasualBoardController {
 		this.fus = fus;
 	}
 	
+	@Autowired
+	PageNumberService pns;
+	
+	public void setPageNumberService(PageNumberService pns) {
+		this.pns = pns;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
 	public ModelAndView toCasualBoard() {
 		List<QuestionBoardDto> getArts = bs.getCasualBoard();
 		ModelAndView list = new ModelAndView();
+		PageNumberCommand paging = new PageNumberCommand();
+		int currentPage = 1;
+		paging = pns.paging(getArts.size(), 10, currentPage, "casualBoardView/casualBoard");
 		list.addObject("list", getArts);
 		list.addObject("count", getArts.size());
+		list.addObject("pages", paging);
 		list.setViewName("/casualBoardView/casualBoard");
 		return list;
 	}
 
+	
+	
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
@@ -75,6 +90,7 @@ public class CasualBoardController {
 		mav.setViewName("casualBoardView/casualBoardContent");
 		return mav;
 	}
+	
 		
 
 // 게시판 검색기능

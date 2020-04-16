@@ -21,22 +21,22 @@
 
 
 
-			<div class="row">
-				<main role="main" class="col-md-10 col-lg-10 px-4">
+			<div class="row mb-3">
+				<main role="main" class="col-lg-12">
 					<h2 align="left">전문 상담</h2>
 					<p align="left">
 						(전체 글: <c:out value="${countPro}" />)
 					</p>
-					<div class="table-responsive">
+					<div class="table">
 						<table class="table table-striped table-lg table-hover">
 							<!-- 맨 윗 줄 -->
 							<thead class="thead-dark">
 								<tr>
-									<th>번 호</th>
-									<th>제목</th>
-									<th>작성자</th>
-									<th>작성일자</th>
-									<th>조회</th>
+									<th width="10%">번 호</th>
+									<th align="left" width="30%">제목</th>
+									<th width="20%">작성자</th>
+									<th width="20%">작성일자</th>
+									<th width="10%">조회</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -55,12 +55,12 @@
 
 						</table>
 						<!-- 게시판 글쓰기 -->
-						<div>
-							<div align="right">
-								<input name="doctorBoardWriteForm" type="button" value="글쓰기"
-									onClick="location.href='doctorWriteForm'">
-							</div>
-							<div align="left">number</div>
+						<div class="row mb-3" >
+						<div class="col-md-2" align="left">page numbering</div>
+						<div class="col-md-8"></div>
+						<div class="col-md-2" align="right">
+							<button class="btn btn-dark btn-sm btn-block" onClick="location.href='doctorWriteForm'">글쓰기</button>	
+						</div>
 						</div>
 					</div>
 				</main>
