@@ -93,7 +93,6 @@ public class CarediaryService {
 		for (CarediaryCommand command : list) {
 			int diaryIdx = command.getDiary().getPet_care_idx();
 			command.setFiles(carediaryDao.selectCarediaryFileList(diaryIdx));
-			System.out.println("command 내용!!::::=====" + command);
 		}
 		
 		return list;
