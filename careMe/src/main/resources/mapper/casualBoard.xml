@@ -5,7 +5,7 @@
 
 <!-- 게시판 뿌리기 -->
 	<select id="getArt" resultType="com.careme.model.dto.QuestionBoardDto">
-		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n'
+		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n' order by question_table_idx desc
 	</select>
 	
 	<select id="getArtContent" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.dto.QuestionBoardDto">
@@ -20,6 +20,14 @@
 	
 	<select id="getArtComments" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
 		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
+	</select>
+	
+	<select id="contentCount" resultType="int" parameterType="com.careme.model.command.PageNumberCommand">
+		select count(*) from question_board where question_type like 'n'
+	</select>
+	
+	<select id="contentDivide" resultType="com.careme.model.dto.QuestionBoardDto">
+		select * from question_board inner join members on question_board.member_dix=members.member_dix where question_type like 'n' limit 10
 	</select>
 
 	
@@ -81,8 +89,12 @@
 
 <!-- hashtag 확인 -->
 
-	<select id="hashtagFind" parameterType="com.careme.model.dto.TagDto">
+	<select id="hashtagFind" resultType="com.careme.model.dto.TagDto" parameterType="String">
 		select tag_idx, tag_name from tag where tag_name like concat('%', #{tagValue},'%')
 	</select>
+	
+	<insert id="hastagAdd" parameterType="com.careme.model.dto.TagDto" keyProperty="tag_name">
+		insert into tag (tag_name, member_idx, del_yn) values (#{tag_name}, #{member_idx}, #{del_yn})
+	</insert>
 
 </mapper>

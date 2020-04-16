@@ -55,9 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="profile_image_file_path != null">profile_image_file_path=#{profile_image_file_path},</if>
 			<if test="profile_image_file_size != null">profile_image_file_size=#{profile_image_file_size},</if>
 		</set>
-		<where>
-			pet_idx = #{pet_idx}
-		</where>
+		where pet_idx = #{pet_idx}
 	</update>
 	
 	<update id="deletePet">

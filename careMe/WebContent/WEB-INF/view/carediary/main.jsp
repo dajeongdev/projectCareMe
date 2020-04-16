@@ -30,7 +30,7 @@
 		<div class="row mb-2">
 		
 			<div class="col-2 text-left">
-				<button class="btn btn-success" onclick="location.href='carediary/write'">일기작성</button>
+				<button class="btn btn-success" onclick="location.href='write'">일기작성</button>
 			</div>
 			
 			<div class="col-10 text-right">
@@ -49,7 +49,7 @@
 			                <span>21 Jan, 2018</span>
 			            </div>
 			            <div class="card-hover-show">
-			                <a class="btn btn-xs fs-10 btn-bold btn-info" href="#">수정</a>
+			                <a class="btn btn-xs fs-10 btn-bold btn-info" href="update?d_id=20">수정</a>
 			                <a class="btn btn-xs fs-10 btn-bold btn-primary" href="#" data-toggle="modal" data-target="#modal-contact">질문하기</a>
 			                <button type="button" class="btn btn-xs fs-10 btn-bold btn-warning" data-toggle="collapse" data-target="#images" aria-expanded="false" aria-controls="images">열기</button>
 			                <!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
@@ -155,7 +155,7 @@
 					<div class="w-100">
 						<input type="date" class="form-control mr-sm-2">
 						<input type="text" class="form-control mr-sm-2">
-			    		<button class="btn btn-secondary">검색</button>						
+			    		<button class="btn btn-dark btn-sm">검색</button>						
 					</div>
 				</form>
 		    </div>
@@ -228,7 +228,7 @@
 		      				
 	      					<div class="row text-center">
 	      						<div class="col-8 m-auto">
-	      							<button class="btn btn-success">추가</button>
+	      							<button class="btn btn-dark btn-sm">추가</button>
 	      						</div>
 	      					</div>
 		      				
