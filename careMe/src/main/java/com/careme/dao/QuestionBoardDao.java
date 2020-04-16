@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
@@ -72,8 +74,8 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	
 // Casual Board 내용 및 검색
 	
-	public List<QuestionBoardDto> getCasualBoard(){
-		return getSqlSession().selectList("casualQuestionBrd.getArt");
+	public List<QuestionBoardDto> getCasualBoard(PageNumberCommand pnc){
+		return getSqlSession().selectList("casualQuestionBrd.getArt", pnc);
 	}
 	
 	public QuestionBoardDto getCasualBoardContents(int question_table_idx){
@@ -129,8 +131,21 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Hashtag 확인
 	
 	public List<TagDto> getHashtag(String tagValue){
-		return getSqlSession().selectList("casualQuestionBrd.hastagfind", tagValue);
+		return getSqlSession().selectList("casualQuestionBrd.hashtagFind", tagValue);
 	}
-		
+	
+	public List<TagDto> addHashtag(TagCommand tc) {
+		return getSqlSession().selectList("casualQuestionBrd.hashtagAdd", tc);
+	}
+
+// Page Numbering
+	
+	public List<PageNumberCommand> getPages(){
+		return getSqlSession().selectList("causalQuestionBrd.contentCount");
+	}
+	
+	public List<QuestionBoardDto> getContents(){
+		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
+	}
 		
 }
