@@ -1,20 +1,13 @@
 package com.careme.model.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class StoryFileDto {
 	private int story_file_idx;
 	private int story_board_idx;
+	private String file_name;
 	private String file_path;
+	private Long file_size;
 	private String del_yn;
-	private MultipartFile file;
-
-	public MultipartFile getFile() {
-		return file;
-	}
-	public void setFile(MultipartFile file) {
-		this.file = file;
-	}
+	
 	public int getStory_file_idx() {
 		return story_file_idx;
 	}
@@ -27,11 +20,23 @@ public class StoryFileDto {
 	public void setStory_board_idx(int story_board_idx) {
 		this.story_board_idx = story_board_idx;
 	}
+	public String getFile_name() {
+		return file_name;
+	}
+	public void setFile_name(String file_name) {
+		this.file_name = file_name;
+	}
 	public String getFile_path() {
 		return file_path;
 	}
 	public void setFile_path(String file_path) {
 		this.file_path = file_path;
+	}
+	public Long getFile_size() {
+		return file_size;
+	}
+	public void setFile_size(Long file_size) {
+		this.file_size = file_size;
 	}
 	public String getDel_yn() {
 		return del_yn;

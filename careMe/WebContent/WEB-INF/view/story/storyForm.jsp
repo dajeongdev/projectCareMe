@@ -7,22 +7,26 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
-.story_form { width: 100%; height: 100%; position: relative; }
 .container {
 	width: 1000px;
 	width: 1000px;
 	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-left: -250px;
-	margin-top: 100px;
+	margin: 40px;
 }
-#hash-search, #content, #title {
-	width: 600px;
+#hash-search, #content, #title, .custom-file-label {
+	width: 700px;
+}
+.custom-file-label {
+	position: relative;
+	margin-botton: 40px;
+}
+#content {
+	height: 300px;
 }
 #hash-inbox { 
+	margin-top:2px;
 	background: #bdbdbd;
-	width: 600px;
+	width: 700px;
 	height: 100px;
 }
 .added-tag {
@@ -32,26 +36,37 @@
 	border-radius: 10%;
 	display: inline-block;
 }
+.btn-group { 
+	float: right; 
+	margin-top: 10px;
+}
+#preview img {
+	width: 100px;
+	height: 100px;
+}
+#preview {
+	display: inline-block;
+}
 </style>
 <title>스토리 글쓰기</title>
 <script>
 
 // 해쉬태그 입력
 $(function (){
-	  $("#hash-search").on("keyup", function (e) {//해시태그 입력칸 이벤트
+	  $("#hash-search").on("keyup", function (e) {// 해시태그 입력칸 이벤트
 	    var tag = "";
-	    var existed = false;//이미 태그에 올라갔나 확인하기 위함
+	    var existed = false;// 이미 태그에 올라갔나 확인하기 위함
 
-	    if (e.which == 188 || e.which == 13) {//누른게 쉼표거나 엔터
-	      tag = $(this).val().replace(/[\s,]+/g, ""); //쉼표나 엔터 ""으로 바꿔서 tag에 저장
-	      $(this).val("");//입력창 비우기
+	    if (e.which == 188 || e.which == 13) {// 누른게 쉼표거나 엔터
+	      tag = $(this).val().replace(/[\s,]+/g, ""); // 쉼표나 엔터 ""으로 바꿔서 tag에 저장
+	      $(this).val("");// 입력창 비우기
 
-	      $("#hash-inbox span").each(function () { //해시태그 들어간 div 안의 span
-	        var name = $(this).find(".htag-name").val();//input hidden의 값
-	        if (name == tag) existed = true;//이미 있음
+	      $("#hash-inbox span").each(function () { // 해시태그 들어간 div 안의 span
+	        var name = $(this).find(".htag-name").val();// input hidden의 값
+	        if (name == tag) existed = true;// 이미 있음
 	      });
 
-	      if (tag != "" && !existed) { //태그가 빈문자열이 아니고 이미 올린게 아니면
+	      if (tag != "" && !existed) { // 태그가 빈문자열이 아니고 이미 올린게 아니면
 	        $("#hash-inbox").append(
 	            '<span class="added-tag">#' +
 	            tag + '<a href="javascript:;"> X</a>' +
@@ -61,61 +76,94 @@ $(function (){
 	      }
 	    }
 	  });
-	  
-	$("#hash-inbox").on("click", ".added-tag", function () {
-		    $(this).remove();
-	});
-});
-	
-	$(document).ready(function() {
-		var formObj = $("form[name='insert']");
+})
 
-		// 수정
-		$(".insert_btn").on("click", function() {
-			if(fn_valiChk()) {
-				return false;
+	var files = [];
+	var previewIndex = 0;
+
+	// image preview 기능, input = file object[]
+	function addPreview(input) {
+		if(input[0].files) {
+			for(var f = 0; f < input[0].files.length; f++) {
+				var file = input[0].files[f];
+				
+				if(validation(file.name)) continue;
+				
+				setPreviewForm(file);
 			}
-			formObj.attr("action", "/story/storyDetail");
-			formObj.attr("method", "post");
-			formObj.submit();
-		})
-		// 삭제
-		$(".delete_btn").on("click", function() {
-			formObj.attr("action", "/story/stoyDelete");
-			formObj.attr("method", "post");
-			formObj.submit();
-		})
-
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileDelete($(this));
-		})
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileAdd($(this));
-		})
-	});
-	function fn_valiChk() {
-		var regForm = $("form[name='insert']) .chk").length;
-		for(var i = 0; i < regForm; i++) {
-			if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null) {
-				alert($(".chk").eq(i).attr("title"));
-				return true;
-			});
+		} else {
+			alert("invalid file input");
 		}
 	}
-	function fn_fileDelete(obj) {
-		obj.parent.remove();
+	function setPreviewForm(file, img) {
+		var reader = new FileReader();
+		reader.onload = function(img) {
+			var imgNum = previewIndex++;
+			$("#preview").append("<div class=\"preview-box\" value=\"" + imgNum + "\">"
+					+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
+					+ "<p>" + file.name + "</p>"
+					+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
+					+ "삭제" + "</a>" + "</div>");
+			files[imgNum] = file;
+		};
+		reader.readAsDataURL(file);
 	}
-	function fn_fileAdd() {
-		var str = "<p><input type='file' name='file' /><a href='#this' name='delete' class='btn'>삭제</a>";
-		$("#fileDiv").append(str);
 	
-		$("a[name='delete']").on("click", function(e) {
-			e.preventDefault();
-			fn_fileDelete($(this));
-		});
+	// preview에서 삭제 버튼 클릭시 미리보기 이미지 영역 삭제
+	function deletePreview(obj) {
+		var imgNum = obj.attributes['value'].value;
+		delete files[imgNum];
+		$("#preview .preview-box[value=" + imgNum + "]").remove();
+		resizeHeight();
 	}
+
+	// client-side validation
+	// always server-side validation required
+	function validation(fileName) {
+		fileName = fileName + "";
+		var fileNameExtensionIndex = fileName.lastIndexOf(".") + 1;
+		var fileNameExtension = fileName.toLowerCase().substring(fileNameExtensionIndex, fileName.length);
+		if(!((fileNameExtension == 'jpg') || (fileNameExtension == 'gif') || (fileNameExtension == 'png'))) {
+			alert("jpg, gif, png 확장자만 업로드 가능합니다.");
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	$(document).ready(function() {
+		$(".submit a").on("click", function() {
+			var form = $("#insert")[0];
+			var formData = new FormData(form);
+
+			for(var i = 0; i < Object.keys(files).length; i++) {
+				formData.append("files", files[i]);
+			}
+
+			$.ajax({
+				type: "POST",
+				enctype: "multipart/form-data",
+				processData: false,
+				contentType: false,
+				cache: false,
+				url: "/storyForm",
+				dataType: "json",
+				data: formData,
+				success: function(result) {
+					if(result = -1) {
+						alert("jpg, gif, png 확장자만 업로드 가능합니다.");
+					} else if(result = -2) {
+						alert("파일이 10MB를 초과하였습니다.");
+					} else {
+						alert("이미지 업로드 성공");
+					}
+				}
+			});
+		});
+		$("input[type=file]").change(function() {
+			addPreview($(this));
+		});
+	});
 
 </script>
 </head>
@@ -124,31 +172,34 @@ $(function (){
 <div class="container-fluid" style="padding:0;">
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
-<div class="story_form">
+<div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="container">
-		<form id="insert" method="post" action="storyDetail" enctype="multipart/form-data">
-			<input type="hidden" name="story_board_idx" value="${insert.story_board.idx}" readonly="readonly">
-			<label for="title"></label>
-			<input type="text" id="title" name="title" placeholder="제목을 입력해주세요.">
-			<button type="button" class="btn btn-outline-dark">사진추가</button>
+		<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
+			<input type="hidden" name="member_idx" value="1">
 			<div class="story_content">
-				<input type="file" name="insert"/>
-				<a href="#this" name="delete" class="btn">삭제</a>
+				<input type="text" class="form-control" id="title" name="title" 
+				placeholder="제목을 입력해주세요.">
+				<input type="file" name="file" id="file" multiple/>
+				<div class="row" id="selectedFiles"></div>
+				<div id="preview">
+				</div>
 			<div class="form-group">
-			 	<label for="content"></label>
-    			<textarea class="form-control" name="content"
-    			id="exampleFormControlTextarea1 content" rows="3" placeholder="스토리를 들려주세요."></textarea>
+			 	<textarea class="form-control" name="content"
+    			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
   			</div>
   			</div>
-			<div id="info-tag">
-				<input type="text" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+			<!-- <div id="info-tag">
+				<input type="text" class="form-control" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
 					<div id="hash-inbox">
 					</div>
 				</div>
+			</div> -->
+			<input type="hidden" name="tag_idx" value="3">
+			<div class="btn-group">
+				<button type="submit" class="insert_btn btn btn-outline-dark">등록</button>
+				<button type="submit" class="list_btn btn btn-outline-dark" OnClick="location.href='storyDetail'">목록</button>
 			</div>
-			<button type="submit" class="insert_btn">등록</button>
-			<button type="submit" class="list_btn" onclick="location.href='storyMain'">목록</button>
 		</form>
 	</div>
 </div>
