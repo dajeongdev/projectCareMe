@@ -203,7 +203,12 @@
 					<!--인증 -->
 					<td><b></b></td>
 					<td><input type="text" style="width: 530px" id=""
-						name="" class="form-control" /></td>
+						name="" class="form-control" placeholder="인증번호를 입력해주세요" /></td>
+						
+						<!-- 인증번호 확인 버튼 -->
+					<td><button type="button"
+							class="btn btn-dark btn-sm btn-block" name="enChk" value="N"
+							id="enChk" onclick="fn_endChk();">확 인</button></td>
 				</tr>
 
 
