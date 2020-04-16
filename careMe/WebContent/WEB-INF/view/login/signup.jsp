@@ -153,13 +153,22 @@
 					alert("중복된 이메일 입니다.");
 				}else if(data == 0){
 					$("#mailChk").attr("value", "Y");
-					alert("사용가능한 닉네임입니다.");
+					alert("사용가능한 이메일입니다.");
 				}
 			}
 		});
+	} 
+
+	//이메일 보냄
+function fn_sendChk(){
+		var win = window.open("sendMail", "sendMail", "width=200,height=200");
+		win.document.write("<p>이메일을 확인해 주세요!!</p><br><div style='center'><button onclick='newWindow.close();'>닫기</button></div>");
+ 		
 	}
-
-
+	/* function fn_sendChk() {
+		  setTimeout(function(){ alert("이메일을 확인해 주세요!!"); }, 1000);
+		} */
+	
 </script>
 
 </head>
@@ -231,16 +240,17 @@
 
 					<!-- 이메일 중복 확인 -->
 					<td><button type="button"
-							class="btn btn-dark btn-sm btn-block" name="mailChk" value="N"
-							id="mailChk" onclick="fn_mmChk();">중복확인</button></td>
+							class="btn btn-dark btn-sm btn-block" name="mailChk" id="mailChk"
+							onclick="fn_mmChk();" value="N">중복확인</button></td>
+					<!-- value="N" onclick="fn_mmChk();" -->
 				</tr>
 
 				<tr>
-					<!--인증 -->
+					<!--이메일 인증 -->
 					<td><button type="button"
 							class="btn btn-dark btn-sm btn-block" name="sendMail" value="N"
-							id="sendMail">인증받기</button></td>
-							<!-- onclick="fn_sendChk(); -->
+							id="sendMail" onclick="fn_sendChk();">인증받기</button></td>
+					<!-- onclick="fn_sendChk();" /onclick="window.open('sendMail','sendMail','width=300,height=300');" -->
 					<td><input type="text" style="width: 530px" id="mailNum"
 						name="mailNum" class="form-control" placeholder="인증번호를 입력해주세요" /></td>
 

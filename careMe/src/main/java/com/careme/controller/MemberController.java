@@ -110,7 +110,7 @@ public class MemberController {
 
 		EmailDto email = new EmailDto();
 
-		String receiver = "testjava@gmail.com"; // Receiver.메일 받을 주소
+		String receiver = "testjava27@gmail.com"; // Receiver.메일 받을 주소
 		String subject = "[CAREME]인증메일입니다";
 		String content = "";
 
@@ -120,7 +120,7 @@ public class MemberController {
 
 		boolean result = emailService.sendMail(email);
 
-		return "Mail Send: " + result;
+		return "이메일을 보냈습니다 " + result;
 
 	}
 
