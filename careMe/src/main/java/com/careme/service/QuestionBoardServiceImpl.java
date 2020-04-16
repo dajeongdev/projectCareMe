@@ -5,13 +5,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.QuestionBoardDao;
-import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
-import com.careme.model.dto.PetDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 
@@ -29,11 +28,30 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public void setDto(QuestionBoardDto dto) {
 		this.dto = dto;
 	}
+	
+	PageNumberCommand pnc;
+	
+	public PageNumberCommand getPnc() {
+		return pnc;
+	}
 
+	public void setPnc(PageNumberCommand pnc) {
+		this.pnc=pnc;
+	}
+	
+	public PageNumberService pns;
 	
 	
-// Doctor Board 게시글 뿌리기
-	public List<QuestionBoardDto> getDoctorBoard() {
+	public PageNumberService getPns() {
+		return pns;
+	}
+
+	public void setPns(PageNumberService pns) {
+		this.pns = pns;
+	}
+
+	// Doctor Board 게시글 뿌리기
+	public List<QuestionBoardDto> getDoctorBoard(int start_idx, int contentPerPage) {
 		return dao.getDoctorBoard();
 	}
 
@@ -94,8 +112,16 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	}
 
 // Casual Board 내용 구현
-	public List<QuestionBoardDto> getCasualBoard() {
-		return dao.getCasualBoard();
+	public List<QuestionBoardDto> getCasualBoard(int currentPage, int contentPerPage) {
+		
+		PageNumberCommand pnc = new PageNumberCommand();
+		
+		int start_idx = pns.getStart_idx(currentPage, contentPerPage);
+		
+		pnc.setStart_idx(start_idx);
+		pnc.setContentPerPage(contentPerPage);
+		
+		return dao.getCasualBoard(pnc);
 	}
 
 	public QuestionBoardDto getCasualBoardContents(int question_table_idx) {
@@ -160,11 +186,14 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteCommentForCasual(idx);
 	}
 
-// Hashtag 비교 후 가져오기
+// Hashtag 추가 및 비교
 	public List<TagDto> compareHashtag(String tagValue){
 		return dao.getHashtag(tagValue);
 	}
 	
+	public List<TagDto> addHashtag(TagCommand tc) {
+		return dao.addHashtag(tc);
+	}
 	
 
 }

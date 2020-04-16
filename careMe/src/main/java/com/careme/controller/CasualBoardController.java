@@ -1,8 +1,6 @@
 package com.careme.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,12 +11,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
 import com.google.gson.Gson;
@@ -48,18 +50,34 @@ public class CasualBoardController {
 		this.fus = fus;
 	}
 	
+	@Autowired
+	PageNumberService pns;
+	
+	public void setPageNumberService(PageNumberService pns) {
+		this.pns = pns;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
 	public ModelAndView toCasualBoard() {
-		List<QuestionBoardDto> getArts = bs.getCasualBoard();
 		ModelAndView list = new ModelAndView();
-		list.addObject("list", getArts);
-		list.addObject("count", getArts.size());
+		PageNumberCommand paging = new PageNumberCommand();
+		int currentPage = 1;
+		
+		List<QuestionBoardDto> getArticles = bs.getCasualBoard(currentPage, 10);
+		
+		paging = pns.paging(getArticles.size(), 10, currentPage, "casualBoardView/casualBoard");
+		
+		list.addObject("list", getArticles);
+		list.addObject("count", getArticles.size());
+		list.addObject("pages", paging);
 		list.setViewName("/casualBoardView/casualBoard");
 		return list;
 	}
 
+	
+	
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
@@ -75,6 +93,7 @@ public class CasualBoardController {
 		mav.setViewName("casualBoardView/casualBoardContent");
 		return mav;
 	}
+	
 		
 
 // 게시판 검색기능
@@ -140,11 +159,48 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public ModelAndView writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView("redirect:/view/casualBoardView/casualBoard");
+		
 		mav.addObject("written", bs.addCasualArticles(dto));
-		mav.addObject("files", fus.upload(request, "/img/boardUpload"));
-		return mav;
+		
+		if (!request.getFile(request.getFileNames().next()).isEmpty()) {
+			List<FileUploadCommand> files = fus.upload(request, "/img/pet/profile/");
+			FileUploadCommand file = files.get(0);
+			dto.setFile_name(file.getFileOriginName());
+			dto.setFile_path(file.getFilePath());
+			dto.setFile_size(file.getFileSize());
+			return mav;
+		}else {
+			mav.addObject("files", fus.upload(request, "/img/boardUpload"));
+			return mav;
+		}
 	}
 
+	// hashtag 기능
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String hashtagCompare(@RequestParam String tagValue, int member_idx) {
+		List<TagDto> compared = bs.compareHashtag(tagValue);
+		Gson json = new Gson();
+		int listsize = compared.size();
+		int idx = member_idx;
+		
+		if(listsize==0){
+			
+			TagCommand tc = new TagCommand();
+			tc.setTag_name(tagValue);
+			tc.setMember_idx(idx);
+			tc.setDel_yn("n");
+			List<TagDto> added = bs.addHashtag(tc);
+			compared=added;
+			return json.toJson(compared);
+			
+		}else {
+		return json.toJson(compared);
+		}
+	}
+	
+	
+	
 	
 // 게시글 수정
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
@@ -220,20 +276,14 @@ public class CasualBoardController {
 			
 			int result = bs.deleteCasualComment(idx);
 			if(result>0) {
-			return "redirect:history.go(-1)";
+			return "redirect:/view/casualBoardView/casualBoard";
 			}else {
 				System.out.println("no!!!");
-			return "redirect:history.go(-1)";
+			return "redirect:/view/casualBoardView/casualBoard";
 			}
 		}
 	
-	// hashtag 기능
-		@RequestMapping(value="casualWriteForm/tagCompare")
-		public List<TagDto> hashtagCompare(@RequestParam String tagValue) {
-			
-			List<TagDto> compared = bs.compareHashtag(tagValue);
-			return compared;
-		}
+
 		
 		
 	
