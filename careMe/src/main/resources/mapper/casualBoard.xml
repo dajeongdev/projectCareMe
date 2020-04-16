@@ -4,7 +4,7 @@
 <mapper namespace="casualQuestionBrd">
 
 <!-- 게시판 뿌리기 -->
-	<select id="getArt" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.dto.PageNumberCommand">
+	<select id="getArt" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.PageNumberCommand">
 		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n' order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 	</select>
 	
