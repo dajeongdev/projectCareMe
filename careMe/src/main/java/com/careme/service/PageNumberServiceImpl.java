@@ -14,7 +14,9 @@ public class PageNumberServiceImpl implements PageNumberService {
 		int totalPage = totalCount / contentPerPage;
 		int startPage = (currentPage / pageBlock) + 1;
 		int endPage = (totalPage / pageBlock) * pageBlock + (totalPage % pageBlock);
+		int start_idx=(currentPage-1)*contentPerPage;
 		
+		pnc.setStart_idx(start_idx);
 		pnc.setContentPerPage(contentPerPage);
 		pnc.setCurrentPage(currentPage);
 		pnc.setEndPage(endPage);
@@ -27,6 +29,12 @@ public class PageNumberServiceImpl implements PageNumberService {
 		return pnc;
 	}
 	
+	public int getStart_idx(int currentPage, int contentPerPage) {
+		
+		int start_idx=(currentPage-1)*contentPerPage;
+		
+		return start_idx;
+	}
 	
 	
 }

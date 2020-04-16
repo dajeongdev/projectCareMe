@@ -56,11 +56,15 @@ public class DoctorBoardController {
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
 	public ModelAndView toDoctorBoard() {
-		List<QuestionBoardDto> getArts = bs.getDoctorBoard();
+		
 		ModelAndView listPro = new ModelAndView();
 		PageNumberCommand paging = new PageNumberCommand();
 		int currentPage = 1;
-		paging = pns.paging(getArts.size(), 10, currentPage, "casualBoardView/casualBoardContent?question_board_idx="+currentPage);
+		int contentPerPage = 10;
+		
+		List<QuestionBoardDto> getArts = bs.getDoctorBoard(currentPage, contentPerPage);
+		
+		paging = pns.paging(getArts.size(), contentPerPage, currentPage, "casualBoardView/casualBoardContent?question_board_idx="+currentPage);
 		
 		listPro.addObject("listPro", getArts);
 		listPro.addObject("countPro", getArts.size());
