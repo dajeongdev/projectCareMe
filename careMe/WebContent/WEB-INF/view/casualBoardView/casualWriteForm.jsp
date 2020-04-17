@@ -161,7 +161,8 @@ $(function() {
 			
 			var reader = new FileReader();
 			reader.onload = function (e) {
-				var html  = "<div class='col-md-3 mb-5'>";
+				var html = "<input type='file' id='files' name='image' placeholder='' max='5' multiple/>";
+					html += "<div class='col-md-3 mb-5'>";
 					html += "<img src=\"" + e.target.result + "\"  class='w-100 h-80'>";
 					html += "<i class='fa fa-trash' data-file='"+f.name+"' title='Click to remove'></i>";
 					html += "</div>";
