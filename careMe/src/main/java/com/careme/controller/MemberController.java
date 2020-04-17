@@ -139,7 +139,8 @@ public class MemberController {
 		return result+"";
 
 	}
-
+	
+	
 
 	// 회원가입 성공
 	@RequestMapping(value = "login/insertok")
