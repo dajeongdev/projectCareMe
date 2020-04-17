@@ -162,7 +162,7 @@
 	//이메일 보냄
 function fn_sendChk(){
 		var win = window.open("sendMail", "sendMail", "width=200,height=200");
-		win.document.write("<p>이메일을 확인해 주세요!!</p><br><div style='center'><button onclick='newWindow.close();'>닫기</button></div>");
+		/* win.document.write("<p>이메일을 확인해 주세요!!</p><br><div style='center'><button onclick='newWindow.close();'>닫기</button></div>"); */
  		
 	}
 	/* function fn_sendChk() {
@@ -249,7 +249,7 @@ function fn_sendChk(){
 					<!--이메일 인증 -->
 					<td><button type="button"
 							class="btn btn-dark btn-sm btn-block" name="sendMail" value="N"
-							id="sendMail" onclick="fn_sendChk();">인증받기</button></td>
+							id="sendMail" onclick="window.open('sendMail','sendMail','width=300,height=300');">인증받기</button></td>
 					<!-- onclick="fn_sendChk();" /onclick="window.open('sendMail','sendMail','width=300,height=300');" -->
 					<td><input type="text" style="width: 530px" id="mailNum"
 						name="mailNum" class="form-control" placeholder="인증번호를 입력해주세요" /></td>

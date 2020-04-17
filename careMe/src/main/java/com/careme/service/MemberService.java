@@ -29,6 +29,7 @@ public class MemberService {
 	public int loginOk(LoginCommand lc) {
 		List<MemberDto> lok = dao.login(lc);
 		return lok.size();
+		
 	}
 	
 	//회원정보 가져오기
@@ -38,14 +39,12 @@ public class MemberService {
 
 	//서비스
 	public void setSession(HttpSession session, LoginCommand lc) {
+		
 		MemberDto member = memberInfo(lc.getMember_id());
-		
-		SessionCommand sc = new SessionCommand();
-		session.setAttribute("sc", sc);
-		
-		sc.setMember_idx(member.getMember_idx());
-		sc.setMember_id(member.getMember_id());
-		//sc.setMember_nick(member.getMember_nick());
+		System.out.println(member);
+		session.setAttribute("sc", member);
+		session.setAttribute("MINFO", member.getMember_nick());// 이제 닉네임 들고다님
+	
 	}
 	
 	

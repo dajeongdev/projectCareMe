@@ -5,7 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -62,15 +62,22 @@ public class MemberController {
 
 	// 로그인 성공
 	@RequestMapping(value = "login/loginok")
-	public String loginOk(LoginCommand lc, HttpSession session) {
+	public String loginOk(LoginCommand lc, HttpSession session) {	
 		int i = memberService.loginOk(lc);// 1이나 0리턴
 		// System.out.println(i);
 		if (i == 0) {// 실패
 			return "redirect:loginform";
 		} else {// 성공
-			session.setAttribute("MINFO", lc.getMember_nick());// 이제 닉네임 들고다님
+			memberService.setSession(session, lc);
 			return "redirect:/main";
 		}
+	}
+	
+	//로그아웃
+	@RequestMapping(value = "login/logoutok")
+	public String logoutOk(HttpSession session) {
+		session.invalidate();
+		return "redirect:/main";
 	}
 
 	// 회원가입폼
@@ -106,11 +113,11 @@ public class MemberController {
 	// 이메일 보내기
 	@RequestMapping("login/sendMail")
 	@ResponseBody
-	public String sendMail() throws Exception {
+	public String sendMail(String member_email) throws Exception {
 
 		EmailDto email = new EmailDto();
 
-		String receiver = "testjava27@gmail.com"; // Receiver.메일 받을 주소
+		String receiver = member_email; // Receiver.메일 받을 주소
 		String subject = "[CAREME]인증메일입니다";
 		String content = "";
 
