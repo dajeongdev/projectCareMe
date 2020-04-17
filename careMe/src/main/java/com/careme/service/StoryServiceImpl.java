@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.StoryDao;
 import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
@@ -39,9 +40,23 @@ public class StoryServiceImpl implements StoryService {
 	public void setService(FileUploadService service) {
 		this.service = service;
 	}
+	
+	PageNumberCommand pageCom;
 
+	public void setPageCom(PageNumberCommand pageCom) {
+		this.pageCom = pageCom;
+	}
+	
+	PageNumberService pageService;
+	
+	public void setPageService(PageNumberService pageService) {
+		this.pageService = pageService;
+	}
+	
 	@Override
-	public List<StoryBoardDto> list() {
+	public List<StoryBoardDto> list(int currentPage, int contentPerPage) {
+		pageCom = new PageNumberCommand();
+		int startIndex = pageCom.
 		return dao.listing();
 	}
 	public List<StoryFileDto> fileList() {
