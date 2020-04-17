@@ -62,6 +62,16 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
+	public List<StoryBoardDto> totalListing(Map<String, Integer> map) {
+		return dao.totalListing(map);
+	}
+
+	@Override
+	public int getTotal() {
+		return dao.getTotal();
+	}
+	
+	@Override
 	public StoryBoardDto read(int story_board_idx) {
 		return dao.read(story_board_idx);
 	}
@@ -77,6 +87,16 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public int counting(int story_board_idx) {
 		return dao.counting(story_board_idx);
+	}
+	
+	@Override
+	public int heart(int story_board_idx) {
+		return dao.heart(story_board_idx);
+	}
+
+	@Override
+	public int comHeart(int story_comment_idx) {
+		return dao.comHeart(story_comment_idx);
 	}
 	
 	@Override
@@ -185,4 +205,6 @@ public class StoryServiceImpl implements StoryService {
 	public int deleteTag(int tag_idx) {
 		return dao.deleteTag(tag_idx);
 	}
+
+
 }

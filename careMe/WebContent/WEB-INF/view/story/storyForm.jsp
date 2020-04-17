@@ -155,8 +155,6 @@ $(function (){
 				success: function(result) {
 					if(result = -1) {
 						alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-					} else if(result = -2) {
-						alert("파일이 10MB를 초과하였습니다.");
 					} else {
 						alert("이미지 업로드 성공");
 					}

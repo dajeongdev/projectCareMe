@@ -12,16 +12,19 @@ import com.careme.model.dto.TagDto;
 public interface StoryService {
 	// 글목록
 	public List<StoryBoardDto> list();
+	public List<StoryBoardDto> totalListing(Map<String, Integer> map);
+	public int getTotal();
 	public List<StoryFileDto> fileList();
 	
 	// 글 상세보기
 	public StoryBoardDto read(int story_board_idx);
 	public StoryFileDto readFile(int story_board_idx);
 	public List<StoryCommentDto> readCom(int story_board_idx);
-	
 	// 조회수
 	public int counting(int story_board_idx);
-	
+	// 좋아요
+	public int heart(int story_board_idx);
+	public int comHeart(int story_comment_idx);
 	// 인기글
 	public List<StoryBoardDto> hitList();
 	

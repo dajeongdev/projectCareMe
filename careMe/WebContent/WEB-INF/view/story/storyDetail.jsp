@@ -23,9 +23,12 @@ hr { width: 1000px; }
 .comL > div { float: left; margin: 10px; }
 .profile { margin-right: 10px; }
 .comId { font-size: 18px; font-weight: 500;}
-.btn-group { float: right; position:block;}
+.btn-group { float: right; }
 .hr { position: block;}
 .input-group { margin-top: 10px;}
+.updateCom, .deleteCome {
+	float: right;
+}
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -45,7 +48,8 @@ $(document).ready(function(){
 	//목록
 	$(".list_btn").on("click", function() {
 		location.href="/careMe/view/story/storyMain";
-	});
+	})
+
 });
 function fn_valiChk() {
 	var regForm = $("form[name='readForm']) .chk").length;
@@ -56,6 +60,15 @@ function fn_valiChk() {
 		}
 	}
 }
+function change(iconID) {
+	$(".far").on("click", function (){
+		if(document.getElementById(iconID).className == "far fa-heart") {
+			document.getElementById(iconID).className = "fas fa-heart";
+		} else {
+			document.getElementById(iconID).className = "far fa-heart";
+		}
+	});
+}
 </script>
 </head>
 <body>
@@ -63,8 +76,9 @@ function fn_valiChk() {
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
 <div class="detail-form">
-	<form name="readForm" >
+
 	<div class="container">
+	<form name="readForm" >
 		<div class="top">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
@@ -89,24 +103,26 @@ function fn_valiChk() {
 				<a href="">#강아지</a>
 				<a href="">#산책</a>
 			</div>
+			<span class="story_heart"><i class="far fa-heart" id="far" style="font-size:20px;color:red" onClick="change(iconId)"></i></span>
 			<div class="btn-group">
 				<button type="button" class="update_btn btn btn-outline-dark" OnClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
 				<button type="button" class="delete_btn btn btn-outline-dark">삭제</button>
 				<button type="button" class="list_btn btn btn-outline-dark">목록</button>
 			</div>
 		</div>
+		</form>
 		<div class="hr"><hr></div>
 		<div id="bottom">
 			<div class="com">
 				댓글 <c:out value="${comCount}"/>
 				
 				<div>
-					<form name="insertCom" method="POST" action="insertCom">
-						<input type="hidden" name="member_idx">
+					<form name="insertCom" action="insertCom?story_board_idx=${dto.story_board_idx}" method="POST">
+						<input type="hidden" name="member_idx" value="2">
 						<div class="input-group mb-3">
-						  <input type="text" class="form-control comm" placeholder="댓글을 입력해주세요.">
+						  <input type="text" name="content" class="form-control comm" placeholder="댓글을 입력해주세요.">
 						  <div class="input-group-append">
-						    <button class="btn btn-outline-secondary" type="button">등록</button>
+						    <input type="submit" name="submit" value="등록" class="btn btn-outline-secondary">
 						  </div>
 						</div>
 					</form>
@@ -118,14 +134,15 @@ function fn_valiChk() {
 						</div>
 						<div>
 							<span class="comId"><c:out value="${coms.member_id}"/></span>&nbsp&nbsp<c:out value="${coms.content}"/><br>
-							<c:out value="${coms.reg_date}"/>&nbsp<i class="fas fa-heart"></i>&nbsp<c:out value="${coms.heart}"/>
+							<c:out value="${coms.reg_date}"/>&nbsp<i class="fas fa-heart"></i>&nbsp<c:out value="${coms.heart}"/>&nbsp&nbsp&nbsp
+							<span class="updateCom"><i class="fas fa-edit"></i></span>&nbsp&nbsp<span class="deleteCom"><i class="fas fa-trash-alt"></i></span>
 						</div>
 					</div>
 				</c:forEach>
 			</div>
 		</div>
 	</div>
-	</form>
+
 </div>
 </body>
 </html>

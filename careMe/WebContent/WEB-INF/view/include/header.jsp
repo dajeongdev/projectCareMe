@@ -58,7 +58,7 @@
 			<li class="nav-item"><a class="nav-link" href="#">전문의 찾기</a></li>
 			
 			
-			<li class="nav-item"><a class="nav-link" href="/careMe/view/story/storyMain">펫스토리</a></li>
+			<li class="nav-item"><a class="nav-link" href="/careMe/view/story/storyMain?currentPage=1">펫스토리</a></li>
 			
 			
 			<li class="nav-item dropdown"><a

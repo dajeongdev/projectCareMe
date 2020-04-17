@@ -1,20 +1,25 @@
 package com.careme.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.PageNumberService;
 import com.careme.service.StoryService;
 
 @Controller
@@ -32,19 +37,35 @@ public class StoryController {
 	public void setFile(FileUploadService file) {
 		this.file = file;
 	}
+	
+	@Autowired
+	PageNumberService page;
+
+	public void setPage(PageNumberService page) {
+		this.page = page;
+	}
 
 	// 글목록
-	@RequestMapping(value = "/view/story/storyMain", method = RequestMethod.GET)
-	public ModelAndView listing() {
+	@RequestMapping(value = "/view/story/storyMain")
+	public ModelAndView listing(int currentPage) {
 		ModelAndView mav = new ModelAndView();
-		List<StoryBoardDto> list = service.list();
+		PageNumberCommand paging = new PageNumberCommand();
+		int contentPerPage = 9;
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("start_idx", page.getStartIdx(currentPage, contentPerPage));
+		map.put("contentPerPage", contentPerPage);
+		
+		List<StoryBoardDto> slist = service.totalListing(map);
+		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyMain?currentPage=");
+		
 		List<StoryFileDto> fList = service.fileList();
 		List<StoryBoardDto> hlist = service.hitList();
-		mav.addObject("list", list);
+		mav.addObject("start_idx", page.getStartIdx(currentPage, contentPerPage));
+		mav.addObject("slist", slist);
 		mav.addObject("fList", fList);
 		mav.addObject("hlist", hlist);
+		mav.addObject("paging", paging);
 		mav.setViewName("/story/storyMain");
-		System.out.println(hlist);
 		return mav;
 	}
 	
@@ -61,6 +82,8 @@ public class StoryController {
 		mav.addObject("fileDto", fileDto);
 		mav.addObject("comList", comList);
 		mav.addObject("comCount", comCount);
+		mav.addObject("heart", service.heart(story_board_idx));
+		//mav.addObject("comHeart", service.comHeart(story_comment_idx));
 		mav.setViewName("/story/storyDetail");
 		return mav;
 	}
@@ -82,16 +105,14 @@ public class StoryController {
 	
 	// 댓글 작성
 	@RequestMapping(value = "/view/story/insertCom")
-	public String insertCom(StoryCommentDto comDto, MultipartHttpServletRequest request) {
-		int i = service.insert(request);
-		comDto.setStory_board_idx(i);
-		service.insertCom(comDto);
-		
+	public String insertCom(StoryCommentDto comDto) {
+		int i = service.insertCom(comDto);
+		int b = comDto.getStory_board_idx();
 		if(i > 0) {
-			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+			return "redirect:/view/story/storyDetail?story_board_idx="+b;
 		} else {
 			System.out.println("error");
-			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+			return "redirect:/view/story/storyDetail?story_board_idx="+b;
 		}
 	}
 	
@@ -114,15 +135,15 @@ public class StoryController {
 	}
 	
 	// 댓글 수정
-	@RequestMapping(value = "/view/story/updateCom", method = RequestMethod.POST)
+	@RequestMapping(value = "/story/updateCom")
 	public String updateCom(StoryCommentDto comDto) {
-		int result = service.updateCom(comDto);
-		int i = comDto.getStory_board_idx();
-		if(result > 0) {
-			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+		int i = service.updateCom(comDto);
+		int b = comDto.getStory_board_idx();
+		if(i > 0) {
+			return "redirect:/view/story/storyDetail?story_board_idx="+b;
 		} else {
 			System.out.println("error");
-			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+			return "redirect:/view/story/storyDetail?story_board_idx="+b;
 		}
 	}
 	
@@ -130,19 +151,24 @@ public class StoryController {
 	// 글삭제
 	@RequestMapping(value = "/story/delete")
 	public String articleDelete(int story_board_idx) throws Exception {
-		service.delete(story_board_idx);
-		return "redirect:/story/storyMain";
+		int i = service.delete(story_board_idx);
+		if(i > 0) {
+			return "redirect:/view/story/storyMain";
+		} else {
+			System.out.println("error");
+			return "redirect:/view/story/storyMain";
+		}
 	}
 	
 	// 댓글 삭제
 	@RequestMapping(value = "/view/story/deleteCom")
 	public String deleteCom(int story_comment_idx) {
-		int result = service.deleteCom(story_comment_idx);
-		if(result > 0) {
-			return "redirect:/history.go(-1)";
+		int i = service.deleteCom(story_comment_idx);
+		if(i > 0) {
+			return "redirect:/view/story/storyDetail";
 		} else {
 			System.out.println("error");
-			return "redirect:/history.go(-1)";
+			return "redirect:/view/story/storyDetail";
 		}
 	}
 	

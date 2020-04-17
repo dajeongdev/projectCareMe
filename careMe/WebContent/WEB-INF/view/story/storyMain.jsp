@@ -55,7 +55,6 @@
               </div>
               </div>
               <div class="d-flex justify-content-between align-items-center">
-               
               </div>
             </div>
           </div>
@@ -74,12 +73,12 @@
 	<hr>
 	<div>
 	<div class="row">
-    <c:forEach items="${list}" var="item">
+    <c:forEach items="${slist}" var="slist" begin="${start_idx}" end="${start_idx + 8}">
          <div class="col-md-4">
-          <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${item.story_board_idx}'">
-           	<c:forEach items="${fList}" var="items">
-           	<c:if test="${items.story_board_idx == item.story_board_idx}">
-           	<img width="100%" height="170" class="img" src="${fullName}${items.file_path}">
+          <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${slist.story_board_idx}'">
+           	<c:forEach items="${fList}" var="fList">
+           	<c:if test="${fList.story_board_idx == slist.story_board_idx}">
+           	<img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
            	</c:if>
             </c:forEach>
             <div class="card-body">
@@ -88,10 +87,10 @@
               <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
               </div>
               <div class="content">
-              <h5 class="card-text">${item.title}</h5>
-              <span class="card-text">${item.member_id}</span>
-              <i class="fas fa-heart"></i>&nbsp<span class="card-heart">${item.heart}</span>&nbsp&nbsp
-              <i class="fas fa-eye"></i>&nbsp<span class="card-count">${item.view_count}</span>
+              <h5 class="card-text">${slist.title}</h5>
+              <span class="card-text">${slist.member_id}</span>
+              <i class="fas fa-heart"></i>&nbsp<span class="card-heart">${slist.heart}</span>&nbsp&nbsp
+              <i class="fas fa-eye"></i>&nbsp<span class="card-count">${slist.view_count}</span>
               </div>
               </div>
               
@@ -105,6 +104,40 @@
         </div>
      </div>
     </div>
+	
+	
+	<div id="paging">
+		<div class="row lg-3" >
+			<div class="col-lg-12" align="center">
+				<ul class="pagination pagination-lg pagination-dark">
+  
+					<li class="page-item disabled">
+   		  				<a class="page-link" href="#">&laquo;</a>
+   					</li>
+    
+   					<c:forEach var="page" begin="${paging.startPage}" end="${paging.endPage}">
+						<c:choose>
+                           <c:when test="${page eq paging.currentPage}"> 			
+							 	<li class="page-item active" style="font-weight: bold;">
+      								<a class="page-link" href="storyMain?currentPage=${page}">${page}</a>
+    							</li>
+    						</c:when>
+   					 		<c:otherwise>
+					   			<li class="page-item active">
+		      						<a class="page-link" href="storyMain?currentPage=${page}">${page}</a>
+		    					</li>
+							</c:otherwise>
+						</c:choose>
+   					 </c:forEach>
+    
+					<li class="page-item">
+						<a class="page-link" href="#">&raquo;</a>
+    				</li>
+  							
+  				</ul>
+			</div>
+		</div>
+	</div>
 	
 	</form>
 	<form class="searching" action="/view/story/storyBoardSearch">
