@@ -29,7 +29,6 @@ public class PageNumberServiceImpl implements PageNumberService {
 		pnc.setPath(path);
 		pnc.setTotalPage(totalPage);
 		
-		
 		return pnc;
 	}
 	

@@ -49,7 +49,7 @@
 			<li><a class="nav-link" href="view/main">Main</a></li>
 			
 			<li class="nav-item"><a class="nav-link"
-				href="/careMe/view/doctorBoardView/doctorBoard">전문가 상담</a></li>
+				href="/careMe/view/doctorBoardView/doctorBoard?currentPage=1">전문가 상담</a></li>
 			
 			
 			<li class="nav-item"><a class="nav-link" href="/careMe/carediary">케어일기</a></li>
@@ -70,7 +70,7 @@
 					<a class="dropdown-item"
 						href="/careMe/view/myPageView/myPageCasual">일반 마이페이지 (임시)</a> 
 					<a class="dropdown-item"
-						href="/careMe/view/casualBoardView/casualBoard">고민상담</a>
+						href="/careMe/view/casualBoardView/casualBoard?currentPage=1">고민상담</a>
 				</div></li>
 		</ul>
 	</div>

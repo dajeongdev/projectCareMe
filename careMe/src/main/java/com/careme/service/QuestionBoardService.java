@@ -1,7 +1,7 @@
 package com.careme.service;
 
 import java.util.List;
-
+import java.util.Map;
 
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
@@ -12,9 +12,13 @@ import com.careme.model.dto.TagDto;
 public interface QuestionBoardService {
 
 // Doctor Board 게시글 뿌리기
-	public List<QuestionBoardDto> getDoctorBoard(int start_idx, int contentPerPage);
+	public List<QuestionBoardDto> getDoctorBoard();
 	
-	public QuestionBoardDto getDoctorBoardContents (int question_tbale_idx);
+	public List<QuestionBoardDto> getDoctorBoardPage(Map<String,Integer>param);
+	
+	public int getTotal();
+	
+	public QuestionBoardDto getDoctorBoardContents (int question_table_idx);
 	
 	public void getDoctorBoardViews (int question_table_idx);
 	
@@ -40,7 +44,9 @@ public interface QuestionBoardService {
 	
 	
 // Casual Board 내용 구현
-	public List<QuestionBoardDto> getCasualBoard(int start_idx, int contentPerPage);
+	public List<QuestionBoardDto> getCasualBoard();
+	
+	public List<QuestionBoardDto> getCasualBoardPage(Map<String,Integer>param);
 	
 	public QuestionBoardDto getCasualBoardContents (int question_table_idx);
 	
