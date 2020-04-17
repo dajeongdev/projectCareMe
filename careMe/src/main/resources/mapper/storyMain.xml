@@ -4,8 +4,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="story">
 	<!-- 글목록 O-->
-	<select id="list" resultType="com.careme.model.dto.StoryBoardDto">
-		select * from story_board inner join members where story_board.member_idx = members.member_idx order by story_board.story_board_idx desc
+	<select id="list" parameterType="HashMap" resultType="com.careme.model.dto.StoryBoardDto">
+		select SQL_CALC_FOUND_ROWS * from story_board inner join members on story_board.member_idx = members.member_idx where story_board.del_yn = 'n' order by story_board.story_board_idx desc
+	</select>
+	<select id="selectTotal" resultType="int">
+		select FOUND_ROWS()
 	</select>
 	<select id="fileList" resultType="com.careme.model.dto.StoryFileDto">
 		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc
@@ -39,15 +42,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		set view_count = view_count + 1 
 		where story_board_idx = #{story_board_idx}
 	</update>
+	<!-- 좋아요 수 증가 -->
 	<update id="heart" parameterType="com.careme.model.dto.StoryBoardDto">
-		update story_board set heart = heart + 1 where story_board_idx = #{story_board_idx}
+		update story_board 
+		set heart = heart + 1 
+		where story_board_idx = #{story_board_idx}
 	</update>
 	<!-- 인기글 -->
 	<select id="hit" parameterType="com.careme.model.dto.StoryBoardDto" resultType="com.careme.model.dto.StoryBoardDto">
-		select * from story_board inner join members where story_board.member_idx = members.member_idx order by heart desc limit 3
+		select * from story_board inner join members where story_board.member_idx = members.member_idx order by view_count desc limit 3
 	</select>
-	
-	
+	<!-- 검색 -->
+	<select id="search" parameterType="com.careme.model.command.StoryCommand" resultType="com.careme.model.dto.StoryBoardDto">
+		select * from story_board inner join members on story_board.member_idx = members.member_idx 
+		<if test="searchType != null">
+			<if test='searhType == search_option.equals("title")'>and title like '%' || #{keyword} || '%'</if>
+		</if>
+		<if test="searchType != null">
+			<if test='searhType == search_option.equals("content")'>and content like '%' || #{keyword} || '%'</if>
+		</if>
+		<if test="searchType != null">
+			<if test='searhType == search_option.equals("member.id")'>and member.id like '%' || #{keyword} || '%'</if>
+		</if>
+	</select>
 	
 	<!-- 글작성 -->
 	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
@@ -66,31 +83,49 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	<!-- 댓글 작성  -->
 	<insert id="insertCom" parameterType="com.careme.model.dto.StoryCommentDto">
-		insert into story_comment(story_comment_idx, story_board_idx, member_idx, content, heart, reg_date, del_yn)
-		values(0, #{story_board_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
+		insert into story_comment(story_board_idx, member_idx, content, heart, reg_date, del_yn)
+		values(#{story_board_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
 	</insert>
 	
 	
 	<!-- 글수정 O -->
-	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto">
+	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
 		update story_board
 		<set> 
 			<if test="title != null">title = #{title},</if>
 			<if test="content != null">content = #{content}</if>
 		</set>
 		<where>story_board_idx = #{story_board_idx}</where>
+		<selectKey keyProperty="story_board_idx" resultType="int">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 	</update>
 	<update id="updateFile" parameterType="com.careme.model.dto.StoryFileDto">
-		update story_file set file_name = #{file_name}, file_path = #{file_path}, file_size = #{file_size}
+		update story_file 
+		<set>file_name = #{file_name}, file_path = #{file_path}, file_size = #{file_size}</set>
+		<where>story_board_idx = #{story_board_idx}</where>
 	</update>
 	<update id="updateTag" parameterType="com.careme.model.dto.TagDto">
 		update tag set tag_name = #{tag_name} where tag_idx = ${tag_idx}
+	</update>
+	<update id="updateCom" parameterType="com.careme.model.dto.StoryCommentDto">
+		update story_board set content = #{content}
+	</update>
+	<!-- 좋아요 수 증가 -->
+	<update id="comHeart" parameterType="com.careme.model.dto.StoryCommentDto">
+		update story_comment 
+		set heart = heart + 1 
+		where story_comment_idx = #{story_comment_idx}
 	</update>
 	
 	
 	<!-- 글삭제 -->
 	<update id="delete" parameterType="int">
 		update story_board set del_yn = 'y' where story_board_idx = #{story_board_idx}
+	</update>
+	<!-- 파일 삭제 -->
+	<update id="deleteFile" parameterType="int">
+		update story_file set del_yn = 'y' where story_board_idx = #{story_board_idx}
 	</update>
 	<!-- 태그 삭제 -->
 	<update id="deleteTag" parameterType="int">

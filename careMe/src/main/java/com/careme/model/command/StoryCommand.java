@@ -1,25 +1,24 @@
 package com.careme.model.command;
 
-import java.util.List;
-
-import com.careme.model.dto.StoryBoardDto;
-import com.careme.model.dto.StoryFileDto;
-
 public class StoryCommand {
-	private StoryBoardDto dto;
-	private List<StoryFileDto> files;
+	private String searchType = "";
+	private String keyword = "";
 	
-	public StoryBoardDto getFileDto() {
-		return dto;
+	public String getSearchType() {
+		return searchType;
 	}
-	public void setFileDto(StoryBoardDto dto) {
-		this.dto = dto;
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
 	}
-	public List<StoryFileDto> getFiles() {
-		return files;
+	public String getKeyword() {
+		return keyword;
 	}
-	public void setFiles(List<StoryFileDto> files) {
-		this.files = files;
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 	
+	@Override
+	public String toString() {
+		return "StoryCommand [searchType=" + searchType + ", keyword=" + keyword + "]";
+	}
 } 
