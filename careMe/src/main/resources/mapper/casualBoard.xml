@@ -4,9 +4,6 @@
 <mapper namespace="casualQuestionBrd">
 
 <!-- 게시판 뿌리기 -->
-	<select id="getTotal" resultType="com.careme.model.dto.QuestionBoardDto">
-		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n' order by question_table_idx desc
-	</select>
 	
 	<select id="getArticles" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="HashMap">
 		select SQL_CALC_FOUND_ROWS * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n' order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
@@ -30,13 +27,6 @@
 		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
 	</select>
 	
-	<select id="contentCount" resultType="int" parameterType="com.careme.model.command.PageNumberCommand">
-		select count(*) from question_board where question_type like 'n'
-	</select>
-	
-	<select id="contentDivide" resultType="com.careme.model.dto.QuestionBoardDto">
-		select * from question_board inner join members on question_board.member_dix=members.member_dix where question_type like 'n' limit 10
-	</select>
 
 	
 <!-- 게시판글 검색 -->

@@ -25,9 +25,9 @@
 				<main role="main" class="col-lg-12">
 					<h2 align="left">전문 상담</h2>
 					<p align="left">
-						(전체 글: <c:out value="${countPro}" />)
+						(전체 글: <c:out value="${paging.totalCount}" />)
 					</p>
-					<div class="table">
+					<div class="table" style="height: 540px">
 						<table class="table table-striped table-lg table-hover">
 							<!-- 맨 윗 줄 -->
 							<thead class="thead-dark">
@@ -42,7 +42,7 @@
 							<tbody>
 
 								<!-- 글 들어가는 곳 -->
-								<c:forEach var="item" items="${listPro}">
+								<c:forEach var="item" items="${listPro}" begin="${item.start_idx}" end="${item.start_idx}+9">
 									<tr onClick="location.href='doctorBoardContent?question_table_idx=${item.question_table_idx}'">
 										<td><c:out value="${item.question_table_idx}" /></td>
 										<td><c:out value="${item.title}"/></td>
@@ -52,19 +52,48 @@
 									</tr>
 								</c:forEach>
 							</tbody>
-
 						</table>
-						<!-- 게시판 글쓰기 -->
-						<div class="row mb-3" >
-						<div class="col-md-2" align="left">page numbering</div>
-						<div class="col-md-8"></div>
-						<div class="col-md-2" align="right">
-							<button class="btn btn-dark btn-sm btn-block" onClick="location.href='doctorWriteForm'">글쓰기</button>	
 						</div>
+						<!-- 게시판 페이지넘버링 및 글쓰기 -->
+						<!-- 글쓰기 버튼 -->
+						<div class="row lg-3" >
+							<div class="col-lg-10"></div>
+							<div class="col-lg-2" align="right">
+								<button class="btn btn-dark btn-sm btn-block" onClick="location.href='doctorWriteForm'">글쓰기</button>	
+							</div>
 						</div>
-					</div>
-				</main>
-			</div>
+						
+						<div class="row lg-3" >
+							<div class="col-lg-12" align="center">
+							<ul class="pagination pagination-lg pagination-dark">
+  
+							 <!-- 왼쪽 화살표 -->  
+							 <li class="page-item disabled">
+   		  					 <a class="page-link" href="#">&laquo;</a>
+   							 </li>
+    
+   							 <c:forEach var="page" begin="${paging.startPage}" end="${paging.endPage}">
+							 	<c:choose>
+    						 		<c:when test="${page eq paging.currentPage}">
+    						 			<li class="page-item active">
+      						 			<a class="page-link" style="font-weight: bold;" href="doctorBoard?currentPage=${page}">${page}</a>
+    						 			</li>	
+    								</c:when>
+ 	   								<c:otherwise>
+    									<li class="page-item active">
+      									<a class="page-link" href="doctorBoard?currentPage=${page}">${page}</a>
+    									</li>
+   					 				</c:otherwise>
+								</c:choose>
+							</c:forEach>
+    
+						  	<!-- 오른쪽 화살표 -->
+							<li class="page-item">
+							<a class="page-link" href="#">&raquo;</a>
+    						</li>
+  							</ul>
+							</div>
+						</div>
 
 			<!-- 게시판 검색 -->
 			<form action="view/doctorBoardView/doctorBoardSearch">
@@ -76,6 +105,8 @@
 				<input type="submit" value="검색" />
 			</form>
 
+			</main>
+		</div>
 
 
 		</div>

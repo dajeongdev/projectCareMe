@@ -1,6 +1,8 @@
 package com.careme.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,19 +62,21 @@ public class CasualBoardController {
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
-	public ModelAndView toCasualBoard() {
-		ModelAndView list = new ModelAndView();
+	public ModelAndView toCasualBoard(int currentPage) {
+		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
 		PageNumberCommand paging = new PageNumberCommand();
-		int currentPage = 1;
+		int contentPerPage = 10;
+
+		Map<String,Integer> param = new HashMap<String,Integer>();
+		param.put("start_idx", pns.getStartIdx(currentPage, contentPerPage));
+		param.put("contentPerPage", contentPerPage);
 		
-		List<QuestionBoardDto> getArticles = bs.getCasualBoard(currentPage, 10);
-		
-		paging = pns.paging(getArticles.size(), 10, currentPage, "casualBoardView/casualBoard");
+		List<QuestionBoardDto> getArticles = bs.getCasualBoardPage(param);
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
 		
 		list.addObject("list", getArticles);
-		list.addObject("count", getArticles.size());
-		list.addObject("pages", paging);
-		list.setViewName("/casualBoardView/casualBoard");
+		list.addObject("paging", paging);
+		
 		return list;
 	}
 
