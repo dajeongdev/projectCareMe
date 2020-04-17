@@ -5,11 +5,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="story">
 	<!-- 글목록 O-->
 	<select id="list" parameterType="hashmap" resultType="com.careme.model.dto.StoryBoardDto">
-		select SQL_CALC_FOUND_ROWS * from story_board inner join members on story_board.member_idx = members.member_idx where del_yn = 'n' order by story_board.story_board_idx desc limit #{start_idx}, #{contentPerPage}
+		select * from story_board inner join members on story_board.member_idx = members.member_idx where story_board.del_yn = 'n' order by story_board.story_board_idx desc
 	</select>
-	<select id="selectTotal" resultType="int">
+	<!-- <select id="selectTotal" resultType="int">
 		select FOUND_ROWS()
-	</select>
+	</select>  -->
 	<select id="fileList" resultType="com.careme.model.dto.StoryFileDto">
 		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc
 	</select>
@@ -55,9 +55,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="seartType == 't'.toString">and title like '%' || #{keyword} || '%'</if>
 		</if>
 	</select>-->
-	<select id="paging">
-		
-	</select>
 	
 	<!-- 글작성 -->
 	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
@@ -76,8 +73,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	<!-- 댓글 작성  -->
 	<insert id="insertCom" parameterType="com.careme.model.dto.StoryCommentDto">
-		insert into story_comment(story_comment_idx, story_board_idx, member_idx, content, heart, reg_date, del_yn)
-		values(0, #{story_board_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
+		insert into story_comment(story_board_idx, member_idx, content, heart, reg_date, del_yn)
+		values(#{story_board_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
 	</insert>
 	
 	

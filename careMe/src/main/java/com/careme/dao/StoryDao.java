@@ -29,7 +29,6 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public List<StoryCommentDto> readCom(int story_board_idx) {
 		return getSqlSession().selectList("story.readCom", story_board_idx);
 	}
-	
 	// 조회수
 	public int counting(int story_board_idx) {
 		return getSqlSession().update("story.viewCount", story_board_idx);
@@ -49,11 +48,9 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int insertFile(StoryFileDto fileDto) {
 		return getSqlSession().insert("story.insertFile", fileDto);
 	}
-	
 	public int insertTag(TagDto tagDto) {
 		return getSqlSession().insert("insert.insertTag", tagDto);
 	}
-	
 	public int insertCom(StoryCommentDto comDto) {
 		return getSqlSession().insert("story.insertCom", comDto);
 	}

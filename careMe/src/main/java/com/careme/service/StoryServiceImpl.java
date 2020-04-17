@@ -54,9 +54,7 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
-	public List<StoryBoardDto> list(int currentPage, int contentPerPage) {
-		pageCom = new PageNumberCommand();
-		int startIndex = pageCom.
+	public List<StoryBoardDto> list() {
 		return dao.listing();
 	}
 	public List<StoryFileDto> fileList() {

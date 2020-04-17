@@ -80,6 +80,21 @@ public class StoryController {
 		return "/story/storyDetail";
 	}
 	
+	// 댓글 작성
+	@RequestMapping(value = "/view/story/insertCom")
+	public String insertCom(StoryCommentDto comDto, MultipartHttpServletRequest request) {
+		int i = service.insert(request);
+		comDto.setStory_board_idx(i);
+		service.insertCom(comDto);
+		
+		if(i > 0) {
+			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+		} else {
+			System.out.println("error");
+			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
+		}
+	}
+	
 	// 글수정
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.GET)
 	public ModelAndView updateForm(int story_board_idx) {
@@ -91,30 +106,11 @@ public class StoryController {
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.POST)
 	public ModelAndView articleUpdate(StoryBoardDto dto, MultipartHttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		dto.getStory_board_idx();
+		int i = service.insert(request);
+		dto.setStory_board_idx(i);
 		mav.addObject("update", service.update(dto));
 		mav.setViewName("/story/storyDetail");
 		return mav;
-	}
-	
-	// 글삭제
-	@RequestMapping(value = "/story/delete")
-	public String articleDelete(int story_board_idx) throws Exception {
-		service.delete(story_board_idx);
-		return "redirect:/story/storyMain";
-	}
-	
-	// 댓글 작성
-	@RequestMapping(value = "/view/story/insertCom")
-	public String insertCom(StoryCommentDto comDto) {
-		int result = service.insertCom(comDto);
-		int i = comDto.getStory_board_idx();
-		if(result > 0) {
-			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
-		} else {
-			System.out.println("error");
-			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
-		}
 	}
 	
 	// 댓글 수정
@@ -128,6 +124,14 @@ public class StoryController {
 			System.out.println("error");
 			return "redirect:/view/story/storyDetail?story_board_idx=" + i;
 		}
+	}
+	
+	
+	// 글삭제
+	@RequestMapping(value = "/story/delete")
+	public String articleDelete(int story_board_idx) throws Exception {
+		service.delete(story_board_idx);
+		return "redirect:/story/storyMain";
 	}
 	
 	// 댓글 삭제
