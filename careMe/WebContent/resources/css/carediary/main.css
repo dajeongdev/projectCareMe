@@ -190,8 +190,7 @@ small, time, .small {
 
 .color-circle {
 	width: 20px;
-    height: 20px;
-    background-color: #a1f2d1;
+    height: 20px;    
     border-radius: 50%;
     margin: auto;
 }

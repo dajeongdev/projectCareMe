@@ -6,14 +6,13 @@ import com.careme.model.command.PageNumberCommand;
 
 @Service("PageNumberService")
 public class PageNumberServiceImpl implements PageNumberService {
-	
 	public PageNumberCommand paging (int totalCount, int contentPerPage, int currentPage, String path) {
 		PageNumberCommand pnc = new PageNumberCommand();
 		
 		int pageBlock = 10;
 		
 		int totalPage = (totalCount/contentPerPage)+1;
-		
+
 		int startPage = (currentPage / pageBlock) + 1;
 		int endPage = (totalPage / pageBlock) * pageBlock + (totalPage % pageBlock);
 		
