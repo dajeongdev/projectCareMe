@@ -25,7 +25,6 @@
 			dataType:"json"})
 			.done(function(items){
 			$("#petSpeciesLevel2 option").remove();
-
 				if (items.length > 0) {
 					for (item in items) {
 					var s = items[item];

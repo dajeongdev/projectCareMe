@@ -153,14 +153,14 @@ $(function(){
 		<div class="container min-vh-100 pt-3 text-center">
 
 		<form name="addWrite" action="casualBoardWriteAdd" method="POST" enctype="multipart/form-data">
-			<div class="row">
+			<div class="row my-3 p-3 bg-white rounded shadow-sm">
 				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
 					
 					<h2 align="left">고민 상담</h2>
 					<p></p>
 						<div class="mb-3" align="left">
 			          		<label for="title">제목</label>
-          					<input id="title" name="title" type="text" class="form-control"/>
+          					<input id="title" name="title" width="100%" type="text" class="form-control"/>
         				</div>
 						<input name="question_type" type="hidden" value="n" /> 
 						<input name="is_private" type="hidden" value="n" /> 
@@ -169,7 +169,7 @@ $(function(){
 
 						<!-- 동물 종류 찾기 -->
 
-						<div class="row">
+						<div class="row" width="100%">
 							<div class="col-md-6  mb-3">
 								<label for="petSpecies1">대분류</label> 
 								<select class="form-control" id="petSpeciesLevel1">
@@ -190,7 +190,7 @@ $(function(){
 
 						<div align="left">
 							내용<br>
-							<textarea name="content" style="width: 900px; height: 500px"></textarea>
+							<textarea name="content" style="width: 100%; height: 500px"></textarea>
 							<br> 
 						</div>
 						
@@ -213,15 +213,17 @@ $(function(){
     			    <ul id="tag-list"></ul>
 
     			   	</div> 
+    			  </main>
+			</div>		
 						
-						
-						
+			<div class="row">
+				
+				<div class="col-md-12" align="center">			
 					<input type="submit" value="제출"> 
 					<input type="reset" value="다시쓰기"> 
 					<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
-
-					
-				</main>
+				</div>	
+				
 			</div>
 			
 		</form>
