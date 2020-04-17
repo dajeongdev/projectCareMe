@@ -3,12 +3,14 @@ package com.careme.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -109,15 +111,22 @@ public class MemberController {
 		int i5 = memberService.mailcheck(lc);
 		return i5;
 	}
+	
+	
+	//이메일 인증 창 열기
+	@RequestMapping(value = "login/mailform")
+	public String form3() {
+		return "login/mailform";
+	}
 
 	// 이메일 보내기
 	@RequestMapping("login/sendMail")
 	@ResponseBody
-	public String sendMail(String member_email) throws Exception {
-
+	public String sendMail(@RequestParam() String getemail) throws Exception {
+		System.out.println("getemail::"+getemail);
 		EmailDto email = new EmailDto();
 
-		String receiver = member_email; // Receiver.메일 받을 주소
+		String receiver = getemail; // Receiver.메일 받을 주소
 		String subject = "[CAREME]인증메일입니다";
 		String content = "";
 
@@ -126,9 +135,15 @@ public class MemberController {
 		email.setContent(content);
 
 		boolean result = emailService.sendMail(email);
-
+		System.out.println(result);
 		return "이메일을 보냈습니다 " + result;
+		//return "redirect:/mailform";
 
+	}
+	
+	//이메일 인증번호
+	public String checknumber() {
+		return"";
 	}
 
 	// 회원가입 성공

@@ -91,7 +91,7 @@
 						return false; 
 			            }
 		            //인증번호를 입력했는지
-		            if(form.mailNum.value==""){
+		            if(form.getnumber.value==""){
 			            alert("인증번호를 입력해주세요!")
 			            form.mailNum.focus();
 			            return false;
@@ -102,7 +102,7 @@
 			            return false;
 			            }
 		           
-	  // form.submit();
+	  form.submit();
 	     
 	   }
 	
@@ -160,12 +160,21 @@
 	} 
 
 	//이메일 보냄
+
 function fn_sendChk(){
-		var win = window.open("sendMail", "sendMail", "width=200,height=200");
-		/* win.document.write("<p>이메일을 확인해 주세요!!</p><br><div style='center'><button onclick='newWindow.close();'>닫기</button></div>"); */
- 		
+<%--  window.open("<%=request.getContextPath()%>/login/mailform", "인증받기", "width=600,height=600" ); --%>
+	/* var win = window.open("sendMail", "sendMail", "width=150,height=150");
+		 win.document.write("<p>이메일을 확인해 주세요!!</p><br><div style='center'><button class='btn btn-dark btn-sm btn-block' onclick='self.close();'>닫기</button></div>"); */
+			 var windowObj;
+	         var email = document.getElementById('member_email').value;
+			 
+			 var settings ='toolbar=yes,directories=yes,status=yes,menubar=no,scrollbars=auto,resizable=no,height=600,width=600,left=0,top=0';
+	        // 자식창을 열고 자식창의 window 객체를 windowObj 변수에 저장
+	        windowObj = window.open("<%=request.getContextPath()%>/login/mailform?email="+email,"인증받기",settings);
+
 	}
-	/* function fn_sendChk() {
+	/* 펑션띄우기
+		function fn_sendChk() {
 		  setTimeout(function(){ alert("이메일을 확인해 주세요!!"); }, 1000);
 		} */
 	
@@ -186,13 +195,13 @@ function fn_sendChk(){
 		<!-- 성공하면 insertok로 감  -->
 		<form name="form2" action=insertok method="get"
 			onsubmit="return Signup()">
-			<table width="656" height="400" align="center" cellspacing="0">
+			<table width="685" height="400" align="center" cellspacing="0">
 				<tr height="10" align="center">
 				</tr>
 
 				<tr>
 					<!-- 아이디 입력 -->
-					<td><b>ID:</b></td>
+					<td style="padding-left: 20px;"><b>ID:</b></td>
 					<td><input type="text" style="width: 530px" id="member_id"
 						name="member_id" maxlength="45" class="form-control"
 						placeholder="※4-12자의 영문 대소문자와 숫자로만 입력" /></td>
@@ -206,14 +215,14 @@ function fn_sendChk(){
 
 				<tr>
 					<!-- 비밀번호 입력 -->
-					<td><b>PW:</b></td>
+					<td style="padding-left: 16px;"><b>PW:</b></td>
 					<td><input type="password" style="width: 530px"
 						id="member_pass" name="member_pass" maxlength="12"
 						class="form-control" placeholder=" ※4-12자의 영문 대소문자와 숫자로만 입력" /></td>
 				</tr>
 				<tr>
 					<!-- 비밀번호 확인 -->
-					<td><b>PW:</b></td>
+					<td style="padding-left: 16px;"><b>PW:</b></td>
 					<td><input type="password" style="width: 530px"
 						id="member_pass2" name="member_pass2" maxlength="12"
 						class="form-control" /></td>
@@ -221,7 +230,7 @@ function fn_sendChk(){
 
 				<tr>
 					<!-- 닉네임 입력 -->
-					<td><b>Nick:</b></td>
+					<td style="padding-left: 10px;"><b>Nick:</b></td>
 					<td><input type="text" style="width: 530px" id="member_nick"
 						name="member_nick" class="form-control" placeholder="ex)petlove" /></td>
 
@@ -233,7 +242,7 @@ function fn_sendChk(){
 
 				<tr>
 					<!-- 이메일 입력 -->
-					<td><b>Email:</b></td>
+					<td style="padding-left: 8px;"><b>Email:</b></td>
 					<td><input type="text" style="width: 530px" id="member_email"
 						name="member_email" class="form-control"
 						placeholder="ex)your@email.com" /></td>
@@ -249,15 +258,16 @@ function fn_sendChk(){
 					<!--이메일 인증 -->
 					<td><button type="button"
 							class="btn btn-dark btn-sm btn-block" name="sendMail" value="N"
-							id="sendMail" onclick="window.open('sendMail','sendMail','width=300,height=300');">인증받기</button></td>
+							id="sendMail" onclick="fn_sendChk();">인증받기</button></td>
+
 					<!-- onclick="fn_sendChk();" /onclick="window.open('sendMail','sendMail','width=300,height=300');" -->
-					<td><input type="text" style="width: 530px" id="mailNum"
-						name="mailNum" class="form-control" placeholder="인증번호를 입력해주세요" /></td>
+					<td><input type="text" style="width: 530px" id="getnumber"
+						name="getnumber" class="form-control" /></td>
 
 					<!-- 인증번호 확인 버튼 -->
-					<td><button type="button"
+					<!-- 	<td><button type="button"
 							class="btn btn-dark btn-sm btn-block" name="enChk" value="N"
-							id="enChk" onclick="fn_endChk();">확 인</button></td>
+							id="enChk" onclick="fn_endChk();">확 인</button></td> -->
 				</tr>
 
 

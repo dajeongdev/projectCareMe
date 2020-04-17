@@ -27,7 +27,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework/spring-context-support
 	compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.26.RELEASE'
 
-
+	//이메일
     // https://mvnrepository.com/artifact/org.springframework/spring-webmvc
 	compile group: 'org.springframework', name: 'spring-webmvc', version: '4.3.26.RELEASE'
 	
