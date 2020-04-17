@@ -13,8 +13,7 @@
 <title>회원가입폼</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
-	/* 아이디 중복체크 */
-//$(function(){
+
 	/* 유효성 검사 */
 	function Signup(){
 	           var form = document.form2;
@@ -86,22 +85,11 @@
 					      }
 			      
 			     //이메일 인증받기 했는지
-		         if(form.sendMail.value=='N'){
+		         if(form.checkM.value==""){
 			            alert("이메일 인증하기를 눌러주세요!");
 						return false; 
 			            }
-		            //인증번호를 입력했는지
-		            if(form.getnumber.value==""){
-			            alert("인증번호를 입력해주세요!")
-			            form.mailNum.focus();
-			            return false;
-			            }
-		            //인증번호 확인을 눌렀는지
-		            if(form.emailNChk.value=='N'){
-			            alert("인증번호 확인을 눌러주세요!")
-			            return false;
-			            }
-		           
+
 	  form.submit();
 	     
 	   }
@@ -162,22 +150,15 @@
 	//이메일 보냄
 
 function fn_sendChk(){
-<%--  window.open("<%=request.getContextPath()%>/login/mailform", "인증받기", "width=600,height=600" ); --%>
-	/* var win = window.open("sendMail", "sendMail", "width=150,height=150");
-		 win.document.write("<p>이메일을 확인해 주세요!!</p><br><div style='center'><button class='btn btn-dark btn-sm btn-block' onclick='self.close();'>닫기</button></div>"); */
+
 			 var windowObj;
 	         var email = document.getElementById('member_email').value;
 			 
 			 var settings ='toolbar=yes,directories=yes,status=yes,menubar=no,scrollbars=auto,resizable=no,height=600,width=600,left=0,top=0';
 	        // 자식창을 열고 자식창의 window 객체를 windowObj 변수에 저장
 	        windowObj = window.open("<%=request.getContextPath()%>/login/mailform?email="+email,"인증받기",settings);
-
 	}
-	/* 펑션띄우기
-		function fn_sendChk() {
-		  setTimeout(function(){ alert("이메일을 확인해 주세요!!"); }, 1000);
-		} */
-	
+
 </script>
 
 </head>
@@ -258,28 +239,9 @@ function fn_sendChk(){
 					<!--이메일 인증 -->
 					<td><button type="button"
 							class="btn btn-dark btn-sm btn-block" name="sendMail" value="N"
-							id="sendMail" onclick="fn_sendChk();">인증받기</button></td>
-
-					<!-- onclick="fn_sendChk();" /onclick="window.open('sendMail','sendMail','width=300,height=300');" -->
-					<td><input type="text" style="width: 530px" id="getnumber"
-						name="getnumber" class="form-control" /></td>
-
-					<!-- 인증번호 확인 버튼 -->
-					<!-- 	<td><button type="button"
-							class="btn btn-dark btn-sm btn-block" name="enChk" value="N"
-							id="enChk" onclick="fn_endChk();">확 인</button></td> -->
+							id="sendMail" onclick="fn_sendChk();">인증받기</button>
+							<input type="hidden" id="checkM" name="checkM"> </td>
 				</tr>
-
-
-				<!-- <tr>
-					연락처
-					<td><b>phone:</b></td>
-					<td><input type="text" style="width: 530px" id="member_phone"
-						name="member_phone" class="form-control"
-						placeholder="000-0000-0000" /></td>
-
-				</tr>
- -->
 			</table>
 			<br>
 			<!-- 버튼 -->

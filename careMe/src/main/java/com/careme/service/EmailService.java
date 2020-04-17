@@ -17,11 +17,11 @@ public class EmailService {
 	@Autowired
 	protected JavaMailSender mailSender;
 
-	public boolean sendMail(EmailDto email) throws Exception {
+	public int sendMail(EmailDto email) throws Exception {
 
 		try {
 			MimeMessage msg = mailSender.createMimeMessage();
-
+				//랜덤값 생성
 				int checkNum = 1;
 				while (true) {
 					checkNum = ((int) (Math.random() * 1000000));
@@ -44,7 +44,7 @@ public class EmailService {
 
 			mailSender.send(msg);
 
-			return true;
+			return checkNum;
 
 		} catch (Exception ex) {
 
@@ -52,7 +52,7 @@ public class EmailService {
 
 		}
 
-		return false;
+		return 0;
 
 	}
 

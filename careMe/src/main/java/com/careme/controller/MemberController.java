@@ -21,6 +21,7 @@ import com.careme.model.dto.EmailDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.service.EmailService;
 import com.careme.service.MemberService;
+import com.google.gson.Gson;
 
 @Controller
 public class MemberController {
@@ -120,8 +121,8 @@ public class MemberController {
 	}
 
 	// 이메일 보내기
-	@RequestMapping("login/sendMail")
-	@ResponseBody
+	@RequestMapping(value="login/sendMail", produces = "application/json; charset=utf8")
+	@ResponseBody()
 	public String sendMail(@RequestParam() String getemail) throws Exception {
 		System.out.println("getemail::"+getemail);
 		EmailDto email = new EmailDto();
@@ -134,17 +135,11 @@ public class MemberController {
 		email.setSubject(subject);
 		email.setContent(content);
 
-		boolean result = emailService.sendMail(email);
-		System.out.println(result);
-		return "이메일을 보냈습니다 " + result;
-		//return "redirect:/mailform";
+		int result = emailService.sendMail(email);
+		return result+"";
 
 	}
-	
-	//이메일 인증번호
-	public String checknumber() {
-		return"";
-	}
+
 
 	// 회원가입 성공
 	@RequestMapping(value = "login/insertok")
