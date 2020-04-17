@@ -40,9 +40,12 @@
 	float: right; 
 	margin-top: 10px;
 }
+.form-group, #file {
+	padding-top: 20px;
+}
 #preview img {
-	width: 100px;
-	height: 100px;
+	width: 700px;
+	height: 500px;
 }
 #preview {
 	display: inline-block;
@@ -100,10 +103,10 @@ $(function (){
 		reader.onload = function(img) {
 			var imgNum = previewIndex++;
 			$("#preview").append("<div class=\"preview-box\" value=\"" + imgNum + "\">"
-					+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
-					+ "<p>" + file.name + "</p>"
 					+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
-					+ "삭제" + "</a>" + "</div>");
+					+ "<i class='fas fa-trash-alt'></i>" + "</a>" 
+					+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
+				    + "</div>");
 			files[imgNum] = file;
 		};
 		reader.readAsDataURL(file);
@@ -152,8 +155,6 @@ $(function (){
 				success: function(result) {
 					if(result = -1) {
 						alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-					} else if(result = -2) {
-						alert("파일이 10MB를 초과하였습니다.");
 					} else {
 						alert("이미지 업로드 성공");
 					}
@@ -179,7 +180,7 @@ $(function (){
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
-				<input type="file" name="file" id="file" multiple/>
+				<input type="file" class="custom-file-input" id="inputGroupFile04" name="file">
 				<div class="row" id="selectedFiles"></div>
 				<div id="preview">
 				</div>
@@ -197,8 +198,8 @@ $(function (){
 			</div> -->
 			<input type="hidden" name="tag_idx" value="3">
 			<div class="btn-group">
-				<button type="submit" class="insert_btn btn btn-outline-dark">등록</button>
-				<button type="submit" class="list_btn btn btn-outline-dark" OnClick="location.href='storyDetail'">목록</button>
+				<button type="submit" class="insert_btn btn btn-outline-dark" OnClick="document.location.href='storyDetail?story_board_idx=${story_board_idx}'">등록</button>
+				<button type="submit" class="list_btn btn btn-outline-dark" OnClick="document.location.href='storyMain'">목록</button>
 			</div>
 		</form>
 	</div>
