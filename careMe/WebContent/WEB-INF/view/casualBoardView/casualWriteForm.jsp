@@ -162,7 +162,7 @@ $(function() {
 			var reader = new FileReader();
 			reader.onload = function (e) {
 				var html  = "<div class='col-md-3 mb-5'>";
-					html += "(X)";
+					html += "<img src=\"" + e.target.result + "\"  class='w-100 h-80'>";
 					html += "<i class='fa fa-trash' data-file='"+f.name+"' title='Click to remove'></i>";
 					html += "</div>";
 				selDiv.append(html);
@@ -283,6 +283,7 @@ $(function(){
 							<div class="col-12" id="images">
 								<label for="">사진등록</label>
 								<div>
+								<input type="file" class="form-control mb-3 d-none" id="files" name="image" placeholder="" max="5" multiple/>
 									<label for="files"> <span class="btn btn-dark btn-sm">등록</span>
 									</label>
 								</div>
@@ -318,6 +319,7 @@ $(function(){
 			</div>
 			
 		</form>
+		
 		</div>
 	</div>
 </body>

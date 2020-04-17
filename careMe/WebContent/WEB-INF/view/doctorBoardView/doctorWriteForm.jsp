@@ -67,7 +67,7 @@
 
 						<!-- 동물 종류 찾기 -->
 
-						<div class="row">
+						<div class="row" style="width: 100%;">
 							<div class="col-md-6  mb-3">
 								<label for="petSpecies1">대분류</label> 
 								<select class="form-control" id="petSpeciesLevel1">
@@ -89,7 +89,7 @@
 						<div align="left">
 							내용<br>
 							<textarea name="content" style="width: 100%; height: 250px"></textarea>
-							<br>
+							<br> 
 						</div>
 						
 						

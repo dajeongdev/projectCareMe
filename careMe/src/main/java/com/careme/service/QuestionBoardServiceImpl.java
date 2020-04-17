@@ -69,9 +69,28 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	// 게시글 작성
 
-	public int addDoctorArticles(QuestionBoardDto dto) {
+	public void addDoctorArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
 		dto.setReg_date(LocalDateTime.now());
-		return dao.insertArticleForDoctor(dto);
+		dao.insertArticleForDoctor(dto);
+		int idx = dto.getQuestion_table_idx();
+		System.out.println("idx:::"+idx);
+		if (idx>0) {
+			bs.addFileForDoctor(idx, request);
+		}
+	}
+
+	public void addFileForDoctor(int question_table_idx, MultipartHttpServletRequest request) {
+		List<FileUploadCommand> addfiles;
+		addfiles = fus.upload(request, "/img/boardUpload");
+		for (FileUploadCommand file : addfiles) {
+			BoardFileDto bdto = new BoardFileDto();
+			bdto.setQuestion_table_idx(question_table_idx);
+			bdto.setFile_name(file.getFileOriginName());
+			bdto.setFile_path(file.getFilePath());
+			bdto.setFile_size(file.getFileSize());
+			bdto.setReg_date(LocalDateTime.now());
+			dao.insertFileForDoctor(bdto);
+		}
 	}
 
 	// 게시글 수정
@@ -125,7 +144,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public void getCasualBoardViews(int question_table_idx) {
 		dao.getCasualBoardViews(question_table_idx);
 	}
-
 	
 	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
@@ -156,8 +174,9 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	public void addCasualArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
 		dto.setReg_date(LocalDateTime.now());
-		int idx=dao.insertArticleForCasual(dto);
-		if (request.getFileNames()!=null) {
+		dao.insertArticleForCasual(dto);
+		int idx = dto.getQuestion_table_idx();
+		if (idx>0) {
 			bs.addFileForCasual(idx, request);
 		}
 	}

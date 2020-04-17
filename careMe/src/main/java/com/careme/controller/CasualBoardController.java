@@ -98,8 +98,6 @@ public class CasualBoardController {
 		
 		return list;
 	}
-
-	
 	
 
 //게시글 내용 불러오기
@@ -127,20 +125,30 @@ public class CasualBoardController {
 		
 
 // 게시판 검색기능
-	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
+	@RequestMapping(value = "/casualBoardSearch")
 	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword) {
-		ModelAndView list = new ModelAndView();
+		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
+		int contentPerPage = 10;
+		int currentPage=1;
+		
+		//검색 정보 처리
 		SearchBoardCommand sbc = new SearchBoardCommand();
-		List<QuestionBoardDto> items = null;
 		sbc=bs.listSearchInfo(searchn, searchKeyword);
-		items = bs.getCasualBoardSearch(sbc);
+		
+		int start_idx=pns.getStartIdx(currentPage, contentPerPage);
+		sbc.setStart_idx(start_idx);
+		sbc.setContentPerPage(contentPerPage);
+		List<QuestionBoardDto> items = bs.getCasualBoardSearch(sbc);
+
+		
+		
+		// 내용 및 페이지 번호
+		PageNumberCommand paging = new PageNumberCommand();
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
 		
 		list.addObject("list", items);
-		list.addObject("count", items.size());
-		list.setViewName("list");
-		
-		return System.out.println(info.getMember_id());
-		System.out.println(info.getMember_idx());list;
+		list.addObject("paging", paging);
+		return list;
 	}
 
 	
@@ -152,8 +160,6 @@ public class CasualBoardController {
 		//회원 정보 및 확인
 //		String currentId = session.getAttribute("id");
 		MemberDto info = ms.memberInfo("hellojava");
-		
-		
 		
 		write.addObject("info", info);
 		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
@@ -169,7 +175,7 @@ public class CasualBoardController {
 		else if (level == 2) items = ps.selectPetSpeciesLevel2(ancestor);
 		
 		Gson json = new Gson();
-		return json.toJson(items);
+		return json.toJson(items);	
 	}
 	
 	

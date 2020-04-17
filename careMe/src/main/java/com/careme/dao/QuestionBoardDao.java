@@ -47,11 +47,12 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Doctor Board 작성, 수정, 삭제
 	
 	public int insertArticleForDoctor(QuestionBoardDto dto){
-		return getSqlSession().insert("doctorQuestionBrd.insertArt", dto);
+		int idx= getSqlSession().insert("doctorQuestionBrd.insertArt", dto);
+		return idx;
 	}
 	
-	public int insertFileforDoctor(QuestionBoardDto dto) {
-		return getSqlSession().insert("doctorQuestionBrd.insertArtFile", dto);
+	public int insertFileForDoctor(BoardFileDto dto) {
+		return getSqlSession().insert("doctorQuestionBrd.insertFile", dto);
 	}
 	
 	public int updateArticlesForDoctor(QuestionBoardDto dto) {

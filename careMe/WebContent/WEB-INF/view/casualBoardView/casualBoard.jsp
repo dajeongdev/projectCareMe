@@ -92,7 +92,7 @@
 						</div>
 						
 						<!-- 게시판 검색 -->
-						<form action="view/casualBoardView/casualBoardSearch">
+						<form action="casualBoardSearch">
 							<select name="searchn">
 								<option value="0">작성자</option>
 								<option value="1">제목</option>

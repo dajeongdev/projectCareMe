@@ -32,7 +32,9 @@ public interface QuestionBoardService {
 	
 	
 // Doctor Board 작성, 수정, 삭제
-	public int addDoctorArticles (QuestionBoardDto dto);
+	public void addDoctorArticles (QuestionBoardDto dto, MultipartHttpServletRequest request);
+	
+	public void addFileForDoctor(int question_table_idx, MultipartHttpServletRequest request);
 	
 	public int updateDoctorArticle (QuestionBoardDto dto);
 	
