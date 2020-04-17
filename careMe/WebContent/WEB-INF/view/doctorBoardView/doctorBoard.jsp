@@ -25,9 +25,9 @@
 				<main role="main" class="col-lg-12">
 					<h2 align="left">전문 상담</h2>
 					<p align="left">
-						(전체 글: <c:out value="${countPro}" />)
+						(전체 글: <c:out value="${paging.totalCount}" />)
 					</p>
-					<div class="table">
+					<div class="table" style="height: 540px">
 						<table class="table table-striped table-lg table-hover">
 							<!-- 맨 윗 줄 -->
 							<thead class="thead-dark">
@@ -42,7 +42,7 @@
 							<tbody>
 
 								<!-- 글 들어가는 곳 -->
-								<c:forEach var="item" items="${listPro}">
+								<c:forEach var="item" items="${listPro}" begin="${item.start_idx}" end="${item.start_idx}+9">
 									<tr onClick="location.href='doctorBoardContent?question_table_idx=${item.question_table_idx}'">
 										<td><c:out value="${item.question_table_idx}" /></td>
 										<td><c:out value="${item.title}"/></td>
@@ -52,8 +52,8 @@
 									</tr>
 								</c:forEach>
 							</tbody>
-
 						</table>
+						</div>
 						<!-- 게시판 페이지넘버링 및 글쓰기 -->
 						<!-- 글쓰기 버튼 -->
 						<div class="row lg-3" >
@@ -72,9 +72,9 @@
    		  					 <a class="page-link" href="#">&laquo;</a>
    							 </li>
     
-   							 <c:forEach var="page" begin="${pages.startPage}" end="${pages.endPage}">
+   							 <c:forEach var="page" begin="${paging.startPage}" end="${paging.endPage}">
 							 	<c:choose>
-    						 		<c:when test="${page eq pages.currentPage}">
+    						 		<c:when test="${page eq paging.currentPage}">
     						 			<li class="page-item active">
       						 			<a class="page-link" style="font-weight: bold;" href="doctorBoard?currentPage=${page}">${page}</a>
     						 			</li>	
@@ -105,6 +105,8 @@
 				<input type="submit" value="검색" />
 			</form>
 
+			</main>
+		</div>
 
 
 		</div>

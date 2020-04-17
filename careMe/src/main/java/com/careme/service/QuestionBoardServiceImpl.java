@@ -28,8 +28,8 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.getDoctorBoard();
 	}
 
-	public List<QuestionBoardDto> getDoctorBoardPage(QuestionBoardDto dto){
-		return dao.getDoctorBoardList(dto);
+	public List<QuestionBoardDto> getDoctorBoardPage(Map<String,Integer>param){
+		return dao.getDoctorBoardList(param);
 	}
 
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx) {

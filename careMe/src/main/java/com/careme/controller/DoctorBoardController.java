@@ -57,9 +57,8 @@ public class DoctorBoardController {
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
-	public ModelAndView toDoctorBoard(@RequestParam int currentPage) {
+	public ModelAndView toDoctorBoard(int currentPage) {
 		ModelAndView listPro = new ModelAndView("/doctorBoardView/doctorBoard");
-		QuestionBoardDto dto = new QuestionBoardDto();
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
 		
@@ -67,14 +66,11 @@ public class DoctorBoardController {
 		param.put("start_idx", pns.getStartIdx(currentPage, contentPerPage));
 		param.put("contentPerPage", contentPerPage);
 		
-		dto.setParam(param);
+		List<QuestionBoardDto> getArticles = bs.getDoctorBoardPage(param);
+		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
 		
-		List<QuestionBoardDto> getArticles = bs.getDoctorBoard();
-		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "doctorBoardView/doctorBoard");
-		List<QuestionBoardDto> getArticlesList = bs.getDoctorBoardPage(dto);
-	
-		listPro.addObject("listPro", getArticlesList);
-		listPro.addObject("pages", paging);
+		listPro.addObject("listPro", getArticles);
+		listPro.addObject("paging", paging);
 		return listPro;
 	}
 

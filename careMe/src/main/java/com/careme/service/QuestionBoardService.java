@@ -14,7 +14,9 @@ public interface QuestionBoardService {
 // Doctor Board 게시글 뿌리기
 	public List<QuestionBoardDto> getDoctorBoard();
 	
-	public List<QuestionBoardDto> getDoctorBoardPage(QuestionBoardDto dto);
+	public List<QuestionBoardDto> getDoctorBoardPage(Map<String,Integer>param);
+	
+	public int getTotal();
 	
 	public QuestionBoardDto getDoctorBoardContents (int question_table_idx);
 	
@@ -45,8 +47,6 @@ public interface QuestionBoardService {
 	public List<QuestionBoardDto> getCasualBoard();
 	
 	public List<QuestionBoardDto> getCasualBoardPage(Map<String,Integer>param);
-	
-	public int getTotal();
 	
 	public QuestionBoardDto getCasualBoardContents (int question_table_idx);
 	

@@ -21,7 +21,7 @@
 			<div class="row mb-3">
 				<main role="main" class="col-lg-12">
 					<h2 align="left">고민 상담</h2>
-					<p align="left"> (전체 글: <c:out value="${pages.totalCount}" />)</p>
+					<p align="left"> (전체 글: <c:out value="${paging.totalCount}" />)</p>
 					<div class="table" style="height: 540px">
 						<table class="table table-striped table-lg table-hover">
 							<!-- 맨 윗 줄 -->
@@ -46,9 +46,7 @@
 									<td><c:out value="${item.reg_date}" /></td>
 									<td><c:out value="${item.view_count}" /></td>
 								</tr>
-								
 							</c:forEach>
-							
 							</tbody>
 						</table>
 					</div>

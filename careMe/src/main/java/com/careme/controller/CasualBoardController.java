@@ -63,9 +63,8 @@ public class CasualBoardController {
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
 	public ModelAndView toCasualBoard(int currentPage) {
-		System.out.println("컨트롤러::" + currentPage);
 		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
-			PageNumberCommand paging = new PageNumberCommand();
+		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
 
 		Map<String,Integer> param = new HashMap<String,Integer>();
@@ -75,7 +74,6 @@ public class CasualBoardController {
 		List<QuestionBoardDto> getArticles = bs.getCasualBoardPage(param);
 		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
 		
-		System.out.println("pages::::"+paging);
 		list.addObject("list", getArticles);
 		list.addObject("paging", paging);
 		

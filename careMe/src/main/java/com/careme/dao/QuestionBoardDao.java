@@ -21,8 +21,8 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("doctorQuestionBrd.getTotal");
 	}
 	
-	public List<QuestionBoardDto> getDoctorBoardList(QuestionBoardDto dto){
-		return getSqlSession().selectList("doctorQuestionBrd.getArticles", dto);
+	public List<QuestionBoardDto> getDoctorBoardList(Map<String,Integer>param){
+		return getSqlSession().selectList("doctorQuestionBrd.getArticles", param);
 	}
 	
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx){
