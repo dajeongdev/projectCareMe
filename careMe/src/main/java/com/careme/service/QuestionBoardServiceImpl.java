@@ -6,11 +6,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.QuestionBoardDao;
+import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 
@@ -22,7 +25,21 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public void setDao(QuestionBoardDao dao) {
 		this.dao = dao;
 	}
-
+	
+	@Autowired
+	QuestionBoardService bs;
+	
+	public void setQuestionBoardService(QuestionBoardService bs) {
+		this.bs = bs;
+	}
+	
+	@Autowired
+	FileUploadService fus;
+	
+	public void setFileUploadService(FileUploadService fus) {
+		this.fus = fus;
+	}
+	
 	// Doctor Board 게시글 뿌리기
 	public List<QuestionBoardDto> getDoctorBoard() {
 		return dao.getDoctorBoard();
@@ -109,6 +126,22 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dao.getCasualBoardViews(question_table_idx);
 	}
 
+	
+	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword) {
+		SearchBoardCommand sbc = new SearchBoardCommand();
+		if (searchn == 0) {
+			sbc.setSearch_option("member_id");
+			sbc.setSearchKeyword(searchKeyword);
+		} else if (searchn == 1) {
+			sbc.setSearch_option("title");
+			sbc.setSearchKeyword(searchKeyword);
+		} else if (searchn == 2) {
+			sbc.setSearch_option("content");
+			sbc.setSearchKeyword(searchKeyword);
+		}
+		return sbc;
+	}
+	
 	public List<QuestionBoardDto> getCasualBoardSearch(SearchBoardCommand sbc) {
 		return dao.getCasualBoardSearch(sbc);
 	}
@@ -121,15 +154,28 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	// 게시글 작성
 
-	public int addCasualArticles(QuestionBoardDto dto) {
+	public void addCasualArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
 		dto.setReg_date(LocalDateTime.now());
-		return dao.insertArticleForCasual(dto);
+		int idx=dao.insertArticleForCasual(dto);
+		if (request.getFileNames()!=null) {
+			bs.addFileForCasual(idx, request);
+		}
 	}
 
-	public int addArtFileForCasual(QuestionBoardDto dto) {
-		dto.setReg_date(LocalDateTime.now());
-		return dao.insertArtFileForCasual(dto);
+	public void addFileForCasual(int question_table_idx, MultipartHttpServletRequest request) {
+		List<FileUploadCommand> addfiles;
+		addfiles = fus.upload(request, "/img/boardUpload");
+		for (FileUploadCommand file : addfiles) {
+			BoardFileDto bdto = new BoardFileDto();
+			bdto.setQuestion_table_idx(question_table_idx);
+			bdto.setFile_name(file.getFileOriginName());
+			bdto.setFile_path(file.getFilePath());
+			bdto.setFile_size(file.getFileSize());
+			bdto.setReg_date(LocalDateTime.now());
+			dao.insertFileForCasual(bdto);
+		}
 	}
+		
 
 	// 게시글 수정
 

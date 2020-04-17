@@ -43,7 +43,6 @@
 
 </head>
 <body>
-
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 
 	<div
@@ -51,9 +50,8 @@
 		<div class="container min-vh-100 pt-3 text-center">
 		
 		<form action="doctorBoardWriteAdd" method="post" enctype="multipart/form-data">
-			
-			<div class="row my-3 p-3 bg-white rounded shadow-sm">
-				<main role="main" class="col-md-12 col-lg-10 px-4">
+			<div class="row my-3 p-3">
+				<main role="main" class="col-lg-12 bg-white rounded shadow-sm">
 					
 					<h2 align="left">전문 상담</h2>
 					<p></p>
@@ -62,6 +60,7 @@
           					<input name="title" type="text" class="form-control"/>
         				</div>
 						<input name="question_type" type="hidden" value="y" /> 
+						<input name="member_idx" type="hidden" id="subject" value="${info.member_idx}">
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />
@@ -89,27 +88,40 @@
 
 						<div align="left">
 							내용<br>
-							<textarea name="content" style="width: 900px; height: 500px"></textarea>
-							<br> <input name="member_idx" type="text" id="subject"><br>
+							<textarea name="content" style="width: 100%; height: 250px"></textarea>
+							<br>
 						</div>
 						
 						
-						<label for="file">파일첨부</label>
-							<input name="file" type="file" />
+						<div align="left">
+						<label for="file">파일첨부</label><br>
+							<input type="file" name="file" id="file" multiple/>
+							<div class="row" id="selectedFiles"></div>
+							<div id="preview"></div>
+    					</div>
+    					
     					<br>
     					
-						<label for="tagArea">태그 추가</label>  					
-							<input type="text" name="tagArea" placeholder="#">
-						<br>
+						<div class="content" align="left">
+       					<input type="hidden" value="" name="tag" id="rdTag" />
+    			   	<div>
+     			       <input type="text" id="tag" size="7" placeholder="태그입력" />
+     			    </div><br>  
+    			    
+    			    <ul id="tag-list"></ul>
 
-
-						<input type="submit" value="제출"> 
-						<input type="reset" value="다시쓰기"> 
-						<input type="button" value="목록으로" OnClick="location.href='doctorBoard'">
-
-					
+    			   	</div> 
 				</main>
 			</div>
+				
+				<div class="row">
+					<div class="col-md-12" align="center">	
+						<input type="submit" class="btn btn-dark btn-sm" value="제출"> 
+						<input type="reset" class="btn btn-dark btn-sm" value="다시쓰기"> 
+						<input type="button" class="btn btn-dark btn-sm" value="목록으로" OnClick="location.href='doctorBoard?currentPage=1'">
+					</div>
+				</div>			
+				
 			
 		</form>
 

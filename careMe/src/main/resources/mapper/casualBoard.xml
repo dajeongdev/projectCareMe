@@ -53,12 +53,10 @@
 		#{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n')
 	</insert>
 	
-	<insert id="insertArtFile" parameterType="com.careme.model.dto.QuestionBoardDto">
-		 insert into question_board_file (question_table_idx, file_name, file_path, file_size, reg_date, update_date, del_yn) 
-		 values (#{question_table_idx}, #{file_name}, #{file_path}, #{file_size}, #{reg_date}, null, 'n')
+	<insert id="insertFile" parameterType="com.careme.model.dto.BoardFileDto">
+		 insert into question_board_file (question_table_idx, file_name, file_path, file_size, reg_date, del_yn) 
+		 values (#{question_table_idx}, #{file_name}, #{file_path}, #{file_size}, #{reg_date}, 'n')
 	</insert>
-	
-	
 	
     <update id="updateArticle" parameterType="com.careme.model.dto.QuestionBoardDto">
 		update question_board set title=#{title}, content=#{content}, pet_species_idx=#{pet_species_idx}, 

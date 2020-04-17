@@ -11,7 +11,8 @@
 <title>메인 화면</title>
 
 <script>
-	$(function(){
+<!-- PET CHOOSE -->
+$(function(){
 		$("#petSpeciesLevel1").on("change", function(){
 		var ancestor=$(this).find("option:selected").data("num");
 			if(!ancestor){
@@ -37,10 +38,11 @@
 				});
 			})
 		})
-</script>
 
-
-<script>
+</script>		
+<script>		
+<!-- HASHTAG -->
+$(function() {
     $(document).ready(function () {
 
         var tag = {};
@@ -109,7 +111,79 @@
             $(this).parent().remove();
         });
 	})
+})	
+	
 </script>
+
+<script>
+
+var storedFiles = [];
+var selDivs = "";
+
+$(function() {
+
+	selDiv = $("#selectedFiles");
+
+	$("#files").on("change", handleFileSelect);
+	$("body").on("click", ".fa-trash", removeFile);
+
+	form = $("form[name=casualWriteForm]")[0];
+	form.onsubmit = function (e) {
+		e.preventDefault();
+		var formData = new FormData(form);
+		for (var i = 0; i < storedFiles.length; i++) {
+			formData.append("files", storedFiles[i]);
+		}
+
+		 $.ajax({
+	         url: "casualWriteForm"
+             , type : "POST"
+	         , contentType: false
+	         , processData: false
+             , data : formData
+        	 , success : function() {
+                 location.href="/careMe/view/casualBoardView/casualBoard?currentPage=1";
+             }
+        })
+	}
+
+})
+
+	function handleFileSelect(e) {
+		var files = e.target.files;
+		var filesArr = Array.prototype.slice.call(files);
+		filesArr.forEach(function(f) {			
+
+			if(!f.type.match("image.*")) {
+				return;
+			}
+			storedFiles.push(f);
+			
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var html  = "<div class='col-md-3 mb-5'>";
+					html += "(X)";
+					html += "<i class='fa fa-trash' data-file='"+f.name+"' title='Click to remove'></i>";
+					html += "</div>";
+				selDiv.append(html);
+			}
+			reader.readAsDataURL(f); 
+		});
+	}
+
+	function removeFile(e) {
+		var file = $(this).data("file");
+		for(var i=0;i<storedFiles.length;i++) {
+			if(storedFiles[i].name === file) {
+				storedFiles.splice(i,1);
+				break;
+			}
+		}
+		$(this).parent().remove();
+	}
+
+</script>
+
 
 <!-- <script>
 $(function(){
@@ -153,8 +227,8 @@ $(function(){
 		<div class="container min-vh-100 pt-3 text-center">
 
 		<form name="addWrite" action="casualBoardWriteAdd" method="POST" enctype="multipart/form-data">
-			<div class="row my-3 p-3 bg-white rounded shadow-sm">
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+			<div class="row my-3 p-3">
+				<main role="main" class="col-lg-12 bg-white rounded shadow-sm">
 					
 					<h2 align="left">고민 상담</h2>
 					<p></p>
@@ -166,10 +240,11 @@ $(function(){
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />
+						<input name="member_idx" type="hidden" id="subject" value="${info.member_idx}">
 
 						<!-- 동물 종류 찾기 -->
 
-						<div class="row" width="100%">
+						<div class="row" style="width: 100%;">
 							<div class="col-md-6  mb-3">
 								<label for="petSpecies1">대분류</label> 
 								<select class="form-control" id="petSpeciesLevel1">
@@ -190,17 +265,33 @@ $(function(){
 
 						<div align="left">
 							내용<br>
-							<textarea name="content" style="width: 100%; height: 500px"></textarea>
+							<textarea name="content" style="width: 100%; height: 250px"></textarea>
 							<br> 
 						</div>
 						
-						<p><input name="member_idx" type="text" id="subject"></p>
 						
-						<div align="left">
+						
+						<!--<div align="left">
 						<label for="file">파일첨부</label><br>
-							<input name="file" type="file" />
+							<input type="file" name="file" id="file" multiple/>
+							<div class="row" id="selectedFiles"></div>
+							<div id="preview"></div>
+    					</div> -->
+
+
+						<div class="row mb-3" align="left">
+							<div class="col-12" id="images">
+								<label for="">사진등록</label>
+								<div>
+									<label for="files"> <span class="btn btn-dark btn-sm">등록</span>
+									</label>
+								</div>
+
+								<div class="row" id="selectedFiles"></div>
+							</div>
 						</div>
-    					<br>
+
+						<br>
     					
     					
 						
@@ -219,9 +310,9 @@ $(function(){
 			<div class="row">
 				
 				<div class="col-md-12" align="center">			
-					<input type="submit" value="제출"> 
-					<input type="reset" value="다시쓰기"> 
-					<input type="button" value="목록으로" OnClick="location.href='casualBoard'">
+					<input type="submit" class="btn btn-dark btn-sm" value="제출"> 
+					<input type="reset" class="btn btn-dark btn-sm" value="다시쓰기"> 
+					<input type="button" class="btn btn-dark btn-sm" value="목록으로" OnClick="location.href='casualBoard?currentPage=1'">
 				</div>	
 				
 			</div>

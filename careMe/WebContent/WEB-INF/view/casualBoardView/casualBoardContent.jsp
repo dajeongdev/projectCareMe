@@ -51,11 +51,12 @@
 			<!-- 고정되는 하단 -->
 			<table align="right">
 				<tr height="30">
-					<td colspan="4" align="right"><input type="button" value="글수정"
+					<td colspan="4" align="right">
+					<input type="button" class="btn btn-dark btn-sm" value="글수정"
 						onClick="document.location.href='casualBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">
-					<input type="button" value="글삭제"
+					<input type="button" class="btn btn-dark btn-sm" value="글삭제"
 						onClick="document.location.href='deleteCasualArticle?question_table_idx=${mlist.question_table_idx}'">
-					<input type="button" value="글목록" onClick="location.href='casualBoard'"></td>
+					<input type="button" class="btn btn-dark btn-sm" value="글목록" onClick="location.href='casualBoard?currentPage=1'"></td>
 				</tr>
 			</table>
 			<br>

@@ -9,6 +9,7 @@ import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 
@@ -115,8 +116,8 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return idx;
 	}
 	
-	public int insertArtFileForCasual(QuestionBoardDto dto) {
-		return getSqlSession().insert("casualQuestionBrd.insertArtFile", dto);
+	public int insertFileForCasual(BoardFileDto dto) {
+		return getSqlSession().insert("casualQuestionBrd.insertFile", dto);
 	}
 		
 	public int updateArticlesForCasual(QuestionBoardDto dto) {
