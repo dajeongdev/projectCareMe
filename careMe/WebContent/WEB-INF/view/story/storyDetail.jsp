@@ -1,48 +1,73 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+<% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
+<c:set var="fullName" value="<%=fullName%>" />
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <title>스토리 글보기</title>
+<style>
+.container { 
+	width: 1000px; 
+	height: 1000px; 
+	position: absolute; 
+	margin: 40px;
+	font-size: 16px;
+}
+hr { width: 1000px; }
+.container, .input-group { width: 700px; }
+.header > div { float: left; margin-bottom: 20px; }
+.header:after, .comL:after { clear: both; content: ''; display: block; }
+.comL > div { float: left; margin: 10px; }
+.profile { margin-right: 10px; }
+.comId { font-size: 18px; font-weight: 500;}
+.btn-group { float: right; }
+.hr { position: block;}
+.input-group { margin-top: 10px;}
+.updateCom, .deleteCome {
+	float: right;
+}
+</style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script>
 $(document).ready(function(){
 	var formObj = $("form[name='readForm']");
 
-	// 수정
-	$(".update_btn").on("click", function() {
-		if(fn_valiChk()) {
-			return false;
-		}
-		formObj.attr("action", "/story/storyEdit");
-		formObj.attr("method", "post");
-		formObj.submit();
-	})
 	// 삭제
 	$(".delete_btn").on("click", function() {
-		var deleteYN = confirm("삭제하시겠습니까?");
+		var deleteYN = confirm("정말 삭제하시겠습니까?");
 		if(deleteYN == true) {
-			formObj.attr("action", "/delete");
+			formObj.attr("action", "/story/delete");
 			formObj.attr("method", "post");
 			formObj.submit();
 		}
 	})
 	//목록
 	$(".list_btn").on("click", function() {
-		location.href="/story/storyMain";
-	});
+		location.href="/careMe/view/story/storyMain";
+	})
+
 });
 function fn_valiChk() {
-	var regForm = $("form[name='insert']) .chk").length;
+	var regForm = $("form[name='readForm']) .chk").length;
 	for(var i = 0; i < regForm; i++) {
-		if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null) {
+		if($(".chk".eq(i).val() == "" || $(".chk").eq(i).val == null)) {
 			alert($(".chk").eq(i).attr("title"));
 			return true;
-		});
+		}
 	}
+}
+function change(iconID) {
+	$(".far").on("click", function (){
+		if(document.getElementById(iconID).className == "far fa-heart") {
+			document.getElementById(iconID).className = "fas fa-heart";
+		} else {
+			document.getElementById(iconID).className = "far fa-heart";
+		}
+	});
 }
 </script>
 </head>
@@ -50,45 +75,74 @@ function fn_valiChk() {
 <div class="container-fluid" style="padding:0;">
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
-<div id="body">
-	<form name="detail" role="form" method="post">
-		<input type="hidden" id="story_board_idx" name="story_board_idx"
-			value="${detail.story_board_idx}">
-	</form>
-	<div id="header">
-		<h3>${detail.title}</h3>
-		<p>${detail.reg_date}</p>
-		<p>${update.view_count}</p>
+<div class="detail-form">
+
+	<div class="container">
+	<form name="readForm" >
+		<div class="top">
+		<h3><strong>펫스토리</strong></h3>
+		<hr>
+			<div class="header">
+				<div class="profile">
+					<svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+				</div>
+				<div class="rest">
+				<h4><c:out value="${dto.title}"/></h4>
+				<span class="date"><c:out value="${dto.reg_date}"/></span>&nbsp
+				<span class="view"><i class="fas fa-eye"></i><c:out value="${dto.view_count}"/></span>
+				<span class="heart"><i class="fas fa-heart"></i>&nbsp<c:out value="${dto.heart}"/></span>
+				</div>
+			</div>
+			<div class="img">
+				<img width="700" height="500" src="${fullName}${fileDto.file_path}">
+			</div>
+			<div>
+				<p><c:out value="${dto.content}"/></p>
+			</div>
+			<div class="box_tag">
+				<a href="">#강아지</a>
+				<a href="">#산책</a>
+			</div>
+			<span class="story_heart"><i class="far fa-heart" id="far" style="font-size:20px;color:red" onClick="change(iconId)"></i></span>
+			<div class="btn-group">
+				<button type="button" class="update_btn btn btn-outline-dark" OnClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
+				<button type="button" class="delete_btn btn btn-outline-dark">삭제</button>
+				<button type="button" class="list_btn btn btn-outline-dark">목록</button>
+			</div>
+		</div>
+		</form>
+		<div class="hr"><hr></div>
+		<div id="bottom">
+			<div class="com">
+				댓글 <c:out value="${comCount}"/>
+				
+				<div>
+					<form name="insertCom" action="insertCom?story_board_idx=${dto.story_board_idx}" method="POST">
+						<input type="hidden" name="member_idx" value="2">
+						<div class="input-group mb-3">
+						  <input type="text" name="content" class="form-control comm" placeholder="댓글을 입력해주세요.">
+						  <div class="input-group-append">
+						    <input type="submit" name="submit" value="등록" class="btn btn-outline-secondary">
+						  </div>
+						</div>
+					</form>
+				</div>
+				<c:forEach items="${comList}" var="coms">
+					<div class="comL">
+						<div class="profile">
+							<svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+						</div>
+						<div>
+							<span class="comId"><c:out value="${coms.member_id}"/></span>&nbsp&nbsp<c:out value="${coms.content}"/><br>
+							<c:out value="${coms.reg_date}"/>&nbsp<i class="fas fa-heart"></i>&nbsp<c:out value="${coms.heart}"/>&nbsp&nbsp&nbsp
+							<span class="updateCom"><i class="fas fa-edit"></i></span>&nbsp&nbsp<span class="deleteCom"><i class="fas fa-trash-alt"></i></span>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+		</div>
 	</div>
-	<div>
-		<!-- 사진 -->
-	</div>
-	<div>
-		<p>${update.content}</p>
-	</div>
-	<div class="box_tag">
-		<a href="">#강아지</a>
-		<a href="">#산책</a>
-	</div>
-	
-	<div id="comment">
-		<ol class="comList">
-			<c:forEach items="${comList}" var="comList">
-				<li>
-					<p>
-					${comList.member_idx}<br>
-					${comList.content}<br>
-					<fmt:formatDate value="${comList.reg_date}" pattern="MM-dd"/>
-					</p>
-					
-				</li>
-			</c:forEach>
-		</ol>
-	</div>
-		<button type="submit" class="update_btn">수정</button>
-		<button type="submit" class="delete_btn">삭제</button>
-		<button type="submit" class="list_btn">목록</button>
-	
+
 </div>
 </body>
 </html>

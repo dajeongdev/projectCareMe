@@ -2,20 +2,19 @@ package com.careme.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.QuestionBoardDao;
-import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
-import com.careme.model.dto.PetDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 
-@Service
+@Service("QuestionBoardService")
 public class QuestionBoardServiceImpl implements QuestionBoardService {
 	@Autowired
 	QuestionBoardDao dao = new QuestionBoardDao();
@@ -24,17 +23,13 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		this.dao = dao;
 	}
 
-	QuestionBoardDto dto;
-
-	public void setDto(QuestionBoardDto dto) {
-		this.dto = dto;
-	}
-
-	
-	
-// Doctor Board 게시글 뿌리기
+	// Doctor Board 게시글 뿌리기
 	public List<QuestionBoardDto> getDoctorBoard() {
 		return dao.getDoctorBoard();
+	}
+
+	public List<QuestionBoardDto> getDoctorBoardPage(Map<String,Integer>param){
+		return dao.getDoctorBoardList(param);
 	}
 
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx) {
@@ -98,6 +93,14 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.getCasualBoard();
 	}
 
+	public List<QuestionBoardDto> getCasualBoardPage(Map<String,Integer>param){
+		return dao.getCasualBoardList(param);
+	}
+	
+	public int getTotal() {
+		return dao.getTotal();
+	}
+	
 	public QuestionBoardDto getCasualBoardContents(int question_table_idx) {
 		return dao.getCasualBoardContents(question_table_idx);
 	}
@@ -160,11 +163,14 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteCommentForCasual(idx);
 	}
 
-// Hashtag 비교 후 가져오기
+// Hashtag 추가 및 비교
 	public List<TagDto> compareHashtag(String tagValue){
 		return dao.getHashtag(tagValue);
 	}
 	
+	public List<TagDto> addHashtag(TagCommand tc) {
+		return dao.addHashtag(tc);
+	}
 	
 
 }

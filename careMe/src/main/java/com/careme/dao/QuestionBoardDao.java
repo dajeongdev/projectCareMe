@@ -1,10 +1,13 @@
 package com.careme.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
@@ -15,7 +18,11 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Doctor Board 내용 및 검색
 	
 	public List<QuestionBoardDto> getDoctorBoard(){
-		return getSqlSession().selectList("doctorQuestionBrd.getArt");
+		return getSqlSession().selectList("doctorQuestionBrd.getTotal");
+	}
+	
+	public List<QuestionBoardDto> getDoctorBoardList(Map<String,Integer>param){
+		return getSqlSession().selectList("doctorQuestionBrd.getArticles", param);
 	}
 	
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx){
@@ -73,7 +80,15 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Casual Board 내용 및 검색
 	
 	public List<QuestionBoardDto> getCasualBoard(){
-		return getSqlSession().selectList("casualQuestionBrd.getArt");
+		return getSqlSession().selectList("casualQuestionBrd.getTotal");
+	}
+	
+	public List<QuestionBoardDto> getCasualBoardList(Map<String,Integer>param){
+		return getSqlSession().selectList("casualQuestionBrd.getArticles", param);
+	}
+	
+	public int getTotal() {
+		return getSqlSession().selectOne("casualQuestionBrd.selectTotal");
 	}
 	
 	public QuestionBoardDto getCasualBoardContents(int question_table_idx){
@@ -129,8 +144,21 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Hashtag 확인
 	
 	public List<TagDto> getHashtag(String tagValue){
-		return getSqlSession().selectList("casualQuestionBrd.hastagfind", tagValue);
+		return getSqlSession().selectList("casualQuestionBrd.hashtagFind", tagValue);
 	}
-		
+	
+	public List<TagDto> addHashtag(TagCommand tc) {
+		return getSqlSession().selectList("casualQuestionBrd.hashtagAdd", tc);
+	}
+
+// Page Numbering
+	
+	public List<PageNumberCommand> getPages(){
+		return getSqlSession().selectList("causalQuestionBrd.contentCount");
+	}
+	
+	public List<QuestionBoardDto> getContents(){
+		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
+	}
 		
 }

@@ -8,10 +8,17 @@ public class StoryCommentDto {
 	private int member_idx;
 	private String content;
 	private int heart;
+	private String member_id;
 	private LocalDateTime reg_date;
 	private LocalDateTime update_date;
 	private String del_yn;
 	
+	public String getMember_id() {
+		return member_id;
+	}
+	public void setMember_id(String member_id) {
+		this.member_id = member_id;
+	}
 	public int getMember_idx() {
 		return member_idx;
 	}

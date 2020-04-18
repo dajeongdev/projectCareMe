@@ -1,6 +1,8 @@
 package com.careme.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.dao.QuestionBoardDao;
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
 import com.google.gson.Gson;
@@ -45,14 +48,29 @@ public class DoctorBoardController {
 		this.fus = fus;
 	}
 	
+	@Autowired
+	PageNumberService pns;
+	
+	public void setPageNumberService(PageNumberService pns) {
+		this.pns = pns;
+	}
+	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
-	public ModelAndView toDoctorBoard() {
-		List<QuestionBoardDto> getArts = bs.getDoctorBoard();
-		ModelAndView listPro = new ModelAndView();
-		listPro.addObject("listPro", getArts);
-		listPro.addObject("countPro", getArts.size());
-		listPro.setViewName("/doctorBoardView/doctorBoard");
+	public ModelAndView toDoctorBoard(int currentPage) {
+		ModelAndView listPro = new ModelAndView("/doctorBoardView/doctorBoard");
+		PageNumberCommand paging = new PageNumberCommand();
+		int contentPerPage = 10;
+		
+		Map<String,Integer> param = new HashMap<String,Integer>();
+		param.put("start_idx", pns.getStartIdx(currentPage, contentPerPage));
+		param.put("contentPerPage", contentPerPage);
+		
+		List<QuestionBoardDto> getArticles = bs.getDoctorBoardPage(param);
+		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
+		
+		listPro.addObject("listPro", getArticles);
+		listPro.addObject("paging", paging);
 		return listPro;
 	}
 

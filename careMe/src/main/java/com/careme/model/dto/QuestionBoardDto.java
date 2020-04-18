@@ -1,6 +1,7 @@
 package com.careme.model.dto;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class QuestionBoardDto {
 	
@@ -8,7 +9,11 @@ public class QuestionBoardDto {
 	int member_idx;
 	int doctor_idx;
 	String member_id;
-
+	Map<String,Integer> param;
+	
+	int start_idx;
+	int contentPerPage;
+	
 	String title;
 	String question_type;
 	String content;
@@ -26,6 +31,8 @@ public class QuestionBoardDto {
 	int pet_species_idx;
 	int pet_species_level;
 	String pet_species_name;
+	
+	
 	public int getQuestion_table_idx() {
 		return question_table_idx;
 	}
@@ -140,24 +147,38 @@ public class QuestionBoardDto {
 	public void setPet_species_name(String pet_species_name) {
 		this.pet_species_name = pet_species_name;
 	}
+	public Map<String, Integer> getParam() {
+		return param;
+	}
+	public void setParam(Map<String, Integer> param) {
+		this.param = param;
+	}
+	public int getStart_idx() {
+		return start_idx;
+	}
+	public void setStart_idx(int start_idx) {
+		this.start_idx = start_idx;
+	}
+	public int getContentPerPage() {
+		return contentPerPage;
+	}
+	public void setContentPerPage(int contentPerPage) {
+		this.contentPerPage = contentPerPage;
+	}
+	
 	@Override
 	public String toString() {
 		return "QuestionBoardDto [question_table_idx=" + question_table_idx + ", member_idx=" + member_idx
-				+ ", doctor_idx=" + doctor_idx + ", member_id=" + member_id + ", title=" + title + ", question_type="
+				+ ", doctor_idx=" + doctor_idx + ", member_id=" + member_id + ", param=" + param + ", start_idx="
+				+ start_idx + ", contentPerPage=" + contentPerPage + ", title=" + title + ", question_type="
 				+ question_type + ", content=" + content + ", view_count=" + view_count + ", is_private=" + is_private
 				+ ", reg_date=" + reg_date + ", update_date=" + update_date + ", del_yn=" + del_yn + ", file_name="
 				+ file_name + ", file_path=" + file_path + ", file_size=" + file_size + ", pet_idx=" + pet_idx
 				+ ", pet_species_idx=" + pet_species_idx + ", pet_species_level=" + pet_species_level
-				+ ", pet_species_name=" + pet_species_name + ", getQuestion_table_idx()=" + getQuestion_table_idx()
-				+ ", getMember_idx()=" + getMember_idx() + ", getDoctor_idx()=" + getDoctor_idx() + ", getMember_id()="
-				+ getMember_id() + ", getTitle()=" + getTitle() + ", getQuestion_type()=" + getQuestion_type()
-				+ ", getContent()=" + getContent() + ", getView_count()=" + getView_count() + ", getIs_private()="
-				+ getIs_private() + ", getReg_date()=" + getReg_date() + ", getUpdate_date()=" + getUpdate_date()
-				+ ", getDel_yn()=" + getDel_yn() + ", getFile_name()=" + getFile_name() + ", getFile_path()="
-				+ getFile_path() + ", getFile_size()=" + getFile_size() + ", getPet_idx()=" + getPet_idx()
-				+ ", getPet_species_idx()=" + getPet_species_idx() + ", getPet_species_level()="
-				+ getPet_species_level() + ", getPet_species_name()=" + getPet_species_name() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ ", pet_species_name=" + pet_species_name + "]";
 	}
+	
+	
+	
 	
 }

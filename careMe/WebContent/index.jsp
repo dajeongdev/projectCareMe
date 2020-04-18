@@ -11,6 +11,6 @@
 
 <% response.sendRedirect("main"); %>
 
-</body>
 
+</body>
 </html>
