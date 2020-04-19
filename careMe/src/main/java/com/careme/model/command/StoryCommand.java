@@ -21,4 +21,5 @@ public class StoryCommand {
 	public String toString() {
 		return "StoryCommand [searchType=" + searchType + ", keyword=" + keyword + "]";
 	}
+	
 } 
