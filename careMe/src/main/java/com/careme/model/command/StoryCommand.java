@@ -1,8 +1,8 @@
 package com.careme.model.command;
 
 public class StoryCommand {
-	private String searchType = "";
-	private String keyword = "";
+	private String searchType;
+	private String keyword;
 	
 	public String getSearchType() {
 		return searchType;
@@ -16,9 +16,9 @@ public class StoryCommand {
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
 	}
-	
 	@Override
 	public String toString() {
 		return "StoryCommand [searchType=" + searchType + ", keyword=" + keyword + "]";
 	}
-} 
+	
+}
