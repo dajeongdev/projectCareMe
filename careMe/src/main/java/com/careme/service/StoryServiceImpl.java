@@ -1,9 +1,12 @@
 package com.careme.service;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +55,13 @@ public class StoryServiceImpl implements StoryService {
 	public void setPageService(PageNumberService pageService) {
 		this.pageService = pageService;
 	}
+	
+	TagDto tagDto;
+	
+	public void setTagDto(TagDto tagDto) {
+		this.tagDto = tagDto;
+	}
+	
 	
 	@Override
 	public List<StoryBoardDto> list() {
@@ -103,7 +113,11 @@ public class StoryServiceImpl implements StoryService {
 	public List<StoryBoardDto> hitList() {
 		return dao.hitList();
 	}
-
+	
+	@Override
+	public List<StoryBoardDto> searching(StoryCommand com) {
+		return dao.searching(com);
+	}
 	
 	@Override
 	public int insert(MultipartHttpServletRequest request) {
@@ -158,11 +172,6 @@ public class StoryServiceImpl implements StoryService {
 		comDto.setReg_date(LocalDateTime.now());
 		return dao.insertCom(comDto);
 	}
-
-	@Override
-	public int insertTag(TagDto tagDto) {
-		return dao.insertTag(tagDto);
-	}
 	
 	
 	@Override
@@ -181,15 +190,10 @@ public class StoryServiceImpl implements StoryService {
 		return dao.updateFfile(fileDto);
 	}
 
-	@Override
-	public int updateTag(TagDto tagDto) {
-		return dao.updateTag(tagDto);
-	}
-
 	
 	@Override
-	public int delete(int story_board_idx) {
-		return dao.delete(story_board_idx);
+	public int delete(HttpServletRequest request) {
+		return dao.delete((int)request.getSession().getAttribute("story_board_idx")); 
 	}
 
 	@Override
@@ -201,9 +205,55 @@ public class StoryServiceImpl implements StoryService {
 		return dao.deleteFile(story_file_idx);
 	}
 
+
+	@Override
+	public List<TagDto> readTag() {
+		return dao.readTag();
+	}
+	
+	@Override
+	public int insertTag(HttpServletRequest request) {
+		List<TagDto> list = new ArrayList<>();
+		tagDto = new TagDto();
+		for(TagDto tagDto : list) {
+			int member_idx = 1;
+			if(request.getParameter("tag_idx") != null && request.getParameter("tag_idx") != "") {
+				tagDto.setTag_idx((int)request.getSession().getAttribute("tag_idx"));
+			}
+			tagDto.setMember_idx(member_idx);
+			tagDto.setTag_name(request.getParameter("tag_name"));
+		}
+		return dao.insertTag(tagDto);
+	}
+	
+	@Override
+	public int insertTagType(int tag_idx, HttpServletRequest request) {
+		List<TagDto> list = new ArrayList<TagDto>();
+		
+		for(TagDto tagDto : list) {
+			tagDto = new TagDto();
+			int board_idx = dto.getStory_board_idx();
+			if(request.getParameter("tag_idx") != null && request.getParameter("tag_idx") != "") {
+				tagDto.setTag_idx((int)request.getSession().getAttribute("tag_idx"));
+			}
+			tagDto.setBoard_idx(board_idx);
+		}
+		return dao.insertTagType(tagDto);
+	}
+	
+	@Override
+	public int updateTag(TagDto tagDto) {
+		return dao.updateTag(tagDto);
+	}
 	@Override
 	public int deleteTag(int tag_idx) {
 		return dao.deleteTag(tag_idx);
+	}
+	
+	
+	@Override
+	public List<StoryFileDto> mainImageList() {
+		return dao.mainImageList();
 	}
 
 
