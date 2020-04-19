@@ -55,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	member_email=#{member_email}
 	</select>
 
+
 	<!-- 정보수정 -->
 	<update id="update"
 		parameterType="com.careme.model.dto.MemberDto">

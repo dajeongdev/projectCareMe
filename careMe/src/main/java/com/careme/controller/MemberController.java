@@ -3,12 +3,14 @@ package com.careme.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,6 +21,7 @@ import com.careme.model.dto.EmailDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.service.EmailService;
 import com.careme.service.MemberService;
+import com.google.gson.Gson;
 
 @Controller
 public class MemberController {
@@ -109,15 +112,22 @@ public class MemberController {
 		int i5 = memberService.mailcheck(lc);
 		return i5;
 	}
+	
+	
+	//이메일 인증 창 열기
+	@RequestMapping(value = "login/mailform")
+	public String form3() {
+		return "login/mailform";
+	}
 
 	// 이메일 보내기
-	@RequestMapping("login/sendMail")
-	@ResponseBody
-	public String sendMail(String member_email) throws Exception {
-
+	@RequestMapping(value="login/sendMail", produces = "application/json; charset=utf8")
+	@ResponseBody()
+	public String sendMail(@RequestParam() String getemail) throws Exception {
+		System.out.println("getemail::"+getemail);
 		EmailDto email = new EmailDto();
 
-		String receiver = member_email; // Receiver.메일 받을 주소
+		String receiver = getemail; // Receiver.메일 받을 주소
 		String subject = "[CAREME]인증메일입니다";
 		String content = "";
 
@@ -125,11 +135,12 @@ public class MemberController {
 		email.setSubject(subject);
 		email.setContent(content);
 
-		boolean result = emailService.sendMail(email);
-
-		return "이메일을 보냈습니다 " + result;
+		int result = emailService.sendMail(email);
+		return result+"";
 
 	}
+	
+	
 
 	// 회원가입 성공
 	@RequestMapping(value = "login/insertok")

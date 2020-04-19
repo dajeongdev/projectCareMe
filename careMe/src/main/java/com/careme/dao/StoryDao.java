@@ -1,10 +1,10 @@
 package com.careme.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
-import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -15,6 +15,15 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public List<StoryBoardDto> listing() {
 		return getSqlSession().selectList("story.list");
 	}
+	
+	public List<StoryBoardDto> totalListing(Map<String, Integer> map) {
+		return getSqlSession().selectList("story.list", map);
+	}
+	
+	public int getTotal() {
+		return getSqlSession().selectOne("story.selectTotal");
+	}
+	
 	public List<StoryFileDto> fileListing() {
 		return getSqlSession().selectList("story.fileList");
 	}
@@ -26,15 +35,19 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public StoryFileDto readFile(int story_board_idx) {
 		return getSqlSession().selectOne("story.readFile", story_board_idx);
 	}
-	
+	public List<StoryCommentDto> readCom(int story_board_idx) {
+		return getSqlSession().selectList("story.readCom", story_board_idx);
+	}
 	// 조회수
 	public int counting(int story_board_idx) {
 		return getSqlSession().update("story.viewCount", story_board_idx);
 	}
-	
-	// 댓글 읽기
-	public List<StoryCommentDto> readCom(int story_board_idx) {
-		return getSqlSession().selectList("story.readCom", story_board_idx);
+	// 좋아요
+	public int heart(int story_board_idx) {
+		return getSqlSession().update("story.heart", story_board_idx);
+	}
+	public int comHeart(int story_comment_idx) {
+		return getSqlSession().update("story.comHeart", story_comment_idx);
 	}
 	
 	// 인기글
@@ -47,15 +60,12 @@ public class StoryDao extends SqlSessionDaoSupport {
 		getSqlSession().insert("story.insert", dto);
 		return dto.getStory_board_idx();
 	}
-	
 	public int insertFile(StoryFileDto fileDto) {
 		return getSqlSession().insert("story.insertFile", fileDto);
 	}
-	
 	public int insertTag(TagDto tagDto) {
 		return getSqlSession().insert("insert.insertTag", tagDto);
 	}
-	
 	public int insertCom(StoryCommentDto comDto) {
 		return getSqlSession().insert("story.insertCom", comDto);
 	}
@@ -65,9 +75,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 		getSqlSession().update("story.update", dto);
 		return dto.getStory_board_idx();
 	}
-	
-	public int updateFfile(StoryBoardDto dto) {
-		return getSqlSession().update("story.updateFile", dto);
+	public int updateFfile(StoryFileDto fileDto) {
+		return getSqlSession().update("story.updateFile", fileDto);
 	} 
 	
 	public int updateTag(TagDto tagDto) {
@@ -82,11 +91,12 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int delete(int story_board_idx) {
 		return getSqlSession().update("story.delete", story_board_idx);
 	}
-	
+	public int deleteFile(int story_file_idx) {
+		return getSqlSession().update("story.deleteFile", story_file_idx);
+	}
 	public int deleteTag(int tag_idx) {
 		return getSqlSession().update("story.deleteTag", tag_idx);
 	}
-	
 	public int deleteCom(int story_comment_idx) {
 		return getSqlSession().update("story.deleteCom", story_comment_idx);
 	}
