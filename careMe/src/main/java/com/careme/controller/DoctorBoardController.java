@@ -81,7 +81,7 @@ public class DoctorBoardController {
 		param.put("contentPerPage", contentPerPage);
 		
 		List<QuestionBoardDto> getArticles = bs.getDoctorBoardPage(param);
-		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
+		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "doctorBoardView/doctorBoard?currentPage=");
 		
 		listPro.addObject("listPro", getArticles);
 		listPro.addObject("paging", paging);

@@ -44,10 +44,8 @@ $(function(){
 <!-- HASHTAG -->
 $(function() {
     $(document).ready(function () {
-
         var tag = {};
         var counter = 0;
-
         // 태그를 추가
         function addTag (value) {
             tag[counter] = value; // Object 안에 tag 추가
@@ -65,12 +63,9 @@ $(function() {
             $("#rdTag").val(value); 
             $(this).submit();
         });
-
         $("#tag").on("keypress", function (e) {
             var self = $(this);
-
             if (e.key === "Enter" || e.keyCode == 32) {
-
                 var tagValue = self.val();
                 if (tagValue !== "") {
                     // 중복검사 겹치면 해당값 array 로 return
@@ -103,7 +98,6 @@ $(function() {
                 e.preventDefault();
             }
         });
-
         // 삭제 버튼 
         $(document).on("click", ".del-btn", function (e) {
             var index = $(this).attr("idx");
@@ -127,7 +121,7 @@ $(function() {
 	$("#files").on("change", handleFileSelect);
 	$("body").on("click", ".fa-trash", removeFile);
 
-	form = $("form[name=casualWriteForm]")[0];
+	form = $("#addWrite")[0];
 	form.onsubmit = function (e) {
 		e.preventDefault();
 		var formData = new FormData(form);
@@ -161,8 +155,7 @@ $(function() {
 			
 			var reader = new FileReader();
 			reader.onload = function (e) {
-				var html = "<input type='file' id='files' name='image' placeholder='' max='5' multiple/>";
-					html += "<div class='col-md-3 mb-5'>";
+				var html = "<div class='col-md-3 mb-5'>";
 					html += "<img src=\"" + e.target.result + "\"  class='w-100 h-80'>";
 					html += "<i class='fa fa-trash' data-file='"+f.name+"' title='Click to remove'></i>";
 					html += "</div>";
@@ -183,41 +176,10 @@ $(function() {
 		$(this).parent().remove();
 	}
 
+	
 </script>
 
 
-<!-- <script>
-$(function(){
-	$("#tag").on("keypress", function (e) {
-   	 var self = $(this);
-   	 if (e.key === "Enter" || e.keyCode == 32) {
-	    var tagValue = self.val();
-		var url ="casualWriteForm/hashCheck?tagValue="+tagValue;
-		$.ajax(
-			{type:"get",
-			url:url,
-			dataType:"json"})
-			.done(function(compared){
-			
-			if (compared.length>0){
-				for (i in compared){
-					var h = compared[i]
-					var taging = "<li class='tag-item'>#"+h.tag_name+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
-					$("#tag-list").append(taging);
-				}
-			}else{
-				var taging = "<li class='tag-item'>#"+tagValue+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
-				$("#tag-list").append(taging);
-			}
-			}).fail(function(e){
-				alert(e.responseText);
-				});
-			}
-    	})
-	})
-
-</script>
--->
 
 
 </head>
@@ -284,7 +246,6 @@ $(function(){
 							<div class="col-12" id="images">
 								<label for="">사진등록</label>
 								<div>
-								<input type="file" class="form-control mb-3 d-none" id="files" name="image" placeholder="" max="5" multiple/>
 									<label for="files"> <span class="btn btn-dark btn-sm">등록</span>
 									</label>
 								</div>
@@ -320,7 +281,7 @@ $(function(){
 			</div>
 			
 		</form>
-		
+		<input type="file" class="form-control mb-3 d-none" id="files" name="image" placeholder="" max="5" multiple>
 		</div>
 	</div>
 </body>

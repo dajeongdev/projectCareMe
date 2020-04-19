@@ -288,7 +288,7 @@ $(function(){
 						
 						<div align="left">
 						<label for="file">파일첨부</label><br>
-							<input type="file" name="file" id="file" multiple/>
+							<input type="file" class="file_input_hidden" name="file" id="file" multiple/>
 							<div class="row" id="selectedFiles"></div>
 							<div id="preview"></div>
     					</div>

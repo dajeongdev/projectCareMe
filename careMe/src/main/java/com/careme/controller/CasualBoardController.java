@@ -81,6 +81,10 @@ public class CasualBoardController {
 		MemberDto info = ms.memberInfo("hellojava");
 		list.addObject("info", info);
 		
+//		System.out.println(info.getMember_idx());
+//		System.out.println(info.getMember_nick());
+//		System.out.println(info.getMember_id());
+		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
@@ -103,7 +107,7 @@ public class CasualBoardController {
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
 	public ModelAndView casualBoardContents(@RequestParam int question_table_idx) throws Exception {
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("casualBoardView/casualBoardContent");
 		
 		//회원 정보 및 확인
 //		String currentId = session.getAttribute("id");
@@ -118,7 +122,6 @@ public class CasualBoardController {
 		mav.addObject("mlist", mlist);
 		mav.addObject("clist", clist);
 		mav.addObject("commCount", commentCount);
-		mav.setViewName("casualBoardView/casualBoardContent");
 		return mav;
 	}
 	
@@ -126,25 +129,27 @@ public class CasualBoardController {
 
 // 게시판 검색기능
 	@RequestMapping(value = "/casualBoardSearch")
-	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword) {
-		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
+	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword, int currentPage) {
+		ModelAndView list = new ModelAndView("/view/casualBoardView/casualBoard?currentPage=1");
 		int contentPerPage = 10;
-		int currentPage=1;
 		
 		//검색 정보 처리
 		SearchBoardCommand sbc = new SearchBoardCommand();
 		sbc=bs.listSearchInfo(searchn, searchKeyword);
-		
 		int start_idx=pns.getStartIdx(currentPage, contentPerPage);
 		sbc.setStart_idx(start_idx);
 		sbc.setContentPerPage(contentPerPage);
-		List<QuestionBoardDto> items = bs.getCasualBoardSearch(sbc);
-
+		System.out.println(currentPage);
+		System.out.println(sbc.getSearch_option());
+		System.out.println(sbc.getContentPerPage());
+		System.out.println(sbc.getSearchKeyword());
+		System.out.println(sbc.getStart_idx());
 		
+		List<QuestionBoardDto> items = bs.getCasualBoardSearch(sbc);
 		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
-		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoard?currentPage="+currentPage+"&searchn="+searchn+"&searchKeyword="+searchKeyword);
 		
 		list.addObject("list", items);
 		list.addObject("paging", paging);
@@ -248,7 +253,6 @@ public class CasualBoardController {
 		if(result>0) {
 		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 		}else {
-			System.out.println("no!!!");
 		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 		}
 	}

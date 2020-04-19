@@ -147,16 +147,14 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	
 	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
-		if (searchn == 0) {
-			sbc.setSearch_option("member_id");
-			sbc.setSearchKeyword(searchKeyword);
-		} else if (searchn == 1) {
-			sbc.setSearch_option("title");
-			sbc.setSearchKeyword(searchKeyword);
-		} else if (searchn == 2) {
-			sbc.setSearch_option("content");
-			sbc.setSearchKeyword(searchKeyword);
-		}
+			if (searchn == 0) {
+				sbc.setSearch_option("member_id");
+			} else if (searchn == 1) {
+				sbc.setSearch_option("title");
+			} else if (searchn == 2) {
+				sbc.setSearch_option("content");
+			}
+		sbc.setSearchKeyword(searchKeyword);
 		return sbc;
 	}
 	
@@ -184,6 +182,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public void addFileForCasual(int question_table_idx, MultipartHttpServletRequest request) {
 		List<FileUploadCommand> addfiles;
 		addfiles = fus.upload(request, "/img/boardUpload");
+		System.out.println(addfiles);
 		for (FileUploadCommand file : addfiles) {
 			BoardFileDto bdto = new BoardFileDto();
 			bdto.setQuestion_table_idx(question_table_idx);
