@@ -39,20 +39,45 @@ public class AdminService {
 		return adminDao.selectMember(memberIdx);
 	}
 	
-	public HashMap<String, Object> getMemberList(int page) {
-		HashMap<String, Object> data = getData("", "", page);
-		return data;
-	}
-	
-	public HashMap<String, Object> searchMemberList(String searchType, String searchText, int page) {
-		HashMap<String, Object> data = getData(searchType, searchText, page);
-		return data;
-	}
-	
-	public HashMap<String, Object> getData(String searchType, String searchText, int page) {
+	public HashMap<String, Object> getMemberList(int page, int contentPerPage) {
 		HashMap<String, Object> data = new HashMap<String, Object>();
+		
+		String path = "member?page=";
+		int pageStart = pageService.getStartIdx(page, contentPerPage);
+		
+		HashMap<String, Object> params = getParams("", "", page, contentPerPage, pageStart);
+		
+		List<MemberDto> list = adminDao.selectMemberList(params);
+		data.put("list", list);
+		
+		int totalCount = adminDao.selectTotalCount();
+		
+		PageNumberCommand paging = pageService.paging(totalCount, contentPerPage, page, path);
+		data.put("paging", paging);
+		return data;
+	}
+	
+	public HashMap<String, Object> searchMemberList(String searchType, String searchText, int page, int contentPerPage) {
+		HashMap<String, Object> data = new HashMap<String, Object>();
+		
+		String path = "search?searchType=" + searchType + "&searchText=" + searchText + "&page=";
+		int pageStart = pageService.getStartIdx(page, contentPerPage);
+		
+		HashMap<String, Object> params = getParams(searchType, searchText, page, contentPerPage, pageStart);
+		
+		List<MemberDto> list = adminDao.searchMemberList(params);
+		data.put("list", list);
+		
+		int totalCount = adminDao.selectTotalCount();
+		
+		PageNumberCommand paging = pageService.paging(totalCount, contentPerPage, page, path);
+		
+		data.put("paging", paging);
+		return data;
+	}
+	
+	public HashMap<String, Object> getParams(String searchType, String searchText, int page, int contentPerPage, int pageStart) {
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		String path;
 		
 		if (searchType != "") {
 			String searchColumn;
@@ -76,26 +101,13 @@ public class AdminService {
 			
 			params.put("searchColumn", searchColumn);
 			params.put("searchText", searchText);
-			path = "search?searchType=" + searchType + "&searchText=" + searchText + "&page=";
-		} else {
-			path = "member?page=";
+			
 		}
-		
-		int contentPerPage = 10;
-		int pageStart = pageService.getStartIdx(page, contentPerPage);
-		
+
 		params.put("pageStart", pageStart);
-		params.put("limit", contentPerPage);
+		params.put("contentPerPage", contentPerPage);
 		
-		List<MemberDto> list = adminDao.selectMemberList(params);
-		data.put("list", list);
-		
-		int totalCount = adminDao.selectTotalCount();
-		PageNumberCommand paging = pageService.paging(totalCount, contentPerPage, page, path);
-		System.out.println(paging);
-		data.put("paging", paging);
-		
-		return data;
+		return params;
 	}
 	
 
@@ -108,9 +120,12 @@ public class AdminService {
 			memberDto.setMember_profile(fileUploadcommand.get(0).getFilePath());
 		}
 		
-		System.out.println("서비스 파일업로드후..::" + memberDto);
 		res = adminDao.updateMember(memberDto);
 		return res;
+	}
+	
+	public int deleteMember(int memberIdx) {
+		return adminDao.deleteMember(memberIdx);
 	}
 
 }

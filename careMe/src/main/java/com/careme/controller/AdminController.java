@@ -1,19 +1,22 @@
 package com.careme.controller;
 
 import java.util.HashMap;
-import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.dto.MemberDto;
 import com.careme.service.AdminService;
 import com.careme.service.MemberService;
+import com.google.gson.Gson;
 
 @Controller
 public class AdminController {
@@ -40,7 +43,7 @@ public class AdminController {
 		int currentPage = 1;
 		if (page != null) currentPage = Integer.parseInt(page); 
 		ModelAndView mav = new ModelAndView("/admin/member/list");
-		HashMap<String, Object> data = adminService.getMemberList(currentPage);
+		HashMap<String, Object> data = adminService.getMemberList(currentPage, 5);
 		
 		mav.addObject("list", data.get("list"));
 		mav.addObject("paging", data.get("paging"));
@@ -54,7 +57,7 @@ public class AdminController {
 													, @RequestParam("page") int page
 													) {
 		ModelAndView mav = new ModelAndView("/admin/member/list");
-		HashMap<String, Object> data = adminService.searchMemberList(searchType, searchText, page);
+		HashMap<String, Object> data = adminService.searchMemberList(searchType, searchText, page, 5);
 		
 		mav.addObject("list", data.get("list"));
 		mav.addObject("paging", data.get("paging"));
@@ -79,9 +82,30 @@ public class AdminController {
 		return "redirect:/admin/member";
 	}
 	
+	@RequestMapping(value = "/admin/member/delete", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String deleteMember(HttpServletRequest request) {
+		int memberIdx = Integer.parseInt(request.getParameter("memberIdx"));
+		int res = adminService.deleteMember(memberIdx);
+		String resultText = "fail";
+		if (res == 1) resultText = "success";
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultText", resultText);
+		resultMap.put("result", res);
+		Gson json = new Gson();
+		return json.toJson(resultMap);
+	}
+	
 	@RequestMapping("/admin/doctor")
 	public String toDoctorList() {
 		return "/admin/doctor/list";
+	}
+	
+	// /admin/download/*
+	@RequestMapping("member")
+	public ModelAndView downloadMemberXls() {
+		return new ModelAndView();
 	}
 
 }

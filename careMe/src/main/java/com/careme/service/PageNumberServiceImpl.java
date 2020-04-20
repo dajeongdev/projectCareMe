@@ -11,13 +11,23 @@ public class PageNumberServiceImpl implements PageNumberService {
 		
 		int pageBlock = 10;
 		
-		int totalPage = (totalCount/contentPerPage)+1;
+		int totalPage = (totalCount/contentPerPage);
+		if (totalCount % contentPerPage > 0) totalPage++;
 
-		int startPage = (currentPage / pageBlock) + 1;
-		int endPage = (totalPage / pageBlock) * pageBlock + (totalPage % pageBlock);
+		int startPage = ((currentPage - 1) / pageBlock) * pageBlock + 1;
+		int endPage = startPage + pageBlock - 1;
 		
-		if(totalPage<endPage) {
+		int prevPage = startPage - pageBlock;
+		
+		if (currentPage == 1) {
+			prevPage = 0;
+		}
+		
+		int nextPage = endPage + 1;
+		
+		if (endPage > totalPage) {
 			endPage = totalPage;
+			nextPage = 0;
 		}
 		
 		pnc.setContentPerPage(contentPerPage);
@@ -27,6 +37,9 @@ public class PageNumberServiceImpl implements PageNumberService {
 		pnc.setTotalCount(totalCount);
 		pnc.setPath(path);
 		pnc.setTotalPage(totalPage);
+		pnc.setBlockSize(pageBlock);
+		pnc.setPrevPage(prevPage);
+		pnc.setNextPage(nextPage);
 		
 		return pnc;
 	}

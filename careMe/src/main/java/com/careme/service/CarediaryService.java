@@ -94,12 +94,7 @@ public class CarediaryService {
 	
 	public HashMap<String, Object> getCarediaryListByPetIdx(int petIdx, int currentPage, int contentPerPage) {
 		HashMap<String, Object> data = new HashMap<String, Object>();
-		//String path = petIdx + "?page="; 
-		// 리턴받아야 하는 항목 =  totalCount
-		// 쿼리실행시 필요한 항목 startIndex, 조건, contentPerPage
-		// startIndex 를 static으로 해서 command 구하기전에 얻기
-		//PageNumberCommand pageCommand = pageService.paging(totalCount, currentPage);
-		//contentPerPage, , path
+
 		List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
 		HashMap<String, Integer> param = new HashMap<String, Integer>();
 		int start = pageService.getStartIdx(currentPage, contentPerPage);

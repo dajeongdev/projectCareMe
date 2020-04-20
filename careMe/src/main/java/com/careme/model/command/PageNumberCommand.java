@@ -8,6 +8,9 @@ public class PageNumberCommand {
 	private int startPage;
 	private int endPage;
 	private int totalPage;
+	private int blockSize;
+	private int prevPage;
+	private int nextPage;
 	private String path;
 	
 	
@@ -48,6 +51,24 @@ public class PageNumberCommand {
 	public void setTotalPage(int totalPage) {
 		this.totalPage = totalPage;
 	}
+	public int getBlockSize() {
+		return blockSize;
+	}
+	public void setBlockSize(int blockSize) {
+		this.blockSize = blockSize;
+	}
+	public int getPrevPage() {
+		return prevPage;
+	}
+	public void setPrevPage(int prevPage) {
+		this.prevPage = prevPage;
+	}
+	public int getNextPage() {
+		return nextPage;
+	}
+	public void setNextPage(int nextPage) {
+		this.nextPage = nextPage;
+	}
 	public String getPath() {
 		return path;
 	}
@@ -58,8 +79,7 @@ public class PageNumberCommand {
 	public String toString() {
 		return "PageNumberCommand [totalCount=" + totalCount + ", contentPerPage=" + contentPerPage + ", currentPage="
 				+ currentPage + ", startPage=" + startPage + ", endPage=" + endPage + ", totalPage=" + totalPage
-				+ ", path=" + path + "]";
+				+ ", blockSize=" + blockSize + ", prevPage=" + prevPage + ", nextPage=" + nextPage + ", path=" + path
+				+ "]";
 	}
-	
-	
 }

@@ -27,6 +27,10 @@ public class AdminDao  extends SqlSessionDaoSupport {
 	public int updateMember(MemberDto memberDto) {
 		return getSqlSession().update("admin.updateMember", memberDto);
 	}
+	
+	public int deleteMember(int memberIdx) {
+		return getSqlSession().update("admin.deleteMember", memberIdx);
+	}
 
 
 }
