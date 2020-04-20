@@ -34,7 +34,7 @@ public class CarediaryService {
 	}
 	
 	@Autowired
-	PageNumberServiceImpl pageService;
+	PageNumberService pageService;
 	public void setPageService(PageNumberServiceImpl pageNumberServiceImple) {
 		this.pageService = pageNumberServiceImple;
 	}

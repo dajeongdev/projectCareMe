@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" 
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	<!-- name=view이름 -->
+	<definition name="base_layout" template="/WEB-INF/view/admin/layout/baseLayout.jsp">
+		<!-- /로 시작하면 경로로 인식 -->
+		<put-attribute name="head" value="/WEB-INF/view/admin/include/head.jsp" />
+		<put-attribute name="nav" value="/WEB-INF/view/admin/include/nav.jsp" />
+		<put-attribute name="side" value="/WEB-INF/view/admin/include/side.jsp" />
+	</definition>
+	
+	<definition name="/admin/main" extends="base_layout">
+		<put-attribute name="title" value="메인화면" />
+		<put-attribute name="body" value="/WEB-INF/view/admin/main.jsp" />
+	</definition>
+
+	<definition name="/admin/member/*" extends="base_layout">
+		<put-attribute name="title" value="일반회원" />
+		<put-attribute name="body" value="/WEB-INF/view/admin/member/{1}.jsp" />
+	</definition>
+	
+	<definition name="/admin/doctor/*" extends="base_layout">
+		<put-attribute name="title" value="의사회원" />
+		<put-attribute name="body" value="/WEB-INF/view/admin/doctor/{1}" />
+	</definition>
+	
+
+</tiles-definitions>

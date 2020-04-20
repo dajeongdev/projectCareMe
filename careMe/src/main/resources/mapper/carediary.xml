@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where pet_care_idx = #{pet_care_idx}
 	</update>
 	
-	<update id="deleteCarediaryFiles" parameterType="java.util.HashMap">
+	<update id="deleteCarediaryFiles" parameterType="HashMap">
 		update pet_care_file set del_yn = 'y'
 		where pet_care_file_idx in
 		<foreach collection="deleteList" item="item" index="index" separator="," open="(" close=")">
