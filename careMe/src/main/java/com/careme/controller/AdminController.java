@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.dto.MemberDto;
@@ -17,9 +18,9 @@ import com.careme.service.MemberService;
 @Controller
 public class AdminController {
 	@Autowired
-	AdminService adminSevice;
-	public void setAdminService(AdminService adminSevice) {
-		this.adminSevice = adminSevice;
+	AdminService adminService;
+	public void setAdminService(AdminService adminService) {
+		this.adminService = adminService;
 	}
 	
 	@Autowired
@@ -35,10 +36,15 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/admin/member")
-	public ModelAndView toMemberList() {
+	public ModelAndView toMemberList(String page) {
+		int currentPage = 1;
+		if (page != null) currentPage = Integer.parseInt(page); 
 		ModelAndView mav = new ModelAndView("/admin/member/list");
-		List<MemberDto> list = adminSevice.getMemberList();
-		mav.addObject("list", list);
+		HashMap<String, Object> data = adminService.getMemberList(currentPage);
+		
+		mav.addObject("list", data.get("list"));
+		mav.addObject("paging", data.get("paging"));
+		
 		return mav;
 	}
 	
@@ -48,21 +54,29 @@ public class AdminController {
 													, @RequestParam("page") int page
 													) {
 		ModelAndView mav = new ModelAndView("/admin/member/list");
-		HashMap<String, Object> data = adminSevice.searchMemberList(searchType, searchText, page);
+		HashMap<String, Object> data = adminService.searchMemberList(searchType, searchText, page);
+		
 		mav.addObject("list", data.get("list"));
 		mav.addObject("paging", data.get("paging"));
 		return mav;
 	}
 	
+	// 회원정보 수정폼
 	@RequestMapping(value = "/admin/member/update", method=RequestMethod.GET)
 	public ModelAndView toMemberUpdateForm(@RequestParam("memberIdx") int memberIdx) {
 		ModelAndView mav = new ModelAndView("/admin/member/update");
+		MemberDto memberDto = adminService.getMember(memberIdx);
+		mav.addObject("member", memberDto);
 		return mav;
 	}
 	
+	// 회원정보 수정
 	@RequestMapping(value = "/admin/member/update", method=RequestMethod.POST)
-	public String memberUpdate(MemberDto memberDto) {
-		return "/admin/member/update";
+	public String memberUpdate(MemberDto memberDto, MultipartHttpServletRequest request) {
+		System.out.println(request.getFileNames().next());
+		int res = 0;
+		res = adminService.updateMember(memberDto, request);
+		return "redirect:/admin/member";
 	}
 	
 	@RequestMapping("/admin/doctor")
