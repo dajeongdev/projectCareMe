@@ -29,7 +29,7 @@
 	<div style="padding: 15px; margin: 0 auto; max-width: 700px">
 
 		<!-- 성공하면 로 감  -->
-		<form name="form2" action="" method="post"
+		<form name="form5" action="" method="post"
 			onsubmit="return myPageCasual()">
 
 			<table width="685" height="400" align="center" cellspacing="0">
@@ -39,20 +39,21 @@
 				<tr>
 					<!-- 아이디 입력 -->
 					<td style="padding-left: 20px;"><b>ID:</b></td>
-					<td><input type="text" style="width: 530px" id="member_id"
-						name="member_id" maxlength="45" class="form-control" /></td>
+					<td><input type="text" style="width: 530px" id="member_id" readonly="readonly"
+						name="member_id" value="${sc.getMember_id}" class="form-control" /></td>
 				</tr>
+			
 
 				<tr>
 					<!-- 비밀번호 입력 -->
-					<td style="padding-left: 16px;"><b>PW:</b></td>
+					<td style="padding-left: 16px;"><b>PW 변경:</b></td>
 					<td><input type="password" style="width: 530px"
 						id="member_pass" name="member_pass" maxlength="12"
 						class="form-control" placeholder=" ※4-12자의 영문 대소문자와 숫자로만 입력" /></td>
 				</tr>
 				<tr>
 					<!-- 비밀번호 확인 -->
-					<td style="padding-left: 16px;"><b>PW:</b></td>
+					<td style="padding-left: 16px;"><b>PW 확인:</b></td>
 					<td><input type="password" style="width: 530px"
 						id="member_pass2" name="member_pass2" maxlength="12"
 						class="form-control" /></td>
@@ -60,8 +61,8 @@
 				<tr>
 					<!-- 닉네임 입력 -->
 					<td style="padding-left: 10px;"><b>Nick:</b></td>
-					<td><input type="text" style="width: 530px" id="member_nick"
-						name="member_nick" class="form-control"/></td>
+					<td><input type="text" style="width: 530px" id="member_nick" readonly="readonly"
+						name="member_nick" value="${MINFO}" class="form-control"/></td>
 				</tr>
 			</table>
 		</form>
