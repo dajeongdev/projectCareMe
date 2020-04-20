@@ -9,10 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
-
 <title>메인 화면</title>
-
-
 </head>
 
 <body>
@@ -23,7 +20,7 @@
 
 			<div class="row mb-3">
 				<main role="main" class="col-lg-12">
-					<h2 align="left">고민 상담</h2>
+					<h2 align="left">고민 상담 (검색결과)</h2>
 					<p align="left"> (전체 글: <c:out value="${paging.totalCount}" />)</p>
 					<div class="table" style="height: 540px">
 						<table class="table table-striped table-lg table-hover">
@@ -53,18 +50,11 @@
 							</tbody>
 						</table>
 					</div>
-					<!-- 게시판 페이지넘버링 및 글쓰기 -->
-					<!-- 글쓰기 버튼 -->
-						<div class="row lg-3" >
-							<div class="col-lg-10"></div>
-							<div class="col-lg-2" align="right">
-								<button class="btn btn-dark btn-sm btn-block" onClick="location.href='casualWriteForm'">글쓰기</button>	
-							</div>
-						</div>
+					<!-- 게시판 페이지넘버링 -->
 						
 						<div class="row lg-3" >
 							<div class="col-lg-12" align="center">
-							<ul class="pagination pagination-lg dark">
+							<ul class="pagination pagination-lg pagination-dark">
   
 					<!-- 왼쪽 화살표 -->  
 							 <li class="page-item disabled">
@@ -75,12 +65,12 @@
 								<c:choose>
                             		<c:when test="${page eq paging.currentPage}"> 			
 							 			<li class="page-item active" style="font-weight: bold;">
-      										<a class="page-link" href="casualBoard?currentPage=${page}">${page}</a>
+      										<a class="page-link" href="casualBoardSearch?currentPage=${page}&searchn=${searchn}&searchKeyword=${searchKeyword}">${page}</a>
     									</li>
     								</c:when>
    					 				<c:otherwise>
 			   					 		<li class="page-item active">
-      										<a class="page-link" href="casualBoard?currentPage=${page}">${page}</a>
+      										<a class="page-link" href="casualBoardSearch?currentPage=${page}&searchn=${searchn}&searchKeyword=${searchKeyword}">${page}</a>
     									</li>
 									</c:otherwise>
 								</c:choose>
@@ -93,19 +83,7 @@
   							</ul>
 							</div>
 						</div>
-						
-					<!-- 게시판 검색 -->
-						<form action="casualBoardSearch?currentPage=${currentPage}&searchn=${searchn}&searchKeyword=${searchKeyword}">
-							<select name="searchn">
-								<option value="0">작성자</option>
-								<option value="1">제목</option>
-								<option value="2">내용</option>
-							</select>
-							<input type="text" name="searchKeyword" size="15" maxlength="50" />
-							<input type="hidden" name="currentPage" value="1" />
-							<input type="submit" value="검색" />
-						</form>
-
+					
 					</main>
 				</div>
 

@@ -4,12 +4,18 @@
 <%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
+
 <title>메인 화면</title>
+<% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
+<c:set var="fullName" value="<%=fullName%>" />
+
+
 </head>
 
 <body>
@@ -36,24 +42,32 @@
 		  		<div class="row card-body">
 
   				
-  					<div class="col-md-3" style="height: auto;"> 
-  						<div class="card shadow-sm">
-         					<div class="card-header">
-         					<img align="left" class="bd-placeholder-img card-img-top" src="<%=request.getContextPath()%>/resources/img/dog.jpg"/>
-            				</div>
-            				<div class="card-body">
-              					<h4 class="card-title"><c:out value="${mlist.member_id}"/></h4>
-    		  					<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
-            				</div>
-          				</div>
-  					</div>	
+  					<div class="col-md-3">
+	       				<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
+    	    			<title>Placeholder</title><rect width="100%" height="100%" fill="#777">
+        				</rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+        
+        				<h2 class="card-title"><c:out value="${mlist.member_id}"/></h2>
+        
+        				<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
+  					</div>
   					
-  					<div class="col-md-9 shadow-sm" style="height: auto;">
-  						<blockquote>
-          					<p style="font:20" align="left">
-								<c:out value="${mlist.content}" />
+  					<div class="col-md-9 shadow-sm">
+  						<div>
+  							<c:if test="${flist.size()>0}">
+  								<c:forEach var="flist" items="${flist}">
+  									<div class="img">
+  										<img class="w-50 h-40" border="1px" src="${fullName}${flist.file_path}">
+  									</div>
+  								</c:forEach>
+  							</c:if>
+  						</div>
+  						<br>
+  						<div>
+  							<p style="css:mainCSS" align="left">
+								${mlist.content}
 							</p>
-        				</blockquote>
+        				</div>
 					</div>
 				
   				</div>
@@ -86,43 +100,55 @@
 			
 			<c:forEach var="item" items="${clist}">
 			<div class="row">
-				<div class="card border-dark col-md-3">
-  					<div class="card-header">
-  						<img align="left" height="100" width="80" src="<%=request.getContextPath()%>/resources/img/dog.jpg">
-  					</div>
-  		
-  					<div class="card-body">
-    					<h4 class="card-title" style="font: 10"><c:out value="${item.member_id}" /></h4>
-    					<p class="card-text">written on<br><c:out value="${item.reg_date}" /></p>
-  					</div>
-				</div>
-		
-		
+				<div class="card border-dark col-md-3" align="center">
+  						<p></p>
+  						<svg class="bd-placeholder-img rounded-circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
+    	    			<title>Placeholder</title><rect width="100%" height="100%" fill="#777">
+        				</rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+        
+        				<h2 class="card-title"><c:out value="${item.member_id}"/></h2>
+        
+        				<p class="card-text">written on<br><c:out value="${item.reg_date}" /></p>
+        				<p></p>
+  				</div>
+				
 				<div class="card border-dark col-md-9">
   					<div class="row card-body my-3 p-3 bg-white rounded shadow-sm">
-    					<blockquote>
-          					<p style="font:20" align="left">
-							<c:out value="${item.content}" />
+    						<p style="" align="left">
+								<c:out value="${item.content}"/>
 							</p>
-        				</blockquote>
+        			</div>
+					<div class="row">
+						<div class="col-md-9"></div>					
+						<div class="col-md-3" align="right">
+						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
+							onClick="">
+						<input type="button" class="btn btn-dark btn-sm" value="댓글 삭제"
+							onClick="">
+						</div>
 					</div>
+					<p></p>
 				</div>
 			</div>
+			<p></p>
+			
 			<hr>
 			</c:forEach>
 
 			<!-- comment 작성 -->
+			<div class="col-lg-12" style="width:100%;">
 				<h5>
 					댓글을 달아주세요 
 				</h5>
 
 			<form action="casualCommentAdd?question_table_idx=${mlist.question_table_idx}" method="post">
-				<textarea name="content" style="width: 900px; height: 100px" rows="3"></textarea>
+				<textarea name="content" style="width: 100%; height: 100px"></textarea>
 						<div class="col-md-12" align="right">
 							<input class="btn btn-dark btn-sm" type="submit" name="submit" value="확인"> 
 							<input type="hidden" name="member_idx" value="1">
 						</div>
 			</form>
+			</div>
 			</div>
 			</div>
 		</main>

@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>메인 화면</title>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script>
 <!-- PET CHOOSE -->
 $(function(){
