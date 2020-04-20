@@ -40,25 +40,28 @@
 		})
 </script>
 
+
+
 </head>
 <body>
-
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 
 	<div
 		class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 		<div class="container min-vh-100 pt-3 text-center">
-			<div class="row">
-				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+		
+		<form action="doctorBoardWriteAdd" method="post" enctype="multipart/form-data">
+			<div class="row my-3 p-3">
+				<main role="main" class="col-lg-12 bg-white rounded shadow-sm">
+					
 					<h2 align="left">전문 상담</h2>
 					<p></p>
-
-					<form action="doctorBoardUpdateAdd" method="post" name="updateInfo">
-
-						<div style="width: 900px; height: 100px" align="left">
-							<input placeholder="제목" type="text" name="title">
-						</div>
+						<div class="mb-3" align="left">
+			          		<label for="title">제목</label>
+          					<input name="title" type="text" class="form-control"/>
+        				</div>
 						<input name="question_type" type="hidden" value="y" /> 
+						<input name="member_idx" type="hidden" id="subject" value="${info.member_idx}">
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />
@@ -86,31 +89,42 @@
 
 						<div align="left">
 							내용<br>
-							<textarea name="content" style="width: 900px; height: 500px"></textarea>
-							<br> <input name="member_idx" type="text" id="subject"><br>
+							<textarea name="content" style="width: 100%; height: 250px"></textarea>
+							<br>
 						</div>
+						
+						
+						<div align="left">
+						<label for="file">파일첨부</label><br>
+							<input type="file" name="file" id="file" multiple/>
+							<div class="row" id="selectedFiles"></div>
+							<div id="preview"></div>
+    					</div>
+    					
+    					<br>
+    					
+						<div class="content" align="left">
+       					<input type="hidden" value="" name="tag" id="rdTag" />
+    			   	<div>
+     			       <input type="text" id="tag" size="7" placeholder="태그입력" />
+     			    </div><br>  
+    			    
+    			    <ul id="tag-list"></ul>
 
-						<div>
-							<p>tag 추가하기</p>
-							<input type="text" name="tagArea" placeholder="#">
-
-						</div>
-
-						<!-- <div align="left">
-						파일첨부<br>
-						<form name="fileUpload" enctype="multipart/form-data">
-							<input type="file" id="file_name" aria-describedby="inputGroupFileAddon01"  >
-    					</form>
-    					</div> -->
-
-
-						<input type="submit" value="수정"> 
-						<input type="reset" value="다시쓰기">
-						<input type="button" value="목록으로" OnClick="location.href='doctorBoard'">
-
-					</form>
+    			   	</div> 
 				</main>
 			</div>
+				
+				<div class="row">
+					<div class="col-md-12" align="center">	
+						<input type="submit" class="btn btn-dark btn-sm" value="수정"> 
+						<input type="reset" class="btn btn-dark btn-sm" value="다시쓰기"> 
+						<input type="button" class="btn btn-dark btn-sm" value="목록으로" OnClick="location.href='doctorBoard?currentPage=1'">
+					</div>
+				</div>			
+				
+			
+		</form>
 
 
 		</div>

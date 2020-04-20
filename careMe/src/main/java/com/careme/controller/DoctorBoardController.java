@@ -16,9 +16,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.MemberService;
 import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
@@ -29,18 +31,18 @@ public class DoctorBoardController {
 
 	@Autowired
 	QuestionBoardService bs;
-
+	
 	public void setQuestionBoardService(QuestionBoardService bs) {
 		this.bs = bs;
 	}
 	
 	@Autowired
-	PetService petService;
+	PetService ps;
 	
-	public void setPetService(PetService petService) {
-		this.petService = petService;
+	public void setPetService(PetService ps) {
+		this.ps = ps;
 	}
-
+	
 	@Autowired
 	FileUploadService fus;
 	
@@ -55,10 +57,22 @@ public class DoctorBoardController {
 		this.pns = pns;
 	}
 	
+	@Autowired
+	MemberService ms;
+	
+	public void setMemberService(MemberService ms) {
+		this.ms=ms;
+	}
+	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
 	public ModelAndView toDoctorBoard(int currentPage) {
 		ModelAndView listPro = new ModelAndView("/doctorBoardView/doctorBoard");
+		
+		MemberDto info = ms.memberInfo("hellojava");
+		System.out.println(info.getMember_id());
+		System.out.println(info.getMember_idx());
+		
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
 		
@@ -67,7 +81,7 @@ public class DoctorBoardController {
 		param.put("contentPerPage", contentPerPage);
 		
 		List<QuestionBoardDto> getArticles = bs.getDoctorBoardPage(param);
-		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
+		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "doctorBoardView/doctorBoard?currentPage=");
 		
 		listPro.addObject("listPro", getArticles);
 		listPro.addObject("paging", paging);
@@ -93,66 +107,51 @@ public class DoctorBoardController {
 // 게시판 검색기능
 	@RequestMapping(value = "/view/doctorBoardSearch")
 	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
-		SearchBoardCommand sbc = new SearchBoardCommand();
 		ModelAndView list = new ModelAndView();
+		SearchBoardCommand sbc = new SearchBoardCommand();
 		List<QuestionBoardDto> items = null;
-
-		if (searchn == 0) {
-			sbc.setSearch_option("member_id");
-			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getDoctorBoardSearch(sbc);
-			list.addObject("list", items);
-			list.addObject("count", items.size());
-			list.setViewName("redirect:view/doctorBoardView/doctorBoard");
-
-		} else if (searchn == 1) {
-			sbc.setSearch_option("title");
-			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getDoctorBoardSearch(sbc);
-			list.addObject("list", items);
-			list.addObject("count", items.size());
-			list.setViewName("redirect:view/doctorBoardView/doctorBoard");
-
-		} else if (searchn == 2) {
-			sbc.setSearch_option("content");
-			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getDoctorBoardSearch(sbc);
-			list.addObject("list", items);
-			list.addObject("count", items.size());
-			list.setViewName("redirect:view/doctorBoardView/doctorBoard");
-		}
+		sbc=bs.listSearchInfo(searchn, searchKeyword);
+		items = bs.getCasualBoardSearch(sbc);
+		
+		list.addObject("list", items);
+		list.addObject("count", items.size());
+		list.setViewName("list");
+		
 		return list;
 	}
 
-// 게시글 작성
-	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm")
-	public ModelAndView toWriteForm() throws Exception {
-		ModelAndView write = new ModelAndView("doctorBoardView/doctorWriteForm");
-		write.addObject("speciesOption", petService.selectPetSpeciesLevel1());
-		return write;
-	}
-	
-	@RequestMapping(value="/view/doctorBoardView/doctorWriteForm/pet_species_idx", method=RequestMethod.GET, produces="text/plain;charset=UTF-8")
-	@ResponseBody
-	public String getDoctorPetSpeciesList(int level, int ancestor) {
-		List<PetSpeciesDto> items = null;
+	// 게시글 작성
+		@RequestMapping(value = "/view/doctorBoardView/doctorWriteForm", method = RequestMethod.GET)
+		public ModelAndView toWriteForm() throws Exception {
+			ModelAndView write = new ModelAndView("doctorBoardView/doctorWriteForm");
+			
+			//회원 정보 및 확인
+//			String currentId = session.getAttribute("id");
+			MemberDto info = ms.memberInfo("hellojava");
+			
+			write.addObject("info", info);
+			write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
+			return write;
+		}
 		
-		if(level==1) items = petService.selectPetSpeciesLevel1();
-		else if(level==2) items = petService.selectPetSpeciesLevel2(ancestor);
+		@RequestMapping(value = "/view/doctorBoardView/doctorWriteForm/pet_species_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+		@ResponseBody
+		public String getDoctorPetSpeciesList(int level, int ancestor) {
+			List<PetSpeciesDto> items = null;
+			
+			if (level == 1) items = ps.selectPetSpeciesLevel1();
+			else if (level == 2) items = ps.selectPetSpeciesLevel2(ancestor);
+			
+			Gson json = new Gson();
+			return json.toJson(items);	
+		}
 		
-		Gson json = new Gson();
-		return json.toJson(items);
-	}
-	
-	
-	
-	@RequestMapping(value="/view/doctorBoardView/doctorBoardWriteAdd", method=RequestMethod.POST)
-	public ModelAndView writeDoctorBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
-		ModelAndView mav = new ModelAndView("/view/doctorBoardView/doctorBoard");
-		mav.addObject("written", bs.addDoctorArticles(dto));
-		mav.addObject("files", fus.upload(request, "img/boardUpload"));
-		return mav;
-	}
+		
+		@RequestMapping(value = "/view/doctorBoardView/doctorBoardWriteAdd", method = RequestMethod.POST)
+		public String writeDoctorBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+			bs.addDoctorArticles(dto, request);
+			return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
+		}
 	
 	
 // 게시글 수정
@@ -160,7 +159,7 @@ public class DoctorBoardController {
 	public ModelAndView toDoctorUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView("doctorBoardView/doctorBoardUpdateForm");
 		int idx = question_table_idx;
-			update.addObject("speciesOption", petService.selectPetSpeciesLevel1());
+			update.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
 			return update;
 	}
@@ -170,23 +169,23 @@ public class DoctorBoardController {
 	public String updateDoctorArticle(QuestionBoardDto dto) throws Exception {
 		int result = bs.updateDoctorArticle(dto);
 		if (result > 0) {
-			return "redirect:/view/doctorBoardView/doctorBoard";
+			return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
 		} else {
-			return "redirect:/view/doctorBoardView/doctorBoard";
+			return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
 		}
 	}
 
 	
 // 게시글 삭제
-	@RequestMapping(value="/view/doctorBoardView/deleteArticle")
+	@RequestMapping(value="/view/doctorBoardView/deleteDoctorArticle")
 	public String deleteDoctorArticle(@RequestParam int question_table_idx) {
 		int idx = question_table_idx;
 		int result = bs.deleteDoctorArticle(idx);
 		if(result>0) {
-		return "redirect:/view/doctorBoardView/doctorBoard";
+		return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
 		}else {
 			System.out.println("no!!!");
-		return "redirect:/view/doctorBoardView/doctorBoard";
+		return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
 		}
 	}
 

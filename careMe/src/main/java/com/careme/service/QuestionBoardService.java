@@ -3,6 +3,8 @@ package com.careme.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
@@ -22,13 +24,17 @@ public interface QuestionBoardService {
 	
 	public void getDoctorBoardViews (int question_table_idx);
 	
+	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword);
+	
 	public List<QuestionBoardDto> getDoctorBoardSearch (SearchBoardCommand sbc);
 	
 	public List<BoardCommentDto> getDoctorBoardComments (int question_table_idx);
 	
 	
 // Doctor Board 작성, 수정, 삭제
-	public int addDoctorArticles (QuestionBoardDto dto);
+	public void addDoctorArticles (QuestionBoardDto dto, MultipartHttpServletRequest request);
+	
+	public void addFileForDoctor(int question_table_idx, MultipartHttpServletRequest request);
 	
 	public int updateDoctorArticle (QuestionBoardDto dto);
 	
@@ -58,9 +64,9 @@ public interface QuestionBoardService {
 	
 	
 // Casual Board 작성, 수정, 삭제
-	public int addCasualArticles (QuestionBoardDto dto);
+	public void addCasualArticles (QuestionBoardDto dto, MultipartHttpServletRequest request);
 	
-	public int addArtFileForCasual (QuestionBoardDto dto);
+	public void addFileForCasual(int question_table_idx, MultipartHttpServletRequest request);
 	
 	public int updateCasualArticle (QuestionBoardDto dto);
 	

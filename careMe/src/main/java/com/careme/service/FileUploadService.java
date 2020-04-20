@@ -29,6 +29,7 @@ public class FileUploadService {
 			for (MultipartFile file : uploadFiles) {
 				FileUploadCommand command = new FileUploadCommand();
 				String originName = file.getOriginalFilename();
+				System.out.println("originName:::"+originName);
 				String ext = originName.substring(originName.lastIndexOf("."), originName.length());
 				Long size = file.getSize();
 				
@@ -36,7 +37,7 @@ public class FileUploadService {
 				String saveFileName = getSaveFileName(ext);
 				// 실제 저장경로
 				String fileSavePath = rootPath + resourcesPath + path;
-				//System.out.println("fileSavePath:" + fileSavePath);
+				System.out.println("fileSavePath:" + fileSavePath);
 				try {
 					writeFile(file, saveFileName, fileSavePath);
 					command.setFileOriginName(originName);
