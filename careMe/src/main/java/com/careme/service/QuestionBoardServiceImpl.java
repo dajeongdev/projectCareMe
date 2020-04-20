@@ -141,6 +141,10 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.getCasualBoardContents(question_table_idx);
 	}
 
+	public List<BoardFileDto> getBoardFiles (int question_table_idx){
+		return dao.getBoardFiles(question_table_idx);
+	}
+	
 	public void getCasualBoardViews(int question_table_idx) {
 		dao.getCasualBoardViews(question_table_idx);
 	}

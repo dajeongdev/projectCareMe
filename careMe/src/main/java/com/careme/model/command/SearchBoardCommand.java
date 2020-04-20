@@ -4,6 +4,7 @@ public class SearchBoardCommand {
 	
 		String search_option;
 		String searchKeyword;
+		String question_type;
 		
 		int start_idx;
 		int contentPerPage;
@@ -32,10 +33,17 @@ public class SearchBoardCommand {
 		public void setContentPerPage(int contentPerPage) {
 			this.contentPerPage = contentPerPage;
 		}
+		
+		public String getQuestion_type() {
+			return question_type;
+		}
+		public void setQuestion_type(String question_type) {
+			this.question_type = question_type;
+		}
 		@Override
 		public String toString() {
 			return "SearchBoardCommand [search_option=" + search_option + ", searchKeyword=" + searchKeyword
-					+ ", start_idx=" + start_idx + ", contentPerPage=" + contentPerPage + "]";
+					+ ", question_type=" + question_type + ", start_idx=" + start_idx + ", contentPerPage="
+					+ contentPerPage + "]";
 		}
-		
 }
