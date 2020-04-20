@@ -90,94 +90,167 @@ $(function (){
 	      }
 	    }
 	  });
-})
+});
 
-	var files = [];
-	var previewIndex = 0;
+var files = [];
+var previewIndex = 0;
 
-	// image preview 기능, input = file object[]
-	function addPreview(input) {
-		if(input[0].files) {
-			for(var f = 0; f < input[0].files.length; f++) {
-				var file = input[0].files[f];
-				
-				if(validation(file.name)) continue;
-				
-				setPreviewForm(file);
-			}
-		} else {
-			alert("invalid file input");
+// image preview 기능, input = file object[]
+function addPreview(input) {
+	if(input[0].files) {
+		for(var f = 0; f < input[0].files.length; f++) {
+			var file = input[0].files[f];
+			
+			if(validation(file.name)) continue;
+			
+			setPreviewForm(file);
 		}
+	} else {
+		alert("invalid file input");
 	}
-	function setPreviewForm(file, img) {
-		var reader = new FileReader();
-		reader.onload = function(img) {
-			var imgNum = previewIndex++;
-			$("#preview").append("<div class=\"preview-box\" value=\"" + imgNum + "\">"
-					+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
-					+ "<i class='fas fa-trash-alt'></i>" + "</a>" 
-					+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
-				    + "</div>");
-			files[imgNum] = file;
-		};
-		reader.readAsDataURL(file);
-	}
-	
-	// preview에서 삭제 버튼 클릭시 미리보기 이미지 영역 삭제
-	function deletePreview(obj) {
-		var imgNum = obj.attributes['value'].value;
-		delete files[imgNum];
-		$("#preview .preview-box[value=" + imgNum + "]").remove();
-		resizeHeight();
-	}
+}
+function setPreviewForm(file, img) {
+	var reader = new FileReader();
+	reader.onload = function(img) {
+		var imgNum = previewIndex++;
+		$("#preview").append("<div class=\"preview-box\" value=\"" + imgNum + "\">"
+				+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
+				+ "<i class='fas fa-trash-alt'></i>" + "</a>" 
+				+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
+			    + "</div>");
+		files[imgNum] = file;
+	};
+	reader.readAsDataURL(file);
+}
 
-	// client-side validation
-	// always server-side validation required
-	function validation(fileName) {
-		fileName = fileName + "";
-		var fileNameExtensionIndex = fileName.lastIndexOf(".") + 1;
-		var fileNameExtension = fileName.toLowerCase().substring(fileNameExtensionIndex, fileName.length);
-		if(!((fileNameExtension == 'jpg') || (fileNameExtension == 'gif') || (fileNameExtension == 'png'))) {
-			alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-			return true;
-		} else {
-			return false;
+// preview에서 삭제 버튼 클릭시 미리보기 이미지 영역 삭제
+function deletePreview(obj) {
+	var imgNum = obj.attributes['value'].value;
+	delete files[imgNum];
+	$("#preview .preview-box[value=" + imgNum + "]").remove();
+	resizeHeight();
+}
+
+// client-side validation
+// always server-side validation required
+function validation(fileName) {
+	fileName = fileName + "";
+	var fileNameExtensionIndex = fileName.lastIndexOf(".") + 1;
+	var fileNameExtension = fileName.toLowerCase().substring(fileNameExtensionIndex, fileName.length);
+	if(!((fileNameExtension == 'jpg') || (fileNameExtension == 'gif') || (fileNameExtension == 'png'))) {
+		alert("jpg, gif, png 확장자만 업로드 가능합니다.");
+		return true;
+	} else {
+		return false;
+	}
+}
+
+$(document).ready(function() {
+	$(".submit a").on("click", function() {
+		var form = $("#update")[0];
+		var formData = new FormData(form);
+
+		for(var i = 0; i < Object.keys(files).length; i++) {
+			formData.append("files", files[i]);
 		}
-	}
 
-	$(document).ready(function() {
-		$(".submit a").on("click", function() {
-			var form = $("#update")[0];
-			var formData = new FormData(form);
-
-			for(var i = 0; i < Object.keys(files).length; i++) {
-				formData.append("files", files[i]);
-			}
-
-			$.ajax({
-				type: "POST",
-				enctype: "multipart/form-data",
-				processData: false,
-				contentType: false,
-				cache: false,
-				url: "/storyEdit",
-				dataType: "json",
-				data: formData,
-				success: function(result) {
-					if(result = -1) {
-						alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-					} else if(result = -2) {
-						alert("파일이 10MB를 초과하였습니다.");
-					} else {
-						alert("이미지 업로드 성공");
-					}
+		$.ajax({
+			type: "POST",
+			enctype: "multipart/form-data",
+			processData: false,
+			contentType: false,
+			cache: false,
+			url: "/storyEdit",
+			dataType: "json",
+			data: formData,
+			success: function(result) {
+				if(result = -1) {
+					alert("jpg, gif, png 확장자만 업로드 가능합니다.");
+				} else {
+					alert("이미지 업로드 성공");
 				}
-			});
-		});
-		$("input[type=file]").change(function() {
-			addPreview($(this));
+			}
 		});
 	});
+	$("input[type=file]").change(function() {
+		addPreview($(this));
+	});
+});
+var storedFiles = [];
+var deletedFiles = [];
+var selDivs = "";
+
+$(function() {
+	selDiv = $("#selectedFiles");
+
+	$("#file").on("change", handleFileSelect);
+	
+	$("body").on("click", ".fa-trash", removeFile);
+
+	form = $("form[name=update]")[0];
+	form.onsubmit = function (e) {
+		e.preventDefault();
+		var formData = new FormData(form);
+		for (var i = 0; i < storedFiles.length; i++) {
+			formData.append("file", storedFiles[i]);
+		}
+
+		formData.append("fileDelete", fileDelete);
+
+		 $.ajax({
+	         url: "update"
+             , type : "POST"
+	         , contentType: false
+	         , processData: false
+             , data : formData
+        	 , success : function() {
+        		 location.href="/careMe/story";
+             }
+        })
+	}
+
+	
+
+})
+
+function handleFileSelect(e) {
+	var files = e.target.files;
+	var filesArr = Array.prototype.slice.call(files);
+	filesArr.forEach(function(f) {			
+
+		if(!f.type.match("image.*")) {
+			return;
+		}
+		storedFiles.push(f);
+		
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			var html  = "<div class=\"preview-box\" value=\"" + imgNum + "\">"
+			+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
+			+ "<i class='fas fa-trash-alt'></i>" + "</a>" 
+			+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
+		    + "</div>";
+			selDiv.append(html);
+		}
+		reader.readAsDataURL(f); 
+	});
+}
+
+function removeFile(e) {
+	var file = $(this).data("file");
+	var idx = $(this).data("idx");
+
+	if (idx) fileDelete.push(idx);
+	
+	for(var i=0;i<storedFiles.length;i++) {
+		if(storedFiles[i].name === file) {
+			storedFiles.splice(i,1);
+			break;
+		}
+	}
+	$(this).parent().remove();
+}
+
 
 </script>
 </head>
@@ -191,27 +264,30 @@ $(function (){
 	<h3><strong>펫스토리</strong></h3>
 		<hr>
 		<form name="update" method="POST" action="storyEdit" enctype="multipart/form-data">
-			<input type="hidden" name="story_board_idx" value="${update.story_board_idx}">
-			<input type="hidden" name="member_idx" value="1">
+			<input type="hidden" name="member_idx" value="${dto.member_idx}">
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 
-				value="${update.title}">
-				<input type="file" name="file" id="file" multiple/>
+				value="${dto.title}">
+				<input type="file" class="custom-file-input" id=inputGroupFile04 name="file">
+				 <label class="custom-file-label" for="inputGroupFile04">사진 선택</label>
+				<i class="fas fa-trash-alt" onClick="deletePreview(this)"></i>
 				<div class="row" id="selectedFiles"></div>
 				<div id="preview">
 				</div>
 			<div class="form-group">
 			 	<textarea class="form-control" name="content"
-    			id="content" rows="3" ><c:out value="${update.content}"/></textarea>
+    			id="content" rows="3" ><c:out value="${dto.content}"/></textarea>
   			</div>
   			</div>
-			<!-- <div id="info-tag">
-				<input type="text" class="form-control" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+			<div id="info_tag">
+				<input type="hidden" name="tag_idx" name="tag_idx">
+				<input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
 					<div id="hash-inbox">
-					</div>
+					
+					</div>					
 				</div>
-			</div> -->
+			</div>	
 			<input type="hidden" name="tag_idx" value="3">
 			<div class="btn-group">
 				<button type="submit" class="insert_btn btn btn-outline-dark" OnClick="document.location.href='storyDetail?story_board_idx=${story_board_idx}'">등록</button>

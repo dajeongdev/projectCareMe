@@ -18,11 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
+import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
 import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.MemberService;
 import com.careme.service.PageNumberService;
 import com.careme.service.StoryService;
 
@@ -54,6 +56,13 @@ public class StoryController {
 	public void setTagDto(TagDto tagDto) {
 		this.tagDto = tagDto;
 	}
+	
+	@Autowired
+	MemberService mem;
+
+	public void setMem(MemberService mem) {
+		this.mem = mem;
+	}
 
 
 	// 글목록
@@ -71,46 +80,35 @@ public class StoryController {
 		
 		List<StoryFileDto> fList = service.fileList();
 		List<StoryBoardDto> hlist = service.hitList();
-		/*int i = service.insertTag(request);
-		tagDto.setTag_idx(i);
-		int j = service.insertTagType(i, request);*/
 		mav.addObject("start_idx", page.getStartIdx(currentPage, contentPerPage));
 		mav.addObject("slist", slist);
 		mav.addObject("fList", fList);
 		mav.addObject("hlist", hlist);
 		mav.addObject("paging", paging);
+		
+		MemberDto info = mem.memberInfo("hellojava");
+		mav.addObject("info", info);
 		mav.setViewName("/story/storyMain");
 		return mav;
 	}
 	
 	
-	@RequestMapping(value = "/view/story/storyMainSearch")
-	public ModelAndView searching(@RequestParam int searchType, @RequestParam String keyword) {
-		StoryCommand com = new StoryCommand();
+	@RequestMapping(value = "/storyMainSearch")
+	public ModelAndView searching(@RequestParam int searchType, @RequestParam String keyword, int currentPage) {
 		ModelAndView mav = new ModelAndView();
-		List<StoryBoardDto> list = null;
-		if(searchType == 0) {
-			com.setSearchType("member_id");
-			com.setKeyword(keyword);
-			list = service.searching(com);
-			mav.addObject("list", list);
-			mav.addObject("count", list.size());
-			mav.setViewName("/story/storyMain");
-		} else if(searchType == 1) {
-			com.setSearchType("title");
-			com.setKeyword(keyword);
-			list = service.searching(com);
-			mav.addObject("list", list);
-			mav.addObject("count", list.size());
-			mav.setViewName("/story/storyMain");
-		} else if(searchType == 2) {
-			com.setSearchType("content");
-			com.setKeyword(keyword);
-			list = service.searching(com);
-			mav.addObject("list", list);
-			mav.addObject("count", list.size());
-			mav.setViewName("/story/storyMain");
-		}
+		int contentPerPage = 10;
+		StoryCommand com = new StoryCommand();
+		com = service.searchList(searchType, keyword);
+		int start_idx = page.getStartIdx(currentPage, contentPerPage);
+		com.setStart_idx(start_idx);
+		com.setContentPerPage(contentPerPage);
+		List<StoryBoardDto> list = service.searching(com);
+		PageNumberCommand paging = new PageNumberCommand();
+		paging = page.paging(service.getTotal(), contentPerPage, currentPage, 
+					"storyMain?currentPage="+currentPage+"&searchType="+searchType+"&keyword="+keyword);
+		mav.addObject("list", list);
+		mav.addObject("paging", paging);
+		mav.setViewName("/story/storyMain?currentPage=1");;
 		return mav;
 	}
 	
@@ -129,6 +127,9 @@ public class StoryController {
 		mav.addObject("comCount", comCount);
 		//mav.addObject("heart", service.heart(story_board_idx));
 		//mav.addObject("comHeart", service.comHeart(story_comment_idx));
+		
+		MemberDto info = mem.memberInfo("hellojava");
+		mav.addObject("info", info);
 		mav.setViewName("/story/storyDetail");
 		return mav;
 	}
@@ -141,11 +142,15 @@ public class StoryController {
 	}
 	
 	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
-	public String insertForm(StoryFileDto dto, MultipartHttpServletRequest request) {
+	public String insertForm(StoryFileDto fileDto, MultipartHttpServletRequest request) {
 		int no = service.insert(request);
-		dto.setStory_board_idx(no);
-		service.insertFile(dto, request);
-		return "/story/storyDetail";
+		fileDto.setStory_board_idx(no);
+		service.insertFile(fileDto, request);
+		int i = fileDto.getStory_board_idx();
+		/*int i = service.insertTag(request);
+		tagDto.setTag_idx(i);
+		int j = service.insertTagType(i, request);*/
+		return "/story/storyDetail?story_board_idx=" + i;
 	}
 	
 	// 댓글 작성
@@ -164,24 +169,31 @@ public class StoryController {
 	
 	// 글수정
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.GET)
-	public ModelAndView updateForm(int story_board_idx) {
+	public ModelAndView updateForm(StoryBoardDto d, MultipartHttpServletRequest request, int story_board_idx) throws Exception {
 		ModelAndView mav = new ModelAndView("/story/storyEdit");
+		StoryBoardDto dto = service.read(d.getStory_board_idx());
+		request.getSession().setAttribute("story_board_idx", story_board_idx);
+		
 		mav.addObject("story_board_idx", story_board_idx);
+		mav.addObject("dto", dto);
+		mav.addObject("file", service.readFile(story_board_idx));
 		return mav;
 	}
 	
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.POST)
-	public ModelAndView articleUpdate(StoryBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+	public ModelAndView articleUpdate(StoryFileDto fileDto, Integer[] fileDelete, MultipartHttpServletRequest request, int story_board_idx) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		int i = service.insert(request);
-		dto.setStory_board_idx(i);
-		mav.addObject("update", service.update(dto));
-		mav.setViewName("/story/storyDetail");
+		StoryBoardDto dto = service.read(story_board_idx);
+		int i = dto.getStory_board_idx();
+		service.update(request);
+		service.updateFile(fileDto, fileDelete, request);
+		mav.addObject("story_board_idx", i);
+		mav.setViewName("/story/storyDetail?story_board_idx=" + i);
 		return mav;
 	}
 	
 	// 댓글 수정
-	@RequestMapping(value = "/story/updateCom")
+	@RequestMapping(value = "/view/story/updateCom")
 	public String updateCom(StoryCommentDto comDto) {
 		int i = service.updateCom(comDto);
 		int b = comDto.getStory_board_idx();

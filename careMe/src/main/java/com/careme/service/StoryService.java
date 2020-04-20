@@ -20,6 +20,7 @@ public interface StoryService {
 	public List<StoryBoardDto> totalListing(Map<String, Integer> map);
 	public int getTotal();
 	public List<StoryFileDto> fileList();
+	public StoryCommand searchList(int searchType, String keyword);
 	public List<StoryBoardDto> searching(StoryCommand com);
 	// 인기글
 	public List<StoryBoardDto> hitList();
@@ -41,14 +42,13 @@ public interface StoryService {
 	
 	
 	// 수정
-	public int update(StoryBoardDto dto);
-	public int updateFile(StoryFileDto fileDto);
+	public int update(MultipartHttpServletRequest request);
+	public void updateFile(StoryFileDto fileDto, Integer[] fileDelete, MultipartHttpServletRequest request);
 	public int updateCom(StoryCommentDto comDto);
 	
 	
 	// 삭제
 	public int delete(HttpServletRequest request);
-	public int deleteFile(int story_file_idx);
 	public int deleteCom(int story_comment_idx);
 	
 	

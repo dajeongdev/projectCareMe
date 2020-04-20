@@ -55,7 +55,7 @@ $(document).ready(function(){
 	})
 	//목록
 	$(".list_btn").on("click", function() {
-		location.href="/careMe/view/story/storyMain";
+		location.href="/careMe/view/story/storyMain?currentPage=1";
 	})
 
 });
@@ -77,12 +77,6 @@ function change(iconID) {
 		}
 	});
 }
-/*function delete() {
-    var d = document.createElement('form');
-    d.action = "delete";
-    document.body.appendChild(d);
-    d.submit();
-}*/
 </script>
 </head>
 <body>
@@ -117,7 +111,7 @@ function change(iconID) {
 				<a href="">#산책</a>
 				<div class="btn-group">
 					<button type="button" class="update_btn btn btn-outline-dark" OnClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
-					<button type="button" class="delete_btn btn btn-outline-dark delete_btn">삭제</button>
+					<button type="button" class="delete_btn btn btn-outline-dark delete_btn" onClick="document.location.href='delete?story_board_idx=${dto.story_board_idx}'">삭제</button>
 					<button type="button" class="list_btn btn btn-outline-dark">목록</button>
 				</div>
 			</div>	

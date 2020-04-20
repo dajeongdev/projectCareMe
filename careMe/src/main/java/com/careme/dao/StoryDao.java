@@ -4,10 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
-
-import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.StoryCommand;
-import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -89,8 +86,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int delete(int story_board_idx) {
 		return getSqlSession().delete("story.delete", story_board_idx);
 	}
-	public int deleteFile(int story_file_idx) {
-		return getSqlSession().delete("story.deleteFile", story_file_idx);
+	public int deleteFile(Map<String, Object> list) {
+		return getSqlSession().delete("story.deleteFile", list);
 	}
 	public int deleteCom(int story_comment_idx) {
 		return getSqlSession().delete("story.deleteCom", story_comment_idx);

@@ -80,9 +80,9 @@ h2, h4 { font-family: 'S-CoreDream-6Bold'; }
     <c:forEach items="${slist}" var="slist" begin="${start_idx}" end="${start_idx + 8}">
          <div class="col-md-4">
           <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${slist.story_board_idx}'">
-           	<c:forEach items="${fList}" var="fList">
+           	<c:forEach items="${fList}" var="fList" varStatus="f">
            	<c:if test="${fList.story_board_idx == slist.story_board_idx}">
-           	<img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
+           	  <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
            	</c:if>
             </c:forEach>
             <div class="card-body">
@@ -146,7 +146,8 @@ h2, h4 { font-family: 'S-CoreDream-6Bold'; }
 	 </form>
 	
 	<div class="form-inline">
-		<form class="searching" action="storyMainSearch">
+		<form class="searching" action="storyMain?searhType=${searhType}&keyword=${keyword}&currentPage=${currentPage}">
+			<input type="hidden" name="currentPage" value="1" />
 			<select id="searchType" name="searchType">
 				<option value="0">작성자</option>
 				<option value="1">제목</option>

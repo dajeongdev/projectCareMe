@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select FOUND_ROWS()
 	</select>
 	<select id="fileList" resultType="com.careme.model.dto.StoryFileDto">
-		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc
+		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc 
 	</select>
 	<!-- 인기글 -->
 	<select id="hit" parameterType="com.careme.model.dto.StoryBoardDto" resultType="com.careme.model.dto.StoryBoardDto">
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 검색 -->
 	<select id="search" parameterType="com.careme.model.command.StoryCommand" resultType="com.careme.model.dto.StoryBoardDto">
-		select * from story_board inner join members
+		select * from story_board inner join members on story_board.member_idx = members.member_idx
 		<choose>
 			<when test='searchType != null and searchType.equals("member_id")'>
 				where member_id like concat('%',#{keyword},'%')
@@ -152,7 +152,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 메인용 스토리 -->
 	<select id="main_story"  resultType="com.careme.model.dto.StoryFileDto">
-		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc limit 4
+		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx asc limit 3
 	</select>
 	
 </mapper>

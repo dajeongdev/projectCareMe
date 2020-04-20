@@ -16,6 +16,7 @@ import com.careme.dao.StoryDao;
 import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
+import com.careme.model.command.StoryTagCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -120,6 +121,20 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
+	public StoryCommand searchList(int searchType, String keyword) {
+		StoryCommand com = new StoryCommand();
+		if(searchType == 0) {
+			com.setSearchType("member_id");
+		} else if(searchType == 1) {
+			com.setSearchType("title");
+		} else if(searchType == 2) {
+			com.setSearchType("content");
+		}
+		com.setKeyword(keyword);
+		return com;
+	}
+	
+	@Override
 	public int insert(MultipartHttpServletRequest request) {
 		dto = requesting(request);
 		return dao.insert(dto);
@@ -139,7 +154,6 @@ public class StoryServiceImpl implements StoryService {
 		dto.setMember_idx(member_idx);
 		dto.setContent(request.getParameter("content"));
 		dto.setTitle(request.getParameter("title"));
-		
 		int tag_idx = 1;
 		dto.setTag_idx(tag_idx);
 		dto.setReg_date(LocalDateTime.now());
@@ -175,21 +189,36 @@ public class StoryServiceImpl implements StoryService {
 	
 	
 	@Override
+	public int update(MultipartHttpServletRequest request)  {
+		dto	= requesting(request);
+		int i = dao.update(dto);
+		request.getSession().removeAttribute("story_board_idx");
+		return i;
+	}
+
+	@Override
+	public void updateFile(StoryFileDto fileDto, Integer[] fileDelete, MultipartHttpServletRequest request) {
+		int i = dao.updateFfile(fileDto);
+		int story_board_idx = dto.getStory_board_idx();
+		System.out.println("삭제파일 길이: " + fileDelete.length);
+		if (i == 1) {
+			if (fileDelete.length > 0) {
+				System.out.println("삭제파일 길이: " + fileDelete.length);
+				Map<String, Object> deleteList = new HashMap<String, Object>();
+				List<Integer> list = Arrays.asList(fileDelete);
+				deleteList.put("deleteList", list);
+				
+				dao.deleteFile(deleteList);
+			}
+			if (request.getFileMap().size() > 0) fileRequesting(story_board_idx, request);
+		}
+	}
+
+	@Override
 	public int updateCom(StoryCommentDto comDto) {
 		comDto.setReg_date(LocalDateTime.now());
 		return dao.updateCom(comDto);
 	}
-
-	@Override
-	public int update(StoryBoardDto dto) {
-		return dao.update(dto);
-	}
-
-	@Override
-	public int updateFile(StoryFileDto fileDto) {
-		return dao.updateFfile(fileDto);
-	}
-
 	
 	@Override
 	public int delete(HttpServletRequest request) {
@@ -200,11 +229,6 @@ public class StoryServiceImpl implements StoryService {
 	public int deleteCom(int story_comment_idx) {
 		return dao.deleteCom(story_comment_idx);
 	}
-
-	public int deleteFile(int story_file_idx) {
-		return dao.deleteFile(story_file_idx);
-	}
-
 
 	@Override
 	public List<TagDto> readTag() {
@@ -255,6 +279,14 @@ public class StoryServiceImpl implements StoryService {
 	public List<StoryFileDto> mainImageList() {
 		return dao.mainImageList();
 	}
-
-
+	
+	public void tag(StoryTagCommand com, HttpServletRequest request) {
+		String[] tags = com.getTag_name();
+		for(int  i = 0; i < tags.length; i++) {
+			TagDto tagDto = new TagDto();
+			tagDto.setTag_name(tags[i]);
+			tagDto.setBoard_idx(board_idx);
+			
+		}
+	} 
 }

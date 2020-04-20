@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
@@ -33,6 +34,7 @@ h3 { font-family: 'S-CoreDream-6Bold'; }
 #content {
 	height: 300px;
 }
+#title { margin-bottom: 30px;}
 #hash-inbox { 
 	margin-top:2px;
 	background: #bdbdbd;
@@ -53,13 +55,7 @@ h3 { font-family: 'S-CoreDream-6Bold'; }
 .form-group, #file {
 	padding-top: 20px;
 }
-#preview img {
-	width: 700px;
-	height: 500px;
-}
-#preview {
-	display: inline-block;
-}
+.preview { padding-left: 30px; width:500px; }
 
 </style>
 <title>스토리 글쓰기</title>
@@ -76,7 +72,7 @@ $(function (){
 	      $(this).val("");// 입력창 비우기
 
 	      $("#hash-inbox span").each(function () { // 해시태그 들어간 div 안의 span
-	        var name = $(this).find(".htag-name").val();// input hidden의 값
+	        var name = $(this).find(".tags").val();// input hidden의 값
 	        if (name == tag) existed = true;// 이미 있음
 	      });
 
@@ -84,18 +80,19 @@ $(function (){
 	        $("#hash-inbox").append(
 	            '<span class="added-tag">#' +
 	            tag + '<a href="javascript:;"> X</a>' +
-	            '<input type="hidden" class="htag-name" name="recipe[hashtags][][name]" value="' + tag + '" >' +
+	            '<input type="hidden" class="tags" name="tags" value="' + tag + '" >' +
 	            '</span> '
 	        );
 	      }
+	      $(this).submit();
 	    }
 	  });
-	  $("#hash-inbox").on("click", ".added-tag", function () {
+	  $("#hash-inbox").on("click", ".tagss", function () {
 		    $(this).remove();
 		  });
-})
+});
 
-	var files = [];
+	/*var files = [];
 	var previewIndex = 0;
 
 	// image preview 기능, input = file object[]
@@ -178,7 +175,70 @@ $(function (){
 		$("input[type=file]").change(function() {
 			addPreview($(this));
 		});
-	});
+	});*/
+	
+	var storedFiles = [];
+	var selDivs = "";
+
+	$(function() {
+		selDiv = $("#selectedFiles");
+
+		$("#files").on("change", preview);
+		
+		$("body").on("click", ".fa-trash", removeFile);
+
+		form = $("form[name=insert]")[0];
+		form.onsubmit = function (e) {
+			e.preventDefault();
+			var formData = new FormData(form);
+			for (var i = 0; i < storedFiles.length; i++) {
+				formData.append("files", storedFiles[i]);
+			}
+			 $.ajax({
+		         url: "storyForm"
+	             , type : "POST"
+		         , contentType: false
+		         , processData: false
+	             , data : formData
+            	 , success : function() {
+            		 location.href="/careMe/view/story/storyMain?currentPage=1";
+                 }
+	        })
+		}
+	})
+	
+	function preview(e) {
+		var files = e.target.files;
+		var filesArr = Array.prototype.slice.call(files);
+		filesArr.forEach(function(f) {			
+
+			if(!f.type.match("image.*")) {
+				return;
+			}
+			storedFiles.push(f);
+			
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var html  = "<div class='preview'>";
+				html += "<i class='fa fa-trash fa-2x' data-file='"+f.name+"' title='Click to remove'></i>";
+				html += "<img src=\"" + e.target.result + "\" class='w-100 h-70'>";
+				html += "</div>"
+				selDiv.append(html);
+			}
+			reader.readAsDataURL(f); 
+		});
+	}
+
+	function removeFile(e) {
+		var file = $(this).data("file");
+		for(var i=0;i<storedFiles.length;i++) {
+			if(storedFiles[i].name === file) {
+				storedFiles.splice(i,1);
+				break;
+			}
+		}
+		$(this).parent().remove();
+	}
 
 </script>
 </head>
@@ -189,26 +249,25 @@ $(function (){
 </div>
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="whole">
+	<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
 		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
 			<input type="hidden" name="member_idx" value="1">
 			<div class="story_content">
-			<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
-				<input type="file" class="custom-file-input" id=inputGroupFile04 name="file">
-				 <label class="custom-file-label" for="inputGroupFile04">사진 선택</label>
-				<div class="row" id="selectedFiles"></div>
-				<div id="preview">
+				
+				 <label class="custom-file-label" for="files">사진 선택</label>
+				<div class="row" id="selectedFiles">
 				</div>
 			<div class="form-group">
 			 	<textarea class="form-control" name="content"
     			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
   			</div>
-  			</form>
+  			
   			</div>
-			<div id="info_tag">
+			<!-- <div id="info_tag">
 				<input type="hidden" name="tag_idx" name="tag_idx">
 				<input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
@@ -216,13 +275,15 @@ $(function (){
 					
 					</div>					
 				</div>
-			</div>		
+			</div>	 -->
 
 			<div class="btn-group">
-				<button type="submit" class="insert_btn btn btn-outline-dark" OnClick="document.location.href='storyDetail?story_board_idx=${story_board_idx}'">등록</button>
-				<button type="submit" class="list_btn btn btn-outline-dark" OnClick="document.location.href='storyMain'">목록</button>
+				<button type="submit" class="insert_btn btn btn-outline-dark" >등록</button>
+				<button type="button" class="list_btn btn btn-outline-dark" OnClick="document.location.href='storyMain?currentPage=1'">목록</button>
 			</div>
 		</div>
+	</form>
+	<input type="file" class="custom-file-input" id="files" name="file" multiple>
 	</div>
 </div>
 </body>

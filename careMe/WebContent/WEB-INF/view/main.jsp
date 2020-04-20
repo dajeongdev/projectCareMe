@@ -18,34 +18,69 @@ h3 { font-family: 'S-CoreDream-6Bold'; }
 .p-4 > h4 { padding-bottom: 5px;}
 .no-gutters { background-color: #fff;}
 .row-content { padding-top: 50px; }
-.row-doctor1, .row-doctor2 { margin-left: 15px;}
+.row-doctor1, .row-doctor2 { margin-left: 20px;}
 .row-doctor1 > .col-sm-3, .row-doctor2 > .col-sm-3, .row-story > .col-sm-3 { width:285px; margin-left: 0 !important; padding-right: 0 !important; padding-left: 0 !important;}
 .row-story > .col-sm-3 { padding-right: 0 !important; padding-left: 0 !important;}
 .row-doctor2 > .col-sm-3 { padding-bottom: 10px;}
 .row-story, .row-doctor { margin:0 auto !important; padding: 0 !important;}
 .row-doctor > h3 { float:left; }
 .doctor-content { margin: 0 auto;width: 1140px; }
-#slide{position:relative;width: 1140px;}
- #slide li{
- position:absolute;
-top:0;
-left:0;
-display:none;
--webkit-display:block;
-}
 #slide img{width:1140px; height: 300px;} 
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+/* The dots/bullets/indicators */
+.dot {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+.active {
+  background-color: #717171;
+}
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
 </style>
 <script>
-imgslide(); //페이지가 로딩될때 함수를 실행합니다
-function imgslide(){
-	var val = $("#slide").attr("val"); //현재 이미지 번호를 가져옵니다
-	 var mx = $("#slide").attr("mx"); //총 이미지 개수를 가져옵니다
-	$("#img"+ val).hide(); //현재 이미지를 사라지게 합니다.
-	if(val == mx){ val = 1; } //현재이미지가 마지막 번호라면 1번으로 되돌립니다.
-	else{ val++; } //마지막 번호가 아니라면 카운트를 증가시켜줍니다
-	$("#img" + val).fadeIn(500); //변경된 번호의 이미지영역을 나타나게 합니다.괄호 안에 숫자는 페이드인 되는 시간을 나타냅니다.
-	$("#slide").attr('val',val); //변경된 이미지영역의 번호를 부여합니다.
-	setTimeout('imgslide()',1000); //1초 뒤에 다시 함수를 호출합니다.(숫자값 1000당 1초)
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+    var i;
+    var slides = document.getElementsByClassName("mySlides");
+    var dots = document.getElementsByClassName("dot");
+    for (i = 0; i < slides.length; i++) {
+       slides[i].style.display = "none";  
+    }
+    slideIndex++;
+    if (slideIndex > slides.length) {slideIndex = 1}    
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+    }
+    slides[slideIndex-1].style.display = "block";  
+    dots[slideIndex-1].className += " active";
+    setTimeout(showSlides, 2000); // Change image every 2 seconds
 }
 </script>
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
@@ -118,12 +153,13 @@ function imgslide(){
 		</div>
 		</div>
 		
-		<div class="row row-story -content">
-		    <ul class="slider" var="1" max="6">
+		<div class="row row-story slideshow-container">
+			<h3>펫스토리</h3>
+		    <div class="mySlides fade">
 		      <c:forEach items="${fList}" var="fList">
 		        <li id="img"><img src="${fullName}${fList.file_path}"></li>
 			  </c:forEach>
-		    </ul>
+		    </div>
 		</div>		
 
 
