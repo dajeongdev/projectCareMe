@@ -186,6 +186,7 @@ public class CasualBoardController {
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		System.out.println("컨트롤러 도착");
 		bs.addCasualArticles(dto, request);
 		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 	}

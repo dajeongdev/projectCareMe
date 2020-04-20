@@ -174,6 +174,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dto.setReg_date(LocalDateTime.now());
 		dao.insertArticleForCasual(dto);
 		int idx = dto.getQuestion_table_idx();
+		System.out.println(idx);
 		if (idx>0) {
 			bs.addFileForCasual(idx, request);
 		}

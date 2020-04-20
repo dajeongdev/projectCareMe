@@ -19,40 +19,50 @@
 
 
 		<div class="row">
-			<main role="main" class="col-md-12 col-lg-10 px-4">
+			<main role="main" class="col-lg-12 px-4">
 			<h2 align="left">고민 상담</h2>
 			<p></p>
 
 			<!-- 게시글 본문 -->
 			
-		<div class="row">
-		<div class="card border-dark col-md-3">
-  			<div class="card-header">
-  				<img align="left" height="100" width="80" src="<%=request.getContextPath()%>/resources/img/dog.jpg">
-  			</div>
-  		
-  			<div class="card-body">
-    			<h4 class="card-title"><c:out value="${mlist.member_id}"/></h4>
-    			<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
-  			</div>
-		</div>
-		
-		
-		<div class="card border-dark col-md-9">
-  			<div class="card-header">
-  				<h2 class="blog-post-title" align="left"><c:out value="${mlist.title}" /></h2>
-  			</div>
-  		
-  			<div class="row card-body my-3 p-3 bg-white rounded shadow-sm">
-    				<blockquote>
-          				<p style="font:20" align="left">
-							<c:out value="${mlist.content}" />
-						</p>
-        			</blockquote>
+		<div class="row card border-dark ">
+			<div class="card">
+  				
+  				<div class="card-header">
+  					<h2 class="blog-post-title" align="left"><c:out value="${mlist.title}" /></h2>
+  				</div>
+  				
+
+		  		<div class="row card-body">
+
+  				
+  					<div class="col-md-3" style="height: auto;"> 
+  						<div class="card shadow-sm">
+         					<div class="card-header">
+         					<img align="left" class="bd-placeholder-img card-img-top" src="<%=request.getContextPath()%>/resources/img/dog.jpg"/>
+            				</div>
+            				<div class="card-body">
+              					<h4 class="card-title"><c:out value="${mlist.member_id}"/></h4>
+    		  					<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
+            				</div>
+          				</div>
+  					</div>	
+  					
+  					<div class="col-md-9 shadow-sm" style="height: auto;">
+  						<blockquote>
+          					<p style="font:20" align="left">
+								<c:out value="${mlist.content}" />
+							</p>
+        				</blockquote>
+					</div>
 				
-    		</div>
+  				</div>
+  				
+  			
+  			</div>
 		</div>
-		</div>
+		
+		
 		<p></p>				
 			<!-- 고정되는 하단 -->
 			<table align="right">

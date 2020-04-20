@@ -40,8 +40,8 @@ $(function(){
 		})
 
 </script>		
-<script>		
-<!-- HASHTAG -->
+<!--<script>		
+HASHTAG
 $(function() {
     $(document).ready(function () {
         var tag = {};
@@ -107,7 +107,7 @@ $(function() {
 	})
 })	
 	
-</script>
+</script>-->
 
 <script>
 
@@ -121,7 +121,7 @@ $(function() {
 	$("#files").on("change", handleFileSelect);
 	$("body").on("click", ".fa-trash", removeFile);
 
-	form = $("#addWrite")[0];
+	form = $("form[name=addWrite]")[0];
 	form.onsubmit = function (e) {
 		e.preventDefault();
 		var formData = new FormData(form);
@@ -130,17 +130,16 @@ $(function() {
 		}
 
 		 $.ajax({
-	         url: "casualWriteForm"
-             , type : "POST"
-	         , contentType: false
-	         , processData: false
-             , data : formData
-        	 , success : function() {
+	         url:"casualBoardWriteAdd"
+             ,type:"POST"
+	         ,contentType:false
+	         ,processData:false
+             ,data:formData
+        	 ,success:function() {
                  location.href="/careMe/view/casualBoardView/casualBoard?currentPage=1";
              }
         })
 	}
-
 })
 
 	function handleFileSelect(e) {
@@ -189,7 +188,7 @@ $(function() {
 	<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 		<div class="container min-vh-100 pt-3 text-center">
 
-		<form name="addWrite" action="casualBoardWriteAdd" method="POST" enctype="multipart/form-data">
+		<form name="addWrite" enctype="multipart/form-data">
 			<div class="row my-3 p-3">
 				<main role="main" class="col-lg-12 bg-white rounded shadow-sm">
 					
