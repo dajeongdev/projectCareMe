@@ -9,6 +9,7 @@ import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 
@@ -46,11 +47,12 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Doctor Board 작성, 수정, 삭제
 	
 	public int insertArticleForDoctor(QuestionBoardDto dto){
-		return getSqlSession().insert("doctorQuestionBrd.insertArt", dto);
+		int idx= getSqlSession().insert("doctorQuestionBrd.insertArt", dto);
+		return idx;
 	}
 	
-	public int insertFileforDoctor(QuestionBoardDto dto) {
-		return getSqlSession().insert("doctorQuestionBrd.insertArtFile", dto);
+	public int insertFileForDoctor(BoardFileDto dto) {
+		return getSqlSession().insert("doctorQuestionBrd.insertFile", dto);
 	}
 	
 	public int updateArticlesForDoctor(QuestionBoardDto dto) {
@@ -115,8 +117,8 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return idx;
 	}
 	
-	public int insertArtFileForCasual(QuestionBoardDto dto) {
-		return getSqlSession().insert("casualQuestionBrd.insertArtFile", dto);
+	public int insertFileForCasual(BoardFileDto dto) {
+		return getSqlSession().insert("casualQuestionBrd.insertFile", dto);
 	}
 		
 	public int updateArticlesForCasual(QuestionBoardDto dto) {
