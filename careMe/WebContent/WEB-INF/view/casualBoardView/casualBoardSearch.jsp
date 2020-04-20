@@ -50,14 +50,7 @@
 							</tbody>
 						</table>
 					</div>
-					<!-- 게시판 페이지넘버링 및 글쓰기 -->
-					<!-- 글쓰기 버튼 -->
-						<div class="row lg-3" >
-							<div class="col-lg-10"></div>
-							<div class="col-lg-2" align="right">
-								<button class="btn btn-dark btn-sm btn-block" onClick="location.href='casualWriteForm'">글쓰기</button>	
-							</div>
-						</div>
+					<!-- 게시판 페이지넘버링 -->
 						
 						<div class="row lg-3" >
 							<div class="col-lg-12" align="center">
@@ -72,12 +65,12 @@
 								<c:choose>
                             		<c:when test="${page eq paging.currentPage}"> 			
 							 			<li class="page-item active" style="font-weight: bold;">
-      										<a class="page-link" href="casualBoard?currentPage=${page}">${page}</a>
+      										<a class="page-link" href="casualBoardSearch?currentPage=${page}">${page}</a>
     									</li>
     								</c:when>
    					 				<c:otherwise>
 			   					 		<li class="page-item active">
-      										<a class="page-link" href="casualBoard?currentPage=${page}">${page}</a>
+      										<a class="page-link" href="casualBoardSearch?currentPage=${page}">${page}</a>
     									</li>
 									</c:otherwise>
 								</c:choose>
@@ -90,19 +83,7 @@
   							</ul>
 							</div>
 						</div>
-						
-					<!-- 게시판 검색 -->
-						<form action="casualBoardSearch?currentPage=${currentPage}&searchn=${searchn}&searchKeyword=${searchKeyword}">
-							<select name="searchn">
-								<option value="0">작성자</option>
-								<option value="1">제목</option>
-								<option value="2">내용</option>
-							</select>
-							<input type="text" name="searchKeyword" size="15" maxlength="50" />
-							<input type="hidden" name="currentPage" value="1" />
-							<input type="submit" value="검색" />
-						</form>
-
+					
 					</main>
 				</div>
 

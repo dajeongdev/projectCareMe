@@ -128,14 +128,15 @@ public class CasualBoardController {
 		
 
 // 게시판 검색기능
-	@RequestMapping(value = "/casualBoardSearch")
+	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
 	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword, int currentPage) {
-		ModelAndView list = new ModelAndView("/view/casualBoardView/casualBoard?currentPage=1");
+		ModelAndView list = new ModelAndView("/casualBoardView/casualBoardSearch");
 		int contentPerPage = 10;
-		
+		 
 		//검색 정보 처리
 		SearchBoardCommand sbc = new SearchBoardCommand();
 		sbc=bs.listSearchInfo(searchn, searchKeyword);
+		
 		int start_idx=pns.getStartIdx(currentPage, contentPerPage);
 		sbc.setStart_idx(start_idx);
 		sbc.setContentPerPage(contentPerPage);
@@ -149,7 +150,7 @@ public class CasualBoardController {
 		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
-		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoard?currentPage="+currentPage+"&searchn="+searchn+"&searchKeyword="+searchKeyword);
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoardSearch?currentPage=");
 		
 		list.addObject("list", items);
 		list.addObject("paging", paging);
