@@ -9,14 +9,23 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
+@font-face { font-family: 'S-CoreDream-4Regular'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'S-CoreDream-6Bold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff'); font-weight: normal; font-style: normal; }
+h3 { font-family: 'S-CoreDream-6Bold'; }
 .container {
 	width: 1000px;
-	width: 1000px;
-	position: absolute;
+	height: 1100px;  
 	margin: 40px;
+	font-size: 16px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -500px;
+	margin-top: -330px;
+	font-family: 'S-CoreDream-4Regular';
 }
 #hash-search, #content, #title, .custom-file-label {
-	width: 700px;
+	width: 1000px;
 }
 .custom-file-label {
 	position: relative;
@@ -179,6 +188,8 @@ $(function (){
 </div>
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="container">
+	<h3><strong>펫스토리</strong></h3>
+		<hr>
 		<form name="update" method="POST" action="storyEdit" enctype="multipart/form-data">
 			<input type="hidden" name="story_board_idx" value="${update.story_board_idx}">
 			<input type="hidden" name="member_idx" value="1">

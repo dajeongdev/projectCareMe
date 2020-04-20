@@ -5,6 +5,9 @@ import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.StoryCommand;
+import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -26,6 +29,9 @@ public class StoryDao extends SqlSessionDaoSupport {
 	
 	public List<StoryFileDto> fileListing() {
 		return getSqlSession().selectList("story.fileList");
+	}
+	public List<StoryBoardDto> searching(StoryCommand com){
+		return getSqlSession().selectList("story.search");
 	}
 	
 	// 글 상세보기
@@ -63,9 +69,6 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int insertFile(StoryFileDto fileDto) {
 		return getSqlSession().insert("story.insertFile", fileDto);
 	}
-	public int insertTag(TagDto tagDto) {
-		return getSqlSession().insert("insert.insertTag", tagDto);
-	}
 	public int insertCom(StoryCommentDto comDto) {
 		return getSqlSession().insert("story.insertCom", comDto);
 	}
@@ -78,28 +81,42 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int updateFfile(StoryFileDto fileDto) {
 		return getSqlSession().update("story.updateFile", fileDto);
 	} 
-	
-	public int updateTag(TagDto tagDto) {
-		return getSqlSession().update("story.updateTag", tagDto);
-	}
-	
 	public int updateCom(StoryCommentDto comDto) {
 		return getSqlSession().update("story.updateCom", comDto);
 	}
 	
 	// 삭제(del_yn 'y')
 	public int delete(int story_board_idx) {
-		return getSqlSession().update("story.delete", story_board_idx);
+		return getSqlSession().delete("story.delete", story_board_idx);
 	}
 	public int deleteFile(int story_file_idx) {
-		return getSqlSession().update("story.deleteFile", story_file_idx);
-	}
-	public int deleteTag(int tag_idx) {
-		return getSqlSession().update("story.deleteTag", tag_idx);
+		return getSqlSession().delete("story.deleteFile", story_file_idx);
 	}
 	public int deleteCom(int story_comment_idx) {
-		return getSqlSession().update("story.deleteCom", story_comment_idx);
+		return getSqlSession().delete("story.deleteCom", story_comment_idx);
+	}
+
+
+	// 태그
+	public List<TagDto> readTag() {
+		return getSqlSession().selectList("story.readTag");
+	}
+	public int insertTag(TagDto tagDto) {
+		getSqlSession().insert("story.insertTag", tagDto);
+		return tagDto.getTag_idx();
+	}
+	public int insertTagType(TagDto tagDto) {
+		return getSqlSession().insert("story.insertTagType", tagDto);
+	}
+	public int updateTag(TagDto tagDto) {
+		return getSqlSession().update("story.updateTag", tagDto);
+	}
+	public int deleteTag(int tag_idx) {
+		return getSqlSession().delete("story.deleteTag", tag_idx);
 	}
 	
-
+	// 메인용 스토리 이미지 리스트
+	public List<StoryFileDto> mainImageList() {
+		return getSqlSession().selectList("story.main_story");
+	}
 }

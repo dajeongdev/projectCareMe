@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri = "http://www.springframework.org/tags/form" prefix = "form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,18 +8,27 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
-.container {
+@font-face { font-family: 'S-CoreDream-4Regular'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'S-CoreDream-6Bold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff'); font-weight: normal; font-style: normal; }
+.story_form {margin: 0 auto; padding: 0;}
+h3 { font-family: 'S-CoreDream-6Bold'; }
+.whole {
 	width: 1000px;
-	width: 1000px;
-	position: absolute;
+	height: 1100px;  
 	margin: 40px;
+	font-size: 16px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -500px;
+	margin-top: -330px;
+	font-family: 'S-CoreDream-4Regular';
 }
-#hash-search, #content, #title, .custom-file-label {
-	width: 700px;
+#hash-search, #content, #title, .custom-file-label, #tag_name {
+	width: 1000px;
 }
 .custom-file-label {
 	position: relative;
-	margin-botton: 40px;
 }
 #content {
 	height: 300px;
@@ -26,7 +36,7 @@
 #hash-inbox { 
 	margin-top:2px;
 	background: #bdbdbd;
-	width: 700px;
+	width: 1000px;
 	height: 100px;
 }
 .added-tag {
@@ -50,13 +60,14 @@
 #preview {
 	display: inline-block;
 }
+
 </style>
 <title>스토리 글쓰기</title>
 <script>
 
 // 해쉬태그 입력
 $(function (){
-	  $("#hash-search").on("keyup", function (e) {// 해시태그 입력칸 이벤트
+	  $("#tag_name").on("keyup", function (e) {// 해시태그 입력칸 이벤트
 	    var tag = "";
 	    var existed = false;// 이미 태그에 올라갔나 확인하기 위함
 
@@ -79,6 +90,9 @@ $(function (){
 	      }
 	    }
 	  });
+	  $("#hash-inbox").on("click", ".added-tag", function () {
+		    $(this).remove();
+		  });
 })
 
 	var files = [];
@@ -174,13 +188,17 @@ $(function (){
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
 <div class="story_form col-md-4-order-md-2 mb-4">
-	<div class="container">
-		<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
+	<div class="whole">
+		<div class="container">
+		<h3><strong>펫스토리</strong></h3>
+		<hr>
 			<input type="hidden" name="member_idx" value="1">
 			<div class="story_content">
+			<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
-				<input type="file" class="custom-file-input" id="inputGroupFile04" name="file">
+				<input type="file" class="custom-file-input" id=inputGroupFile04 name="file">
+				 <label class="custom-file-label" for="inputGroupFile04">사진 선택</label>
 				<div class="row" id="selectedFiles"></div>
 				<div id="preview">
 				</div>
@@ -188,20 +206,23 @@ $(function (){
 			 	<textarea class="form-control" name="content"
     			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
   			</div>
+  			</form>
   			</div>
-			<!-- <div id="info-tag">
-				<input type="text" class="form-control" id="hash-search" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+			<div id="info_tag">
+				<input type="hidden" name="tag_idx" name="tag_idx">
+				<input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
 					<div id="hash-inbox">
-					</div>
+					
+					</div>					
 				</div>
-			</div> -->
-			<input type="hidden" name="tag_idx" value="3">
+			</div>		
+
 			<div class="btn-group">
 				<button type="submit" class="insert_btn btn btn-outline-dark" OnClick="document.location.href='storyDetail?story_board_idx=${story_board_idx}'">등록</button>
 				<button type="submit" class="list_btn btn btn-outline-dark" OnClick="document.location.href='storyMain'">목록</button>
 			</div>
-		</form>
+		</div>
 	</div>
 </div>
 </body>

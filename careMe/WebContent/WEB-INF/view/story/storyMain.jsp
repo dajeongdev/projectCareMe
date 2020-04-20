@@ -7,7 +7,10 @@
 <% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
 <c:set var="fullName" value="<%=fullName%>" />
 <style>
-.storyMain { margin: 40px; }
+@font-face { font-family: 'S-CoreDream-4Regular'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'S-CoreDream-6Bold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff'); font-weight: normal; font-style: normal; }
+.storyMain { margin: 40px; font-family: 'S-CoreDream-4Regular';}
+h2, h4 { font-family: 'S-CoreDream-6Bold'; }
 .card-text, .card-heart, .card-count { font-size: 15px; }
 .part > div { float: left; }
 .part:after { clear: both; content:''; display:block; }
@@ -17,6 +20,9 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <title>스토리 메인</title>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script>
+
+</script>
 </head>
 <body>
 
@@ -25,7 +31,7 @@
 </div>
 
 <div class="storyMain">
-	<form action="/story/storyForm" method="post">
+<form action="/story/storyForm" method="post">
 	<h2><strong>펫스토리</strong></h2>
 	<hr>
 	<div class="album py-5 bg-light">
@@ -61,9 +67,6 @@
         </div>
      	</c:forEach>
        </div>
-        
-
-	
 	<br>
 	<div align="right">
 		<button type="button" class="btn btn-outline-dark insert_btn" 
@@ -73,6 +76,7 @@
 	<hr>
 	<div>
 	<div class="row">
+	
     <c:forEach items="${slist}" var="slist" begin="${start_idx}" end="${start_idx + 8}">
          <div class="col-md-4">
           <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${slist.story_board_idx}'">
@@ -100,6 +104,7 @@
           </div>
         </div>
        </c:forEach>
+      
         </div>
         </div>
      </div>
@@ -138,17 +143,20 @@
 			</div>
 		</div>
 	</div>
+	 </form>
 	
-	</form>
-	<form class="searching" action="/view/story/storyBoardSearch">
-		<select name="search">
-			<option value="0">작성자</option>
-			<option value="1">제목</option>
-			<option value="2">내용</option>
-		</select>
-		<input type="text" name="search" size="20" maxLength="40">
-		<input type="submit" value="검색">
-	</form>
+	<div class="form-inline">
+		<form class="searching" action="storyMainSearch">
+			<select id="searchType" name="searchType">
+				<option value="0">작성자</option>
+				<option value="1">제목</option>
+				<option value="2">내용</option>
+			</select>
+			<input type="text" class="form-control" name="keyword" id="keyword"
+				 placeholder="검색어를 입력하세요.">
+			<button id="searchBtn" class="btn btn-primary">검색</button>
+		</form>
+	</div>
 </div> 
 
 
