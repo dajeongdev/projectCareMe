@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 
@@ -54,7 +55,10 @@ public interface QuestionBoardService {
 	
 	public List<QuestionBoardDto> getCasualBoardPage(Map<String,Integer>param);
 	
+	
 	public QuestionBoardDto getCasualBoardContents (int question_table_idx);
+	
+	public List<BoardFileDto> getBoardFiles (int question_table_idx);
 	
 	public void getCasualBoardViews (int question_table_idx);
 	

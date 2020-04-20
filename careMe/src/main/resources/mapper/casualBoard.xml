@@ -17,6 +17,11 @@
 		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_table_idx=#{question_table_idx}
 	</select>
 	
+	<select id="getArtFiles" resultType="com.careme.model.dto.BoardFileDto" parameterType="int">
+		select * from question_board_file where question_table_idx=#{question_table_idx}
+	</select>
+	
+	
 	<update id="getArtView" parameterType="com.careme.model.dto.QuestionBoardDto">
 		update question_board set 
 			view_count=view_count+1 
@@ -31,16 +36,16 @@
 	
 <!-- 게시판글 검색 -->
 	<select id="getSrchArticle" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.SearchBoardCommand">
-		select * from question_board inner join members on question_board.member_idx=members.member_idx
+		select SQL_CALC_FOUND_ROWS * from question_board inner join members on question_board.member_idx=members.member_idx
 			<choose>
-				<when test='search_option != null and search_option.equals("member_id")'>
-					where member_id like '%#{searchKeyword}%' order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
+				<when test='search_option.equals("member_id")'>
+					where question_type like 'n' and member_id like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
-				<when test='search_option != null and search_option.equals("title")'>
-					where title like '%#{searchKeyword}%' order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
+				<when test='search_option.equals("title")'>
+					where question_type like 'n' and title like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
-				<when test='search_option != null and search_option.equals("content")'>
-					where content like '%#{searchKeyword}%' order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
+				<when test='search_option.equals("content")'>
+					where question_type like 'n' and content like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
 			</choose>
 	</select>  

@@ -1,7 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="Spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -10,7 +9,7 @@
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>메인 화면</title>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script>
 <!-- PET CHOOSE -->
 $(function(){
@@ -41,14 +40,12 @@ $(function(){
 		})
 
 </script>		
-<script>		
-<!-- HASHTAG -->
+<!--<script>		
+HASHTAG
 $(function() {
     $(document).ready(function () {
-
         var tag = {};
         var counter = 0;
-
         // 태그를 추가
         function addTag (value) {
             tag[counter] = value; // Object 안에 tag 추가
@@ -66,12 +63,9 @@ $(function() {
             $("#rdTag").val(value); 
             $(this).submit();
         });
-
         $("#tag").on("keypress", function (e) {
             var self = $(this);
-
             if (e.key === "Enter" || e.keyCode == 32) {
-
                 var tagValue = self.val();
                 if (tagValue !== "") {
                     // 중복검사 겹치면 해당값 array 로 return
@@ -104,7 +98,6 @@ $(function() {
                 e.preventDefault();
             }
         });
-
         // 삭제 버튼 
         $(document).on("click", ".del-btn", function (e) {
             var index = $(this).attr("idx");
@@ -114,124 +107,78 @@ $(function() {
 	})
 })	
 	
-	// image preview 기능, input = file object[]
-	function addPreview(input) {
-		if(input[0].files) {
-			for(var f = 0; f < input[0].files.length; f++) {
-				var file = input[0].files[f];
-				
-				if(validation(file.name)) continue;
-				
-				setPreviewForm(file);
-			}
-		} else {
-			alert("invalid file input");
+</script>-->
+
+<script>
+
+var storedFiles = [];
+var selDivs = "";
+
+$(function() {
+
+	selDiv = $("#selectedFiles");
+
+	$("#files").on("change", handleFileSelect);
+	$("body").on("click", ".fa-trash", removeFile);
+
+	form = $("form[name=addWrite]")[0];
+	form.onsubmit = function (e) {
+		e.preventDefault();
+		var formData = new FormData(form);
+		for (var i = 0; i < storedFiles.length; i++) {
+			formData.append("files", storedFiles[i]);
 		}
-	}
-	function setPreviewForm(file, img) {
-		var reader = new FileReader();
-		reader.onload = function(img) {
-			var imgNum = previewIndex++;
-			$("#preview").append("<div class=\"preview-box\" value=\"" + imgNum + "\">"
-					+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
-					+ "<p>" + file.name + "</p>"
-					+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
-					+ "삭제" + "</a>" + "</div>");
-			files[imgNum] = file;
-		};
-		reader.readAsDataURL(file);
-	}
-	
-	// preview에서 삭제 버튼 클릭시 미리보기 이미지 영역 삭제
-	function deletePreview(obj) {
-		var imgNum = obj.attributes['value'].value;
-		delete files[imgNum];
-		$("#preview .preview-box[value=" + imgNum + "]").remove();
-		resizeHeight();
-	}
 
-	// client-side validation
-	// always server-side validation required
-	function validation(fileName) {
-		fileName = fileName + "";
-		var fileNameExtensionIndex = fileName.lastIndexOf(".") + 1;
-		var fileNameExtension = fileName.toLowerCase().substring(fileNameExtensionIndex, fileName.length);
-		if(!((fileNameExtension == 'jpg') || (fileNameExtension == 'gif') || (fileNameExtension == 'png'))) {
-			alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-			return true;
-		} else {
-			return false;
-		}
+		 $.ajax({
+	         url:"casualBoardWriteAdd"
+             ,type:"POST"
+	         ,contentType:false
+	         ,processData:false
+             ,data:formData
+        	 ,success:function() {
+                 location.href="/careMe/view/casualBoardView/casualBoard?currentPage=1";
+             }
+        })
 	}
+})
 
-	$(document).ready(function() {
-		$(".submit a").on("click", function() {
-			var form = $("#insert")[0];
-			var formData = new FormData(form);
+	function handleFileSelect(e) {
+		var files = e.target.files;
+		var filesArr = Array.prototype.slice.call(files);
+		filesArr.forEach(function(f) {			
 
-			for(var i = 0; i < Object.keys(files).length; i++) {
-				formData.append("files", files[i]);
+			if(!f.type.match("image.*")) {
+				return;
 			}
-
-			$.ajax({
-				type: "POST",
-				enctype: "multipart/form-data",
-				processData: false,
-				contentType: false,
-				cache: false,
-				url: "/storyForm",
-				dataType: "json",
-				data: formData,
-				success: function(result) {
-					if(result = -1) {
-						alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-					} else if(result = -2) {
-						alert("파일이 10MB를 초과하였습니다.");
-					} else {
-						alert("이미지 업로드 성공");
-					}
-				}
-			});
-		});
-		$("input[type=file]").change(function() {
-			addPreview($(this));
-		});
-	});
-	
-</script>
-
-<!-- <script>
-$(function(){
-	$("#tag").on("keypress", function (e) {
-   	 var self = $(this);
-   	 if (e.key === "Enter" || e.keyCode == 32) {
-	    var tagValue = self.val();
-		var url ="casualWriteForm/hashCheck?tagValue="+tagValue;
-		$.ajax(
-			{type:"get",
-			url:url,
-			dataType:"json"})
-			.done(function(compared){
+			storedFiles.push(f);
 			
-			if (compared.length>0){
-				for (i in compared){
-					var h = compared[i]
-					var taging = "<li class='tag-item'>#"+h.tag_name+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
-					$("#tag-list").append(taging);
-				}
-			}else{
-				var taging = "<li class='tag-item'>#"+tagValue+"<span class='del-btn' idx='"+counter+"'>x</span></li>"
-				$("#tag-list").append(taging);
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var html = "<div class='col-md-3 mb-5'>";
+					html += "<img src=\"" + e.target.result + "\"  class='w-100 h-80'>";
+					html += "<i class='fa fa-trash' data-file='"+f.name+"' title='Click to remove'></i>";
+					html += "</div>";
+				selDiv.append(html);
 			}
-			}).fail(function(e){
-				alert(e.responseText);
-				});
-			}
-    	})
-	})
+			reader.readAsDataURL(f); 
+		});
+	}
 
+	function removeFile(e) {
+		var file = $(this).data("file");
+		for(var i=0;i<storedFiles.length;i++) {
+			if(storedFiles[i].name === file) {
+				storedFiles.splice(i,1);
+				break;
+			}
+		}
+		$(this).parent().remove();
+	}
+
+	
 </script>
--->
+
+
 
 
 </head>
@@ -241,7 +188,7 @@ $(function(){
 	<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 		<div class="container min-vh-100 pt-3 text-center">
 
-		<form name="addWrite" action="casualBoardWriteAdd" method="POST" enctype="multipart/form-data">
+		<form name="addWrite" enctype="multipart/form-data">
 			<div class="row my-3 p-3">
 				<main role="main" class="col-lg-12 bg-white rounded shadow-sm">
 					
@@ -286,12 +233,12 @@ $(function(){
 						
 						
 						
-						<div align="left">
+						<!--<div align="left">
 						<label for="file">파일첨부</label><br>
-							<input type="file" class="file_input_hidden" name="file" id="file" multiple/>
+							<input type="file" name="file" id="file" multiple/>
 							<div class="row" id="selectedFiles"></div>
 							<div id="preview"></div>
-    					</div>
+    					</div> -->
 
 
 						<div class="row mb-3" align="left">
@@ -333,6 +280,7 @@ $(function(){
 			</div>
 			
 		</form>
+		<input type="file" class="form-control mb-3 d-none" id="files" name="image" placeholder="" max="5" multiple>
 		</div>
 	</div>
 </body>
