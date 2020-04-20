@@ -95,15 +95,17 @@
 							</div>
 						</div>
 
-			<!-- 게시판 검색 -->
-			<form action="view/doctorBoardView/doctorBoardSearch">
-				<select name="searchn">
-					<option value="0">작성자</option>
-					<option value="1">제목</option>
-					<option value="2">내용</option>
-				</select> <input type="text" name="searchKeyword" size="15" maxlength="50" />
-				<input type="submit" value="검색" />
-			</form>
+					<!-- 게시판 검색 -->
+						<form action="doctorBoardSearch?currentPage=${currentPage}&searchn=${searchn}&searchKeyword=${searchKeyword}">
+							<select name="searchn">
+								<option value="0">작성자</option>
+								<option value="1">제목</option>
+								<option value="2">내용</option>
+							</select>
+							<input type="text" name="searchKeyword" size="15" maxlength="50" />
+							<input type="hidden" name="currentPage" value="1" />
+							<input type="submit" value="검색" />
+						</form>
 
 			</main>
 		</div>
