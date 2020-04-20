@@ -20,6 +20,7 @@ import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
@@ -78,8 +79,10 @@ public class CasualBoardController {
 		
 		//회원 정보 및 확인
 //		String currentId = session.getAttribute("id");
-		MemberDto info = ms.memberInfo("hellojava");
+		MemberDto info = ms.memberInfo("testmin");
 		list.addObject("info", info);
+		System.out.println(info.getMember_idx());
+		System.out.println(info.getMember_nick());
 		
 //		System.out.println(info.getMember_idx());
 //		System.out.println(info.getMember_nick());
@@ -106,7 +109,7 @@ public class CasualBoardController {
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
-	public ModelAndView casualBoardContents(@RequestParam int question_table_idx) throws Exception {
+	public ModelAndView casualBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
 		ModelAndView mav = new ModelAndView("casualBoardView/casualBoardContent");
 		
 		//회원 정보 및 확인
@@ -117,11 +120,18 @@ public class CasualBoardController {
 		//글내용 불러오기
 		bs.getCasualBoardViews(question_table_idx);
 		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
+		List<BoardFileDto> flist = bs.getBoardFiles(question_table_idx);
 		List<BoardCommentDto> clist = bs.getCasualBoardComments(question_table_idx);
+		
+		String idx = String.valueOf(question_table_idx);
+		
 		int commentCount = clist.size();
 		mav.addObject("mlist", mlist);
+		mav.addObject("flist", flist);
+		mav.addObject("idx", idx);
 		mav.addObject("clist", clist);
 		mav.addObject("commCount", commentCount);
+		
 		return mav;
 	}
 	
@@ -140,16 +150,8 @@ public class CasualBoardController {
 		int start_idx=pns.getStartIdx(currentPage, contentPerPage);
 		sbc.setStart_idx(start_idx);
 		sbc.setContentPerPage(contentPerPage);
-		System.out.println(currentPage);
-		System.out.println(sbc.getSearch_option());
-		System.out.println(sbc.getContentPerPage());
-		System.out.println(sbc.getSearchKeyword());
-		System.out.println(sbc.getStart_idx());
 		
 		List<QuestionBoardDto> items = bs.getCasualBoardSearch(sbc);
-		Map<String, Object> searchInfo = new HashMap<String, Object>();
-		searchInfo.put("searchn", searchn);
-		searchInfo.put("searchKeyword", searchKeyword);
 		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
@@ -157,7 +159,6 @@ public class CasualBoardController {
 		
 		list.addObject("list", items);
 		list.addObject("paging", paging);
-		//'list.addObject("searchInfo", searchInfo);
 		list.addObject("searchn", searchn);
 		list.addObject("searchKeyword", searchKeyword);
 		
@@ -192,7 +193,6 @@ public class CasualBoardController {
 		return json.toJson(items);	
 	}
 	
-	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
 		System.out.println("컨트롤러 도착");
@@ -223,9 +223,6 @@ public class CasualBoardController {
 		return json.toJson(compared);
 		}
 	}
-	
-	
-	
 	
 // 게시글 수정
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")

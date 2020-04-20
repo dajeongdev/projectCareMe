@@ -17,6 +17,11 @@
 		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_table_idx=#{question_table_idx}
 	</select>
 	
+	<select id="getArtFiles" resultType="com.careme.model.dto.BoardFileDto" parameterType="int">
+		select * from question_board_file where question_table_idx=#{question_table_idx}
+	</select>
+	
+	
 	<update id="getArtView" parameterType="com.careme.model.dto.QuestionBoardDto">
 		update question_board set 
 			view_count=view_count+1 
