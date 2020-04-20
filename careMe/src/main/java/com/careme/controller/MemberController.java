@@ -153,43 +153,79 @@ public class MemberController {
 	}
 
 	// 의사등록폼
-		@RequestMapping(value = "login/doctorInsert")
-		public String form4() {
-			return "login/doctorInsert";
-		}
-	
+	@RequestMapping(value = "login/doctorInsert")
+	public String form4() {
+		return "login/doctorInsert";
+	}
+
 	// 의사등록 성공
 	@RequestMapping(value = "login/dinsertok")
-	public String dinsertOk(DocterDto ddto, HttpSession session	) {
-		//System.out.println("dtest" + ddto);
-		int i4 = memberService.dinsertOk(ddto);//0이나 1리턴
-		//System.out.println(i4);
-		if(i4 == 0) { //없으면 가입
+	public String dinsertOk(DocterDto ddto, HttpSession session) {
+		// System.out.println("dtest" + ddto);
+		int i4 = memberService.dinsertOk(ddto);// 0이나 1리턴
+		// System.out.println(i4);
+		if (i4 == 0) { // 없으면 가입
 			session.setAttribute("dsussess", ddto.getDoctor_license());
-			return "login/doctorOk"; //성공
-		}else {
-			return "redirect:doctorInsert"; //실패
+			return "login/doctorOk"; // 성공
+		} else {
+			return "redirect:doctorInsert"; // 실패
 		}
 	}
 
-	//정보수정폼-일반
-	@RequestMapping(value ="login/memberUpdateForm")
+	// 마이페이지
+	@RequestMapping(value = "login/mypage", method = RequestMethod.GET)
+	public String form7() {
+		return "login/mypage";
+	}
+
+	// 정보수정폼-일반
+	@RequestMapping(value = "login/memberUpdateForm", method = RequestMethod.GET)
 	public String form5() {
 		return "login/memberUpdateForm";
 	}
-	
+
 	// 정보수정-일반
-	public String update(MemberDto mdto) {
-		
+	@RequestMapping(value = "login/update")
+	public String updateOk(MemberDto mdto, HttpSession session) {
+		int i5 = memberService.updateOk(mdto);
+		System.out.println(i5);
+		if (i5 == 1) { // 일치하면 수정
+			memberService.updateOk(mdto);
+			return "redirect:/main";
+		} else {
+			session.setAttribute("message", "아이디와 비밀번호를 다시 입력해주세요");
+			return "redirect:/memberUpdateForm";
+		}
+
 	}
-	
-	//정보수정폼-의사
+
+	// 정보수정폼-의사
 	@RequestMapping(value = "login/doctorUpdateForm")
 	public String form6() {
 		return "login/doctorUpdateForm";
 	}
-	
-	
+
 	// 정보수정-의사
+
+	// 회원탈퇴 폼
+	@RequestMapping(value = "login/deleteMember", method = RequestMethod.GET)
+	public String form8() {
+		return "login/deleteMember";
+	}
+
+	// 회원탈퇴 성공
+	@RequestMapping(value = "login/deleteMemberOk")
+	public String deleteOk(MemberDto mdto, HttpSession session) {
+		int i6 = memberService.deleteOk(mdto);
+		System.out.println(i6);
+		if (i6 == 1) {
+			memberService.deleteOk(mdto);
+			session.invalidate();
+			return "redirect:/main";
+		} else {
+			session.setAttribute("mes", "비밀번호가 틀렸습니다.");
+			return "redirect:/deleteMember";
+		}
+	}
 
 }

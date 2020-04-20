@@ -50,9 +50,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 회원가입 -->
 	<insert id="insert"
 		parameterType="com.careme.model.dto.MemberDto">
-		insert into members(member_id, member_pass,
+		insert into members(member_idx,member_id, member_pass,
 		member_email, member_nick)
-		values(#{member_id},#{member_pass},#{member_email},
+		values(#{member_idx},#{member_id},#{member_pass},#{member_email},
 		#{member_nick})
 	</insert>
 
@@ -70,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 정보수정 일반 -->
 	<update id="update"
 		parameterType="com.careme.model.dto.MemberDto">
-		update set members
+		update members set
 		member_pass=#{member_pass}
 		where
 		member_id=#{member_id}
@@ -79,17 +79,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 정보수정 의사 -->
 	<update id="dupdate"
 		parameterType="com.careme.model.dto.DocterDto">
-		update set doctor
+		update doctor set
 		doctor_hospital_name=#{doctor_hospital_name},doctor_hospital_tel=#{doctor_hospital_tel},docotor_hospital_address=#{docotor_hospital_address},doctor_hospital_zipcode=#{doctor_hospital_zipcode},doctor_hospital_address_detail=#{doctor_hospital_address_detail}
 		where
 		doctor_idx=#{doctor_idx}
 	</update>
 
-
 	<!-- 회원탈퇴 -->
-	<delete id="delete"
-		parameterType="com.careme.model.dto.MemberDto">
-		delete * from members where member_id=#{member_id} 
+	<delete id="delete">
+		delete from members where member_id=#{member_id}
 	</delete>
 
 </mapper>
