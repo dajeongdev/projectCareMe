@@ -106,16 +106,29 @@ public class DoctorBoardController {
 	
 // 게시판 검색기능
 	@RequestMapping(value = "/view/doctorBoardSearch")
-	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
-		ModelAndView list = new ModelAndView();
+	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword, int currentPage) {
+		ModelAndView list = new ModelAndView("/doctorBoardView/doctorBoardSearch");
+		int contentPerPage = 10;
+		 
+		//검색 정보 처리
 		SearchBoardCommand sbc = new SearchBoardCommand();
-		List<QuestionBoardDto> items = null;
 		sbc=bs.listSearchInfo(searchn, searchKeyword);
-		items = bs.getCasualBoardSearch(sbc);
+		
+		int start_idx=pns.getStartIdx(currentPage, contentPerPage);
+		sbc.setStart_idx(start_idx);
+		sbc.setContentPerPage(contentPerPage);
+		
+		List<QuestionBoardDto> items = bs.getDoctorBoardSearch(sbc);
+		
+		// 내용 및 페이지 번호
+		PageNumberCommand paging = new PageNumberCommand();
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "doctorBoardView/doctorBoardSearch?currentPage="+currentPage+"&searchn="+searchn+"&searchKeyword="+searchKeyword);
 		
 		list.addObject("list", items);
-		list.addObject("count", items.size());
-		list.setViewName("list");
+		list.addObject("paging", paging);
+		list.addObject("searchn", searchn);
+		list.addObject("searchKeyword", searchKeyword);
+		
 		
 		return list;
 	}
@@ -127,7 +140,7 @@ public class DoctorBoardController {
 			
 			//회원 정보 및 확인
 //			String currentId = session.getAttribute("id");
-			MemberDto info = ms.memberInfo("hellojava");
+			MemberDto info = ms.memberInfo("testmin");
 			
 			write.addObject("info", info);
 			write.addObject("speciesOption", ps.selectPetSpeciesLevel1());

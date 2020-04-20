@@ -40,8 +40,8 @@ $(function(){
 		})
 
 </script>		
-<!--<script>		
-HASHTAG
+<script>		
+<!-- HASHTAG -->
 $(function() {
     $(document).ready(function () {
         var tag = {};
@@ -107,7 +107,7 @@ $(function() {
 	})
 })	
 	
-</script>-->
+</script>
 
 <script>
 

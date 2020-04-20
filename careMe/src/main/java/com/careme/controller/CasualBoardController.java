@@ -174,7 +174,9 @@ public class CasualBoardController {
 		
 		//회원 정보 및 확인
 //		String currentId = session.getAttribute("id");
-		MemberDto info = ms.memberInfo("hellojava");
+		MemberDto info = ms.memberInfo("testmin");
+		System.out.println(info.getMember_nick());
+		System.out.println(info.getMember_idx());
 		
 		write.addObject("info", info);
 		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
@@ -195,7 +197,6 @@ public class CasualBoardController {
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
-		System.out.println("컨트롤러 도착");
 		bs.addCasualArticles(dto, request);
 		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 	}
