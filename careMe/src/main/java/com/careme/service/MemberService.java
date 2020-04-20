@@ -74,7 +74,7 @@ public class MemberService {
 	}
 	
 	//정보수정
-	public int update(MemberDto mdto){
+	public int updateOk(MemberDto mdto){
 		return dao.update(mdto);
 	}
 	
@@ -84,6 +84,8 @@ public class MemberService {
 	}
 	
 	//회원탈퇴
-	
+	public int deleteOk(MemberDto mdto) {
+		return dao.delete(mdto);
+	}
 	
 }
