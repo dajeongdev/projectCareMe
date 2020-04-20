@@ -20,7 +20,7 @@
 
 			<div class="row mb-3">
 				<main role="main" class="col-lg-12">
-					<h2 align="left">고민 상담</h2>
+					<h2 align="left">고민 상담 (검색결과)</h2>
 					<p align="left"> (전체 글: <c:out value="${paging.totalCount}" />)</p>
 					<div class="table" style="height: 540px">
 						<table class="table table-striped table-lg table-hover">
@@ -65,12 +65,12 @@
 								<c:choose>
                             		<c:when test="${page eq paging.currentPage}"> 			
 							 			<li class="page-item active" style="font-weight: bold;">
-      										<a class="page-link" href="casualBoardSearch?currentPage=${page}">${page}</a>
+      										<a class="page-link" href="casualBoardSearch?currentPage=${page}&searchn=${searchn}&searchKeyword=${searchKeyword}">${page}</a>
     									</li>
     								</c:when>
    					 				<c:otherwise>
 			   					 		<li class="page-item active">
-      										<a class="page-link" href="casualBoardSearch?currentPage=${page}">${page}</a>
+      										<a class="page-link" href="casualBoardSearch?currentPage=${page}&searchn=${searchn}&searchKeyword=${searchKeyword}">${page}</a>
     									</li>
 									</c:otherwise>
 								</c:choose>

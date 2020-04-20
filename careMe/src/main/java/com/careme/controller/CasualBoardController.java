@@ -147,13 +147,21 @@ public class CasualBoardController {
 		System.out.println(sbc.getStart_idx());
 		
 		List<QuestionBoardDto> items = bs.getCasualBoardSearch(sbc);
+		Map<String, Object> searchInfo = new HashMap<String, Object>();
+		searchInfo.put("searchn", searchn);
+		searchInfo.put("searchKeyword", searchKeyword);
 		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
-		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoardSearch?currentPage=");
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoardSearch?currentPage="+currentPage+"&searchn="+searchn+"&searchKeyword="+searchKeyword);
 		
 		list.addObject("list", items);
 		list.addObject("paging", paging);
+		//'list.addObject("searchInfo", searchInfo);
+		list.addObject("searchn", searchn);
+		list.addObject("searchKeyword", searchKeyword);
+		
+		
 		return list;
 	}
 
