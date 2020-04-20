@@ -10,6 +10,19 @@
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>메인 화면</title>
+<% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
+<c:set var="fullName" value="<%=fullName%>" />
+
+<script type="text/javascript">
+
+function deleteArticle(question_table_idx){
+        if(confirm("정말 삭제하시겠습니까?")==true){
+            location.href="deleteCasualArticle?question_table_idx="+question_table_idx;
+        }
+    };
+
+</script>
+
 </head>
 <body>
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />

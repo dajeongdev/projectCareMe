@@ -120,7 +120,7 @@ public class CasualBoardController {
 		//글내용 불러오기
 		bs.getCasualBoardViews(question_table_idx);
 		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
-		List<BoardFileDto> flist = bs.getBoardFiles(question_table_idx);
+		List<BoardFileDto> flist = bs.getCasualBoardFiles(question_table_idx);
 		List<BoardCommentDto> clist = bs.getCasualBoardComments(question_table_idx);
 		
 		String idx = String.valueOf(question_table_idx);

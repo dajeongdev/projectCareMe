@@ -57,6 +57,10 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dao.getDoctorBoardViews(question_table_idx);
 	}
 
+	public List<BoardFileDto> getDoctorBoardFiles (int question_table_idx){
+		return dao.getDoctorBoardFiles(question_table_idx);
+	}
+	
 	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc) {
 		return dao.getDoctorBoardSearch(sbc);
 	}
@@ -73,7 +77,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dto.setReg_date(LocalDateTime.now());
 		dao.insertArticleForDoctor(dto);
 		int idx = dto.getQuestion_table_idx();
-		System.out.println("idx:::"+idx);
 		if (idx>0) {
 			bs.addFileForDoctor(idx, request);
 		}
@@ -141,8 +144,8 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.getCasualBoardContents(question_table_idx);
 	}
 
-	public List<BoardFileDto> getBoardFiles (int question_table_idx){
-		return dao.getBoardFiles(question_table_idx);
+	public List<BoardFileDto> getCasualBoardFiles (int question_table_idx){
+		return dao.getCasualBoardFiles(question_table_idx);
 	}
 	
 	public void getCasualBoardViews(int question_table_idx) {
@@ -178,7 +181,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dto.setReg_date(LocalDateTime.now());
 		dao.insertArticleForCasual(dto);
 		int idx = dto.getQuestion_table_idx();
-		System.out.println(idx);
 		if (idx>0) {
 			bs.addFileForCasual(idx, request);
 		}
@@ -187,7 +189,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public void addFileForCasual(int question_table_idx, MultipartHttpServletRequest request) {
 		List<FileUploadCommand> addfiles;
 		addfiles = fus.upload(request, "/img/boardUpload");
-		System.out.println(addfiles);
 		for (FileUploadCommand file : addfiles) {
 			BoardFileDto bdto = new BoardFileDto();
 			bdto.setQuestion_table_idx(question_table_idx);

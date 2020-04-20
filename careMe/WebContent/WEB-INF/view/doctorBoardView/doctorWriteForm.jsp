@@ -198,7 +198,7 @@ $(function() {
 			          		<label for="title">제목</label>
           					<input id="title" name="title" width="100%" type="text" class="form-control"/>
         				</div>
-						<input name="question_type" type="hidden" value="n" /> 
+						<input name="question_type" type="hidden" value="y" /> 
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />

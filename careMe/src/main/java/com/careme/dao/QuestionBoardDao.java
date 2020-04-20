@@ -34,6 +34,10 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		getSqlSession().update("doctorQuestionBrd.getArtView", question_table_idx);
 	}
 	
+	public List<BoardFileDto> getDoctorBoardFiles(int question_table_idx) {
+		return getSqlSession().selectList("doctorQuestionBrd.getArtFiles", question_table_idx);
+	}
+	
 	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc){
 		return getSqlSession().selectList("doctorQuestionBrd.getSrchArticle");
 	}
@@ -97,7 +101,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("casualQuestionBrd.getArtContent", question_table_idx);
 	}
 	
-	public List<BoardFileDto> getBoardFiles(int question_table_idx) {
+	public List<BoardFileDto> getCasualBoardFiles(int question_table_idx) {
 		return getSqlSession().selectList("casualQuestionBrd.getArtFiles", question_table_idx);
 	}
 	

@@ -16,11 +16,13 @@
 <c:set var="fullName" value="<%=fullName%>" />
 
 <script type="text/javascript">
-function deleteArticle(${mlist.question_table_idx}){
+
+function deleteArticle(question_table_idx){
         if(confirm("정말 삭제하시겠습니까?")==true){
-            location.href="deleteCasualArticle?question_table_idx="+${mlist.question_table_idx};
+            location.href="deleteCasualArticle?question_table_idx="+question_table_idx;
         }
     };
+
 </script>
 
 
@@ -90,11 +92,10 @@ function deleteArticle(${mlist.question_table_idx}){
 			<table align="right">
 				<tr height="30">
 					<td colspan="4" align="right">
-					<input type="button" class="btn btn-dark btn-sm" value="글수정"
-						onclick="document.location.href='casualBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">
-					<input type="button" class="btn btn-dark btn-sm" value="글삭제"
-						onclick="deleteArticle(${mlist.question_table_idx})">
-					<input type="button" class="btn btn-dark btn-sm" value="글목록" onClick="location.href='casualBoard?currentPage=1'"></td>
+					<button type="button" class="btn btn-dark btn-sm" onclick="document.location.href='casualBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">글수정</button>
+					<button type="button" class="btn btn-dark btn-sm" onclick="deleteArticle('${mlist.question_table_idx}')">글삭제</button>
+					<button type="button" class="btn btn-dark btn-sm" onClick="location.href='casualBoard?currentPage=1'">글목록</button>
+					</td>
 				</tr>
 			</table>
 			<br>

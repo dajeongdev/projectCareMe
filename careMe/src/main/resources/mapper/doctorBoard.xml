@@ -16,7 +16,11 @@
 	<select id="getArtContent" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.dto.QuestionBoardDto">
 		select * from question_board inner join members on question_board.member_idx=members.member_idx where question_table_idx=#{question_table_idx}
 	</select>
-	
+
+	<select id="getArtFiles" resultType="com.careme.model.dto.BoardFileDto" parameterType="int">
+		select * from question_board_file where question_table_idx=#{question_table_idx}
+	</select>
+
 	<update id="getArtView" parameterType="com.careme.model.dto.QuestionBoardDto">
 		update question_board set 
 			view_count=view_count+1 
@@ -34,13 +38,13 @@
 		select * from question_board natural join members
 			<choose>
 				<when test='search_option != null and search_option.equals("member_id")'>
-					where member_id like concat('%',#{searchKeyword},'%')
+					where question_type like 'y' and content like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
 				<when test='search_option != null and search_option.equals("title")'>
-					where title like concat('%',#{searchKeyword},'%')
+					where question_type like 'y' and content like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
 				<when test='search_option != null and search_option.equals("content")'>
-					where content like concat('%',#{searchKeyword},'%')
+					where question_type like 'y' and content like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
 			</choose>
 	</select>  
@@ -49,9 +53,15 @@
 
 <!-- 게시판글 작성 수정 삭제 -->
 	
-	<insert id="insertArt" parameterType="com.careme.model.dto.QuestionBoardDto">
-		insert into question_board (member_idx, title, question_type, doctor_idx, pet_idx, pet_species_idx, content, view_count, is_private, reg_date, update_date, del_yn) 
-		values (#{member_idx}, #{title}, #{question_type}, #{doctor_idx}, #{pet_idx}, #{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n')
+	<insert id="insertArt" parameterType="com.careme.model.dto.QuestionBoardDto" useGeneratedKeys="true"  keyProperty="question_table_idx">
+		insert into question_board (member_idx, title, question_type, doctor_idx, pet_idx, pet_species_idx, content, 
+		view_count, is_private, reg_date, update_date, del_yn) values (#{member_idx}, #{title}, #{question_type}, #{doctor_idx}, #{pet_idx}, 
+		#{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n')
+	</insert>
+	
+	<insert id="insertFile" parameterType="com.careme.model.dto.BoardFileDto">
+		 insert into question_board_file (question_table_idx, file_name, file_path, file_size, reg_date, del_yn) 
+		 values (#{question_table_idx}, #{file_name}, #{file_path}, #{file_size}, #{reg_date}, 'n')
 	</insert>
 	
     <update id="updateArticle" parameterType="com.careme.model.dto.QuestionBoardDto">

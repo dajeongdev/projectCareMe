@@ -25,6 +25,8 @@ public interface QuestionBoardService {
 	
 	public void getDoctorBoardViews (int question_table_idx);
 	
+	public List<BoardFileDto> getDoctorBoardFiles (int question_table_idx);
+	
 	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword);
 	
 	public List<QuestionBoardDto> getDoctorBoardSearch (SearchBoardCommand sbc);
@@ -55,10 +57,9 @@ public interface QuestionBoardService {
 	
 	public List<QuestionBoardDto> getCasualBoardPage(Map<String,Integer>param);
 	
-	
 	public QuestionBoardDto getCasualBoardContents (int question_table_idx);
 	
-	public List<BoardFileDto> getBoardFiles (int question_table_idx);
+	public List<BoardFileDto> getCasualBoardFiles (int question_table_idx);
 	
 	public void getCasualBoardViews (int question_table_idx);
 	
