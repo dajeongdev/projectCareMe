@@ -49,7 +49,7 @@ public class AdminController {
 	
 	@RequestMapping(value = "/admin/member/update", method=RequestMethod.GET)
 	public String toMemberUpdateForm(@RequestParam("memberIdx") int memberIdx) {
-		return "/member/update";
+		return "/admin/member/update";
 	}
 	
 	@RequestMapping("/admin/doctor")

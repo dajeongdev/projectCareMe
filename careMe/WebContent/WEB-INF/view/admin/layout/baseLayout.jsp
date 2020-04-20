@@ -13,7 +13,9 @@
 
 	<tiles:insertAttribute name="nav" />
 	<tiles:insertAttribute name="side" />
-	<tiles:insertAttribute name="body" />
+	<div class="content-wrapper">
+		<tiles:insertAttribute name="body" />
+	</div>
 	
 </div>	
 </body>
