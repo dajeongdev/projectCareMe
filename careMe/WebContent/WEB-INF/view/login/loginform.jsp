@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html>
@@ -86,6 +87,10 @@
 	   }
 
 	</script>
+
+	<c:if test="${FAIL==0}">
+		<script>alert("아이디나 비밀번호가 틀렸습니다")</script>
+	</c:if>
 
 	<!-- 헤더 -->
 	<div class="container-fluid" style="padding: 0;">
