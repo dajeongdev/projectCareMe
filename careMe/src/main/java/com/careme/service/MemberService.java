@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.careme.dao.MemberDao;
 import com.careme.model.command.LoginCommand;
 import com.careme.model.command.SessionCommand;
+import com.careme.model.dto.DocterDto;
 import com.careme.model.dto.MemberDto;
 
 @Service
@@ -29,7 +30,6 @@ public class MemberService {
 	public int loginOk(LoginCommand lc) {
 		List<MemberDto> lok = dao.login(lc);
 		return lok.size();
-		
 	}
 	
 	//회원정보 가져오기
@@ -44,10 +44,7 @@ public class MemberService {
 		System.out.println(member);
 		session.setAttribute("sc", member);
 		session.setAttribute("MINFO", member.getMember_nick());// 이제 닉네임 들고다님
-	
 	}
-	
-	
 	
 	//중복아이디체크
 	public int idcheck(LoginCommand lc) {
@@ -69,6 +66,24 @@ public class MemberService {
 		List<MemberDto> lok = dao.insert(mdto);
 		return lok.size();
 	}
+	
+	//의사등록 성공
+	public int dinsertOk(DocterDto ddto) {
+		List<DocterDto> dok= dao.dinsert(ddto);
+		return dok.size();
+	}
+	
+	//정보수정
+	public int update(MemberDto mdto){
+		return dao.update(mdto);
+	}
+	
+	//의사 정보수정
+	public List<DocterDto> dupdate(DocterDto ddto){
+		return dao.dupdate(ddto);
+	}
+	
+	//회원탈퇴
 	
 	
 }
