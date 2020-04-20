@@ -179,9 +179,9 @@ public class MemberController {
 	}
 	
 	// 정보수정-일반
-	//public String update(MemberDto mdto) {
+	public String update(MemberDto mdto) {
 		
-	//}
+	}
 	
 	//정보수정폼-의사
 	@RequestMapping(value = "login/doctorUpdateForm")

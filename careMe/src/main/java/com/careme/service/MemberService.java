@@ -74,7 +74,7 @@ public class MemberService {
 	}
 	
 	//정보수정
-	public List<MemberDto> update(MemberDto mdto){
+	public int update(MemberDto mdto){
 		return dao.update(mdto);
 	}
 	

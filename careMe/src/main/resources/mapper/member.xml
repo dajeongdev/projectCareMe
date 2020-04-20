@@ -70,7 +70,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 정보수정 일반 -->
 	<update id="update"
 		parameterType="com.careme.model.dto.MemberDto">
-		member_pass=#{member_pass}, member_nick=#{member_nick}
+		update set members
+		member_pass=#{member_pass}
 		where
 		member_id=#{member_id}
 	</update>

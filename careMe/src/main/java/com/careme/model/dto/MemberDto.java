@@ -13,6 +13,19 @@ public class MemberDto {
 	private LocalDateTime reg_date;
 	private String member_nick;
 	private String del_yn;
+	private String member_profile;
+	
+	
+	
+	
+
+	public String getMember_profile() {
+		return member_profile;
+	}
+
+	public void setMember_profile(String member_profile) {
+		this.member_profile = member_profile;
+	}
 
 	public int getMember_idx() {
 		return member_idx;
@@ -99,7 +112,8 @@ public class MemberDto {
 		return "MemberDto [member_idx=" + member_idx + ", member_id=" + member_id + ", member_pass=" + member_pass
 				+ ", member_email=" + member_email + ", member_phone=" + member_phone + ", member_token=" + member_token
 				+ ", member_join_type=" + member_join_type + ", reg_date=" + reg_date + ", member_nick=" + member_nick
-				+ ", del_yn=" + del_yn + "]";
+				+ ", del_yn=" + del_yn + ", member_profile=" + member_profile + "]";
 	}
 
+	
 }

@@ -52,8 +52,8 @@ public class MemberDao extends SqlSessionDaoSupport {
 	}
 	
 	//정보수정 일반
-	public List<MemberDto> update(MemberDto mdto){
-		return getSqlSession().selectList("member.update", mdto);
+	public int update(MemberDto mdto){
+		return getSqlSession().selectOne("member.update", mdto);
 	}
 	
 	//정보수정 의사

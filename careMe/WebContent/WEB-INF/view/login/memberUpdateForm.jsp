@@ -13,7 +13,35 @@
 <title>정보수정</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
-	
+/* 유효성 검사 */
+function Update(){
+           var form = document.form5;
+			//패스워드 검사
+            if (!form.member_pass.value)
+            {
+                 alert("패스워드를 입력 해야 합니다!");
+                 form.member_pass.focus();//포커스를 Password박스로 이동.
+                 return false;
+            }
+            if (!form.member_pass.value =="")
+            {
+                 alert("공백은 입력이 불가합니다!");
+                 form.member_pass.focus();//포커스를 Password박스로 이동.
+                 return false;
+            }
+            if (form.member_pass.value.length < 4 || form.member_pass.value.length > 12){
+                 alert("비밀번호는 4~12자 이내로 입력 가능 합니다!");
+                 form.member_pass.focus();
+                 return false;
+            }
+            if (form.member_pass.value != form.member_pass2.value){
+	            alert("비밀번호를 같게 입력해주세요!");
+	           	form.member_pass.focus();
+	           	return false;
+	         }
+  form.submit();
+     
+   }
 </script>
 </head>
 <body>
@@ -29,8 +57,7 @@
 	<div style="padding: 15px; margin: 0 auto; max-width: 700px">
 
 		<!-- 성공하면 로 감  -->
-		<form name="form5" action="" method="post"
-			onsubmit="return myPageCasual()">
+		<form name="form5" action="" method="post" onsubmit="return Update()">
 
 			<table width="685" height="400" align="center" cellspacing="0">
 				<tr height="10" align="center">
@@ -39,11 +66,10 @@
 				<tr>
 					<!-- 아이디 입력 -->
 					<td style="padding-left: 20px;"><b>ID:</b></td>
-					<td><input type="text" style="width: 530px" id="member_id" readonly="readonly"
-						name="member_id" value="${sc.getMember_id}" class="form-control" /></td>
+					<td><input type="text" style="width: 530px" id="member_id"
+						readonly="readonly" name="member_id" value="${sc.member_id}"
+						class="form-control" /></td>
 				</tr>
-			
-
 				<tr>
 					<!-- 비밀번호 입력 -->
 					<td style="padding-left: 16px;"><b>PW 변경:</b></td>
@@ -61,9 +87,33 @@
 				<tr>
 					<!-- 닉네임 입력 -->
 					<td style="padding-left: 10px;"><b>Nick:</b></td>
-					<td><input type="text" style="width: 530px" id="member_nick" readonly="readonly"
-						name="member_nick" value="${MINFO}" class="form-control"/></td>
+					<td><input type="text" style="width: 530px" id="member_nick"
+						readonly="readonly" name="member_nick" value="${MINFO}"
+						class="form-control" /></td>
 				</tr>
+				<tr>
+					<!-- 이메일 입력 -->
+					<td style="padding-left: 10px;"><b>Email:</b></td>
+					<td><input type="text" style="width: 530px" id="member_email"
+						readonly="readonly" name="member_email" value="${sc.member_email}"
+						class="form-control" /></td>
+				</tr>
+			</table>
+			<br>
+			<!-- 버튼 -->
+			<!-- 짧은 버튼 -->
+			<table width="400" height="50" align="center" cellspacing="0">
+				<tbody>
+					<tr height="10" align="center">
+					</tr>
+
+					<tr>
+						<td><input type="submit" name="join" value="수정하기"
+							class="btn btn-dark btn-sm btn-block"></td>
+						<td><input type="button" name="reset" value="취소하기"
+							class="btn btn-dark btn-sm btn-block" onclick="redirect:/main"></td>
+					</tr>
+				</tbody>
 			</table>
 		</form>
 	</div>
