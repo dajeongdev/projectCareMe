@@ -23,7 +23,7 @@ function Update(){
                  form.member_pass.focus();//포커스를 Password박스로 이동.
                  return false;
             }
-            if (!form.member_pass.value =="")
+            if (form.member_pass.value =="")
             {
                  alert("공백은 입력이 불가합니다!");
                  form.member_pass.focus();//포커스를 Password박스로 이동.
@@ -42,7 +42,19 @@ function Update(){
   form.submit();
      
    }
+
+function godelete(){
+	 var result = confirm("정말 탈퇴하겠습니까?");
+
+		 if(result) {
+			 location.href='deleteMember';
+     } else{
+    	 return;
+     }
+}
+
 </script>
+
 </head>
 <body>
 	<!-- 헤더 -->
@@ -57,7 +69,8 @@ function Update(){
 	<div style="padding: 15px; margin: 0 auto; max-width: 700px">
 
 		<!-- 성공하면 로 감  -->
-		<form name="form5" action="" method="post" onsubmit="return Update()">
+		<form name="form5" action="update" method="post"
+			onsubmit="return Update()">
 
 			<table width="685" height="400" align="center" cellspacing="0">
 				<tr height="10" align="center">
@@ -88,7 +101,7 @@ function Update(){
 					<!-- 닉네임 입력 -->
 					<td style="padding-left: 10px;"><b>Nick:</b></td>
 					<td><input type="text" style="width: 530px" id="member_nick"
-						readonly="readonly" name="member_nick" value="${MINFO}"
+						readonly="readonly" name="member_nick" value="${sc.member_nick}"
 						class="form-control" /></td>
 				</tr>
 				<tr>
@@ -111,10 +124,20 @@ function Update(){
 						<td><input type="submit" name="join" value="수정하기"
 							class="btn btn-dark btn-sm btn-block"></td>
 						<td><input type="button" name="reset" value="취소하기"
-							class="btn btn-dark btn-sm btn-block" onclick="redirect:/main"></td>
+							class="btn btn-dark btn-sm btn-block" onclick="history.go(-1)"></td>
 					</tr>
 				</tbody>
 			</table>
+			<!-- 탈퇴하기 -->
+			<table width="100" height="50" align="center" cellspacing="0">
+				<tbody>
+					<tr height="10" align="center">
+					</tr>
+					<tr>
+						<td><input type="button" name="bye" value="탈퇴하기"
+							onclick="godelete()" class="btn btn-dark btn-sm btn-block"></td>
+						<!-- onclick="location.href='deleteMember'" -->
+					</tr>
 		</form>
 	</div>
 </body>
