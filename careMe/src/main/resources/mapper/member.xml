@@ -28,7 +28,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 아이디로 찾음 -->
 	<select id="selectMember"
 		resultType="com.careme.model.dto.MemberDto">
-		select * from members where del_yn='n' and member_id=#{member_id}
+		select * from members where del_yn='n' and
+		member_id=#{member_id}
+	</select>
+
+	<!-- 닉네임 중복체크 -->
+	<select id="nickchk" resultType="int">
+		SELECT COUNT(*) FROM members
+		WHERE
+		member_nick = #{member_nick}
+	</select>
+
+
+	<!-- 이메일 중복체크 -->
+	<select id="mailchk" resultType="int">
+		SELECT COUNT(*) FROM members
+		where
+		member_email=#{member_email}
 	</select>
 
 	<!-- 회원가입 -->
@@ -40,36 +56,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{member_nick})
 	</insert>
 
-	<!-- 닉네임 중복체크 -->
-	<select id="nickchk" resultType="int">
-		SELECT COUNT(*) FROM members
-		WHERE
-		member_nick = #{member_nick}
-	</select>
-	
-	
-	<!-- 이메일 중복체크 -->
-	<select id="mailchk" resultType="int">
-	SELECT COUNT(*) FROM members
-	where 
-	member_email=#{member_email}
-	</select>
+	<!-- 의사등록 -->
+	<insert id="dinsert"
+		parameterType="com.careme.model.dto.DocterDto">
+		insert into doctor(doctor_name,
+		doctor_license,doctor_hospital_name,doctor_hospital_tel,
+		docotor_hospital_address,doctor_hospital_zipcode,del_yn)
+		values(#{doctor_name},#{doctor_license},#{doctor_hospital_name}.#{doctor_hospital_tel},#{docotor_hospital_address},#{doctor_hospital_zipcode},#{del_yn})
+		natural join members where
+		member_idx = #{member_idx}
+	</insert>
 
-
-	<!-- 정보수정 -->
+	<!-- 정보수정 일반 -->
 	<update id="update"
 		parameterType="com.careme.model.dto.MemberDto">
 		update set members
-		member_pass,member_phone,member_email
-		where member_id=#{member_id},
-		member_phone=#{member_phone},member_pass=#{member_pass}
+		member_pass=#{member_pass}
+		where
+		member_id=#{member_id}
 	</update>
+
+	<!-- 정보수정 의사 -->
+	<update id="dupdate"
+		parameterType="com.careme.model.dto.DocterDto">
+		update set doctor
+		doctor_hospital_name=#{doctor_hospital_name},doctor_hospital_tel=#{doctor_hospital_tel},docotor_hospital_address=#{docotor_hospital_address},doctor_hospital_zipcode=#{doctor_hospital_zipcode},doctor_hospital_address_detail=#{doctor_hospital_address_detail}
+		where
+		doctor_idx=#{doctor_idx}
+	</update>
+
 
 	<!-- 회원탈퇴 -->
 	<delete id="delete"
 		parameterType="com.careme.model.dto.MemberDto">
-		delete * from members where member_id=#{member_id} and
-		member_pass=#{member_pass}
+		delete * from members where member_id=#{member_id} 
 	</delete>
 
 </mapper>
