@@ -16,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.MemberDao;
 import com.careme.model.command.LoginCommand;
-import com.careme.model.dto.DocterDto;
+import com.careme.model.dto.DoctorDto;
 import com.careme.model.dto.EmailDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.service.EmailService;
@@ -153,19 +153,23 @@ public class MemberController {
 	}
 
 	// 의사등록폼
-	@RequestMapping(value = "login/doctorInsert")
+	@RequestMapping(value = "login/doctorInsertForm")
 	public String form4() {
-		return "login/doctorInsert";
+		return "login/doctorInsertForm";
 	}
 
 	// 의사등록 성공
 	@RequestMapping(value = "login/dinsertok")
-	public String dinsertOk(DocterDto ddto, HttpSession session) {
-		// System.out.println("dtest" + ddto);
+	public String dinsertOk(DoctorDto ddto, HttpSession session) {
+		 System.out.println("dtest" + ddto);
+
+		 MemberDto member =  (MemberDto) session.getAttribute("sc");
+		// System.out.println(member);
+		 ddto.setMember_idx(member.getMember_idx()); 
+		 
 		int i4 = memberService.dinsertOk(ddto);// 0이나 1리턴
-		// System.out.println(i4);
-		if (i4 == 0) { // 없으면 가입
-			session.setAttribute("dsussess", ddto.getDoctor_license());
+		 System.out.println(i4);
+		if (i4 == 1) { // 없으면 가입
 			return "login/doctorOk"; // 성공
 		} else {
 			return "redirect:doctorInsert"; // 실패
@@ -188,7 +192,7 @@ public class MemberController {
 	@RequestMapping(value = "login/update")
 	public String updateOk(MemberDto mdto, HttpSession session) {
 		int i5 = memberService.updateOk(mdto);
-		System.out.println(i5);
+		//System.out.println(i5);
 		if (i5 == 1) { // 일치하면 수정
 			memberService.updateOk(mdto);
 			return "redirect:/main";

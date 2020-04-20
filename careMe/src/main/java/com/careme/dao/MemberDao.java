@@ -11,7 +11,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 
 import com.careme.model.command.LoginCommand;
 import com.careme.model.dto.MemberDto;
-import com.careme.model.dto.DocterDto;
+import com.careme.model.dto.DoctorDto;
 
 public class MemberDao extends SqlSessionDaoSupport {
 
@@ -49,19 +49,19 @@ public class MemberDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("member.insert", mdto);
 	}
 
-	// 의사등록
-	public List<DocterDto> dinsert(DocterDto ddto) {
-		return getSqlSession().selectList("doctor.dinsert", ddto);
-	}
-
 	// 정보수정 일반
 	public int update(MemberDto mdto) {
 		return getSqlSession().update("member.update", mdto);
 	}
 
+	// 의사등록
+	public int dinsert(DoctorDto ddto) {
+		return getSqlSession().insert("doctors.dinsert", ddto);
+	}
+	
 	// 정보수정 의사
-	public List<DocterDto> dupdate(DocterDto ddto) {
-		return getSqlSession().selectList("doctor.dupdate", ddto);
+	public int dupdate(DoctorDto ddto) {
+		return getSqlSession().update("doctors.dupdate", ddto);
 	}
 
 

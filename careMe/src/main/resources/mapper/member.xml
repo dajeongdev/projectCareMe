@@ -50,21 +50,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 회원가입 -->
 	<insert id="insert"
 		parameterType="com.careme.model.dto.MemberDto">
-		insert into members(member_idx,member_id, member_pass,
+		insert into members(member_id, member_pass,
 		member_email, member_nick)
-		values(#{member_idx},#{member_id},#{member_pass},#{member_email},
+		values(#{member_id},#{member_pass},#{member_email},
 		#{member_nick})
-	</insert>
-
-	<!-- 의사등록 -->
-	<insert id="dinsert"
-		parameterType="com.careme.model.dto.DocterDto">
-		insert into doctor(doctor_name,
-		doctor_license,doctor_hospital_name,doctor_hospital_tel,
-		docotor_hospital_address,doctor_hospital_zipcode,del_yn)
-		values(#{doctor_name},#{doctor_license},#{doctor_hospital_name}.#{doctor_hospital_tel},#{docotor_hospital_address},#{doctor_hospital_zipcode},#{del_yn})
-		natural join members where
-		member_idx = #{member_idx}
 	</insert>
 
 	<!-- 정보수정 일반 -->
@@ -74,15 +63,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		member_pass=#{member_pass}
 		where
 		member_id=#{member_id}
-	</update>
-
-	<!-- 정보수정 의사 -->
-	<update id="dupdate"
-		parameterType="com.careme.model.dto.DocterDto">
-		update doctor set
-		doctor_hospital_name=#{doctor_hospital_name},doctor_hospital_tel=#{doctor_hospital_tel},docotor_hospital_address=#{docotor_hospital_address},doctor_hospital_zipcode=#{doctor_hospital_zipcode},doctor_hospital_address_detail=#{doctor_hospital_address_detail}
-		where
-		doctor_idx=#{doctor_idx}
 	</update>
 
 	<!-- 회원탈퇴 -->

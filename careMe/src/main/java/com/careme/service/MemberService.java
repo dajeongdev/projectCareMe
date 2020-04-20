@@ -1,5 +1,7 @@
 package com.careme.service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.careme.dao.MemberDao;
 import com.careme.model.command.LoginCommand;
 import com.careme.model.command.SessionCommand;
-import com.careme.model.dto.DocterDto;
+import com.careme.model.dto.DoctorDto;
 import com.careme.model.dto.MemberDto;
 
 @Service
@@ -68,9 +70,10 @@ public class MemberService {
 	}
 	
 	//의사등록 성공
-	public int dinsertOk(DocterDto ddto) {
-		List<DocterDto> dok= dao.dinsert(ddto);
-		return dok.size();
+	public int dinsertOk(DoctorDto ddto) {
+	ddto.setReg_date(LocalDateTime.now());//시간 넣어주기
+	int dok = dao.dinsert(ddto);
+		return dok;
 	}
 	
 	//정보수정
@@ -79,7 +82,7 @@ public class MemberService {
 	}
 	
 	//의사 정보수정
-	public List<DocterDto> dupdate(DocterDto ddto){
+	public int dupdateOk(DoctorDto ddto){
 		return dao.dupdate(ddto);
 	}
 	
