@@ -4,6 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="admin">
+
 	<select id="selectMemberList" resultType="com.careme.model.dto.MemberDto">
 		select * from members where del_yn = 'n' limit 20
 	</select>
@@ -22,6 +23,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<update id="deleteMember">
 		update members set del_yn = 'y' where member_idx = #{member_idx}
+	</update>
+	
+	<update id="updateMember">
+		update members set
+		<set>
+			<if test="member_id != null">member_id=${member_id},</if>
+			<if test="member_email != null">member_email=${member_email},</if>
+			<if test="member_phone != null">member_phone=${member_phone},</if>
+			<if test="member_nick != null">"member_nick != null"=${"member_nick != null"},</if>
+			<if test="member_profile != null">member_profile=${member_profile},</if>
+		</set>
+		where member_idx = ${member_idx}
 	</update>
 
 </mapper>

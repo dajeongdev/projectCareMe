@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.careme.dao.AdminDao;
+import com.careme.dao.MemberDao;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.dto.MemberDto;
 

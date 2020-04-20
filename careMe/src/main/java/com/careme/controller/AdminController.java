@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.dto.MemberDto;
 import com.careme.service.AdminService;
+import com.careme.service.MemberService;
 
 @Controller
 public class AdminController {
@@ -19,6 +20,12 @@ public class AdminController {
 	AdminService adminSevice;
 	public void setAdminService(AdminService adminSevice) {
 		this.adminSevice = adminSevice;
+	}
+	
+	@Autowired
+	MemberService memberService;
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
 	}
 	
 	
@@ -48,7 +55,13 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/admin/member/update", method=RequestMethod.GET)
-	public String toMemberUpdateForm(@RequestParam("memberIdx") int memberIdx) {
+	public ModelAndView toMemberUpdateForm(@RequestParam("memberIdx") int memberIdx) {
+		ModelAndView mav = new ModelAndView("/admin/member/update");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/admin/member/update", method=RequestMethod.POST)
+	public String memberUpdate(MemberDto memberDto) {
 		return "/admin/member/update";
 	}
 	
