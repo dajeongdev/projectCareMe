@@ -9,26 +9,25 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <title>스토리 글보기</title>
 <style>
-.container { 
-	width: 1000px; 
-	height: 1000px; 
-	position: absolute; 
+.whole { margin: 0 auto; padding: 0;}
+.detail-form { 
+	width: 1000px;  
 	margin: 40px;
 	font-size: 16px;
 }
-hr { width: 1000px; }
-.container, .input-group { width: 700px; }
+.container { margin:0 auto;}
+hr { width: 700px; }
+.container, .input-group, .box_tag { width: 700px; }
 .header > div { float: left; margin-bottom: 20px; }
 .header:after, .comL:after { clear: both; content: ''; display: block; }
 .comL > div { float: left; margin: 10px; }
 .profile { margin-right: 10px; }
 .comId { font-size: 18px; font-weight: 500;}
-.btn-group { float: right; }
-.hr { position: block;}
+.btn-group { float: right;}
 .input-group { margin-top: 10px;}
-.updateCom, .deleteCome {
-	float: right;
-}
+.updateCom, .deleteCome { float: right;}
+.content { font-size: 20px; margin-top: 20px;}
+.content-heart {float: right; color: red;}
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -69,17 +68,22 @@ function change(iconID) {
 		}
 	});
 }
+/*function delete() {
+    var d = document.createElement('form');
+    d.action = "delete";
+    document.body.appendChild(d);
+    d.submit();
+}*/
 </script>
 </head>
 <body>
 <div class="container-fluid" style="padding:0;">
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
-<div class="detail-form">
-
+<div class="whole">
+	<div class="detail-form">
 	<div class="container">
 	<form name="readForm" >
-		<div class="top">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
 			<div class="header">
@@ -97,22 +101,22 @@ function change(iconID) {
 				<img width="700" height="500" src="${fullName}${fileDto.file_path}">
 			</div>
 			<div>
-				<p><c:out value="${dto.content}"/></p>
+				<p class="content"><c:out value="${dto.content}"/><span class="content-heart"><i class="fas fa-heart fa-2x"></i></span></p>
 			</div>
 			<div class="box_tag">
 				<a href="">#강아지</a>
 				<a href="">#산책</a>
-			</div>
-			<span class="story_heart"><i class="far fa-heart" id="far" style="font-size:20px;color:red" onClick="change(iconId)"></i></span>
-			<div class="btn-group">
-				<button type="button" class="update_btn btn btn-outline-dark" OnClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
-				<button type="button" class="delete_btn btn btn-outline-dark">삭제</button>
-				<button type="button" class="list_btn btn btn-outline-dark">목록</button>
-			</div>
-		</div>
+				<div class="btn-group">
+					<button type="button" class="update_btn btn btn-outline-dark" OnClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
+					<button type="button" class="delete_btn btn btn-outline-dark delete_btn">삭제</button>
+					<button type="button" class="list_btn btn btn-outline-dark">목록</button>
+				</div>
+			</div>	
 		</form>
-		<div class="hr"><hr></div>
-		<div id="bottom">
+		
+		<br>
+		<div class="bottom">
+		<hr>
 			<div class="com">
 				댓글 <c:out value="${comCount}"/>
 				
@@ -139,10 +143,11 @@ function change(iconID) {
 						</div>
 					</div>
 				</c:forEach>
+
 			</div>
 		</div>
 	</div>
-
+</div>
 </div>
 </body>
 </html>

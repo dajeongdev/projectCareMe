@@ -40,9 +40,9 @@
 							<c:forEach var="item" items="${list}" begin="${item.start_idx}" end="${item.start_idx}+9">
 								
 								<tr onClick="location.href='casualBoardContent?question_table_idx=${item.question_table_idx}'">
-									<td><c:out value="${item.question_table_idx}" /></td>
+									<td><c:out value="${item.question_table_idx}"/></td>
 									<td><c:out value="${item.title}"/></td>
-									<td><c:out value="${item.member_id}" /></td>
+									<td><c:out value="${info.member_id}" /></td>
 									<td><c:out value="${item.reg_date}" /></td>
 									<td><c:out value="${item.view_count}" /></td>
 								</tr>
@@ -50,8 +50,8 @@
 							</tbody>
 						</table>
 					</div>
-						<!-- 게시판 페이지넘버링 및 글쓰기 -->
-						<!-- 글쓰기 버튼 -->
+					<!-- 게시판 페이지넘버링 및 글쓰기 -->
+					<!-- 글쓰기 버튼 -->
 						<div class="row lg-3" >
 							<div class="col-lg-10"></div>
 							<div class="col-lg-2" align="right">
@@ -63,7 +63,7 @@
 							<div class="col-lg-12" align="center">
 							<ul class="pagination pagination-lg pagination-dark">
   
-							 <!-- 왼쪽 화살표 -->  
+					<!-- 왼쪽 화살표 -->  
 							 <li class="page-item disabled">
    		  					 <a class="page-link" href="#">&laquo;</a>
    							 </li>
@@ -83,7 +83,7 @@
 								</c:choose>
    					 		</c:forEach>
     
-						  	<!-- 오른쪽 화살표 -->
+					<!-- 오른쪽 화살표 -->
 							<li class="page-item">
 							<a class="page-link" href="#">&raquo;</a>
     						</li>
@@ -91,13 +91,15 @@
 							</div>
 						</div>
 						
-						<!-- 게시판 검색 -->
-						<form action="view/casualBoardView/casualBoardSearch">
+					<!-- 게시판 검색 -->
+						<form action="casualBoardSearch?searchn=${searchn}&searchKeyword=${searchKeyword}&currentPage=${currentPage}">
 							<select name="searchn">
 								<option value="0">작성자</option>
 								<option value="1">제목</option>
 								<option value="2">내용</option>
-							</select> <input type="text" name="searchKeyword" size="15" maxlength="50" />
+							</select>
+							<input type="text" name="searchKeyword" size="15" maxlength="50" />
+							<input type="hidden" name="currentPage" value="1" />
 							<input type="submit" value="검색" />
 						</form>
 

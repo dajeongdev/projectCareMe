@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,10 +20,12 @@ import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.MemberService;
 import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
 import com.careme.service.QuestionBoardService;
@@ -59,11 +63,29 @@ public class CasualBoardController {
 		this.pns = pns;
 	}
 	
+	@Autowired
+	MemberService ms;
+	
+	public void setMemberService(MemberService ms) {
+		this.ms=ms;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
-	public ModelAndView toCasualBoard(int currentPage) {
+	public ModelAndView toCasualBoard(int currentPage, HttpSession session) {
 		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		list.addObject("info", info);
+		
+//		System.out.println(info.getMember_idx());
+//		System.out.println(info.getMember_nick());
+//		System.out.println(info.getMember_id());
+		
+		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
 
@@ -74,19 +96,25 @@ public class CasualBoardController {
 		List<QuestionBoardDto> getArticles = bs.getCasualBoardPage(param);
 		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
 		
+		
 		list.addObject("list", getArticles);
 		list.addObject("paging", paging);
 		
 		return list;
 	}
-
-	
 	
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
 	public ModelAndView casualBoardContents(@RequestParam int question_table_idx) throws Exception {
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("casualBoardView/casualBoardContent");
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		mav.addObject("info", info);
+		
+		//글내용 불러오기
 		bs.getCasualBoardViews(question_table_idx);
 		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
 		List<BoardCommentDto> clist = bs.getCasualBoardComments(question_table_idx);
@@ -94,47 +122,37 @@ public class CasualBoardController {
 		mav.addObject("mlist", mlist);
 		mav.addObject("clist", clist);
 		mav.addObject("commCount", commentCount);
-		mav.setViewName("casualBoardView/casualBoardContent");
 		return mav;
 	}
 	
 		
 
 // 게시판 검색기능
-	@RequestMapping(value = "/view/casualBoardView/casualBoardSearch")
-	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword) {
+	@RequestMapping(value = "/casualBoardSearch")
+	public ModelAndView casualBoardSearch(@RequestParam int searchn, String searchKeyword, int currentPage) {
+		ModelAndView list = new ModelAndView("/view/casualBoardView/casualBoard?currentPage=1");
+		int contentPerPage = 10;
+		
+		//검색 정보 처리
 		SearchBoardCommand sbc = new SearchBoardCommand();
-		ModelAndView list = new ModelAndView();
-		List<QuestionBoardDto> items = null;
-
-		if (searchn == 0) {
-
-			sbc.setSearch_option("member_id");
-			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getCasualBoardSearch(sbc);
-			list.addObject("list", items);
-			list.addObject("count", items.size());
-			list.setViewName("list");
-
-		} else if (searchn == 1) {
-
-			sbc.setSearch_option("title");
-			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getCasualBoardSearch(sbc);
-			list.addObject("list", items);
-			list.addObject("count", items.size());
-			list.setViewName("list");
-
-		} else if (searchn == 2) {
-
-			sbc.setSearch_option("content");
-			sbc.setSearchKeyword(searchKeyword);
-			items = bs.getCasualBoardSearch(sbc);
-			list.addObject("list", items);
-			list.addObject("count", items.size());
-			list.setViewName("list");
-
-		}
+		sbc=bs.listSearchInfo(searchn, searchKeyword);
+		int start_idx=pns.getStartIdx(currentPage, contentPerPage);
+		sbc.setStart_idx(start_idx);
+		sbc.setContentPerPage(contentPerPage);
+		System.out.println(currentPage);
+		System.out.println(sbc.getSearch_option());
+		System.out.println(sbc.getContentPerPage());
+		System.out.println(sbc.getSearchKeyword());
+		System.out.println(sbc.getStart_idx());
+		
+		List<QuestionBoardDto> items = bs.getCasualBoardSearch(sbc);
+		
+		// 내용 및 페이지 번호
+		PageNumberCommand paging = new PageNumberCommand();
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoard?currentPage="+currentPage+"&searchn="+searchn+"&searchKeyword="+searchKeyword);
+		
+		list.addObject("list", items);
+		list.addObject("paging", paging);
 		return list;
 	}
 
@@ -143,6 +161,12 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
 	public ModelAndView toWriteForm() throws Exception {
 		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		
+		write.addObject("info", info);
 		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 		return write;
 	}
@@ -156,27 +180,15 @@ public class CasualBoardController {
 		else if (level == 2) items = ps.selectPetSpeciesLevel2(ancestor);
 		
 		Gson json = new Gson();
-		return json.toJson(items);
+		return json.toJson(items);	
 	}
 	
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public ModelAndView writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
-		ModelAndView mav = new ModelAndView("redirect:/view/casualBoardView/casualBoard");
-		
-		mav.addObject("written", bs.addCasualArticles(dto));
-		
-		if (!request.getFile(request.getFileNames().next()).isEmpty()) {
-			List<FileUploadCommand> files = fus.upload(request, "/img/pet/profile/");
-			FileUploadCommand file = files.get(0);
-			dto.setFile_name(file.getFileOriginName());
-			dto.setFile_path(file.getFilePath());
-			dto.setFile_size(file.getFileSize());
-			return mav;
-		}else {
-			mav.addObject("files", fus.upload(request, "/img/boardUpload"));
-			return mav;
-		}
+	public String writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		System.out.println("컨트롤러 도착");
+		bs.addCasualArticles(dto, request);
+		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 	}
 
 	// hashtag 기능
@@ -210,6 +222,12 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
 	public ModelAndView toCasualUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView("casualBoardView/casualBoardUpdateForm");
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		update.addObject("info", info);
+		
 		int idx = question_table_idx;
 			update.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
@@ -221,23 +239,22 @@ public class CasualBoardController {
 	public String updateCasualArticle(QuestionBoardDto dto) throws Exception {
 		int result = bs.updateCasualArticle(dto);
 		if (result > 0) {
-			return "redirect:/view/casualBoardView/casualBoard";
+			return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 		} else {
-			return "redirect:/view/casualBoardView/casualBoard";
+			return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 		}
 	}
 	
 	
 // 게시글 삭제
-	@RequestMapping(value="/view/casualBoardView/deleteArticle")
+	@RequestMapping(value="/view/casualBoardView/deleteCasualArticle")
 	public String deleteCasualArticle(@RequestParam int question_table_idx) {
 		int idx = question_table_idx;
 		int result = bs.deleteCasualArticle(idx);
 		if(result>0) {
-		return "redirect:/view/casualBoardView/casualBoard";
+		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 		}else {
-			System.out.println("no!!!");
-		return "redirect:/view/casualBoardView/casualBoard";
+		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 		}
 	}
 	
@@ -295,6 +312,13 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/myPageView/myPageDoctor")
 	public ModelAndView doctorMyPage() throws Exception{
 		ModelAndView mav = new ModelAndView();
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		mav.addObject("info", info);
+		
+		//페이지뷰
 		mav.setViewName("myPageView/myPageDoctor");
 		return mav;
 	}
@@ -302,6 +326,13 @@ public class CasualBoardController {
 	@RequestMapping(value = "/view/myPageView/myPageCasual")
 	public ModelAndView infoLink() throws Exception{
 		ModelAndView mav = new ModelAndView();
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		mav.addObject("info", info);
+		
+		//페이지뷰
 		mav.setViewName("myPageView/myPageCasual");
 		return mav;
 	}

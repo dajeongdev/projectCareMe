@@ -179,6 +179,8 @@ $(function (){
 </div>
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="container">
+	<h3><strong>펫스토리</strong></h3>
+		<hr>
 		<form name="update" method="POST" action="storyEdit" enctype="multipart/form-data">
 			<input type="hidden" name="story_board_idx" value="${update.story_board_idx}">
 			<input type="hidden" name="member_idx" value="1">

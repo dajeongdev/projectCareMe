@@ -1,13 +1,13 @@
 package com.careme.model.dto;
 
 public class TagDto {
-	private int tag_idx;
-	private String tag_name;
-	private int member_idx;
+	private int tag_idx; // 태그 번호
+	private String tag_name; // 태그명
+	private int member_idx; // 사용자 번호
 	private String del_yn;
 	private int board_use_tag_idx;
-	private int board_idx;
-	private String board_type;
+	private int board_idx; // 사용된 글번호
+	private String board_type; // 글타입('d'/ 's')
 	
 	public int getBoard_use_tag_idx() {
 		return board_use_tag_idx;
