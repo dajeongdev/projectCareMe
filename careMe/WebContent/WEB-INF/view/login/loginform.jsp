@@ -86,9 +86,9 @@
 
 	</script>
 
-	<c:if test="${FAIL==0}">
+<%-- 	<c:if test="${FAIL==0}">
 		<script>alert("아이디나 비밀번호가 틀렸습니다")</script>
-	</c:if>
+	</c:if> --%>
 
 	<!-- 헤더 -->
 	<div class="container-fluid" style="padding: 0;">

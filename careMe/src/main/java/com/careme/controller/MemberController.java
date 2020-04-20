@@ -69,7 +69,6 @@ public class MemberController {
 		int i = memberService.loginOk(lc);// 1이나 0리턴
 		// System.out.println(i);
 		if (i == 0) {// 실패
-			session.setAttribute("FAIL", 0);
 			return "redirect:loginform";
 		} else {// 성공
 			memberService.setSession(session, lc);
