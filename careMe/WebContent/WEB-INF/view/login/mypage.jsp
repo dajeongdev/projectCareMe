@@ -21,6 +21,7 @@
 	</div>
 	<form name="form7" action="memberUpdateForm" method="post">
 		<a href="memberUpdateForm">정보수정</a>
+		<a href="doctorInsertForm">의사등록</a>
 	</form>
 </body>
 </html>

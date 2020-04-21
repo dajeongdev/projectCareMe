@@ -1,5 +1,7 @@
 package com.careme.service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.careme.dao.MemberDao;
 import com.careme.model.command.LoginCommand;
 import com.careme.model.command.SessionCommand;
-import com.careme.model.dto.DocterDto;
+import com.careme.model.dto.DoctorDto;
 import com.careme.model.dto.MemberDto;
 
 @Service
@@ -26,6 +28,13 @@ public class MemberService {
 	public void setDao(MemberDao dao) {
 		this.dao = dao;
 	}
+	
+	@Autowired
+	PetService petService;
+	public void setPetService(PetService petService) {
+		this.petService = petService;
+	}
+
 	//로그인 성공
 	public int loginOk(LoginCommand lc) {
 		List<MemberDto> lok = dao.login(lc);
@@ -41,8 +50,16 @@ public class MemberService {
 	public void setSession(HttpSession session, LoginCommand lc) {
 		
 		MemberDto member = memberInfo(lc.getMember_id());
+		
+		SessionCommand sc = new SessionCommand();
+		sc.setMemberDto(member);
 		System.out.println(member);
-		session.setAttribute("sc", member);
+		// DoctorDto doctorDto = doctorService.selectDoctor(int member_idx);
+		// sc.setDoctorDto(doctorDto);
+		// int pet_idx = petService.findSelectedPet(member_idx);
+		// sc.setPet_idx(pet_idx);
+		
+		session.setAttribute("sc", sc);
 		session.setAttribute("MINFO", member.getMember_nick());// 이제 닉네임 들고다님
 	}
 	
@@ -68,18 +85,24 @@ public class MemberService {
 	}
 	
 	//의사등록 성공
-	public int dinsertOk(DocterDto ddto) {
-		List<DocterDto> dok= dao.dinsert(ddto);
-		return dok.size();
+	public int dinsertOk(DoctorDto ddto) {
+	ddto.setReg_date(LocalDateTime.now());//시간 넣어주기
+	int dok = dao.dinsert(ddto);
+		return dok;
 	}
 	
 	//정보수정
-	public int updateOk(MemberDto mdto){
+	public List<MemberDto> updateOk(MemberDto mdto){
 		return dao.update(mdto);
 	}
 	
+	//비밀번호 수정
+	public List<MemberDto>  updatePwOk(MemberDto mdto){
+		return dao.updatePw(mdto);
+	}
+	
 	//의사 정보수정
-	public List<DocterDto> dupdate(DocterDto ddto){
+	public int dupdateOk(DoctorDto ddto){
 		return dao.dupdate(ddto);
 	}
 	
