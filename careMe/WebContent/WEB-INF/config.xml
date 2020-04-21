@@ -13,10 +13,13 @@
 	<context:annotation-config></context:annotation-config>
 	<context:property-placeholder location="classpath:config/db.properties" local-override="true" />
 	
+	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="1" />
+	</bean>
 	
 	<!-- tiles 설정 -->
 	<bean id="tilesviewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver">
-		<property name="order" value="1" />
+		<property name="order" value="2" />
 	</bean>
 	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
 		<property name="definitions">
@@ -35,7 +38,7 @@
 	<bean id="viewResolver"	class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/view/" />
 		<property name="suffix" value=".jsp" />
-		<property name="order" value="2" />
+		<property name="order" value="3" />
 	</bean>
 		
 	<!-- connectionPool 설정 -->

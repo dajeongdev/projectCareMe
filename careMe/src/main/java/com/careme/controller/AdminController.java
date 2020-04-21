@@ -1,6 +1,7 @@
 package com.careme.controller;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -76,7 +77,6 @@ public class AdminController {
 	// 회원정보 수정
 	@RequestMapping(value = "/admin/member/update", method=RequestMethod.POST)
 	public String memberUpdate(MemberDto memberDto, MultipartHttpServletRequest request) {
-		System.out.println(request.getFileNames().next());
 		int res = 0;
 		res = adminService.updateMember(memberDto, request);
 		return "redirect:/admin/member";
@@ -103,9 +103,14 @@ public class AdminController {
 	}
 	
 	// /admin/download/*
-	@RequestMapping("member")
-	public ModelAndView downloadMemberXls() {
-		return new ModelAndView();
+	@RequestMapping("/admin/download/member")
+	public ModelAndView downloadMemberXls(String searchType, String searchText, String page) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("searchColumn", adminService.getSearchColumn(searchType));
+		params.put("searchText", searchText);
+		params.put("page", page);
+		System.out.println(params);
+		return new ModelAndView("memberListToXls", "params", params);
 	}
 
 }

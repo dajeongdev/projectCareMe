@@ -80,34 +80,38 @@ public class AdminService {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		
 		if (searchType != "") {
-			String searchColumn;
-			
-			switch(searchType) {
-	        case "id" : 
-	        	searchColumn = "member_id"; 
-	            break;
-	        case "email" : 
-	        	searchColumn = "member_email"; 
-	            break;  
-	        case "phone" : 
-	        	searchColumn = "member_phone";
-	            break;  
-	        case "nick" : 
-	        	searchColumn = "member_nick";
-	            break;  
-	        default :
-	        	searchColumn = "id";
-			}
+			String searchColumn = getSearchColumn(searchType);
 			
 			params.put("searchColumn", searchColumn);
 			params.put("searchText", searchText);
-			
 		}
 
 		params.put("pageStart", pageStart);
 		params.put("contentPerPage", contentPerPage);
 		
 		return params;
+	}
+	
+	public String getSearchColumn(String searchType) {
+		String searchColumn;
+		
+		switch(searchType) {
+        case "id" : 
+        	searchColumn = "member_id"; 
+            break;
+        case "email" : 
+        	searchColumn = "member_email"; 
+            break;  
+        case "phone" : 
+        	searchColumn = "member_phone";
+            break;  
+        case "nick" : 
+        	searchColumn = "member_nick";
+            break;  
+        default :
+        	searchColumn = "";
+		}
+		return searchColumn;
 	}
 	
 

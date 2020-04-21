@@ -22,6 +22,13 @@
 			})
 		}
 	}
+
+	var downloadXls = function () {
+		var result = confirm('Are you sure you want to download xls?');
+
+		if (result) location.href = "/careMe/admin/download/member" + $(location).attr('search');
+		else alert("다운로드 취소!!");
+	}
 	
 </script>
 
@@ -33,7 +40,7 @@
 			<div class="col-12">
 				<div class="card">
 					<div class="card-header">
-						<h3 class="card-title">회원목록 ${paging.currentPage} of ${paging.totalPage}</h3>
+						<h3 class="card-title">${paging.currentPage} of ${paging.totalPage} pages , TotalCount : ${paging.totalCount} </h3>
 						<div class="card-tools">
 							<form name="searchForm" action="/careMe/admin/member/search">
 								<input type="hidden" name="page" value=1>
@@ -102,8 +109,14 @@
 					<!-- /.card-body -->
 
 					<div class="card-footer clearfix">
-						<%-- <jsp:include page="/WEB-INF/view/admin/include/paging.jspf" flush="false"/> --%>
-						<%@ include file="/WEB-INF/view/admin/include/paging.jspf" %>
+						<div class="row">
+							<div class="col-md-6">
+								<%@ include file="/WEB-INF/view/admin/include/paging.jspf" %>
+							</div>
+							<div class="col-md-6">
+								<button class="btn btn-dark btn-sm float-right" onclick="downloadXls()">다운로드</button>	
+							</div>
+						</div>
 					</div>
 
 					<!-- /.card-footer -->

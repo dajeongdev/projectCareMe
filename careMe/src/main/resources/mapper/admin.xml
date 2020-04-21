@@ -9,7 +9,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectMemberList" resultType="com.careme.model.dto.MemberDto" parameterType="HashMap">
-		select SQL_CALC_FOUND_ROWS * from members where del_yn = 'n' limit ${pageStart}, ${contentPerPage}
+		select SQL_CALC_FOUND_ROWS * from members where del_yn = 'n'
+		<if test="pageStart != null">
+			limit ${pageStart}, ${contentPerPage}
+		</if> 
 	</select>
 	
 	<select id="searchMemberList" resultType="com.careme.model.dto.MemberDto" parameterType="HashMap">
@@ -17,7 +20,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from members 
 		where del_yn = 'n' 
 		and ${searchColumn} like concat('%', #{searchText}, '%')
-		limit ${pageStart}, ${contentPerPage}
+		<if test="pageStart != null">
+			limit ${pageStart}, ${contentPerPage}
+		</if>
 	</select>
 	
 	<select id="selectTotalCount" resultType="int">
