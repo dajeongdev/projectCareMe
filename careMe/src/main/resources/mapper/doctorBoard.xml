@@ -30,6 +30,14 @@
 	<select id="getArtComments" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
 		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
 	</select>
+	
+	<update id="addHeart" parameterType="int">
+		update question_board_comment set heart=heart+1 where question_table_idx=#{question_table_idx}
+	</update>
+	
+	<update id="subHeart" parameterType="int">
+		update question_board_comment set heart=heart-1 where question_table_idx=#{question_table_idx}
+	</update>
 
 
 
@@ -78,8 +86,8 @@
 <!-- comment 작성 수정 삭제 -->
 
 	<insert id="insertComment" parameterType="com.careme.model.dto.BoardCommentDto">
-		insert into question_board_comment (question_table_idx, member_idx, content, heart, reg_date, del_yn) 
-		values (#{question_table_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
+		insert into question_board_comment (question_table_idx, member_idx, content, heart, reg_date, del_yn, checkHeart) 
+		values (#{question_table_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n', 'n')
 	</insert>
 	
     <update id="updateComment" parameterType="com.careme.model.dto.BoardCommentDto">

@@ -49,9 +49,9 @@ $(function() {
         // 태그를 추가
         function addTag (value) {
             tag[counter] = value; // Object 안에 tag 추가
-            counter++; // counter 증가 삭제를 위한 del-btn id
+            counter++; // counter 증가 삭제를 위한 delete-btn id
         }
-        // 최종적으로 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘김
+        // 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘김
         function marginTag () {
             return Object.values(tag).filter(function (word) {
                 return word !== "";
@@ -66,6 +66,7 @@ $(function() {
         $("#tag").on("keypress", function (e) {
             var self = $(this);
             if (e.key === "Enter" || e.keyCode == 32) {
+                e.preventDefault();
                 var tagValue = self.val();
                 if (tagValue !== "") {
                     // 중복검사 겹치면 해당값 array 로 return
@@ -74,7 +75,7 @@ $(function() {
                     })
                     // 태그 중복 검사
                     if (result.length == 0) { 
-						var url = "casualWriteFrom?tagValue="+tagValue+"&member_idx="+member_idx;
+						var url = "casualWriteForm?tagValue="+tagValue+"&member_idx="+member_idx;
                         $.ajax({
                             type:"get",
                             url=url,

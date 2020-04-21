@@ -108,7 +108,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteArticlesForDoctor(idx);
 	}
 
-// Doctor Board Comments 작성, 수정, 삭제
+// Doctor Board Comments 작성, 수정, 삭제, 추천
 
 	// comment 작성
 	public int addDoctorComment(BoardCommentDto commentDto) {
@@ -126,6 +126,22 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public int deleteDoctorComment(int idx) {
 		return dao.deleteCommentForDoctor(idx);
 	}
+	
+	// comment 추천
+	
+	public BoardCommentDto getHeartInfo(int idx) {
+		return dao.getHeartInfo(idx);
+	}
+	
+	public int addHeartForDoctor(int idx) {
+		return dao.addHeartForDoctor(idx);
+	}
+	
+	public int subHeartForDoctor(int idx) {
+		return dao.subHeartForDoctor(idx);
+	}
+	
+	
 
 // Casual Board 내용 구현
 	public List<QuestionBoardDto> getCasualBoard() {
@@ -231,6 +247,14 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	// comment 삭제
 	public int deleteCasualComment(int idx) {
 		return dao.deleteCommentForCasual(idx);
+	}
+	
+	public int addHeartForCasual(int idx) {
+		return dao.addHeartForCasual(idx);
+	}
+	
+	public int subHeartForCasual(int idx) {
+		return dao.subHeartForCasual(idx);
 	}
 
 // Hashtag 추가 및 비교

@@ -106,6 +106,25 @@ public class CasualBoardController {
 		return list;
 	}
 	
+	// comment heart
+	
+	@RequestMapping(value = "/view/casualBoardView/casualWriteContent/question_board_comment_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public int updateHeart(@RequestParam int question_board_comment_idx) {
+	
+		BoardCommentDto hdto = bs.getHeartInfo(question_board_comment_idx);
+		String hcheck = hdto.getCheckHeart();
+		int currentHeart = hdto.getHeart();
+		
+		if(hcheck.equals("n")) {
+			bs.addHeartForDoctor(question_board_comment_idx);
+		}else if(hcheck.equals("y")) {
+			bs.subHeartForCasual(question_board_comment_idx);
+		}
+		
+		return currentHeart;
+	}
+	
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)

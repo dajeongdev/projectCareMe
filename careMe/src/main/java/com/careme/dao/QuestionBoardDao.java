@@ -46,7 +46,6 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("doctorQuestionBrd.getArtComments", question_table_idx);
 	}
 	
-
 	
 // Doctor Board 작성, 수정, 삭제
 	
@@ -67,7 +66,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().delete("doctorQuestionBrd.deleteArticle", idx);
 		}
 	
-// Doctor Comment 작성, 수정, 삭제
+// Doctor Comment 작성, 수정, 삭제, 추천
 
 	public int insertCommentForDoctor(BoardCommentDto commentDto){
 		return getSqlSession().insert("doctorQuestionBrd.insertComment", commentDto);
@@ -79,6 +78,14 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 				
 	public int deleteCommentForDoctor(int idx) {
 		return getSqlSession().delete("doctorQuestionBrd.deleteComment", idx);
+	}
+	
+	public int addHeartForDoctor(int idx) {
+		return getSqlSession().update("doctorQuestionBrd.addHeart", idx);
+	}
+	
+	public int subHeartForDoctor(int idx) {
+		return getSqlSession().update("doctorQuestionBrd.subHeart", idx);
 	}
 	
 	
@@ -117,7 +124,12 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("casualQuestionBrd.getArtComments", question_table_idx);
 	}
 	
+	public BoardCommentDto getHeartInfo(int question_board_comment_idx) {
+		return getSqlSession().selectOne("casualQuestionBrd.getHeartInfo", question_board_comment_idx);
+	}
 
+	
+	
 // Casual Board 작성, 수정, 삭제
 	
 	public int insertArticleForCasual(QuestionBoardDto dto){
@@ -149,6 +161,14 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 			
 	public int deleteCommentForCasual(int idx) {
 		return getSqlSession().delete("casualQuestionBrd.deleteComment", idx);
+	}
+	
+	public int addHeartForCasual(int idx) {
+		return getSqlSession().update("casualQuestionBrd.addHeart", idx);
+	}
+	
+	public int subHeartForCasual(int idx) {
+		return getSqlSession().update("casualQuestionBrd.subHeart", idx);
 	}
 	
 // Hashtag 확인

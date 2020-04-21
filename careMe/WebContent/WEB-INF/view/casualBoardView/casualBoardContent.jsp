@@ -23,7 +23,33 @@ function deleteArticle(question_table_idx){
         }
     };
 
+
+$(function(){
+	$("#heart").on("click", function(){
+		var url = "casualBoardContent/changeHeart?question_board_comment_idx="+#{item.question_board_comment_idx};
+		$.ajax({
+			type:"get",
+			url:url,
+			dataType:"json"})
+			.done(function(){
+
+				$
+
+				
+
+				})
+				
+		
+	});
+	
+})
+
+
+    
 </script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
 
 </head>
@@ -123,12 +149,21 @@ function deleteArticle(question_table_idx){
 				
 				<div class="card border-dark col-md-9">
   					<div class="row card-body my-3 p-3 bg-white rounded shadow-sm">
+    					<blockquote>	
     						<p style="" align="left">
 								<c:out value="${item.content}"/>
 							</p>
+						</blockquote>
         			</div>
 					<div class="row">
-						<div class="col-md-9"></div>					
+					
+					<div class="col-md-7"></div>
+						<div class="col-md-1" id="heartCount" align="right">
+							<c:out value="${item.heart}"/>
+						</div>
+						<div class="col-md-1" align="left">
+							<i class="fas fa-heart" id="heart"></i>
+						</div>	
 						<div class="col-md-3" align="right">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
 							onClick="">

@@ -17,7 +17,7 @@
 
 function deleteArticle(question_table_idx){
         if(confirm("정말 삭제하시겠습니까?")==true){
-            location.href="deleteCasualArticle?question_table_idx="+question_table_idx;
+            location.href="deleteDoctorArticle?question_table_idx="+question_table_idx;
         }
     };
 
@@ -40,14 +40,13 @@ function deleteArticle(question_table_idx){
 		<div class="row card border-dark ">
 			<div class="card">
   				
-  				<div class="card-header">
+  				<div class="card-header" >
   					<h2 class="blog-post-title" align="left"><c:out value="${mlist.title}" /></h2>
   				</div>
   				
 
-		  		<div class="row card-body">
+		  		<div class="row card-body" style="height:auto;">
 
-  				
   					<div class="col-md-3">
 	       				<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
     	    			<title>Placeholder</title><rect width="100%" height="100%" fill="#777">
@@ -57,13 +56,23 @@ function deleteArticle(question_table_idx){
         
         				<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
   					</div>
-  					
+  				
   					<div class="col-md-9 shadow-sm">
-  						<blockquote>
-          					<p style="font:20" align="left">
-								<c:out value="${mlist.content}" />
+  						<div>
+  							<c:if test="${flist.size()>0}">
+  								<c:forEach var="flist" items="${flist}">
+  									<div class="img">
+  										<img class="w-50 h-40" border="1px" src="${fullName}${flist.file_path}">
+  									</div>
+  								</c:forEach>
+  							</c:if>
+  						</div>
+  						<br>
+  						<div>
+  							<p align="left">
+								${mlist.content}
 							</p>
-        				</blockquote>
+        				</div>
 					</div>
 				
   				</div>
@@ -78,11 +87,10 @@ function deleteArticle(question_table_idx){
 			<table align="right">
 				<tr height="30">
 					<td colspan="4" align="right">
-					<input type="button" class="btn btn-dark btn-sm" value="글수정"
-						onClick="document.location.href='doctorBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">
-					<input type="button" class="btn btn-dark btn-sm" value="글삭제"
-						onClick="document.location.href='deleteDoctorArticle?question_table_idx=${mlist.question_table_idx}'">
-					<input type="button" class="btn btn-dark btn-sm" value="글목록" onClick="location.href='doctorBoard?currentPage=1'"></td>
+					<button type="button" class="btn btn-dark btn-sm" onclick="document.location.href='doctorBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">글수정</button>
+					<button type="button" class="btn btn-dark btn-sm" onclick="deleteArticle('${mlist.question_table_idx}')">글삭제</button>
+					<button type="button" class="btn btn-dark btn-sm" onClick="location.href='doctorBoard?currentPage=1'">글목록</button>
+					</td>
 				</tr>
 			</table>
 			<br>
@@ -117,7 +125,14 @@ function deleteArticle(question_table_idx){
         				</blockquote>
 					</div>
 					<div class="row">
-						<div class="col-md-9"></div>					
+					
+						<div class="col-md-7"></div>
+						<div class="col-md-1" align="right">
+							<div><c:out value="${item.heart}"/></div>
+						</div>	
+						<div class="col-md-1" align="right">
+							<button>heart</button>
+						</div>					
 						<div class="col-md-3" align="right">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
 							onClick="">

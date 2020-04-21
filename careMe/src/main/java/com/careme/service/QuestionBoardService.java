@@ -51,6 +51,12 @@ public interface QuestionBoardService {
 	
 	public int deleteDoctorComment (int idx);
 	
+	public BoardCommentDto getHeartInfo(int idx);
+	
+	public int addHeartForDoctor(int idx);
+	
+	public int subHeartForDoctor(int idx);
+	
 	
 // Casual Board 내용 구현
 	public List<QuestionBoardDto> getCasualBoard();
@@ -83,6 +89,10 @@ public interface QuestionBoardService {
 	public int updateCasualComment (BoardCommentDto commentDto);
 	
 	public int deleteCasualComment (int idx);
+	
+	public int addHeartForCasual(int idx);
+	
+	public int subHeartForCasual(int idx);
 	
 // Casual Board Hashtags
 	public List<TagDto> compareHashtag(String tagValue);
