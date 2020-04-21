@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.dao.CarediaryDao;
 import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.PageNumberCommand;
 import com.careme.model.dto.DefecationDto;
 import com.careme.model.dto.PetCareDto;
 import com.careme.model.dto.PetCareFileDto;
@@ -22,17 +23,22 @@ import com.careme.model.dto.PetCareFileDto;
 public class CarediaryService {
 	@Autowired
 	CarediaryDao carediaryDao;
-	
 	public void setDao(CarediaryDao carediaryDao) {
 		this.carediaryDao = carediaryDao;
 	}
 	
 	@Autowired
 	FileUploadService fileuploadService;
-
 	public void setFileuploadService(FileUploadService fileuploadService) {
 		this.fileuploadService = fileuploadService;
 	}
+	
+	@Autowired
+	PageNumberService pageService;
+	public void setPageService(PageNumberServiceImpl pageNumberServiceImple) {
+		this.pageService = pageNumberServiceImple;
+	}
+	
 
 	public List<DefecationDto> selectSmallDef() {
 		return carediaryDao.selectSmallDef();
@@ -86,19 +92,30 @@ public class CarediaryService {
 		return command;
 	}
 	
-	public List<CarediaryCommand> getCarediaryListByPetIdx(int petIdx) {
-		List<CarediaryCommand> commandList = new ArrayList<CarediaryCommand>();
-		List<PetCareDto> dtoList = carediaryDao.selectCarediaryListByPetIdx(petIdx);
+	public HashMap<String, Object> getCarediaryListByPetIdx(int petIdx, int currentPage, int contentPerPage) {
+		HashMap<String, Object> data = new HashMap<String, Object>();
+
+		List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
+		HashMap<String, Integer> param = new HashMap<String, Integer>();
+		int start = pageService.getStartIdx(currentPage, contentPerPage);
+		param.put("pet_idx", petIdx);
+		param.put("start", start);
+		param.put("contentPerPage", contentPerPage);
+		list = carediaryDao.selectCarediaryListByPetIdx(param);
+		int totalCount = carediaryDao.selectTotalCount();
 		
-		for (PetCareDto dto : dtoList) {
-			CarediaryCommand command = new CarediaryCommand();
-			command.setDiary(dto);
-			command.setFiles(carediaryDao.selectCarediaryFileList(dto.getPet_care_idx()));
-			
-			commandList.add(command);
+		for (CarediaryCommand command : list) {
+			int diaryIdx = command.getDiary().getPet_care_idx();
+			command.setFiles(carediaryDao.selectCarediaryFileList(diaryIdx));
 		}
 		
-		return commandList;
+		String path = petIdx + "?page=";
+		System.out.println("토탈카운트:: " + totalCount);
+		PageNumberCommand paging = pageService.paging(totalCount, contentPerPage, currentPage, path);
+		
+		data.put("list", list);
+		data.put("paging", paging);
+		return data;
 	}
 	
 	public void processFile(int diaryIdx, MultipartHttpServletRequest request) {
