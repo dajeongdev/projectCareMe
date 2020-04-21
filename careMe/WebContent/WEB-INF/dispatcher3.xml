@@ -11,4 +11,6 @@
 
 	<bean id="question_bd" class="com.careme.dao.QuestionBoardDao" p:sqlSessionFactory-ref="sqlSessionFactory" />
 	
+	<bean id="hashTagDao" class="com.careme.dao.HashTagDao" p:sqlSessionFactory-ref="sqlSessionFactory" />
+	
 </beans>

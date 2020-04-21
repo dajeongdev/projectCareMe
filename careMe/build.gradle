@@ -18,6 +18,9 @@ repositories {
 }
 
 dependencies {
+// https://mvnrepository.com/artifact/org.apache.tiles/tiles-extras
+compile group: 'org.apache.tiles', name: 'tiles-extras', version: '3.0.8'
+
 	
 	//이메일
 	// https://mvnrepository.com/artifact/com.sun.mail/javax.mail

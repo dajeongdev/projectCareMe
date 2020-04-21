@@ -12,6 +12,7 @@ public class BoardCommentDto {
 	int heart;
 	LocalDateTime reg_date;
 	String del_yn;
+	String checkHeart;
 
 	public int getQuestion_board_comment_idx() {
 		return question_board_comment_idx;
@@ -62,10 +63,21 @@ public class BoardCommentDto {
 		this.del_yn = del_yn;
 	}
 	
+	public String getCheckHeart() {
+		return checkHeart;
+	}
+	public void setCheckHeart(String checkHeart) {
+		this.checkHeart = checkHeart;
+	}
 	@Override
 	public String toString() {
 		return "BoardCommentDto [question_board_comment_idx=" + question_board_comment_idx + ", question_table_idx="
 				+ question_table_idx + ", member_idx=" + member_idx + ", member_id=" + member_id + ", content="
-				+ content + ", heart=" + heart + ", reg_date=" + reg_date + ", del_yn=" + del_yn + "]";
+				+ content + ", heart=" + heart + ", reg_date=" + reg_date + ", del_yn=" + del_yn + ", checkHeart="
+				+ checkHeart + "]";
 	}
+
+
+	
+	
 }
