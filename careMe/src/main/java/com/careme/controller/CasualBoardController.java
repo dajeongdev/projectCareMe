@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
-import com.careme.model.command.TagCommand;
+import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.MemberDto;
@@ -26,6 +26,7 @@ import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.HashTagService;
 import com.careme.service.MemberService;
 import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
@@ -71,6 +72,12 @@ public class CasualBoardController {
 		this.ms=ms;
 	}
 	
+	@Autowired
+	HashTagService hs;
+	public void setHashTagService(HashTagService hs) {
+		this.hs = hs;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
@@ -111,17 +118,23 @@ public class CasualBoardController {
 	@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String updateHeart(@RequestParam int question_board_comment_idx) {
-		System.out.println(question_board_comment_idx);
-		BoardCommentDto hdto = bs.getHeartInfo(question_board_comment_idx);
-		String hcheck = hdto.getCheckHeart();
+		BoardCommentDto cdto = bs.getHeartInfo(question_board_comment_idx);
+		String hcheck = cdto.getCheckHeart();
 		
 		if(hcheck.equals("n")) {
-			bs.addHeartForDoctor(question_board_comment_idx);
+			bs.addHeartForCasual(question_board_comment_idx);
+			
+			cdto.setCheckHeart("y");
+			
+			bs.updateCheckHeart(cdto);
+		
 		}else if(hcheck.equals("y")) {
 			bs.subHeartForCasual(question_board_comment_idx);
+			cdto.setCheckHeart("n");
+			bs.updateCheckHeart(cdto);
 		}
 		
-		int currentHeart = hdto.getHeart();
+		int currentHeart = cdto.getHeart();
 		System.out.println(currentHeart);
 		
 		Gson json = new Gson();
@@ -227,26 +240,35 @@ public class CasualBoardController {
 	// hashtag 기능
 	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String hashtagCompare(@RequestParam String tagValue, int member_idx) {
-		List<TagDto> compared = bs.compareHashtag(tagValue);
-		Gson json = new Gson();
-		int listsize = compared.size();
-		int idx = member_idx;
+	public String hashtagCompare(HttpServletRequest request, String tag_name) {
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
 		
-		if(listsize==0){
-			
-			TagCommand tc = new TagCommand();
-			tc.setTag_name(tagValue);
-			tc.setMember_idx(idx);
-			tc.setDel_yn("n");
-			List<TagDto> added = bs.addHashtag(tc);
-			compared=added;
-			return json.toJson(compared);
-			
-		}else {
-		return json.toJson(compared);
-		}
+		// 없으면 넣고, 있으면 찾아서 TagDto로 리턴!
+		TagDto tagDto = hs.checkTag(tag_name, member_idx);		
+		Gson json = new Gson();
+		return json.toJson(tagDto);
 	}
+	
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String hashTagInsert(HttpServletRequest request, String tag_name) {
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
+		
+		TagDto tdto = new TagDto();
+		
+		tdto.setTag_name(tag_name);
+		hs.insertTag(tag_name, member_idx);
+		
+		Gson json = new Gson();
+		return json.toJson(tdto);
+		
+		
+		
+	}
+		
+		
 	
 // 게시글 수정
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")

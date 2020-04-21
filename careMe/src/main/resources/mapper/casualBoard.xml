@@ -28,23 +28,6 @@
 			where question_table_idx=#{question_table_idx}
 	</update>
 	
-	<select id="getArtComments" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
-		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
-	</select>
-	
-	<select id="getHeartInfo" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
-		select * from question_board_comment where question_board_comment_idx=#{question_board_comment_idx}
-	</select>
-	
-	<update id="addHeart" parameterType="int">
-		update question_board_comment set heart=heart+1 where question_table_idx=#{question_table_idx}
-	</update>
-	
-	<update id="subHeart" parameterType="int">
-		update question_board_comment set heart=heart-1 where question_table_idx=#{question_table_idx}
-	</update>
-	
-
 	
 <!-- 게시판글 검색 -->
 	<select id="getSrchArticle" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.SearchBoardCommand">
@@ -99,6 +82,26 @@
 	<delete id="deleteComment" parameterType="int">
 		delete from question_board_comment where question_board_comment_idx=#{question_board_comment_idx}
 	</delete>
+	
+	<select id="getArtComments" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
+		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
+	</select>
+	
+	<select id="getHeartInfo" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
+		select * from question_board_comment where question_board_comment_idx=#{question_board_comment_idx}
+	</select>
+	
+	<update id="addHeart" parameterType="int">
+		update question_board_comment set heart=heart+1 where question_board_comment_idx=#{question_board_comment_idx}
+	</update>
+	
+	<update id="subHeart" parameterType="int">
+		update question_board_comment set heart=heart-1 where question_board_comment_idx=#{question_board_comment_idx}
+	</update>
+
+	<update id="updateCheckHeart" parameterType="com.careme.model.dto.BoardCommentDto">
+		update question_board_comment set checkHeart=#{checkHeart} where question_board_comment_idx=#{question_board_comment_idx}
+	</update>
 
 <!-- hashtag 확인 -->
 

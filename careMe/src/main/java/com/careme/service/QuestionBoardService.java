@@ -94,6 +94,8 @@ public interface QuestionBoardService {
 	
 	public int subHeartForCasual(int idx);
 	
+	public void updateCheckHeart(BoardCommentDto cdto);
+	
 // Casual Board Hashtags
 	public List<TagDto> compareHashtag(String tagValue);
 	

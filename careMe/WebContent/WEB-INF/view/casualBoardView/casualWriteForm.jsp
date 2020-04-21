@@ -39,74 +39,75 @@ $(function(){
 			})
 		})
 
-</script>		
-<script>		
-<!-- HASHTAG -->
+</script>	
+	
+<script>	
+//태그를 저장할 배열
+var tags = [];
+var tagNames = [];
+//태그를 보여줄 element
+
+
+
 $(function() {
-    $(document).ready(function () {
-        var tag = {};
-        var counter = 0;
-        // 태그를 추가
-        function addTag (value) {
-            tag[counter] = value; // Object 안에 tag 추가
-            counter++; // counter 증가 삭제를 위한 delete-btn id
-        }
-        // 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘김
-        function marginTag () {
-            return Object.values(tag).filter(function (word) {
-                return word !== "";
-            });
-        }
-        // 서버로 제출
-        $(document).on("submit", function (e) {
-            var value = marginTag(); // return array
-            $("#rdTag").val(value); 
-            $(this).submit();
-        });
-        $("#tag").on("keypress", function (e) {
-            var self = $(this);
-            if (e.key === "Enter" || e.keyCode == 32) {
-                e.preventDefault();
-                var tagValue = self.val();
-                if (tagValue !== "") {
-                    // 중복검사 겹치면 해당값 array 로 return
-                    var result = Object.values(tag).filter(function (word) {
-                        return word === tagValue;
-                    })
-                    // 태그 중복 검사
-                    if (result.length == 0) { 
-						var url = "casualWriteForm?tagValue="+tagValue+"&member_idx="+member_idx;
-                        $.ajax({
-                            type:"get",
-                            url=url,
-                            dataType:"json"})
-                            .done(function(compared){
-                                if(compared.length>0){
-                                    for(i in compared){
-                                        var list=compared[i]
-                                        $("#tag-list").append("<li class='tag-item'>#"+list.tag_name+"<span class='del-btn' idx='"+counter+"'>X</span></li>");
-                                        addTag(list.tag_name);
-                                        self.val("");
-                                        } 
-                                    }
-                                }).fail(function(e) {
-                					alert(e.responseText);
-                				});
-                     } else {
-                        alert("태그값이 중복됩니다!");
-                    }
-                }
-                e.preventDefault();
-            }
-        });
-        // 삭제 버튼 
-        $(document).on("click", ".del-btn", function (e) {
-            var index = $(this).attr("idx");
-            tag[index] = "";
-            $(this).parent().remove();
-        });
+
+
+	$("#tag").on("keypress", function (e) {
+		if (e.key === "Enter" || e.keyCode == 32) {
+			var inputText = $("#tag").val(); // 내가 입력한 값
+			//inputText를 tagNames[]를 for문 돌려서 비교해서 같으면 중복!
+			
+			
+			for(var i=0; i < tagNames.length; i++){
+				if(tagNames[i] == inputText){
+					console.log(tagNames[i] + "==" + inputText);
+					$("#tag").val("");
+					alert("중복!");
+					return;
+				}				
+			}
+			
+
+			// 태그 중복확인
+			tagCheck(inputText);
+			e.preventDefault();
+		}
+		
+		console.log("enter");
 	})
+	
 })	
+
+var tagCheck = function (tag) {
+	var url = $(location).attr('pathname') + "/hashCheck"
+	$.ajax({
+		type: "get",
+		url: url + "?tag_name=" + tag,
+		dataType:"json"
+	}).done(function(data) {
+		console.log(data);
+		
+		//배열에 tag의 idx를 넣어준다
+		var idx = data.tag_idx;
+		var name = data.tag_name;
+		var html = "<li class='hashTag' data-idx=" + idx + ">" + "#" + name + "</li>";
+
+		//서버에 보낼 배열에 넣기
+		tags.push(idx);
+		// input enter 눌렸을때 input 있는 value text 와 배열에 있는 text를 비교해서 있으면 중복알림! 없으면 ajax!
+		tagNames.push(name);
+
+
+		// 태그 붙이기
+		$("#tag-list").append(html);
+		// input 비우기
+		$("#tag").val("");
+		
+		//alert("성공!");
+	}).fail(function() {
+		alert("실패!");
+	});
+}
 	
 </script>
 
@@ -262,7 +263,8 @@ $(function() {
        					<input type="hidden" value="" name="tag" id="rdTag" />
     			   	<div>
      			       <input type="text" id="tag" size="7" placeholder="태그입력" />
-     			    </div><br>  
+     			    </div>
+     			    <br>  
     			    
     			    <ul id="tag-list"></ul>
 

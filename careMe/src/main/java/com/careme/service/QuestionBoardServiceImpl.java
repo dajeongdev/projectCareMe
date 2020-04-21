@@ -40,6 +40,12 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		this.fus = fus;
 	}
 	
+	// 공통
+	
+	public void updateCheckHeart(BoardCommentDto cdto) {
+		dao.updateCheckHeart(cdto);
+	}
+	
 	// Doctor Board 게시글 뿌리기
 	public List<QuestionBoardDto> getDoctorBoard() {
 		return dao.getDoctorBoard();
@@ -134,15 +140,14 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	}
 	
 	public int addHeartForDoctor(int idx) {
-		return dao.addHeartForDoctor(idx);
+		return dao.addHeartForCasual(idx);
 	}
 	
 	public int subHeartForDoctor(int idx) {
-		return dao.subHeartForDoctor(idx);
+		return dao.subHeartForCasual(idx);
 	}
 	
 	
-
 // Casual Board 내용 구현
 	public List<QuestionBoardDto> getCasualBoard() {
 		return dao.getCasualBoard();
@@ -257,6 +262,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.subHeartForCasual(idx);
 	}
 
+	
 // Hashtag 추가 및 비교
 	public List<TagDto> compareHashtag(String tagValue){
 		return dao.getHashtag(tagValue);

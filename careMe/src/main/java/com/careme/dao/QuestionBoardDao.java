@@ -171,6 +171,10 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().update("casualQuestionBrd.subHeart", idx);
 	}
 	
+	public int updateCheckHeart(BoardCommentDto cdto) {
+		return getSqlSession().update("casualQuestionBrd.updateCheckHeart", cdto);
+	}
+	
 // Hashtag 확인
 	
 	public List<TagDto> getHashtag(String tagValue){
