@@ -18,6 +18,7 @@ public class PetDto {
 	private String blood_type;
 	private String registration_number;
 	private String memo;
+	private String seleted;
 	private LocalDateTime reg_date;
 	private String del_yn;
 	public int getPet_idx() {
@@ -110,6 +111,13 @@ public class PetDto {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+	
+	public String getSeleted() {
+		return seleted;
+	}
+	public void setSeleted(String seleted) {
+		this.seleted = seleted;
+	}
 	public LocalDateTime getReg_date() {
 		return reg_date;
 	}
@@ -122,7 +130,6 @@ public class PetDto {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
-	
 	@Override
 	public String toString() {
 		return "PetDto [pet_idx=" + pet_idx + ", member_idx=" + member_idx + ", name=" + name + ", pet_species_idx="
@@ -130,8 +137,8 @@ public class PetDto {
 				+ ", profile_image_file_path=" + profile_image_file_path + ", profile_image_file_size="
 				+ profile_image_file_size + ", neutralized=" + neutralized + ", birth=" + birth + ", gender=" + gender
 				+ ", weight=" + weight + ", vaccination=" + vaccination + ", blood_type=" + blood_type
-				+ ", registration_number=" + registration_number + ", memo=" + memo + ", reg_date=" + reg_date
-				+ ", del_yn=" + del_yn + "]";
+				+ ", registration_number=" + registration_number + ", memo=" + memo + ", seleted=" + seleted
+				+ ", reg_date=" + reg_date + ", del_yn=" + del_yn + "]";
 	}
 	
 

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<spring:url value="/resources/img/Tux.svg" var="default_image" />
+<%@ page import="com.careme.model.dto.MemberDto"%>
 <%
 	String hostname = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
 			+ "/careMe/";
@@ -16,8 +16,8 @@
 <link rel="stylesheet" href="${mainCSS}">
 <title>메인 화면</title>
 <script>
-	$(function () {
-		$(".pagination").addClass("justify-content-end");
+	$(function() {
+		$(".pagination").addClass("justify-content-start");
 	})
 	
 </script>
@@ -37,6 +37,9 @@
 						src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1"
 						style="width: 200px; border-radius: 50%;">
 					<h1>강아지1</h1>
+					<div>
+						<button class="btn btn-dark btn-sm">수정</button>
+					</div>
 				</div>
 
 
@@ -60,7 +63,7 @@
 					<c:if test="${articles.size() > 0}">
 						<c:forEach var="article" items="${articles}" varStatus="status">
 							<div class="card b-1 hover-shadow mb-20">
-								<footer class="card-footer flexbox align-items-center">
+								<footer class="card-header flexbox align-items-center">
 									<div>
 										<strong>${article.diary.title} : </strong> <span>${article.diary.reg_date}</span>
 									</div>
@@ -140,8 +143,12 @@
 			<!-- E:diary list box -->
 
 			<div class="row">
+				<div class="col-md-6">
+					<jsp:include page="/WEB-INF/view/include/paging.jsp" flush="false" />
+				</div>
 				<div class="col-6 mx-auto mb-3">
-					<form action="" class="form-inline text-right">
+					<form action="" class="form-inline justify-content-end">
+						<input type="hidden" name="page" value="${paging.currentPage}">
 						<div class="input-group mb-3">
 							<input type="text" class="form-control" placeholder="제목검색"
 								id="searchText" name="searchText">
@@ -150,9 +157,6 @@
 							</div>
 						</div>
 					</form>
-				</div>
-				<div class="col-md-6">
-					<jsp:include page="/WEB-INF/view/include/paging.jsp" flush="false" />
 				</div>
 			</div>
 
@@ -170,66 +174,35 @@
 						</div>
 						<div class="modal-body">
 							<div class="row">
-								<div class="col-md-12">
-									<div class="people-nearby">
-
-										<div class="nearby-user">
-											<div class="row">
-												<div class="col-md-2 col-sm-2">
-													<img src="${default_image}" alt="user"
-														class="profile-photo-lg">
+								<c:if test="${pets.size() > 0}">
+									<c:forEach var="pet" items="${pets}">
+										<div class="col-md-4 mb-3">
+											<div class="image" style="height: 100px;">
+												<img src="${hostname}${pet.profile_image_file_path}"
+													class="h-100" />
+											</div>
+											<div class="card-inner">
+												<div class="header text-center py-1">
+													<strong>${pet.name}</strong>
 												</div>
-												<div class="col-md-7 col-sm-7">
-													<h5>
-														<a href="#" class="profile-link">강아지1</a>
-													</h5>
-													<p class="text-muted">2020/04/12 updated</p>
-												</div>
-												<div class="col-md-3 col-sm-3">
-													<button class="btn btn-primary pull-right">선택</button>
+												<div class="content text-center">
+													<button class="btn btn-dark btn-sm"
+														onclick="selectPet(${pet.pet_idx})">선택</button>
 												</div>
 											</div>
 										</div>
-
-										<div class="nearby-user">
-											<div class="row">
-												<div class="col-md-2 col-sm-2">
-													<img src="${default_image }" alt="user"
-														class="profile-photo-lg">
-												</div>
-												<div class="col-md-7 col-sm-7">
-													<h5>
-														<a href="#" class="profile-link">강아지2</a>
-													</h5>
-													<p class="text-muted">2020/04/11 updated</p>
-												</div>
-												<div class="col-md-3 col-sm-3">
-													<button class="btn btn-primary pull-right">선택</button>
-												</div>
-											</div>
-										</div>
-
-										<div class="row text-center">
-											<div class="col-8 m-auto">
-												<button class="btn btn-dark btn-sm">추가</button>
-											</div>
-										</div>
-
-									</div>
-								</div>
+									</c:forEach>
+								</c:if>
 							</div>
-						</div>
-						<div class="modal-footer text-center">
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">닫기</button>
+							<div class="modal-footer justify-content-center">
+								<button class="btn btn-dark btn-sm">추가</button>
+							</div>
 						</div>
 					</div>
 				</div>
+				<!--  E: 내용작성 -->
 			</div>
-
-			<!--  E: 내용작성 -->
 		</div>
 	</div>
-
 </body>
 </html>

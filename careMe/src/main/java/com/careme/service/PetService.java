@@ -19,10 +19,18 @@ public interface PetService {
 	
 	public PetDto selectPet(int petIdx);
 	
+	public List<PetDto> selectPetList(int memberIdx);
+	
 	public int insertPet(MultipartHttpServletRequest request);
 	
 	public int updatePet(MultipartHttpServletRequest request);
 	
 	public int deletePet(HttpServletRequest request);
+	
+	public int findSeletedPet(int memberIdx);
+	
+	public int updateToselectedPet(int petIdx);
+	
+	public void deSelectPet(int memberIdx);
 	
 }

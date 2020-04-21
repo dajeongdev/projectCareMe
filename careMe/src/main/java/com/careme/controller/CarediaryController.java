@@ -17,33 +17,47 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.PageNumberCommand;
+import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetCareDto;
+import com.careme.model.dto.PetDto;
 import com.careme.service.CarediaryService;
+import com.careme.service.PetService;
 
 @Controller
 public class CarediaryController {
 	@Autowired
 	private CarediaryService carediaryService;
-	
-	public void setDao(CarediaryService carediaryService) {
+	public void setCarediaryService(CarediaryService carediaryService) {
 		this.carediaryService = carediaryService;
+	}
+	
+	@Autowired
+	private PetService petService;
+	public void setPetService(PetService petService) {
+		this.petService = petService;
 	}
 	
 	@RequestMapping("/carediary/{pet_idx}")
 	public ModelAndView toCarediaryMain(@PathVariable("pet_idx") int pet_idx, Integer page, HttpServletRequest request) {
-		//carediary 화면으로 들어와서 선택한 펫idx session에 저장
-		//SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
-		//sc.setPet_idx(pet_idx);
-		
-		request.getSession().setAttribute("pet_idx", pet_idx);
 		if (page == null) page = 1;
+		
+		// header script 에서 session에 pet_idx 없으면 로그인화면으로 이동하게 처리
+		MemberDto mSession = (MemberDto) request.getSession().getAttribute("sc");
+		int memberIdx = mSession.getMember_idx();
+		
+		// pet list
+		List<PetDto> pets = petService.selectPetList(memberIdx);
+		System.out.println(pets);
+		
+		// diary list
 		HashMap<String, Object> data = carediaryService.getCarediaryListByPetIdx(pet_idx, page, 2);
 		@SuppressWarnings("unchecked")
-		List<CarediaryCommand> list = (List<CarediaryCommand>) data.get("list");
+		List<CarediaryCommand> articles = (List<CarediaryCommand>) data.get("list");
 		PageNumberCommand paging = (PageNumberCommand) data.get("paging");
 		
 		ModelAndView mav = new ModelAndView("/carediary/main");
-		mav.addObject("articles", list);
+		mav.addObject("pets", pets);
+		mav.addObject("articles", articles);
 		mav.addObject("paging", paging);
 		
 		System.out.println(paging);
@@ -52,9 +66,11 @@ public class CarediaryController {
 	}
 	
 	@RequestMapping("/carediary")
-	public String toCarediaryMain() {
-		System.out.println("pet 선택:: 안함");
-		// login했을때 pet idx 구해서 넣기
+	public String toCarediaryMain(HttpServletRequest request) {
+		MemberDto mSession = (MemberDto) request.getSession().getAttribute("sc");
+		if (mSession != null) {
+			int memberIdx = mSession.getMember_idx();
+		}
 		return "redirect:/carediary/9";
 	}
 	

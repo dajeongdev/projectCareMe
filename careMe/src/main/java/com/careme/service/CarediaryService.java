@@ -51,7 +51,6 @@ public class CarediaryService {
 	public void writeCarediary(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException {
 		dto.setPet_idx((int) request.getSession().getAttribute("pet_idx"));
 		
-		// carediary 메인 테이블에 insert 하고 insert 한 데이터 idx를 pet_care_idx 멤버에 저장
 		carediaryDao.writeCarediary(dto);
 		
 		int diaryIdx = dto.getPet_care_idx();
@@ -60,14 +59,11 @@ public class CarediaryService {
 	}
 	
 	public void updateCarediary(PetCareDto dto, Integer[] deletedFiles, MultipartHttpServletRequest request) {
-		System.out.println("서비스 도착");
 		int res = carediaryDao.updateCarediary(dto);
 		int diaryIdx = dto.getPet_care_idx();
-		System.out.println("삭제파일 길이: " + deletedFiles.length);
 		if (res == 1) {
 			// 파일삭제
 			if (deletedFiles.length > 0) {
-				System.out.println("삭제파일 길이: " + deletedFiles.length);
 				Map<String, Object> deleteList = new HashMap<String, Object>();
 				List<Integer> list = Arrays.asList(deletedFiles);
 				deleteList.put("deleteList", list);

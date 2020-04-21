@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.PetDao;
 import com.careme.model.command.FileUploadCommand;
+import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 
@@ -23,7 +24,6 @@ public class PetServiceImpl implements PetService  {
 	}
 	
 	PetDto pet;
-	
 	public void setpet(PetDto pet) {
 		this.pet = pet;
 	}
@@ -56,9 +56,22 @@ public class PetServiceImpl implements PetService  {
 	}
 	
 	@Override
+	public List<PetDto> selectPetList(int memberIdx) {
+		return dao.selectPetList(memberIdx);
+	}
+	
+	@Override
 	public int insertPet(MultipartHttpServletRequest request) {
-		pet = requestToPetDto(request);
+		MemberDto mSession = (MemberDto) request.getSession().getAttribute("sc");
 		
+		pet = requestToPetDto(request);
+		try {
+			int pet_idx = dao.insertPet(pet);
+			
+			return pet_idx;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return dao.insertPet(pet);
 	};
 	
@@ -99,7 +112,6 @@ public class PetServiceImpl implements PetService  {
 		pet.setGender(request.getParameter("gender"));
 		
 		if (request.getParameter("weight") != null && !request.getParameter("weight").isEmpty()) {
-			System.out.println("weight 이 empty인가... : " + request.getParameter("weight"));
 			pet.setWeight(Double.parseDouble(request.getParameter("weight")));
 		}
 			
@@ -118,5 +130,17 @@ public class PetServiceImpl implements PetService  {
 		}
 		
 		return pet;
+	}
+	
+	public int findSeletedPet(int memberIdx) {
+		return dao.findSeletedPet(memberIdx);
+	}
+	
+	public int updateToselectedPet(int petIdx) {
+		return dao.updateToselectedPet(petIdx);
+	}
+	
+	public void deSelectPet(int memberIdx) {
+		dao.deSelectPet(memberIdx);
 	}
 }

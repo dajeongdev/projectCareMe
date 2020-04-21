@@ -47,8 +47,6 @@
 	        })
 		}
 
-		
-
 	})
 	
 	function handleFileSelect(e) {

@@ -35,7 +35,7 @@ public class MemberExcelDownloadView extends AbstractXlsView {
 		HashMap<String, Object> params = (HashMap<String, Object>) model.get("params");
 		
 		List<MemberDto> list;
-		if (params.get("searchColumn") != null) {
+		if (params.get("searchColumn") != null && params.get("searchColumn") != "") {
 			list = adminDao.searchMemberList(params);
 		} else {
 			list = adminDao.selectMemberList(params);
