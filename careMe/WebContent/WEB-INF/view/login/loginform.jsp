@@ -10,7 +10,8 @@
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>로그인폼</title>
-
+<style type="text/css">
+</style>
 </head>
 <body class="text-center">
 
@@ -84,9 +85,19 @@
 	     
 	   }
 
+	//비밀번호 찾기 창 띄우기
+	function open_pw(){
+		   window.open("pwFind", "비밀번호 찾기","scrollbars=no,resizable=no,width=500,height=400").close;
+		}
+
+	$(function() {
+	    $("#no")
+	      .attr("disabled","disabled");
+	  });
+	
 	</script>
 
-<%-- 	<c:if test="${FAIL==0}">
+	<%-- 	<c:if test="${FAIL==0}">
 		<script>alert("아이디나 비밀번호가 틀렸습니다")</script>
 	</c:if> --%>
 
@@ -125,27 +136,33 @@
 			</table>
 			<br>
 			<!-- 버튼 -->
-			<!-- 짧은버튼 -->
-			<table width="300" height="30" align="center" cellspacing="0">
+			<!-- 로그인 버튼 -->
+			<table width="460" height="30" align="center" cellspacing="0">
 				<tbody>
 					<tr>
-						<td><input type="button" value="  로그인 " onclick="Login();"
-							class="btn btn-dark btn-sm btn-block"></td>
-						<td><input type="button" value="회원가입"
-							onclick="location.href='signup'"
+						<td style="padding-left: 35px"><input type="button"
+							value="  로그인 " onclick="Login();"
 							class="btn btn-dark btn-sm btn-block"></td>
 					</tr>
 				</tbody>
 			</table>
-			<!-- 폼 길이 버튼 -->
-			<!-- <div>
-				<input type="button" value="  로그인 " onclick="Login();"
-					class="btn btn-dark btn-sm btn-block" /> <input type="button"
-					value="회원가입" onclick="location.href='signup'"
-					class="btn btn-dark btn-sm btn-block" /> -->
-	</div>
 
-	</form>
+			<!-- 회원가입/비밀번호 찾기 -->
+			<table>
+				<tbody>
+					<tr>
+						<td style="padding-left: 160px"><input style="color: grey"
+							type="button" value="회원가입   " onclick="location.href='signup'"
+							class="btn btn-sm btn-block"></td>
+						<td><input id="no" style="color: grey" type="button"
+							value="||" class="btn btn-sm btn-block"></td>
+						<td width="130"><input style="color: grey" type="button"
+							name="find" value="비밀번호 찾기" onclick="location.href='pwFind'"
+							class="btn btn-sm btn-block"></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
 	</div>
 </body>
 

@@ -23,7 +23,7 @@
 	                          form.member_id.focus();//포커스를 id박스로 이동.
 	                          return false;
 	                  }
-	                  //아이디 입력 문자수를 4~12자로 제한하는 조건문
+	                  //아이디 입력 문자수를 4~45자로 제한하는 조건문
 	                  if (form.member_id.value.length < 4 || form.member_id.value.length > 45)
 	                  {
 	                   alert("아이디는 4글자 이상으로 입력 가능합니다!");
