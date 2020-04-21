@@ -138,6 +138,8 @@ function godelete(){
 							onclick="godelete()" class="btn btn-dark btn-sm btn-block"></td>
 						<!-- onclick="location.href='deleteMember'" -->
 					</tr>
+				</tbody>
+			</table>
 		</form>
 	</div>
 </body>

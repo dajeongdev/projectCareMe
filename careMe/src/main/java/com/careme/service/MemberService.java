@@ -77,8 +77,13 @@ public class MemberService {
 	}
 	
 	//정보수정
-	public int updateOk(MemberDto mdto){
+	public List<MemberDto> updateOk(MemberDto mdto){
 		return dao.update(mdto);
+	}
+	
+	//비밀번호 수정
+	public List<MemberDto>  updatePwOk(MemberDto mdto){
+		return dao.updatePw(mdto);
 	}
 	
 	//의사 정보수정

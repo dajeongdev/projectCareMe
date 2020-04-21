@@ -17,6 +17,7 @@ public class EmailService {
 	@Autowired
 	protected JavaMailSender mailSender;
 
+	//회원가입용
 	public int sendMail(EmailDto email) throws Exception {
 
 		try {
@@ -38,7 +39,7 @@ public class EmailService {
 			msg.setText(email.getContent());
 
 			// HTML 컨텐츠를 전송하려면.
-			msg.setContent("<h1>인증번호 : "+checkNum+"</h1>", "text/html;charset=utf-8");
+			msg.setContent("<h1>회원가입을 위한 인증번호 : "+checkNum+"</h1>", "text/html;charset=utf-8");
 			System.out.println("email.getReceiver1234():::"+email.getReceiver());
 			msg.setRecipient(RecipientType.TO, new InternetAddress(email.getReceiver()));//수신자 setting
 

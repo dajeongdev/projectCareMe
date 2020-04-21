@@ -18,6 +18,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		member_pass=#{member_pass}
 	</select>
 
+	<!-- 비밀번호 찾기 -->
+	<update id="updatePw"
+		parameterType="com.careme.model.dto.MemberDto">
+		update members set
+		member_pass=#{member_pass} where
+		member_email=#{member_email}
+	</update>
+
 	<!-- 아이디 중복 체크 -->
 	<select id="idchk" resultType="int">
 		SELECT COUNT(*) FROM members
@@ -56,13 +64,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{member_nick})
 	</insert>
 
-	<!-- 정보수정 일반 -->
+	<!-- 비밀번호 변경 -->
 	<update id="update"
 		parameterType="com.careme.model.dto.MemberDto">
 		update members set
 		member_pass=#{member_pass}
 		where
-		member_id=#{member_id}
+		member_email=#{member_email}
 	</update>
 
 	<!-- 회원탈퇴 -->

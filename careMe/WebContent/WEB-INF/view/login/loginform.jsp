@@ -84,9 +84,14 @@
 	     
 	   }
 
+	//비밀번호 찾기 창 띄우기
+	function open_pw(){
+		   window.open("pwFind", "비밀번호 찾기","scrollbars=no,resizable=no,width=500,height=400").close;
+		}
+	
 	</script>
 
-<%-- 	<c:if test="${FAIL==0}">
+	<%-- 	<c:if test="${FAIL==0}">
 		<script>alert("아이디나 비밀번호가 틀렸습니다")</script>
 	</c:if> --%>
 
@@ -134,6 +139,18 @@
 						<td><input type="button" value="회원가입"
 							onclick="location.href='signup'"
 							class="btn btn-dark btn-sm btn-block"></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- 비밀번호 찾기 -->
+			<table width="100" height="50" align="center" cellspacing="0">
+				<tbody>
+					<tr height="10" align="center">
+					</tr>
+					<tr>
+						<td><input type="button" name="find" value="비밀번호 찾기"
+							onclick="open_pw()" class="btn btn-dark btn-sm btn-block"></td>
+						<!-- onclick="location.href='deleteMember'" -->
 					</tr>
 				</tbody>
 			</table>

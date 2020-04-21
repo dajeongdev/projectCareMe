@@ -49,9 +49,14 @@ public class MemberDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("member.insert", mdto);
 	}
 
-	// 정보수정 일반
-	public int update(MemberDto mdto) {
-		return getSqlSession().update("member.update", mdto);
+	// 정보수정 비밀번호 변경
+	public List<MemberDto> update(MemberDto mdto) {
+		return getSqlSession().selectList("member.update", mdto);
+	}
+	
+	// 비밀번호 찾기(랜덤생성 저장)
+	public List<MemberDto> updatePw(MemberDto mdto) {
+		return getSqlSession().selectList("member.updatePw", mdto);
 	}
 
 	// 의사등록

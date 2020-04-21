@@ -15,6 +15,21 @@
 <script type="text/javascript"></script>
 </head>
 <body>
-등록완료
+	<% response.sendRedirect("mypage"); %>
+
+ 
+	<!-- 짧은 버튼 -->
+<!-- 	<table width="400" height="50" align="center" cellspacing="0">
+		<tbody>
+			<tr height="10" align="center"></tr>
+
+			<tr>
+				<td><input type="submit" name="d_in" value="등록하기"
+					class="btn btn-dark btn-sm btn-block"></td>
+				<td><input type="reset" name="reset" value="다시 입력"
+					class="btn btn-dark btn-sm btn-block"></td>
+			</tr>
+		</tbody>
+	</table> -->
 </body>
 </html>
