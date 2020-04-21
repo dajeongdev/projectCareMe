@@ -20,9 +20,6 @@ h2, h4 { font-family: 'S-CoreDream-6Bold'; }
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <title>스토리 메인</title>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script>
-
-</script>
 </head>
 <body>
 
@@ -77,12 +74,12 @@ h2, h4 { font-family: 'S-CoreDream-6Bold'; }
 	<div>
 	<div class="row">
 	
-    <c:forEach items="${slist}" var="slist" begin="${start_idx}" end="${start_idx + 8}">
+    <c:forEach items="${list}" var="list" begin="${start_idx}" end="${start_idx + 8}">
          <div class="col-md-4">
-          <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${slist.story_board_idx}'">
+          <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${list.story_board_idx}'">
            	<c:forEach items="${fList}" var="fList" varStatus="f">
-           	<c:if test="${fList.story_board_idx == slist.story_board_idx}">
-           	  <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
+           	<c:if test="${fList.story_board_idx == list.story_board_idx}">
+           	 <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
            	</c:if>
             </c:forEach>
             <div class="card-body">
@@ -91,10 +88,10 @@ h2, h4 { font-family: 'S-CoreDream-6Bold'; }
               <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
               </div>
               <div class="content">
-              <h5 class="card-text">${slist.title}</h5>
-              <span class="card-text">${slist.member_id}</span>
-              <i class="fas fa-heart"></i>&nbsp<span class="card-heart">${slist.heart}</span>&nbsp&nbsp
-              <i class="fas fa-eye"></i>&nbsp<span class="card-count">${slist.view_count}</span>
+              <h5 class="card-text">${list.title}</h5>
+              <span class="card-text">${list.member_id}</span>
+              <i class="fas fa-heart"></i>&nbsp<span class="card-heart">${list.heart}</span>&nbsp&nbsp
+              <i class="fas fa-eye"></i>&nbsp<span class="card-count">${list.view_count}</span>
               </div>
               </div>
               
@@ -115,11 +112,11 @@ h2, h4 { font-family: 'S-CoreDream-6Bold'; }
 		<div class="row lg-3" >
 			<div class="col-lg-12" align="center">
 				<ul class="pagination pagination-lg pagination-dark">
-  
-					<li class="page-item disabled">
+  					
+  					<li class="page-item disabled">
    		  				<a class="page-link" href="#">&laquo;</a>
-   					</li>
-    
+   					 </li>
+    				
    					<c:forEach var="page" begin="${paging.startPage}" end="${paging.endPage}">
 						<c:choose>
                            <c:when test="${page eq paging.currentPage}"> 			
@@ -134,11 +131,11 @@ h2, h4 { font-family: 'S-CoreDream-6Bold'; }
 							</c:otherwise>
 						</c:choose>
    					 </c:forEach>
-    
-					<li class="page-item">
+    				
+    				<li class="page-item">
 						<a class="page-link" href="#">&raquo;</a>
     				</li>
-  							
+    				
   				</ul>
 			</div>
 		</div>
@@ -146,14 +143,14 @@ h2, h4 { font-family: 'S-CoreDream-6Bold'; }
 	 </form>
 	
 	<div class="form-inline">
-		<form class="searching" action="storyMain?searhType=${searhType}&keyword=${keyword}&currentPage=${currentPage}">
-			<input type="hidden" name="currentPage" value="1" />
-			<select id="searchType" name="searchType">
+		<form class="searching" action="storyMainSearch?currentPage=${currentPage}&searchType=${searchType}&keyword=${keyword}">
+			<select name="searchType">
 				<option value="0">작성자</option>
 				<option value="1">제목</option>
 				<option value="2">내용</option>
 			</select>
-			<input type="text" class="form-control" name="keyword" id="keyword"
+			<input type="hidden" name="currentPage" value="1" />
+			<input type="text" class="form-control" name="keyword"
 				 placeholder="검색어를 입력하세요.">
 			<button id="searchBtn" class="btn btn-primary">검색</button>
 		</form>

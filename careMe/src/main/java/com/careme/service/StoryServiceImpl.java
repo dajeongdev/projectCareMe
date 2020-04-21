@@ -16,6 +16,7 @@ import com.careme.dao.StoryDao;
 import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
+import com.careme.model.command.StoryContentCommand;
 import com.careme.model.command.StoryTagCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
@@ -56,24 +57,19 @@ public class StoryServiceImpl implements StoryService {
 	public void setPageService(PageNumberService pageService) {
 		this.pageService = pageService;
 	}
-	
-	TagDto tagDto;
-	
-	public void setTagDto(TagDto tagDto) {
-		this.tagDto = tagDto;
-	}
-	
+
 	
 	@Override
-	public List<StoryBoardDto> list() {
-		return dao.listing();
+	public List<StoryBoardDto> list(StoryCommand com) {
+		
+		return dao.listing(com);
 	}
 	public List<StoryFileDto> fileList() {
 		return dao.fileListing();
 	}
 	
 	@Override
-	public List<StoryBoardDto> totalListing(Map<String, Integer> map) {
+	public List<StoryBoardDto> listPaging(Map<String, Integer> map) {
 		return dao.totalListing(map);
 	}
 
@@ -87,7 +83,7 @@ public class StoryServiceImpl implements StoryService {
 		return dao.read(story_board_idx);
 	}
 	@Override
-	public StoryFileDto readFile(int story_board_idx) {
+	public List<StoryFileDto> readFile(int story_board_idx) {
 		return dao.readFile(story_board_idx);
 	}
 	@Override
@@ -124,16 +120,15 @@ public class StoryServiceImpl implements StoryService {
 	public StoryCommand searchList(int searchType, String keyword) {
 		StoryCommand com = new StoryCommand();
 		if(searchType == 0) {
-			com.setSearchType("member_id");
+			com.setSearhType("member_id");
 		} else if(searchType == 1) {
-			com.setSearchType("title");
+			com.setSearhType("title");
 		} else if(searchType == 2) {
-			com.setSearchType("content");
+			com.setSearhType("content");
 		}
 		com.setKeyword(keyword);
 		return com;
 	}
-	
 	@Override
 	public int insert(MultipartHttpServletRequest request) {
 		dto = requesting(request);
@@ -143,7 +138,6 @@ public class StoryServiceImpl implements StoryService {
 	public StoryBoardDto requesting(MultipartHttpServletRequest request) {
 		dto = new StoryBoardDto();
 		
-		int member_idx = 1;
 		if (request.getParameter("story_board_idx") != null && request.getParameter("story_board_idx") != "") {
 			dto.setStory_board_idx(Integer.parseInt(request.getParameter("story_board_idx")));
 		}
@@ -151,11 +145,10 @@ public class StoryServiceImpl implements StoryService {
 		if(story_board_idx != null) {
 			dto.setStory_board_idx(story_board_idx);
 		}
-		dto.setMember_idx(member_idx);
+		dto.setMember_idx(Integer.parseInt(request.getParameter("member_idx")));
 		dto.setContent(request.getParameter("content"));
 		dto.setTitle(request.getParameter("title"));
-		int tag_idx = 1;
-		dto.setTag_idx(tag_idx);
+		dto.setTag_idx(Integer.parseInt(request.getParameter("tag_idx")));
 		dto.setReg_date(LocalDateTime.now());
 		return dto;
 	}
@@ -189,23 +182,22 @@ public class StoryServiceImpl implements StoryService {
 	
 	
 	@Override
-	public int update(MultipartHttpServletRequest request)  {
-		dto	= requesting(request);
-		int i = dao.update(dto);
-		request.getSession().removeAttribute("story_board_idx");
-		return i;
+	public int update(StoryBoardDto dto)  {
+		dto.setReg_date(LocalDateTime.now());
+		return dao.update(dto);
 	}
-
+	
 	@Override
-	public void updateFile(StoryFileDto fileDto, Integer[] fileDelete, MultipartHttpServletRequest request) {
+	public void updateFile(StoryFileDto fileDto, Integer[] deletedFiles, MultipartHttpServletRequest request) {
 		int i = dao.updateFfile(fileDto);
 		int story_board_idx = dto.getStory_board_idx();
-		System.out.println("삭제파일 길이: " + fileDelete.length);
+		System.out.println("삭제파일 길이: " + deletedFiles.length);
+		
 		if (i == 1) {
-			if (fileDelete.length > 0) {
-				System.out.println("삭제파일 길이: " + fileDelete.length);
+			if (deletedFiles.length > 0) {
+				System.out.println("삭제파일 길이: " + deletedFiles.length);
 				Map<String, Object> deleteList = new HashMap<String, Object>();
-				List<Integer> list = Arrays.asList(fileDelete);
+				List<Integer> list = Arrays.asList(deletedFiles);
 				deleteList.put("deleteList", list);
 				
 				dao.deleteFile(deleteList);
@@ -231,62 +223,49 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public List<TagDto> readTag() {
-		return dao.readTag();
-	}
-	
-	@Override
-	public int insertTag(HttpServletRequest request) {
-		List<TagDto> list = new ArrayList<>();
-		tagDto = new TagDto();
-		for(TagDto tagDto : list) {
-			int member_idx = 1;
-			if(request.getParameter("tag_idx") != null && request.getParameter("tag_idx") != "") {
-				tagDto.setTag_idx((int)request.getSession().getAttribute("tag_idx"));
-			}
-			tagDto.setMember_idx(member_idx);
-			tagDto.setTag_name(request.getParameter("tag_name"));
-		}
-		return dao.insertTag(tagDto);
-	}
-	
-	@Override
-	public int insertTagType(int tag_idx, HttpServletRequest request) {
-		List<TagDto> list = new ArrayList<TagDto>();
+	public List<StoryTagCommand> readTag(StoryTagCommand tagCom) {
 		
-		for(TagDto tagDto : list) {
-			tagDto = new TagDto();
-			int board_idx = dto.getStory_board_idx();
-			if(request.getParameter("tag_idx") != null && request.getParameter("tag_idx") != "") {
-				tagDto.setTag_idx((int)request.getSession().getAttribute("tag_idx"));
-			}
-			tagDto.setBoard_idx(board_idx);
+		String[] tags = tagCom.getTags();
+		for(int i = 0; i < tags.length; i++) {
+			tagCom = new StoryTagCommand();
+			tagCom.getTags();
+			tagCom.getTag_name();
+			tagCom.getStory_board_idx();
 		}
-		return dao.insertTagType(tagDto);
+		return dao.readTag(tagCom);
 	}
 	
 	@Override
-	public int updateTag(TagDto tagDto) {
-		return dao.updateTag(tagDto);
-	}
-	@Override
-	public int deleteTag(int tag_idx) {
-		return dao.deleteTag(tag_idx);
-	}
-	
-	
-	@Override
-	public List<StoryFileDto> mainImageList() {
-		return dao.mainImageList();
-	}
-	
-	public void tag(StoryTagCommand com, HttpServletRequest request) {
-		String[] tags = com.getTag_name();
+	public int insertTag(StoryTagCommand tagCom) {
+		String[] tags = tagCom.setTag_name();
 		for(int  i = 0; i < tags.length; i++) {
-			TagDto tagDto = new TagDto();
-			tagDto.setTag_name(tags[i]);
-			tagDto.setBoard_idx(board_idx);
-			
+			tagCom = new StoryTagCommand();
+			tagCom.setTag_name(tags[i]);
+			tagCom.setDel_yn("n");
+			tagCom.setStory_board_idx(story_board_idx);
+			tagCom.set
+			//tagDto.setBoard_idx(board_idx);
+			// 나머지 값 설정 or 가져오기
 		}
-	} 
+		return dao.insertTag(tagCom);
+	}
+	
+	@Override
+	public int updateTag(StoryTagCommand tagCom) {
+		return dao.updateTag(tagCom);
+	}
+
+
+	@Override
+	public StoryContentCommand getContent(int story_board_idx) {
+		StoryContentCommand storyCom = new StoryContentCommand();
+		
+		StoryBoardDto dto = dao.read(story_board_idx);
+		List<StoryFileDto> fileDto = dao.readFile(story_board_idx);
+		storyCom.setDto(dto);
+		storyCom.setFileDto(fileDto);
+		
+		return storyCom;
+	}
+
 }

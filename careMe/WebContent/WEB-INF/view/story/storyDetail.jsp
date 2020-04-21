@@ -101,7 +101,7 @@ function change(iconID) {
 				</div>
 			</div>
 			<div class="img">
-				<img width="700" height="500" src="${fullName}${fileDto.file_path}">
+				<img width="700" height="500" src="${fullName}${fileDto[0].file_path}">
 			</div>
 			<div>
 				<p class="content"><c:out value="${dto.content}"/><span class="content-heart"><i class="fas fa-heart fa-2x"></i></span></p>
@@ -110,8 +110,8 @@ function change(iconID) {
 				<a href="">#강아지</a>
 				<a href="">#산책</a>
 				<div class="btn-group">
-					<button type="button" class="update_btn btn btn-outline-dark" OnClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
-					<button type="button" class="delete_btn btn btn-outline-dark delete_btn" onClick="document.location.href='delete?story_board_idx=${dto.story_board_idx}'">삭제</button>
+					<button type="button" class="update_btn btn btn-outline-dark" onClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
+					<button type="button" class="delete_btn btn btn-outline-dark delete_btn" onClick="document.location.href='/careMe/view/story/delete?story_board_idx=${dto.story_board_idx}'">삭제</button>
 					<button type="button" class="list_btn btn btn-outline-dark">목록</button>
 				</div>
 			</div>	

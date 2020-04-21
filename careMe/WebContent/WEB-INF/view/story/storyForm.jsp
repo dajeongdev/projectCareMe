@@ -55,7 +55,7 @@ h3 { font-family: 'S-CoreDream-6Bold'; }
 .form-group, #file {
 	padding-top: 20px;
 }
-.preview { padding-left: 30px; width:500px; }
+.preview { padding-left: 30px; width:800px; }
 
 </style>
 <title>스토리 글쓰기</title>
@@ -84,15 +84,15 @@ $(function (){
 	            '</span> '
 	        );
 	      }
-	      $(this).submit();
+	      
 	    }
 	  });
 	  $("#hash-inbox").on("click", ".tagss", function () {
 		    $(this).remove();
-		  });
+	  });
 });
 
-	/*var files = [];
+/* 	var files = [];
 	var previewIndex = 0;
 
 	// image preview 기능, input = file object[]
@@ -175,9 +175,9 @@ $(function (){
 		$("input[type=file]").change(function() {
 			addPreview($(this));
 		});
-	});*/
+	}); */
 	
-	var storedFiles = [];
+ 	var storedFiles = [];
 	var selDivs = "";
 
 	$(function() {
@@ -197,6 +197,7 @@ $(function (){
 			 $.ajax({
 		         url: "storyForm"
 	             , type : "POST"
+	             , enctype: "multipart/form-data"
 		         , contentType: false
 		         , processData: false
 	             , data : formData
@@ -238,7 +239,7 @@ $(function (){
 			}
 		}
 		$(this).parent().remove();
-	}
+	} 
 
 </script>
 </head>
@@ -253,7 +254,7 @@ $(function (){
 		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
-			<input type="hidden" name="member_idx" value="1">
+			<input type="hidden" name="member_idx" value="2">
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
@@ -267,15 +268,15 @@ $(function (){
   			</div>
   			
   			</div>
-			<!-- <div id="info_tag">
-				<input type="hidden" name="tag_idx" name="tag_idx">
+			<div id="info_tag">
+				<input type="hidden" name="tag_idx" name="tag_idx" value="3">
 				<input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div class="tag_selected">
 					<div id="hash-inbox">
 					
 					</div>					
 				</div>
-			</div>	 -->
+			</div>
 
 			<div class="btn-group">
 				<button type="submit" class="insert_btn btn btn-outline-dark" >등록</button>

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import com.careme.model.command.StoryCommand;
+import com.careme.model.command.StoryTagCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -12,8 +13,8 @@ import com.careme.model.dto.TagDto;
 
 public class StoryDao extends SqlSessionDaoSupport {
 	// 글목록
-	public List<StoryBoardDto> listing() {
-		return getSqlSession().selectList("story.list");
+	public List<StoryBoardDto> listing(StoryCommand com) {
+		return getSqlSession().selectList("story.list", com);
 	}
 	
 	public List<StoryBoardDto> totalListing(Map<String, Integer> map) {
@@ -35,8 +36,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public StoryBoardDto read(int story_board_idx) {
 		return getSqlSession().selectOne("story.read", story_board_idx);
 	}	
-	public StoryFileDto readFile(int story_board_idx) {
-		return getSqlSession().selectOne("story.readFile", story_board_idx);
+	public List<StoryFileDto> readFile(int story_board_idx) {
+		return getSqlSession().selectList("story.readFile", story_board_idx);
 	}
 	public List<StoryCommentDto> readCom(int story_board_idx) {
 		return getSqlSession().selectList("story.readCom", story_board_idx);
@@ -72,8 +73,7 @@ public class StoryDao extends SqlSessionDaoSupport {
 	
 	// 수정
 	public int update(StoryBoardDto dto) {
-		getSqlSession().update("story.update", dto);
-		return dto.getStory_board_idx();
+		return getSqlSession().update("story.update", dto);
 	}
 	public int updateFfile(StoryFileDto fileDto) {
 		return getSqlSession().update("story.updateFile", fileDto);
@@ -95,25 +95,14 @@ public class StoryDao extends SqlSessionDaoSupport {
 
 
 	// 태그
-	public List<TagDto> readTag() {
+	public List<StoryTagCommand> readTag(StoryTagCommand tagCom) {
 		return getSqlSession().selectList("story.readTag");
 	}
-	public int insertTag(TagDto tagDto) {
-		getSqlSession().insert("story.insertTag", tagDto);
-		return tagDto.getTag_idx();
+	public int insertTag(StoryTagCommand tagCom) {
+		return getSqlSession().insert("story.insertTag", tagCom);
 	}
-	public int insertTagType(TagDto tagDto) {
-		return getSqlSession().insert("story.insertTagType", tagDto);
+	public int updateTag(StoryTagCommand tagCom) {
+		return getSqlSession().update("story.updateTag", tagCom);
 	}
-	public int updateTag(TagDto tagDto) {
-		return getSqlSession().update("story.updateTag", tagDto);
-	}
-	public int deleteTag(int tag_idx) {
-		return getSqlSession().delete("story.deleteTag", tag_idx);
-	}
-	
-	// 메인용 스토리 이미지 리스트
-	public List<StoryFileDto> mainImageList() {
-		return getSqlSession().selectList("story.main_story");
-	}
+
 }

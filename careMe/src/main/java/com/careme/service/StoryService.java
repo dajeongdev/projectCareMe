@@ -9,6 +9,8 @@ import org.springframework.http.HttpRequest;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.command.StoryCommand;
+import com.careme.model.command.StoryContentCommand;
+import com.careme.model.command.StoryTagCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -16,18 +18,19 @@ import com.careme.model.dto.TagDto;
 
 public interface StoryService {
 	// 글목록
-	public List<StoryBoardDto> list();
-	public List<StoryBoardDto> totalListing(Map<String, Integer> map);
+	public List<StoryBoardDto> list(StoryCommand com);
+	public List<StoryBoardDto> listPaging(Map<String, Integer> map);
 	public int getTotal();
 	public List<StoryFileDto> fileList();
 	public StoryCommand searchList(int searchType, String keyword);
 	public List<StoryBoardDto> searching(StoryCommand com);
+	public StoryContentCommand getContent(int story_board_idx);
 	// 인기글
 	public List<StoryBoardDto> hitList();
 		
 	// 글 상세보기
 	public StoryBoardDto read(int story_board_idx);
-	public StoryFileDto readFile(int story_board_idx);
+	public List<StoryFileDto> readFile(int story_board_idx);
 	public List<StoryCommentDto> readCom(int story_board_idx);
 	// 조회수
 	public int counting(int story_board_idx);
@@ -42,8 +45,8 @@ public interface StoryService {
 	
 	
 	// 수정
-	public int update(MultipartHttpServletRequest request);
-	public void updateFile(StoryFileDto fileDto, Integer[] fileDelete, MultipartHttpServletRequest request);
+	public int update(StoryBoardDto dto);
+	public void updateFile(StoryFileDto fileDto, Integer[] deletedFiles, MultipartHttpServletRequest request);
 	public int updateCom(StoryCommentDto comDto);
 	
 	
@@ -53,12 +56,8 @@ public interface StoryService {
 	
 	
 	// 태그
-	public List<TagDto> readTag();
-	public int insertTag(HttpServletRequest request);
-	public int insertTagType(int tag_idx, HttpServletRequest request);
-	public int updateTag(TagDto tagDto);
-	public int deleteTag(int tag_idx);
-	
-	// 메인용 스토리 이미지 리스트
-	public List<StoryFileDto> mainImageList();
+	public List<StoryTagCommand> readTag(StoryTagCommand tagCom);
+	public int insertTag(StoryTagCommand tagCom);
+	public int updateTag(StoryTagCommand tagCom);
+
 }
