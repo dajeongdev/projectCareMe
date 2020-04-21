@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>비밀번호 찾기</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
@@ -22,13 +23,12 @@
 			form.member_email.focus();
 			return false;
 		}
-		if (!form.EMchk.value) {
+		if (form.mailChk.value =='N') {
 			alert("이메일 체크를 해주세요.")
 			return false;
 		}
 	}
 
-	
 	/* 이메일 있는지 확인 */
 	function fn_m_Chk() {
 		$.ajax({
@@ -51,38 +51,33 @@
 </script>
 </head>
 <body>
+<body>
+	<br>
 	<div class="#" align="center">
-		<h1>비밀번호 찾기</h1>
+		<h3>비밀번호 찾기</h3>
 	</div>
 	<br>
 
 	<form name="pwfind" class="#" action="find_pass"
 		onsubmit="return fn_pwfind()" method="post">
 		<div align="center">
-			<label class="#">CARE ME!</label>
-			<div class="#">
+			<label class="#"><h4>CARE ME!</h4></label> <br>
+			<div class="#"
+				style="padding: 15px; margin: 0 auto; max-width: 400px">
 				<input type="text" id="member_email" name="member_email"
-					maxlength="45" placeholder="이메일을 작성해주세요">
+					class="form-control" maxlength="45" placeholder="이메일을 작성해주세요"><br>
+				<button type="button" id="mailChk" name="mailChk" value="N"
+					class="btn btn-dark btn-sm btn-block" onclick=" fn_m_Chk()">이메일
+					체크</button>
+				<input type="submit" class="btn btn-dark btn-sm btn-block"
+					value="이메일 보내기">
 			</div>
-		</div>
-
-		<div class="#">
-			<!-- style="margin-left: 30%" -->
-			<!-- Button -->
-			<br>
-			<div width="400" height="50" align="center">
-				<button type="button" id="mailChk" name="mailChk" value=""
-					OnClick=" fn_m_Chk()">이메일 체크</button>
-				<input type="submit" value="이메일 보내기">
-			</div>
-		</div>
-		<br>
-		<div class="#">
 			<div class="#">
 				<div align="center"
 					style="border-top: 1px solid #888; width: 450px; margin: 20px auto; padding-top: 15px; font-size: 85%">
 					가입하신 이메일로 임시비밀번호를 전송해드리겠습니다.</div>
 			</div>
+		</div>
 		</div>
 	</form>
 </body>
