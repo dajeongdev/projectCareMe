@@ -14,7 +14,7 @@
 		currentMenu = uri.substring(uri.indexOf("/"), uri.length() - 1);
 	else
 		currentMenu = uri;
-
+	
 	//세션에 저장된 값
 	//SessionCommand sc = (SessionCommand)session.getAttribute("MINFO");
 
