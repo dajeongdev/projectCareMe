@@ -27,7 +27,9 @@ public interface PetService {
 	
 	public int deletePet(HttpServletRequest request);
 	
-	public int findSeletedPet(int memberIdx);
+	public void changeSelectedPet(int memberIdx, int petIdx);
+	
+	public int findSelectedPet(int memberIdx);
 	
 	public int updateToselectedPet(int petIdx);
 	

@@ -66,7 +66,6 @@ public class PetController {
 		petService.deletePet(request);
 		return "redirect:/main";
 	}
-
 	
 	@RequestMapping(value = "/api/pet/species", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody

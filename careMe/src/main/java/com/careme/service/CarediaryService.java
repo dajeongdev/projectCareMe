@@ -15,6 +15,7 @@ import com.careme.dao.CarediaryDao;
 import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
+import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.DefecationDto;
 import com.careme.model.dto.PetCareDto;
 import com.careme.model.dto.PetCareFileDto;
@@ -49,12 +50,9 @@ public class CarediaryService {
 	}
 	
 	public void writeCarediary(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException {
-		dto.setPet_idx((int) request.getSession().getAttribute("pet_idx"));
-		
 		carediaryDao.writeCarediary(dto);
 		
 		int diaryIdx = dto.getPet_care_idx();
-		
 		if (diaryIdx > 0) processFile(diaryIdx, request);		
 	}
 	

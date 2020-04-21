@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.PageNumberCommand;
-import com.careme.model.dto.MemberDto;
+import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.PetCareDto;
 import com.careme.model.dto.PetDto;
 import com.careme.service.CarediaryService;
@@ -37,25 +37,34 @@ public class CarediaryController {
 		this.petService = petService;
 	}
 	
-	@RequestMapping("/carediary/{pet_idx}")
-	public ModelAndView toCarediaryMain(@PathVariable("pet_idx") int pet_idx, Integer page, HttpServletRequest request) {
+	@RequestMapping("/carediary/{petIdx}")
+	public ModelAndView toCarediaryMain(@PathVariable("petIdx") int petIdx, Integer page, HttpServletRequest request) {
 		if (page == null) page = 1;
 		
 		// header script 에서 session에 pet_idx 없으면 로그인화면으로 이동하게 처리
-		MemberDto mSession = (MemberDto) request.getSession().getAttribute("sc");
-		int memberIdx = mSession.getMember_idx();
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		if (sc == null) {
+			return new ModelAndView("/main");
+		}
+		int memberIdx = sc.getMemberDto().getMember_idx();
 		
+		// pet Info
+		PetDto petDto = petService.selectPet(petIdx);
+		// 선택펫 변경
+		petService.changeSelectedPet(memberIdx, petIdx);
+		// session에 저장
+		sc.setPet_idx(petIdx);
 		// pet list
 		List<PetDto> pets = petService.selectPetList(memberIdx);
-		System.out.println(pets);
 		
 		// diary list
-		HashMap<String, Object> data = carediaryService.getCarediaryListByPetIdx(pet_idx, page, 2);
+		HashMap<String, Object> data = carediaryService.getCarediaryListByPetIdx(petIdx, page, 2);
 		@SuppressWarnings("unchecked")
 		List<CarediaryCommand> articles = (List<CarediaryCommand>) data.get("list");
 		PageNumberCommand paging = (PageNumberCommand) data.get("paging");
 		
 		ModelAndView mav = new ModelAndView("/carediary/main");
+		mav.addObject("pet", petDto);
 		mav.addObject("pets", pets);
 		mav.addObject("articles", articles);
 		mav.addObject("paging", paging);
@@ -67,11 +76,15 @@ public class CarediaryController {
 	
 	@RequestMapping("/carediary")
 	public String toCarediaryMain(HttpServletRequest request) {
-		MemberDto mSession = (MemberDto) request.getSession().getAttribute("sc");
-		if (mSession != null) {
-			int memberIdx = mSession.getMember_idx();
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		
+		if (sc != null) {
+			int memberIdx = sc.getMemberDto().getMember_idx();
+			int petIdx = petService.findSelectedPet(memberIdx);
+			return "redirect:/carediary/" + petIdx;
 		}
-		return "redirect:/carediary/9";
+		
+		return "/main";
 	}
 	
 	@RequestMapping(value= "/carediary/write", method = RequestMethod.GET)
@@ -85,13 +98,12 @@ public class CarediaryController {
 	@RequestMapping(value= "/carediary/write", method = RequestMethod.POST)
 	public String writeDairy(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException, Exception {
 		carediaryService.writeCarediary(dto, request);
-		return "/carediary/main";
+		return "redirect:/carediary/" + dto.getPet_idx();
 	}
 	
 	@RequestMapping(value= "/carediary/update", method = RequestMethod.GET)
 	public ModelAndView updateForm(@RequestParam("d_id") int carediaryIdx) {
 		ModelAndView mav = new ModelAndView("/carediary/update");
-		//HttpServletResponse response = new HttpServletResponse
 		
 		mav.addObject("smallDef", carediaryService.selectSmallDef());
 		mav.addObject("bigDef", carediaryService.selectBigDef());

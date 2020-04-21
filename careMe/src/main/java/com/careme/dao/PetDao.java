@@ -40,7 +40,7 @@ public class PetDao extends SqlSessionDaoSupport {
 		return getSqlSession().update("pet.deletePet", petIdx);
 	}
 	
-	public int findSeletedPet(int memberIdx) {
+	public int findSelectedPet(int memberIdx) {
 		return getSqlSession().selectOne("pet.findSelectedPet", memberIdx);
 	}
 	

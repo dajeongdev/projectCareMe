@@ -42,12 +42,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from pet where del_yn = 'n' and member_idx = #{member_idx}
 	</select>
 	
-	<select id="findSeletedPet" resultType="int">
-		select pet_idx from pet where del_yn = 'n' and member_idx = #{member_idx}
+	<select id="findSelectedPet" resultType="int">
+		select pet_idx from pet where del_yn = 'n' and member_idx = #{member_idx} and selected = 'y' limit 1
 	</select>
 	
 	<update id="updateToselectedPet">
-		update pet set seleted = 'y' where pet_idx = #{pet_idx}
+		update pet set selected = 'y' where pet_idx = #{pet_idx}
 	</update>
 	
 	<update id="deSelectPet">

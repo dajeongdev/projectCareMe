@@ -20,10 +20,24 @@
 		$(".pagination").addClass("justify-content-start");
 	})
 	
+	var toPetUpdateForm = function (petIdx) {
+		var result = confirm("펫 정보수정창 이동?");
+		if (result) {
+			location.href = "/careMe/pet/update?p=" + petIdx;
+		}
+	}
+
+	var selectPet = function (petIdx) {
+		location.href = "/careMe/carediary/" + petIdx;
+	}
+
+	var registPet = function () {
+		location.href = "/careMe/pet/regist";
+	}
+	
 </script>
 </head>
 <body>
-
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 
 	<div
@@ -34,14 +48,13 @@
 			<div class="row mb-3 text-center">
 				<div class="col-md-12">
 					<img alt=""
-						src="https://images.theconversation.com/files/319652/original/file-20200310-61148-vllmgm.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=754&h=503&fit=crop&dpr=1"
+						src="${hostname}${pet.profile_image_file_path}"
 						style="width: 200px; border-radius: 50%;">
-					<h1>강아지1</h1>
+					<h1>${pet.name}</h1>
 					<div>
-						<button class="btn btn-dark btn-sm">수정</button>
+						<button class="btn btn-dark btn-sm" onclick="toPetUpdateForm(${petIdx})">수정</button>
 					</div>
 				</div>
-
 
 			</div>
 
@@ -52,7 +65,7 @@
 
 				<div class="col-10 text-right">
 					<button type="button" class="btn btn-dark btn-sm"
-						data-toggle="modal" data-target="#modalSample">목록</button>
+						data-toggle="modal" data-target="#modalSample">반려동물 목록</button>
 				</div>
 			</div>
 
@@ -60,10 +73,25 @@
 			<div class="row">
 				<div class="col-md-12">
 					<!-- S:diary -->
+					<c:if test="${articles.size() eq 0}">
+					<div class="card b-1 hover-shadow mb-20">
+						<div class="media card-body table-responsive row">
+							<div class="col-md-8">
+								<img alt="" src="https://www.hostinger.com/assets/images/404-3a53e76ef1.png">
+							</div>
+							<div class="col-md-4">
+								<p>아직 작성한 일기가 없습니다.</p>
+								<p>일기를 작성 해주세요.</p>
+								<button class="btn btn-dark btn-sm" onclick="location.href='write'">일기작성</button>
+							</div>
+						</div>
+					</div>
+					</c:if>
+					
 					<c:if test="${articles.size() > 0}">
 						<c:forEach var="article" items="${articles}" varStatus="status">
 							<div class="card b-1 hover-shadow mb-20">
-								<footer class="card-header flexbox align-items-center">
+								<header class="card-header flexbox align-items-center">
 									<div>
 										<strong>${article.diary.title} : </strong> <span>${article.diary.reg_date}</span>
 									</div>
@@ -77,7 +105,7 @@
 											aria-expanded="false" aria-controls="image${status.index}">열기</button>
 										<!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
 									</div>
-								</footer>
+								</header>
 
 								<div class="media card-body table-responsive row">
 
@@ -159,7 +187,6 @@
 					</form>
 				</div>
 			</div>
-
 
 
 			<div class="modal fade" id="modalSample" tabindex="-1" role="dialog">
