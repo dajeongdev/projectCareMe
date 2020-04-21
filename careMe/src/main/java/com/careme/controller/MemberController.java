@@ -75,7 +75,7 @@ public class MemberController {
 		if (i == 0) {// 실패
 			return "redirect:loginform";
 		} else {// 성공
-			memberService.setSession(session, lc);
+			memberService.setSession(session, lc);// 아이디, 비번 저장
 			return "redirect:/main";
 		}
 	}
@@ -169,9 +169,9 @@ public class MemberController {
 
 		email2.setContent(content);
 
-		boolean result = emailPwService.sendMail2(email2);
+		String result = emailPwService.sendMail2(email2);
 
-		return "이메일이 전송 되었습니다: " + result + "<p><button type='button'  onclick=\"location.href='loginform';\">확인</button></p>";
+		return result + "<p><button type='button' onclick=\"location.href='loginform';\">확인</button></p>";
 
 	}
 
@@ -236,7 +236,7 @@ public class MemberController {
 			memberService.updateOk(mdto);
 			return "redirect:/main";
 		} else {
-			session.setAttribute("message", "아이디와 비밀번호를 다시 입력해주세요");
+			session.setAttribute("message", "비밀번호를 다시 입력해주세요");
 			return "redirect:/memberUpdateForm";
 		}
 
@@ -249,6 +249,19 @@ public class MemberController {
 	}
 
 	// 정보수정-의사
+	@RequestMapping(value = "login/dupdate")
+	public String dupdateOk(DoctorDto ddto, HttpSession session) {
+		System.out.println("디디티오"+ddto);
+		List<DoctorDto> list = memberService.dupdateOk(ddto);
+		int i6 = list.size();
+		if (i6 == 0) {
+			memberService.dupdateOk(ddto);
+			return "redirect:/main";
+		} else {
+			session.setAttribute("msg", "수정에 실패했습니다. 수정 화면으로 돌아갑니다");
+			return "redirect:/doctorUpdateForm";
+		}
+	}
 
 	// 회원탈퇴 폼
 	@RequestMapping(value = "login/deleteMember", method = RequestMethod.GET)

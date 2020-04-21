@@ -24,7 +24,7 @@ public class MemberDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("member.login", lc);
 	}
 
-	//
+	// 회원정보
 	public MemberDto selectMember(String id) {
 		return getSqlSession().selectOne("member.selectMember", id);
 	}
@@ -53,7 +53,7 @@ public class MemberDao extends SqlSessionDaoSupport {
 	public List<MemberDto> update(MemberDto mdto) {
 		return getSqlSession().selectList("member.update", mdto);
 	}
-	
+
 	// 비밀번호 찾기(랜덤생성 저장)
 	public List<MemberDto> updatePw(MemberDto mdto) {
 		return getSqlSession().selectList("member.updatePw", mdto);
@@ -63,12 +63,16 @@ public class MemberDao extends SqlSessionDaoSupport {
 	public int dinsert(DoctorDto ddto) {
 		return getSqlSession().insert("doctors.dinsert", ddto);
 	}
-	
-	// 정보수정 의사
-	public int dupdate(DoctorDto ddto) {
-		return getSqlSession().update("doctors.dupdate", ddto);
+
+	// 의사정보
+	public DoctorDto selectDoctor(int member_idx) {
+		return getSqlSession().selectOne("doctors.selectDoctor", member_idx);
 	}
 
+	// 정보수정 의사
+	public List<DoctorDto> dupdate(DoctorDto ddto) {
+		return getSqlSession().selectList("doctors.dupdate", ddto);
+	}
 
 	// 회원탈퇴
 	public int delete(MemberDto mdto) {
