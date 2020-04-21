@@ -78,7 +78,7 @@ public class CasualBoardController {
 		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
 		
 		//회원 정보 및 확인
-//		String currentId = session.getAttribute("id");
+		
 		MemberDto info = ms.memberInfo("testmin");
 		list.addObject("info", info);
 		System.out.println(info.getMember_idx());
@@ -97,7 +97,7 @@ public class CasualBoardController {
 		param.put("contentPerPage", contentPerPage);
 		
 		List<QuestionBoardDto> getArticles = bs.getCasualBoardPage(param);
-		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoard?currentPage=");
 		
 		
 		list.addObject("list", getArticles);
@@ -106,15 +106,14 @@ public class CasualBoardController {
 		return list;
 	}
 	
-	// comment heart
+	// comment heart 업데이트
 	
-	@RequestMapping(value = "/view/casualBoardView/casualWriteContent/question_board_comment_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public int updateHeart(@RequestParam int question_board_comment_idx) {
-	
+	public String updateHeart(@RequestParam int question_board_comment_idx) {
+		System.out.println(question_board_comment_idx);
 		BoardCommentDto hdto = bs.getHeartInfo(question_board_comment_idx);
 		String hcheck = hdto.getCheckHeart();
-		int currentHeart = hdto.getHeart();
 		
 		if(hcheck.equals("n")) {
 			bs.addHeartForDoctor(question_board_comment_idx);
@@ -122,7 +121,12 @@ public class CasualBoardController {
 			bs.subHeartForCasual(question_board_comment_idx);
 		}
 		
-		return currentHeart;
+		int currentHeart = hdto.getHeart();
+		System.out.println(currentHeart);
+		
+		Gson json = new Gson();
+		return json.toJson(currentHeart);
+		
 	}
 	
 
@@ -254,9 +258,14 @@ public class CasualBoardController {
 		MemberDto info = ms.memberInfo("hellojava");
 		update.addObject("info", info);
 		
+		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
+		
 		int idx = question_table_idx;
 			update.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
+			
+			update.addObject("mlist", mlist);
+			
 			return update;
 	}
 	

@@ -16,36 +16,31 @@
 <c:set var="fullName" value="<%=fullName%>" />
 
 <script type="text/javascript">
-
 function deleteArticle(question_table_idx){
         if(confirm("정말 삭제하시겠습니까?")==true){
             location.href="deleteCasualArticle?question_table_idx="+question_table_idx;
         }
     };
+</script>
 
+<script type="text/javascript">
 
 $(function(){
-	$("#heart").on("click", function(){
-		var url = "casualBoardContent/changeHeart?question_board_comment_idx="+#{item.question_board_comment_idx};
+	$("#heart").click(function(){
+		var idx=$(this).find("#heartInfo").data("idx");
+		var url="updateHeart?question_board_comment_idx="+question_board_comment_idx;
 		$.ajax({
-			type:"get",
+			type="GET",
 			url:url,
 			dataType:"json"})
-			.done(function(){
-
-				$
-
-				
-
-				})
-				
-		
+			.done(function(currentHeart){
+				$("#heartCount").html(currentHeart);
+			}).fail(function(e) {
+				alert(e.responseText);
+			});
 	});
-	
-})
+});
 
-
-    
 </script>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -134,6 +129,7 @@ $(function(){
 			<div>
 			
 			<c:forEach var="item" items="${clist}">
+			
 			<div class="row">
 				<div class="card border-dark col-md-3" align="center">
   						<p></p>
@@ -155,14 +151,11 @@ $(function(){
 							</p>
 						</blockquote>
         			</div>
-					<div class="row">
-					
-					<div class="col-md-7"></div>
-						<div class="col-md-1" id="heartCount" align="right">
-							<c:out value="${item.heart}"/>
-						</div>
+					<div class="row" id="heartInfo" data-idx="${item.question_board_comment_idx}">
+					<div class="col-md-8"></div>
 						<div class="col-md-1" align="left">
-							<i class="fas fa-heart" id="heart"></i>
+							<label for="heart">&nbsp;<span class="heartCount"><c:out value="${item.heart}"/></span>&nbsp;<i class="fas fa-heart"></i></label>
+							<button id="heart" ></button>
 						</div>	
 						<div class="col-md-3" align="right">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"

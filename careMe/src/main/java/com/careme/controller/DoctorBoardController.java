@@ -184,9 +184,20 @@ public class DoctorBoardController {
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
 	public ModelAndView toDoctorUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView("doctorBoardView/doctorBoardUpdateForm");
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		update.addObject("info", info);
+		
+		QuestionBoardDto mlist = bs.getDoctorBoardContents(question_table_idx);
+		
 		int idx = question_table_idx;
 			update.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
+
+			update.addObject("mlist", mlist);
+			
 			return update;
 	}
 
