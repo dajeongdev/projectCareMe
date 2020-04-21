@@ -1,5 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +26,7 @@
 			form.member_email.focus();
 			return false;
 		}
-		if (form.mailChk.value =='N') {
+		if (form.mailChk.value == 'N') {
 			alert("이메일 체크를 해주세요.")
 			return false;
 		}
@@ -52,8 +55,13 @@
 </head>
 <body>
 <body>
+
+	<!-- 헤더 -->
+	<div class="container-fluid" style="padding: 0;">
+		<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
+	</div>
 	<br>
-	<div class="#" align="center">
+	<div style="margin: 0 auto; margin-top: 100px;" class="text-center">
 		<h3>비밀번호 찾기</h3>
 	</div>
 	<br>
@@ -61,11 +69,11 @@
 	<form name="pwfind" class="#" action="find_pass"
 		onsubmit="return fn_pwfind()" method="post">
 		<div align="center">
-			<label class="#"><h4>CARE ME!</h4></label> <br>
+			<br>
 			<div class="#"
 				style="padding: 15px; margin: 0 auto; max-width: 400px">
 				<input type="text" id="member_email" name="member_email"
-					class="form-control" maxlength="45" placeholder="이메일을 작성해주세요"><br>
+					class="form-control" maxlength="45" placeholder="이메일을 입력해주세요"><br>
 				<button type="button" id="mailChk" name="mailChk" value="N"
 					class="btn btn-dark btn-sm btn-block" onclick=" fn_m_Chk()">이메일
 					체크</button>
@@ -78,7 +86,7 @@
 					가입하신 이메일로 임시비밀번호를 전송해드리겠습니다.</div>
 			</div>
 		</div>
-		</div>
+
 	</form>
 </body>
 </html>

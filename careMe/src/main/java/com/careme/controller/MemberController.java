@@ -171,7 +171,7 @@ public class MemberController {
 
 		boolean result = emailPwService.sendMail2(email2);
 
-		return "이메일이 전송 되었습니다: " + result + "<p><button type='button'  onclick=\"window.close();\">확인</button></p>";
+		return "이메일이 전송 되었습니다: " + result + "<p><button type='button'  onclick=\"location.href='loginform';\">확인</button></p>";
 
 	}
 
@@ -222,6 +222,7 @@ public class MemberController {
 	// 정보수정폼-일반
 	@RequestMapping(value = "login/memberUpdateForm", method = RequestMethod.GET)
 	public String form5() {
+		System.out.println("멤버 업데이트폼");
 		return "login/memberUpdateForm";
 	}
 

@@ -28,6 +28,13 @@ public class MemberService {
 	public void setDao(MemberDao dao) {
 		this.dao = dao;
 	}
+	
+	@Autowired
+	PetService petService;
+	public void setPetService(PetService petService) {
+		this.petService = petService;
+	}
+
 	//로그인 성공
 	public int loginOk(LoginCommand lc) {
 		List<MemberDto> lok = dao.login(lc);
@@ -43,8 +50,16 @@ public class MemberService {
 	public void setSession(HttpSession session, LoginCommand lc) {
 		
 		MemberDto member = memberInfo(lc.getMember_id());
+		
+		SessionCommand sc = new SessionCommand();
+		sc.setMemberDto(member);
 		System.out.println(member);
-		session.setAttribute("sc", member);
+		// DoctorDto doctorDto = doctorService.selectDoctor(int member_idx);
+		// sc.setDoctorDto(doctorDto);
+		// int pet_idx = petService.findSelectedPet(member_idx);
+		// sc.setPet_idx(pet_idx);
+		
+		session.setAttribute("sc", sc);
 		session.setAttribute("MINFO", member.getMember_nick());// 이제 닉네임 들고다님
 	}
 	

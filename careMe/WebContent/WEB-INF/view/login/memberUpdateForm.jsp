@@ -80,7 +80,7 @@ function godelete(){
 					<!-- 아이디 입력 -->
 					<td style="padding-left: 20px;"><b>ID:</b></td>
 					<td><input type="text" style="width: 530px" id="member_id"
-						readonly="readonly" name="member_id" value="${sc.member_id}"
+						readonly="readonly" name="member_id" value="${sc.memberDto.member_id}"
 						class="form-control" /></td>
 				</tr>
 				<tr>
@@ -101,14 +101,14 @@ function godelete(){
 					<!-- 닉네임 입력 -->
 					<td style="padding-left: 10px;"><b>Nick:</b></td>
 					<td><input type="text" style="width: 530px" id="member_nick"
-						readonly="readonly" name="member_nick" value="${sc.member_nick}"
+						readonly="readonly" name="member_nick" value="${sc.memberDto.member_nick}"
 						class="form-control" /></td>
 				</tr>
 				<tr>
 					<!-- 이메일 입력 -->
 					<td style="padding-left: 10px;"><b>Email:</b></td>
 					<td><input type="text" style="width: 530px" id="member_email"
-						readonly="readonly" name="member_email" value="${sc.member_email}"
+						readonly="readonly" name="member_email" value="${sc.memberDto.member_email}"
 						class="form-control" /></td>
 				</tr>
 			</table>
