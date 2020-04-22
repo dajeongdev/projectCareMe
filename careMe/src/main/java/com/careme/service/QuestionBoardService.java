@@ -6,11 +6,9 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.command.SearchBoardCommand;
-import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.QuestionBoardDto;
-import com.careme.model.dto.TagDto;
 
 public interface QuestionBoardService {
 
@@ -73,6 +71,8 @@ public interface QuestionBoardService {
 	
 	public List<BoardCommentDto> getCasualBoardComments (int question_table_idx);
 	
+	public BoardCommentDto getCasualComment(int question_board_comment_idx);
+	
 	
 // Casual Board 작성, 수정, 삭제
 	public void addCasualArticles (QuestionBoardDto dto, MultipartHttpServletRequest request);
@@ -96,10 +96,6 @@ public interface QuestionBoardService {
 	
 	public void updateCheckHeart(BoardCommentDto cdto);
 	
-// Casual Board Hashtags
-	public List<TagDto> compareHashtag(String tagValue);
-	
-	public List<TagDto> addHashtag(TagCommand tc);
-	
+
 }
 

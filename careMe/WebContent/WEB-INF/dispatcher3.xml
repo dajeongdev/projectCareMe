@@ -13,4 +13,6 @@
 	
 	<bean id="hashTagDao" class="com.careme.dao.HashTagDao" p:sqlSessionFactory-ref="sqlSessionFactory" />
 	
+	<bean id="heartDao" class="com.careme.dao.HeartDao" p:sqlSessionFactory-ref="sqlSessionFactory"/>
+	
 </beans>

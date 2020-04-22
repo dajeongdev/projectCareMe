@@ -15,15 +15,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	        SELECT LAST_INSERT_ID()
 	    </selectKey>
 	</insert>
-	<insert id="insertTagType" parameterType="com.careme.model.dto.TagDto">
-		insert into board_use_tag(board_idx, tag_idx, board_type) 
-		values(#{board_idx}, #{tag_idx}, #{board_type})
+	
+	<insert id="insertTagType" parameterType="com.careme.model.dto.BoardUseTagDto">
+		insert into board_use_tag (board_idx, tag_idx, board_type) 
+		values (#{board_idx}, #{tag_idx}, #{board_type})
 		
-		<selectKey keyProperty="tag_idx" resultType="int">
+		<selectKey keyProperty="board_use_tag_idx" resultType="int">
 	        SELECT LAST_INSERT_ID()
 	    </selectKey>
 	</insert>
-
 	
-
 </mapper>

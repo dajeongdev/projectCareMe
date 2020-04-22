@@ -80,13 +80,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().delete("doctorQuestionBrd.deleteComment", idx);
 	}
 	
-	public int addHeartForDoctor(int idx) {
-		return getSqlSession().update("doctorQuestionBrd.addHeart", idx);
-	}
-	
-	public int subHeartForDoctor(int idx) {
-		return getSqlSession().update("doctorQuestionBrd.subHeart", idx);
-	}
+
 	
 	
 	
@@ -120,13 +114,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("casualQuestionBrd.getSrchArticle", sbc);
 	}
 	
-	public List<BoardCommentDto> getCasualBoardComments(int question_table_idx){
-		return getSqlSession().selectList("casualQuestionBrd.getArtComments", question_table_idx);
-	}
-	
-	public BoardCommentDto getHeartInfo(int question_board_comment_idx) {
-		return getSqlSession().selectOne("casualQuestionBrd.getHeartInfo", question_board_comment_idx);
-	}
+
 
 	
 	
@@ -163,17 +151,18 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().delete("casualQuestionBrd.deleteComment", idx);
 	}
 	
-	public int addHeartForCasual(int idx) {
-		return getSqlSession().update("casualQuestionBrd.addHeart", idx);
+	public List<BoardCommentDto> getCasualBoardComments(int question_table_idx){
+		return getSqlSession().selectList("casualQuestionBrd.getArtComments", question_table_idx);
 	}
 	
-	public int subHeartForCasual(int idx) {
-		return getSqlSession().update("casualQuestionBrd.subHeart", idx);
+	public BoardCommentDto getCasualComment(int question_board_comment_idx){
+		return getSqlSession().selectOne("casualQuestionBrd.getArtCommentsIdx", question_board_comment_idx);
 	}
 	
-	public int updateCheckHeart(BoardCommentDto cdto) {
-		return getSqlSession().update("casualQuestionBrd.updateCheckHeart", cdto);
+	public BoardCommentDto getHeartInfo(int question_board_comment_idx) {
+		return getSqlSession().selectOne("casualQuestionBrd.getHeartInfo", question_board_comment_idx);
 	}
+	
 	
 // Hashtag 확인
 	
@@ -194,5 +183,28 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	public List<QuestionBoardDto> getContents(){
 		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
 	}
+	
+// Heart 추천
+	
+	public int addHeartForCasual(int idx) {
+		return getSqlSession().update("casualQuestionBrd.addHeart", idx);
+	}
+	
+	public int subHeartForCasual(int idx) {
+		return getSqlSession().update("casualQuestionBrd.subHeart", idx);
+	}
+	
+	public int updateCheckHeart(BoardCommentDto cdto) {
+		return getSqlSession().update("casualQuestionBrd.updateCheckHeart", cdto);
+	}
+	
+	public int addHeartForDoctor(int idx) {
+		return getSqlSession().update("doctorQuestionBrd.addHeart", idx);
+	}
+	
+	public int subHeartForDoctor(int idx) {
+		return getSqlSession().update("doctorQuestionBrd.subHeart", idx);
+	}
+	
 		
 }

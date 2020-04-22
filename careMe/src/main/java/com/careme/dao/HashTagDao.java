@@ -2,6 +2,7 @@ package com.careme.dao;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 
+import com.careme.model.dto.BoardUseTagDto;
 import com.careme.model.dto.TagDto;
 
 public class HashTagDao extends SqlSessionDaoSupport {
@@ -14,4 +15,8 @@ public class HashTagDao extends SqlSessionDaoSupport {
 		return tagDto.getTag_idx();
 	}
 
+	public int insertTagType(BoardUseTagDto bdto) {
+		return getSqlSession().insert("hashTag.insertTagType", bdto);
+	}
+	
 }
