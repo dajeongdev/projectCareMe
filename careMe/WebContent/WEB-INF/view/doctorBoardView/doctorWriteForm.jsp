@@ -10,6 +10,7 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>메인 화면</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <script>
 <!-- PET CHOOSE -->
 $(function(){
@@ -19,7 +20,7 @@ $(function(){
 				$("#petSpeciesLevel2 option").remove();
 				return false;
 			}
-		var url ="casualWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
+		var url ="doctorWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
 		$.ajax(
 			{type:"get",
 			url:url,
@@ -39,9 +40,10 @@ $(function(){
 			})
 		})
 
-</script>		
-<!--<script>		
-HASHTAG
+</script>
+		
+<script>		
+<!--HASHTAG-->
 $(function() {
     $(document).ready(function () {
         var tag = {};
@@ -74,7 +76,7 @@ $(function() {
                     })
                     // 태그 중복 검사
                     if (result.length == 0) { 
-						var url = "casualWriteFrom?tagValue="+tagValue+"&member_idx="+member_idx;
+						var url = "casualWriteForm?tagValue="+tagValue+"&member_idx="+member_idx;
                         $.ajax({
                             type:"get",
                             url=url,
@@ -107,10 +109,10 @@ $(function() {
 	})
 })	
 	
-</script>-->
+</script>
 
 <script>
-
+<!-- 사진 preview -->
 var storedFiles = [];
 var selDivs = "";
 
@@ -198,7 +200,7 @@ $(function() {
 			          		<label for="title">제목</label>
           					<input id="title" name="title" width="100%" type="text" class="form-control"/>
         				</div>
-						<input name="question_type" type="hidden" value="n" /> 
+						<input name="question_type" type="hidden" value="y" /> 
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />

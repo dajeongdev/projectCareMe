@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
+import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
@@ -91,31 +92,56 @@ public class DoctorBoardController {
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardContent", method = RequestMethod.GET)
 	public ModelAndView doctorBoardContents(@RequestParam int question_table_idx) throws Exception {
-		ModelAndView mav = new ModelAndView();
+		ModelAndView mav = new ModelAndView("doctorBoardView/doctorBoardContent");
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		mav.addObject("info", info);
+		
+		//글내용 불러오기
 		bs.getDoctorBoardViews(question_table_idx);
 		QuestionBoardDto mlist=bs.getDoctorBoardContents(question_table_idx);
+		List<BoardFileDto> flist = bs.getDoctorBoardFiles(question_table_idx);
 		List<BoardCommentDto> clist = bs.getDoctorBoardComments(question_table_idx);
+		
+		String idx = String.valueOf(question_table_idx);
+		
 		int commentCount = clist.size();
 		mav.addObject("mlist", mlist);
+		mav.addObject("flist", flist);
+		mav.addObject("idx", idx);
 		mav.addObject("clist", clist);
 		mav.addObject("commCount", commentCount);
-		mav.setViewName("doctorBoardView/doctorBoardContent");
 		return mav;
 	}
 
 	
 // 게시판 검색기능
 	@RequestMapping(value = "/view/doctorBoardSearch")
-	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword) {
-		ModelAndView list = new ModelAndView();
+	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword, int currentPage) {
+		ModelAndView list = new ModelAndView("/doctorBoardView/doctorBoardSearch");
+		int contentPerPage = 10;
+		 
+		//검색 정보 처리
 		SearchBoardCommand sbc = new SearchBoardCommand();
-		List<QuestionBoardDto> items = null;
 		sbc=bs.listSearchInfo(searchn, searchKeyword);
-		items = bs.getCasualBoardSearch(sbc);
+		
+		int start_idx=pns.getStartIdx(currentPage, contentPerPage);
+		sbc.setStart_idx(start_idx);
+		sbc.setContentPerPage(contentPerPage);
+		
+		List<QuestionBoardDto> items = bs.getDoctorBoardSearch(sbc);
+		
+		// 내용 및 페이지 번호
+		PageNumberCommand paging = new PageNumberCommand();
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "doctorBoardView/doctorBoardSearch?currentPage="+currentPage+"&searchn="+searchn+"&searchKeyword="+searchKeyword);
 		
 		list.addObject("list", items);
-		list.addObject("count", items.size());
-		list.setViewName("list");
+		list.addObject("paging", paging);
+		list.addObject("searchn", searchn);
+		list.addObject("searchKeyword", searchKeyword);
+		
 		
 		return list;
 	}
@@ -127,7 +153,7 @@ public class DoctorBoardController {
 			
 			//회원 정보 및 확인
 //			String currentId = session.getAttribute("id");
-			MemberDto info = ms.memberInfo("hellojava");
+			MemberDto info = ms.memberInfo("testmin");
 			
 			write.addObject("info", info);
 			write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
@@ -158,9 +184,20 @@ public class DoctorBoardController {
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
 	public ModelAndView toDoctorUpdate(@RequestParam int question_table_idx) throws Exception {
 		ModelAndView update = new ModelAndView("doctorBoardView/doctorBoardUpdateForm");
+		
+		//회원 정보 및 확인
+//		String currentId = session.getAttribute("id");
+		MemberDto info = ms.memberInfo("hellojava");
+		update.addObject("info", info);
+		
+		QuestionBoardDto mlist = bs.getDoctorBoardContents(question_table_idx);
+		
 		int idx = question_table_idx;
 			update.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
+
+			update.addObject("mlist", mlist);
+			
 			return update;
 	}
 
@@ -176,18 +213,17 @@ public class DoctorBoardController {
 	}
 
 	
-// 게시글 삭제
-	@RequestMapping(value="/view/doctorBoardView/deleteDoctorArticle")
-	public String deleteDoctorArticle(@RequestParam int question_table_idx) {
-		int idx = question_table_idx;
-		int result = bs.deleteDoctorArticle(idx);
-		if(result>0) {
-		return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
-		}else {
-			System.out.println("no!!!");
-		return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
+	// 게시글 삭제
+		@RequestMapping(value="/view/doctorBoardView/deleteDoctorArticle")
+		public String deleteDoctorArticle(@RequestParam int question_table_idx) {
+			int idx = question_table_idx;
+			int result = bs.deleteDoctorArticle(idx);
+			if(result>0) {
+			return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
+			}else {
+			return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
+			}
 		}
-	}
 
 //==================================================================================
 		
