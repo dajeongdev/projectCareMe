@@ -74,6 +74,7 @@ public class CarediaryService {
 		}
 	}
 	
+	// 케어다이어리 하나 정보
 	public CarediaryCommand getCarediaryByIdx(int carediaryIdx) {
 		CarediaryCommand command = new CarediaryCommand();
 		

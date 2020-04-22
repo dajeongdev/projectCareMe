@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="findDoctor">
+	<select id="selectDoctorList" resultType="com.careme.model.dto.DoctorDto">
+		select SQL_CALC_FOUND_ROWS * from doctor where del_yn = 'n' and is_certified = 'y'
+	</select>
+	
+	<select id="selectDoctorListOrderByMatching" resultType="com.careme.model.dto.DoctorDto">
+		select SQL_CALC_FOUND_ROWS doctor.* from 
+		(
+			select major.doctor_idx, ifnull(sum(own_pet.own_count), 0) matching_point
+			from doctor_major major
+			inner join doctor on major.doctor_idx = doctor.doctor_idx
+			left join
+			(	
+				select
+					spec.pet_species_ancestor pet_species
+				  , count(spec.pet_species_ancestor) own_count
+				  , spec_anc.pet_species_name spec_name
+				from pet 
+				inner join pet_species spec on pet.pet_species_idx = spec.pet_species_idx
+				inner join pet_species spec_anc on spec.pet_species_ancestor = spec_anc.pet_species_idx
+				where pet.member_idx = 1
+				and pet.del_yn = 'n'
+				group by spec.pet_species_ancestor
+				order by own_count desc
+			) own_pet on own_pet.pet_species = major.pet_species_idx
+			where doctor.is_certified = 'y'
+			  and doctor.del_yn = 'n'
+			group by major.doctor_idx
+			order by matching_point desc
+		) matched
+		inner join doctor on matched.doctor_idx = doctor.doctor_idx;
+	</select>
+	
+	<select id="selectDoctorMajor" resultType="com.careme.model.dto.DoctorMajorDto">
+		select * from doctor_major where doctor_idx = #{doctor_idx};
+	</select>
+	
+	<select id="selectPopularDoctorList">
+		select * from doctor where del_yn = 'n' and is_certified = 'y'
+	</select>
+	
+	<select id="selectTotalCount" resultType="int">
+		SELECT FOUND_ROWS()
+	</select>
+
+</mapper>

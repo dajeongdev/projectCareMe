@@ -98,8 +98,7 @@
 									<div class="card-hover-show">
 										<a class="btn btn-xs fs-10 btn-dark btn-sm"
 											href="update?d_id=${article.diary.pet_care_idx}">수정</a> <a
-											class="btn btn-xs fs-10 btn-bold btn-dark btn-sm" href="#"
-											data-toggle="modal" data-target="#modal-contact">질문하기</a>
+											class="btn btn-xs fs-10 btn-bold btn-dark btn-sm" href="/careMe/view/casualBoardView/casualWriteForm?carediary=${article.diary.pet_care_idx}&pet=${petIdx}">질문하기</a>
 										<button type="button" class="btn btn-xs fs-10 btn-dark btn-sm"
 											data-toggle="collapse" data-target="#image${status.index}"
 											aria-expanded="false" aria-controls="image${status.index}">열기</button>

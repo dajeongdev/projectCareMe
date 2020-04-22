@@ -9,11 +9,6 @@
 
 <% response.sendRedirect("main"); %>
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> master
 </body>
 
 
