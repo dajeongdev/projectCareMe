@@ -8,7 +8,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
+import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.QuestionBoardDto;
+
 
 public interface QuestionBoardService {
 
@@ -75,7 +77,7 @@ public interface QuestionBoardService {
 	
 	
 // Casual Board 작성, 수정, 삭제
-	public void addCasualArticles (QuestionBoardDto dto, MultipartHttpServletRequest request);
+	public int addCasualArticles (QuestionBoardDto dto, MultipartHttpServletRequest request);
 	
 	public void addFileForCasual(int question_table_idx, MultipartHttpServletRequest request);
 	
@@ -96,6 +98,7 @@ public interface QuestionBoardService {
 	
 	public void updateCheckHeart(BoardCommentDto cdto);
 	
+	public void heartProcess(HeartDto hdto, int question_board_comment_idx);
 
 }
 

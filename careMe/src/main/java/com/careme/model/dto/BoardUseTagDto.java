@@ -1,5 +1,6 @@
 package com.careme.model.dto;
 
+
 public class BoardUseTagDto {
 
 	int board_use_tag_idx;
@@ -20,6 +21,11 @@ public class BoardUseTagDto {
 	public void setBoard_idx(int board_idx) {
 		this.board_idx = board_idx;
 	}
+	
+
+	
+	
+	
 	public int getTag_idx() {
 		return tag_idx;
 	}
@@ -32,12 +38,15 @@ public class BoardUseTagDto {
 	public void setBoard_type(String board_type) {
 		this.board_type = board_type;
 	}
-	
 	@Override
 	public String toString() {
-		return "boardUseTagDto [board_use_tag_idx=" + board_use_tag_idx + ", board_idx=" + board_idx + ", tag_idx="
+		return "BoardUseTagDto [board_use_tag_idx=" + board_use_tag_idx + ", board_idx=" + board_idx + ", tag_idx="
 				+ tag_idx + ", board_type=" + board_type + "]";
 	}
+
+	
+	
+	
 	
 	
 	
