@@ -171,7 +171,15 @@ public class MemberController {
 
 		String result = emailPwService.sendMail2(email2);
 
-		return result + "<p><button type='button' onclick=\"location.href='loginform';\">확인</button></p>";
+		return "<head>\r\n"
+				+ "<link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.5.0/css/all.css\">\r\n"
+				+ "  <style>\r\n" + "    .a {\r\n" + "        margin: 40px 0px;\r\n" + "        text-align: center;\r\n"
+				+ "        font-size: 130px;\r\n" + "        color: #808080;\r\n" + "      }\r\n"
+				+ "</head></style></head><body><div align=\"center\"><div><h1 style=\"\r\n"
+				+ "    text-align: center;\r\n" + "    color: #222222;\r\n" + "    padding-top: 50px;\r\n" + "\">"
+				+ result + "</h1><div class=\"a\">\r\n" + "<i class=\"fas fa-envelope-open-text\"></i><br>\r\n" + "\r\n"
+				+ "\r\n"
+				+ "<button type=\"button\" onclick=\"window.close();\" style=\"border-radius: 10px;width: 120px;background-color: #111111;border: none;color:#fff;padding: 15px 0;text-align: center;text-decoration: none;display: inline-block;font-size: 15px;margin: 4px;\">닫 기</button></div></div><div align=\"center\"></div></div></body>";
 
 	}
 
@@ -251,7 +259,7 @@ public class MemberController {
 	// 정보수정-의사
 	@RequestMapping(value = "login/dupdate")
 	public String dupdateOk(DoctorDto ddto, HttpSession session) {
-		System.out.println("디디티오"+ddto);
+		System.out.println("디디티오" + ddto);
 		List<DoctorDto> list = memberService.dupdateOk(ddto);
 		int i6 = list.size();
 		if (i6 == 0) {

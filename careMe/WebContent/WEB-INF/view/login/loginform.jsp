@@ -157,8 +157,9 @@
 						<td><input id="no" style="color: grey" type="button"
 							value="||" class="btn btn-sm btn-block"></td>
 						<td width="130"><input style="color: grey" type="button"
-							name="find" value="비밀번호 찾기" onclick="location.href='pwFind'"
+							name="find" value="비밀번호 찾기" onclick=" open_pw()"
 							class="btn btn-sm btn-block"></td>
+							<!-- 페이지 이동 onclick="location.href='pwFind'" -->
 					</tr>
 				</tbody>
 			</table>
