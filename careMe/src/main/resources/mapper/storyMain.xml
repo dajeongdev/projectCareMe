@@ -128,18 +128,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteCom" parameterType="int">
 		delete from story_comment where del_yn = 'y' and story_board_idx = #{story_board_idx}
 	</delete>
-
-
-	<!-- 태그 -->
-	<select id="readTag" resultType="com.careme.model.command.StoryTagCommand">
-		select * from tags where del_yn = 'n'
-	</select>
-	<insert id="insertTag" parameterType="com.careme.model.command.StoryTagCommand">
-		insert into tags(tag_idx, tag_name, story_board_idx, del_yn) 
-		values(0, #{tag_name}, #{story_board_idx}, 'n')
-	</insert>
-	<update id="updateTag" parameterType="com.careme.model.command.StoryTagCommand">
-		update tags set tag_name = ${tag_name} where story_board_idx = #{story_board_idx}
-	</update>
 	
 </mapper>

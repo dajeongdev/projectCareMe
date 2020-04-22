@@ -53,11 +53,4 @@ public interface StoryService {
 	// 삭제
 	public int delete(HttpServletRequest request);
 	public int deleteCom(int story_comment_idx);
-	
-	
-	// 태그
-	public List<StoryTagCommand> readTag(StoryTagCommand tagCom);
-	public int insertTag(StoryTagCommand tagCom);
-	public int updateTag(StoryTagCommand tagCom);
-
 }

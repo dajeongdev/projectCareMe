@@ -61,7 +61,6 @@ public class StoryServiceImpl implements StoryService {
 	
 	@Override
 	public List<StoryBoardDto> list(StoryCommand com) {
-		
 		return dao.listing(com);
 	}
 	public List<StoryFileDto> fileList() {
@@ -220,39 +219,6 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public int deleteCom(int story_comment_idx) {
 		return dao.deleteCom(story_comment_idx);
-	}
-
-	@Override
-	public List<StoryTagCommand> readTag(StoryTagCommand tagCom) {
-		
-		String[] tags = tagCom.getTags();
-		for(int i = 0; i < tags.length; i++) {
-			tagCom = new StoryTagCommand();
-			tagCom.getTags();
-			tagCom.getTag_name();
-			tagCom.getStory_board_idx();
-		}
-		return dao.readTag(tagCom);
-	}
-	
-	@Override
-	public int insertTag(StoryTagCommand tagCom) {
-		String[] tags = tagCom.setTag_name();
-		for(int  i = 0; i < tags.length; i++) {
-			tagCom = new StoryTagCommand();
-			tagCom.setTag_name(tags[i]);
-			tagCom.setDel_yn("n");
-			tagCom.setStory_board_idx(story_board_idx);
-			tagCom.set
-			//tagDto.setBoard_idx(board_idx);
-			// 나머지 값 설정 or 가져오기
-		}
-		return dao.insertTag(tagCom);
-	}
-	
-	@Override
-	public int updateTag(StoryTagCommand tagCom) {
-		return dao.updateTag(tagCom);
 	}
 
 

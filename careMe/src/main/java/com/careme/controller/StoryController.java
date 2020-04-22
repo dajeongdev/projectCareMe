@@ -13,20 +13,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.PageNumberCommand;
+import com.careme.model.command.SessionCommand;
 import com.careme.model.command.StoryCommand;
+import com.careme.model.dto.BoardUseTagDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
 import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.HashTagService;
 import com.careme.service.MemberService;
 import com.careme.service.PageNumberService;
+import com.careme.service.StoryHashTagService;
 import com.careme.service.StoryService;
+import com.google.gson.Gson;
 
 @Controller
 public class StoryController {
@@ -64,7 +70,14 @@ public class StoryController {
 		this.mem = mem;
 	}
 
+	@Autowired
+	StoryHashTagService tagService;
 
+	public void setTagService(StoryHashTagService tagService) {
+		this.tagService = tagService;
+	}
+
+	
 	// 글목록
 	@RequestMapping(value = "/view/story/storyMain")
 	public ModelAndView listing(HttpSession session, int currentPage) {
@@ -125,9 +138,6 @@ public class StoryController {
 		mav.addObject("comCount", comCount);
 		//mav.addObject("heart", service.heart(story_board_idx));
 		//mav.addObject("comHeart", service.comHeart(story_comment_idx));
-		
-		MemberDto info = mem.memberInfo("hellojava");
-		mav.addObject("info", info);
 		mav.setViewName("/story/storyDetail");
 		return mav;
 	}
@@ -144,12 +154,42 @@ public class StoryController {
 		int no = service.insert(request);
 		fileDto.setStory_board_idx(no);
 		service.insertFile(fileDto, request);
-		//int i = fileDto.getStory_board_idx();
-		/*int i = service.insertTag(request);
-		tagDto.setTag_idx(i);
-		int j = service.insertTagType(i, request);*/
 		return "/story/storyMain";
 	}
+	
+	// 태그 
+	@RequestMapping(value = "/view/story/storyForm/hashCheck", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String hashTagCompare(HttpServletRequest request, String tag_name) {
+		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
+		
+		// 없으면 넣고, 있으면 찾아서 TagDto로 리턴함
+		TagDto tagDto = tagService.checkTag(tag_name, member_idx);
+		Gson json = new Gson();
+		return json.toJson(tagDto);
+	}
+	
+	@RequestMapping(value = "/view/story/storyForm/hashInsert", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String hashTagInsert(StoryBoardDto dto, TagDto tagDto, String board_type, HttpServletRequest request, String tag_name, MultipartHttpServletRequest mq) {
+		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
+		
+		tagDto = new TagDto();
+		BoardUseTagDto useTag = new BoardUseTagDto();
+		int board_idx = service.insert(mq);
+		int tag_idx = tagService.insertTag(tag_name, member_idx);
+		System.out.println(board_idx);
+		System.out.println(tag_idx);
+		tagDto.setTag_name(tag_name);
+		useTag.setBoard_type(board_type);
+		tagService.insertTag(tag_name, member_idx);
+		tagService.insertTagType(dto, tagDto, "s");
+		Gson json = new Gson();
+		return json.toJson(tagDto);
+	}
+	
 	
 	// 댓글 작성
 	@RequestMapping(value = "/view/story/insertCom")

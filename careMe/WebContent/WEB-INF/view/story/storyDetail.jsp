@@ -107,8 +107,9 @@ function change(iconID) {
 				<p class="content"><c:out value="${dto.content}"/><span class="content-heart"><i class="fas fa-heart fa-2x"></i></span></p>
 			</div>
 			<div class="box_tag">
-				<a href="">#강아지</a>
-				<a href="">#산책</a>
+				<c:forEach items="" var="">
+				<a href="">${tag}</a>
+				</c:forEach>
 				<div class="btn-group">
 					<button type="button" class="update_btn btn btn-outline-dark" onClick="document.location.href='/careMe/view/story/storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
 					<button type="button" class="delete_btn btn btn-outline-dark delete_btn" onClick="document.location.href='/careMe/view/story/delete?story_board_idx=${dto.story_board_idx}'">삭제</button>

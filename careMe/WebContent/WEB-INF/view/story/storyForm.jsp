@@ -25,7 +25,7 @@ h3 { font-family: 'S-CoreDream-6Bold'; }
 	margin-top: -330px;
 	font-family: 'S-CoreDream-4Regular';
 }
-#hash-search, #content, #title, .custom-file-label, #tag_name {
+#hash-search, #content, #title, .custom-file-label, #tag {
 	width: 1000px;
 }
 .custom-file-label {
@@ -35,13 +35,13 @@ h3 { font-family: 'S-CoreDream-6Bold'; }
 	height: 300px;
 }
 #title { margin-bottom: 30px;}
-#hash-inbox { 
+#tag-list { 
 	margin-top:2px;
 	background: #bdbdbd;
 	width: 1000px;
 	height: 100px;
 }
-.added-tag {
+.hashTag { 
 	background: #82b1ff;
 	padding: 5px 5px;
 	margin: 5px 5px;
@@ -60,38 +60,6 @@ h3 { font-family: 'S-CoreDream-6Bold'; }
 </style>
 <title>스토리 글쓰기</title>
 <script>
-
-// 해쉬태그 입력
-$(function (){
-	  $("#tag_name").on("keyup", function (e) {// 해시태그 입력칸 이벤트
-	    var tag = "";
-	    var existed = false;// 이미 태그에 올라갔나 확인하기 위함
-
-	    if (e.which == 188 || e.which == 13) {// 누른게 쉼표거나 엔터
-	      tag = $(this).val().replace(/[\s,]+/g, ""); // 쉼표나 엔터 ""으로 바꿔서 tag에 저장
-	      $(this).val("");// 입력창 비우기
-
-	      $("#hash-inbox span").each(function () { // 해시태그 들어간 div 안의 span
-	        var name = $(this).find(".tags").val();// input hidden의 값
-	        if (name == tag) existed = true;// 이미 있음
-	      });
-
-	      if (tag != "" && !existed) { // 태그가 빈문자열이 아니고 이미 올린게 아니면
-	        $("#hash-inbox").append(
-	            '<span class="added-tag">#' +
-	            tag + '<a href="javascript:;"> X</a>' +
-	            '<input type="hidden" class="tags" name="tags" value="' + tag + '" >' +
-	            '</span> '
-	        );
-	      }
-	      
-	    }
-	  });
-	  $("#hash-inbox").on("click", ".tagss", function () {
-		    $(this).remove();
-	  });
-});
-
 /* 	var files = [];
 	var previewIndex = 0;
 
@@ -242,6 +210,70 @@ $(function (){
 	} 
 
 </script>
+<script>	
+//태그를 저장할 배열
+var tags = [];
+var tagNames = [];
+//태그를 보여줄 element
+$(function() {
+	$("#tag").on("keypress", function (e) {
+		if (e.key === "Enter" || e.keyCode == 32) {
+			var inputText = $("#tag").val(); // input 태그에 입력한 값
+			
+			//inputText를 tagNames[]를 for문 돌려서 비교해서 같으면 중복!
+			for(var i=0; i < tagNames.length; i++){
+				if(tagNames[i] == inputText){
+					console.log(tagNames[i] + "==" + inputText);
+					$("#tag").val("");
+					alert("중복!");
+					return;
+				}				
+			}
+			
+			// 태그 중복확인
+			tagCheck(inputText);
+			e.preventDefault();
+		}
+		console.log("enter");
+	})
+	
+})	
+
+var tagCheck = function (tag) {
+	var url = $(location).attr('pathname') + "/hashCheck"
+	var board_idx = 
+	$.ajax({
+		type: "get",
+		url: url + "?tag_name=" + tag,
+		dataType:"json"
+	}).done(function(data) {
+		console.log(data);
+		
+		//배열에 tag의 idx를 넣어준다
+		var idx = data.tag_idx;
+		var name = data.tag_name;
+		var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "</span>";
+
+		//서버에 보낼 배열에 넣기
+		tags.push(idx);
+		// input enter 눌렸을때 input 있는 value text 와 배열에 있는 text를 비교해서 있으면 중복알림! 없으면 ajax!
+		tagNames.push(name);
+
+		// 태그 붙이기
+		$("#tag-list").append(html);
+		// input 비우기
+		$("#tag").val("");
+		
+		//alert("성공!");
+	}).fail(function() {
+		alert("실패!");
+	});
+ 	$("#tag-list").on("click", ".hashTag", function () {
+		$(this).remove();
+	});
+}
+	
+</script>
 </head>
 <body>
 
@@ -254,7 +286,6 @@ $(function (){
 		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
-			<input type="hidden" name="member_idx" value="2">
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
@@ -269,12 +300,10 @@ $(function (){
   			
   			</div>
 			<div id="info_tag">
-				<input type="hidden" name="tag_idx" name="tag_idx" value="3">
-				<input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
-				<div class="tag_selected">
-					<div id="hash-inbox">
-					
-					</div>					
+				<input type="hidden" name="tag" id="rdtag">
+				<input type="text" class="form-control" id="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+				<div id="tag-list">
+										
 				</div>
 			</div>
 

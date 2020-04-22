@@ -9,7 +9,6 @@ import com.careme.model.command.StoryTagCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
-import com.careme.model.dto.TagDto;
 
 public class StoryDao extends SqlSessionDaoSupport {
 	// 글목록

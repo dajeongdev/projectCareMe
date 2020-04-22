@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.careme.dao.HashTagDao;
+import com.careme.model.dto.BoardUseTagDto;
 import com.careme.model.dto.TagDto;
 
 @Service
 public class HashTagService {
 	@Autowired
 	HashTagDao hashTagDao;
+	
 	public void setHashTagDao(HashTagDao hashTagDao) {
 		this.hashTagDao = hashTagDao;
 	}
@@ -27,14 +29,11 @@ public class HashTagService {
 		return tagDto;
 	}
 	
-	public TagDto insertTag(String tag_name, int member_idx) {
-		
+	public int insertTag(String tag_name, int member_idx) {
 		TagDto tdto = new TagDto();
 		tdto.setTag_name(tag_name);
 		tdto.setMember_idx(member_idx);
-		
-		hashTagDao.insertHashTag(tdto);
-		return tdto;
+		return hashTagDao.insertHashTag(tdto);
 	}
 	
 	
