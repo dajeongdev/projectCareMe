@@ -41,7 +41,7 @@ public class MemberController {
 
 	@Autowired
 	EmailPwService emailPwService;
-	
+
 	@Autowired
 	PetService petService;
 
@@ -56,7 +56,7 @@ public class MemberController {
 	public void setEmailService(EmailService emailService) {
 		this.emailService = emailService;
 	}
-	
+
 	public void setPetService(PetService petService) {
 		this.petService = petService;
 	}
@@ -198,7 +198,6 @@ public class MemberController {
 	@RequestMapping(value = "login/doctorInsertForm")
 	public String form4(HttpServletRequest request, Model model) {
 		List<PetSpeciesDto> selectPet = petService.selectPetSpeciesLevel1();
-		System.out.println(selectPet);
 		model.addAttribute("addpet", selectPet); // 모델에 추가
 
 		return "login/doctorInsertForm";
@@ -250,7 +249,10 @@ public class MemberController {
 
 	// 정보수정폼-의사
 	@RequestMapping(value = "login/doctorUpdateForm")
-	public ModelAndView form6(HttpSession session) {
+	public ModelAndView form6(HttpSession session, Model model) {
+		List<PetSpeciesDto> selectPet = petService.selectPetSpeciesLevel1();// 체크박스
+		model.addAttribute("addpet", selectPet); // 모델에 추가
+		System.out.println("받아온동물" + selectPet);
 		ModelAndView mav = new ModelAndView("login/doctorUpdateForm");
 		int member_idx = ((SessionCommand) session.getAttribute("sc")).getMemberDto().getMember_idx();
 		DoctorDto doctorDto = memberService.selectDoctor(member_idx);
@@ -262,13 +264,9 @@ public class MemberController {
 	@RequestMapping(value = "login/dupdateok")
 	public String dupdateOk(DoctorDto ddto, HttpSession session) {
 		String m_id = ((SessionCommand) session.getAttribute("sc")).getMemberDto().getMember_id();
-		// System.out.println("m_id:::"+m_id);
-		// System.out.println("ddto.getMember_idx():::"+ddto.getMember_idx());
 		List<DoctorDto> list = memberService.dupdateOk(ddto);
-		// System.out.println(list);
 		DoctorDto selectDoctor = memberService.selectDoctor(ddto.getMember_idx());
 		MemberDto selectMember = memberService.memberInfo(m_id);
-		// System.out.println("selectDoctor::"+selectDoctor);
 		SessionCommand sc = new SessionCommand();
 		sc.setDoctorDto(selectDoctor);
 		sc.setMemberDto(selectMember);

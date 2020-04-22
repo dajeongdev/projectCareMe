@@ -100,7 +100,6 @@
 
 		//form.submit();
 	}
-	
 </script>
 </head>
 <body>
@@ -189,16 +188,13 @@
 				<tr>
 					<!-- 체크박스 폼 -->
 					<td><b>Mjor:</b></td>
-					<td>
-						<c:forEach var="item" items="${addpet}">
-							<input type="checkbox" id="addpet${item.pet_species_idx}" 
-								   name="addpet1" value="${item.pet_species_idx}">
+					<td><c:forEach var="item" items="${addpet}">
+							<input type="checkbox" id="addpet${item.pet_species_idx}"
+								name="addpet1" value="${item.pet_species_idx}">
 							<label for="addpet${item.pet_species_idx}">
-								${item.pet_species_name}
-							</label>	
-							
-						</c:forEach>
-					</td>
+								${item.pet_species_name} </label>
+
+						</c:forEach></td>
 				</tr>
 				<!-- 짧은 버튼 -->
 				<table width="400" height="50" align="center" cellspacing="0">

@@ -130,18 +130,17 @@
 
 				<tr>
 					<td><input type="hidden" id="doctor_idx" name="doctor_idx"
-						value="${doctorDto.doctor_idx}" />
-						<input type="hidden" id="member_idx" name="member_idx"
-						value="${doctorDto.member_idx}" />
-						
-						</td>
+						value="${doctorDto.doctor_idx}" /> <input type="hidden"
+						id="member_idx" name="member_idx" value="${doctorDto.member_idx}" />
+
+					</td>
 				</tr>
 				<tr>
 					<!-- 의사면허 번호-->
 					<td><b>License:</b></td>
 					<td><input type="text" style="width: 530px"
 						id="doctor_license" name="doctor_license" maxlength="45"
-		   				class="form-control" readonly="readonly"
+						class="form-control" readonly="readonly"
 						value="${doctorDto.doctor_license}" /></td>
 				</tr>
 				<tr>
@@ -188,15 +187,22 @@
 						id="doctor_hospital_tel" name="doctor_hospital_tel"
 						class="form-control" value="${doctorDto.doctor_hospital_tel}" /></td>
 				</tr>
-				
+
 				<tr>
 					<!-- 면허증 파일 -->
 					<td>File:</td>
-					<td>
-						<img src="${hostname}${doctorDto.certification_document}" id="cert_preview">
-					</td>
+					<td><img src="${hostname}${doctorDto.certification_document}"
+						id="cert_preview"></td>
 				</tr>
-				
+				<!-- 체크박스 폼 -->
+				<td><b>Mjor:</b></td>
+				<td><c:forEach var="item" items="${addpet}">
+						<input type="checkbox" id="addpet${item.pet_species_idx}"
+							name="addpet1" value="${item.pet_species_idx}">
+						<label for="addpet${item.pet_species_idx}">
+							${item.pet_species_name} </label>
+
+					</c:forEach>
 			</table>
 			<!-- 짧은 버튼 -->
 			<table width="400" height="50" align="center" cellspacing="0">
