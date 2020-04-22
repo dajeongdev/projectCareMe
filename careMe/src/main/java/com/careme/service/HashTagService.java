@@ -16,6 +16,10 @@ public class HashTagService {
 		this.hashTagDao = hashTagDao;
 	}
 	
+	public void selectTag(String tag_name) {
+		TagDto tagDto = hashTagDao.selectHashTag(tag_name);
+	}
+	
 	public TagDto checkTag(String tag_name, int member_idx) {
 		TagDto tagDto = hashTagDao.selectHashTag(tag_name);
 		
@@ -35,13 +39,11 @@ public class HashTagService {
 		tdto.setMember_idx(member_idx);
 		hashTagDao.insertHashTag(tdto);
 		return tdto;
-
 	}
 	
 	public int insertTagType(BoardUseTagDto bdto) {
 		int result = hashTagDao.insertTagType(bdto);
 		return result;
-		
 	}
 	
 	public int insertUseTag(String board_type, int board_idx, int[] tag_idx) {
@@ -50,7 +52,7 @@ public class HashTagService {
 		bdto.setBoard_type(board_type);
 		int result=0;
 	
-		for(int i=0; i<tag_idx.length; i++) {
+		for(int i = 0; i < tag_idx.length; i++) {
 			bdto.setTag_idx(tag_idx[i]);
 			result+=insertTagType(bdto);
 		}

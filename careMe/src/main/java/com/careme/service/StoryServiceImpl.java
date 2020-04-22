@@ -1,5 +1,6 @@
 package com.careme.service;
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,7 +18,6 @@ import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
 import com.careme.model.command.StoryContentCommand;
-import com.careme.model.command.StoryTagCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -89,20 +89,15 @@ public class StoryServiceImpl implements StoryService {
 	public List<StoryCommentDto> readCom(int story_board_idx) {
 		return dao.readCom(story_board_idx);
 	}
-
+	
 	@Override
-	public int counting(int story_board_idx) {
-		return dao.counting(story_board_idx);
+	public StoryCommentDto readComIdx(int story_comment_idx) {
+		return dao.readComIdx(story_comment_idx);
 	}
 	
 	@Override
-	public int heart(int story_board_idx) {
-		return dao.heart(story_board_idx);
-	}
-
-	@Override
-	public int comHeart(int story_comment_idx) {
-		return dao.comHeart(story_comment_idx);
+	public int counting(int story_board_idx) {
+		return dao.counting(story_board_idx);
 	}
 	
 	@Override
@@ -134,7 +129,7 @@ public class StoryServiceImpl implements StoryService {
 		return dao.insert(dto);
 	}
 
-	public StoryBoardDto requesting(MultipartHttpServletRequest request) {
+	public StoryBoardDto requesting(HttpServletRequest request) {
 		dto = new StoryBoardDto();
 		
 		if (request.getParameter("story_board_idx") != null && request.getParameter("story_board_idx") != "") {
@@ -144,10 +139,8 @@ public class StoryServiceImpl implements StoryService {
 		if(story_board_idx != null) {
 			dto.setStory_board_idx(story_board_idx);
 		}
-		dto.setMember_idx(Integer.parseInt(request.getParameter("member_idx")));
 		dto.setContent(request.getParameter("content"));
 		dto.setTitle(request.getParameter("title"));
-		dto.setTag_idx(Integer.parseInt(request.getParameter("tag_idx")));
 		dto.setReg_date(LocalDateTime.now());
 		return dto;
 	}
@@ -181,9 +174,11 @@ public class StoryServiceImpl implements StoryService {
 	
 	
 	@Override
-	public int update(StoryBoardDto dto)  {
-		dto.setReg_date(LocalDateTime.now());
-		return dao.update(dto);
+	public int update(StoryBoardDto dto, MultipartHttpServletRequest request)  {
+		int i = 0;
+		dto = requesting(request);
+		i = dao.update(dto);
+		return i;
 	}
 	
 	@Override
@@ -212,8 +207,8 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
-	public int delete(HttpServletRequest request) {
-		return dao.delete((int)request.getSession().getAttribute("story_board_idx")); 
+	public int delete(int story_board_idx) {
+		return dao.delete(story_board_idx); 
 	}
 
 	@Override
@@ -232,6 +227,30 @@ public class StoryServiceImpl implements StoryService {
 		storyCom.setFileDto(fileDto);
 		
 		return storyCom;
+	}
+
+
+	@Override
+	public int addHeart(int idx) {
+		return dao.addHeart(idx);
+	}
+
+
+	@Override
+	public int subHeart(int idx) {
+		return dao.subHeart(idx);
+	}
+
+
+	@Override
+	public int addComHeart(int idx) {
+		return dao.addComHeart(idx);
+	}
+
+
+	@Override
+	public int subComHeart(int idx) {
+		return dao.subComHeart(idx);
 	}
 
 }

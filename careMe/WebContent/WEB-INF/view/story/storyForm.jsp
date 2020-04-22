@@ -9,10 +9,9 @@
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
-@font-face { font-family: 'S-CoreDream-4Regular'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff'); font-weight: normal; font-style: normal; }
-@font-face { font-family: 'S-CoreDream-6Bold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff'); font-weight: normal; font-style: normal; }
-.story_form {margin: 0 auto; padding: 0;}
-h3 { font-family: 'S-CoreDream-6Bold'; }
+@font-face { font-family: 'GmarketSansMedium'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
+h3 { font-family: 'GmarketSansBold'; }
 .whole {
 	width: 1000px;
 	height: 1100px;  
@@ -23,7 +22,7 @@ h3 { font-family: 'S-CoreDream-6Bold'; }
 	top: 50%;
 	margin-left: -500px;
 	margin-top: -330px;
-	font-family: 'S-CoreDream-4Regular';
+	font-family: 'GmarketSansMedium';
 }
 #hash-search, #content, #title, .custom-file-label, #tag {
 	width: 1000px;
@@ -241,7 +240,6 @@ $(function() {
 
 var tagCheck = function (tag) {
 	var url = $(location).attr('pathname') + "/hashCheck"
-	var board_idx = 
 	$.ajax({
 		type: "get",
 		url: url + "?tag_name=" + tag,
@@ -252,10 +250,11 @@ var tagCheck = function (tag) {
 		//배열에 tag의 idx를 넣어준다
 		var idx = data.tag_idx;
 		var name = data.tag_name;
-		var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "</span>";
+		var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "<a href='javascript:;'>X</a>" + "</span>";
 
 		//서버에 보낼 배열에 넣기
 		tags.push(idx);
+		$("#rdTag").val(tags);
 		// input enter 눌렸을때 input 있는 value text 와 배열에 있는 text를 비교해서 있으면 중복알림! 없으면 ajax!
 		tagNames.push(name);
 
@@ -263,8 +262,8 @@ var tagCheck = function (tag) {
 		$("#tag-list").append(html);
 		// input 비우기
 		$("#tag").val("");
-		
-		//alert("성공!");
+
+		location.href="/careMe/view/story/storyMain?currentPage=1";
 	}).fail(function() {
 		alert("실패!");
 	});
@@ -290,26 +289,29 @@ var tagCheck = function (tag) {
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
 				
-				 <label class="custom-file-label" for="files">사진 선택</label>
+				<!-- 사진(파일) 등록 -->
+				<label class="custom-file-label" for="files">사진 선택</label>
 				<div class="row" id="selectedFiles">
+				
 				</div>
 			<div class="form-group">
 			 	<textarea class="form-control" name="content"
-    			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
+    			id="content" rows="2" placeholder="스토리를 들려주세요."></textarea>
   			</div>
   			
-  			</div>
-			<div id="info_tag">
+  			<!-- 해시태그 -->
+			<div id="tag_content">
 				<input type="hidden" name="tag" id="rdtag">
-				<input type="text" class="form-control" id="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
-				<div id="tag-list">
+			</div>
+			<input type="text" class="form-control" id="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+			<div id="tag-list">
 										
-				</div>
 			</div>
 
 			<div class="btn-group">
 				<button type="submit" class="insert_btn btn btn-outline-dark" >등록</button>
-				<button type="button" class="list_btn btn btn-outline-dark" OnClick="document.location.href='storyMain?currentPage=1'">목록</button>
+				<button type="button" class="list_btn btn btn-outline-dark" onClick="document.location.href='storyMain?currentPage=1'">목록</button>
+			</div>
 			</div>
 		</div>
 	</form>

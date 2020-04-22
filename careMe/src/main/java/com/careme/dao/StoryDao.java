@@ -1,11 +1,11 @@
 package com.careme.dao;
 
 import java.util.List;
+
 import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import com.careme.model.command.StoryCommand;
-import com.careme.model.command.StoryTagCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -41,6 +41,10 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public List<StoryCommentDto> readCom(int story_board_idx) {
 		return getSqlSession().selectList("story.readCom", story_board_idx);
 	}
+	public StoryCommentDto readComIdx(int story_comment_idx) {
+		return getSqlSession().selectOne("story.readComIdx", story_comment_idx);
+	}
+	
 	// 조회수
 	public int counting(int story_board_idx) {
 		return getSqlSession().update("story.viewCount", story_board_idx);
@@ -91,17 +95,22 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int deleteCom(int story_comment_idx) {
 		return getSqlSession().delete("story.deleteCom", story_comment_idx);
 	}
-
-
-	// 태그
-	public List<StoryTagCommand> readTag(StoryTagCommand tagCom) {
-		return getSqlSession().selectList("story.readTag");
+	
+	// 좋아요
+	public int addHeart(int idx) {
+		return getSqlSession().update("story.addHeart", idx);
 	}
-	public int insertTag(StoryTagCommand tagCom) {
-		return getSqlSession().insert("story.insertTag", tagCom);
+	
+	public int subHeart(int idx) {
+		return getSqlSession().update("story.subHeart", idx);
 	}
-	public int updateTag(StoryTagCommand tagCom) {
-		return getSqlSession().update("story.updateTag", tagCom);
+	
+	public int addComHeart(int idx) {
+		return getSqlSession().update("story.addComHeart", idx);
+	}
+	
+	public int subComHeart(int idx) {
+		return getSqlSession().update("story.subComHeart", idx);
 	}
 
 }

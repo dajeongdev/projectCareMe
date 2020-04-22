@@ -54,16 +54,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		on story_comment.member_idx = members.member_idx 
 		where story_comment.story_board_idx = #{story_board_idx}
 	</select>
+	<select id="readComIdx" parameterType="int" resultType="com.careme.model.dto.StoryCommentDto">
+		select * from story_comment inner join members 
+		on story_comment.member_idx = members.member_idx 
+		where story_comment.story_board_idx = #{story_board_idx}
+	</select>
 	<!-- 조회수 증가 O-->
 	<update id="viewCount" parameterType="com.careme.model.dto.StoryBoardDto">
 		update story_board 
 		set view_count = view_count + 1 
 		where story_board_idx = #{story_board_idx}
 	</update>
-	<!-- 좋아요 수 증가 -->
-	<update id="heart" parameterType="com.careme.model.dto.StoryBoardDto">
+	<!-- 좋아요 수 -->
+	<update id="addHeart" parameterType="int">
 		update story_board 
 		set heart = heart + 1 
+		where story_board_idx = #{story_board_idx}
+	</update>
+	<update id="subHeart" parameterType="int">
+		update story_board 
+		set heart = heart -1 
 		where story_board_idx = #{story_board_idx}
 	</update>
 	
@@ -109,10 +119,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update story_board set content = #{content}
 	</update>
 	<!-- 좋아요 수 증가 -->
-	<update id="comHeart" parameterType="com.careme.model.dto.StoryCommentDto">
-		update story_comment 
+	<update id="addComHeart" parameterType="int">
+		update story_comment
 		set heart = heart + 1 
-		where story_comment_idx = #{story_comment_idx}
+		where story_board_idx = #{story_board_idx}
+	</update>
+	<update id="subComHeart" parameterType="int">
+		update story_comment 
+		set heart = heart -1 
+		where story_board_idx = #{story_board_idx}
 	</update>
 	
 	

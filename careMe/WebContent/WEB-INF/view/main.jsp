@@ -15,7 +15,7 @@ h3 { font-family: 'GmarketSansBold'; }
 .row-doctor > p { margin-bottom: 0 !important; padding-left: 40px;}
 .container, .row-doctor1, .row-doctor2 {width: 1140px;}
 .p-4 > h4 { padding-bottom: 5px;}
-.row-content { padding-top: 50px; padding-bottom: 20px; }
+.row-content { padding-bottom: 20px; }
 .row-doctor1, .row-doctor2 { margin-left: 20px;}
 .row-doctor1 > .col-sm-3, .row-doctor2 > .col-sm-3, .row-story > .col-sm-3 { width:285px; margin-left: 0 !important; padding-right: 0 !important; padding-left: 0 !important;}
 .row-story > .col-sm-3 { padding-right: 0 !important; padding-left: 0 !important;}
@@ -23,6 +23,7 @@ h3 { font-family: 'GmarketSansBold'; }
 .row-doctor { margin:0 auto !important; padding: 0 !important; padding-bottom: 20px;}}
 .row-doctor > h3 { float:left; }
 .doctor-content { margin: 0 auto;width: 1140px; }
+hr { width: 1140px; margin-top: 0!important; }
 </style>
 
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
@@ -36,6 +37,7 @@ h3 { font-family: 'GmarketSansBold'; }
 	<div class="container min-vh-100 pt-3 text-center">		
 		<div class="row row-content">
 			<h3>반려동물과 오랫동안 함께하고 싶다면 </h3>
+			<hr>
 			<div class="row mb-3">
 			 <div class="col-md-4">
 		      <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -43,7 +45,8 @@ h3 { font-family: 'GmarketSansBold'; }
 		         <img class="card-img-top" height="250px" src="<%=request.getContextPath()%>/resources/img/main/dogwithfruit.jpg">
 		        </div>
 		        <div class="col p-4 d-flex flex-column position-static">
-		          <h5>반려동물은 이런 과일을 좋아해요!&nbsp&nbsp</h5>
+		          <h5>반려동물은 이런 과일을 좋아해요!</h5>
+		          <br>
 		        </div>
 		      </div>
 		    </div>
@@ -75,6 +78,7 @@ h3 { font-family: 'GmarketSansBold'; }
 		<div class="row row-doctor">
 		<h3>전문의 찾기</h3>
 		<p>클릭해서 내 반려동물을 잘 케어할 수 있는 전문의 선생님들의 리스트를 살펴보세요!</p>
+		<hr>
 		<div class="doctor-content">
 			<div class="row row-doctor1">
 				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-dog.jpg"></a></div>
