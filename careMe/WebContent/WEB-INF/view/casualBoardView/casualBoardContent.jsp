@@ -170,7 +170,7 @@ $(function(){
 						<div id="heartDiv${status.index}" class="col-md-1" align="left">
 							
 							<label for="heart${item.question_board_comment_idx}"><span id="count${item.question_board_comment_idx}">${item.heart}</span>&nbsp;<i class="fas fa-heart"></i></label>
-							<button id="heart${item.question_board_comment_idx}" onclick="testFunction(${item.question_board_comment_idx})"></button>
+							<button id="heart${item.question_board_comment_idx}" onclick="testFunction(${item.question_board_comment_idx})" style="display:none"></button>
 							
 						</div>	
 						<div class="col-md-3" align="right">

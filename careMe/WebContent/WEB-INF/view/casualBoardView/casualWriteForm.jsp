@@ -22,7 +22,7 @@ $(function(){
 			}
 		var url ="casualWriteForm/pet_species_idx?level=2&ancestor="+ancestor;
 		$.ajax(
-			{type:"get",
+			{type:"GET",
 			url:url,
 			dataType:"json"})
 			.done(function(items){
@@ -75,10 +75,10 @@ $(function() {
 })	
 
 var tagCheck = function (tag) {
-	var url = $(location).attr('pathname') + "/hashCheck"
+	var url = $(location).attr('pathname') + "/hashCheck";
 	$.ajax({
-		type: "get",
-		url: url + "?tag_name=" + tag,
+		type:"POST",
+		url:url + "?tag_name=" + tag,
 		dataType:"json"
 	}).done(function(data) {
 		console.log(data);
@@ -90,9 +90,10 @@ var tagCheck = function (tag) {
 
 		//서버에 보낼 배열에 넣기
 		tags.push(idx);
-		$("#rdTag").val(tags);
 		// input enter 눌렸을때 input 있는 value text 와 배열에 있는 text를 비교해서 있으면 중복알림! 없으면 ajax!
 		tagNames.push(name);
+		// hidden input 에 넣어주기
+		$("#rdTag").val(tags);
 
 
 		// 태그 붙이기
@@ -113,7 +114,7 @@ var tagCheck = function (tag) {
 var storedFiles = [];
 var selDivs = "";
 
-$(function() {
+$(function(){
 
 	selDiv = $("#selectedFiles");
 
@@ -127,13 +128,14 @@ $(function() {
 		for (var i = 0; i < storedFiles.length; i++) {
 			formData.append("files", storedFiles[i]);
 		}
-
-		 $.ajax({
+		formData.append("rdTag", tags);
+		//console.log(formData);		
+		$.ajax({
 	         url:"casualBoardWriteAdd"
              ,type:"POST"
-	         ,contentType:false
-	         ,processData:false
-             ,data:formData
+			 ,contentType:false
+			 ,processData:false
+	         ,data:formData
         	 ,success:function() {
                  location.href="/careMe/view/casualBoardView/casualBoard?currentPage=1";
              }
@@ -243,7 +245,7 @@ $(function() {
     					
 					<!-- 해시태그 추가 -->
 						<div class="content" align="left">
-       						<input type="hidden" value="" name="tag" id="rdTag" />
+       						<input type="hidden" value="" id="rdTag"/>
  	 	  			   	<div>
      				       <input type="text" id="tag" size="7" placeholder="태그입력" />
      				    </div>

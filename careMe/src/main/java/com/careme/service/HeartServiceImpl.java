@@ -16,16 +16,20 @@ public class HeartServiceImpl implements HeartService{
 		this.heartDao = heartDao;
 	}
 	
-	public HeartDto getHeartInfo (int idx) {
-		return heartDao.getHeartInfo(idx);
+	public HeartDto getHeartInfo (HeartDto hdto) {
+		return heartDao.getHeartInfo(hdto);
 	}
 	
 	public void insertHeartInfo(HeartDto hdto) {
 		heartDao.insertHeartInfo(hdto);
 	}
 	
-	public int updateHeartInfo(HeartDto hdto) {
-		return heartDao.updateHeartInfo(hdto);
+	public void updateHeartCheck(HeartDto hdto) {
+		heartDao.updateHeartCheck(hdto);
+	}
+	
+	public int memberCheck(int member_idx) {
+		return heartDao.memberCheck(member_idx);
 	}
 	
 }
