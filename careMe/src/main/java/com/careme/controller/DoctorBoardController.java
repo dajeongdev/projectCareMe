@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +18,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
+import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
+import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.HashTagService;
+import com.careme.service.HeartService;
 import com.careme.service.MemberService;
 import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
@@ -65,15 +73,28 @@ public class DoctorBoardController {
 		this.ms=ms;
 	}
 	
+	@Autowired
+	HashTagService hs;
+	public void setHashTagService(HashTagService hs) {
+		this.hs = hs;
+	}
+	
+	@Autowired
+	HeartService hts;
+	public void setHeartService(HeartService hts) {
+		this.hts=hts;
+	}
+	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
 	public ModelAndView toDoctorBoard(int currentPage) {
 		ModelAndView listPro = new ModelAndView("/doctorBoardView/doctorBoard");
 		
-		MemberDto info = ms.memberInfo("hellojava");
-		System.out.println(info.getMember_id());
-		System.out.println(info.getMember_idx());
+		//회원 정보 및 확인
+		MemberDto info = ms.memberInfo("testmin");
+		listPro.addObject("info", info);
 		
+		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
 		
@@ -91,7 +112,7 @@ public class DoctorBoardController {
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoardContent", method = RequestMethod.GET)
-	public ModelAndView doctorBoardContents(@RequestParam int question_table_idx) throws Exception {
+	public ModelAndView doctorBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
 		ModelAndView mav = new ModelAndView("doctorBoardView/doctorBoardContent");
 		
 		//회원 정보 및 확인
@@ -118,7 +139,7 @@ public class DoctorBoardController {
 
 	
 // 게시판 검색기능
-	@RequestMapping(value = "/view/doctorBoardSearch")
+	@RequestMapping(value = "/view/doctorBoardView/doctorBoardSearch")
 	public ModelAndView doctorBoardSearch(@RequestParam int searchn, String searchKeyword, int currentPage) {
 		ModelAndView list = new ModelAndView("/doctorBoardView/doctorBoardSearch");
 		int contentPerPage = 10;
@@ -135,26 +156,27 @@ public class DoctorBoardController {
 		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
-		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "doctorBoardView/doctorBoardSearch?currentPage="+currentPage+"&searchn="+searchn+"&searchKeyword="+searchKeyword);
+		paging = pns.paging(bs.getTotalDoctor(), contentPerPage, currentPage, "doctorBoardView/doctorBoardSearch?currentPage="+currentPage+"&searchn="+searchn+"&searchKeyword="+searchKeyword);
 		
 		list.addObject("list", items);
 		list.addObject("paging", paging);
 		list.addObject("searchn", searchn);
 		list.addObject("searchKeyword", searchKeyword);
 		
-		
 		return list;
 	}
 
+	
 	// 게시글 작성
 		@RequestMapping(value = "/view/doctorBoardView/doctorWriteForm", method = RequestMethod.GET)
 		public ModelAndView toWriteForm() throws Exception {
 			ModelAndView write = new ModelAndView("doctorBoardView/doctorWriteForm");
 			
 			//회원 정보 및 확인
-//			String currentId = session.getAttribute("id");
+//			SessionCommand sc = new SessionCommand();
+//			int currentIdx = sc.getMemberDto().getMember_idx();
+
 			MemberDto info = ms.memberInfo("testmin");
-			
 			write.addObject("info", info);
 			write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			return write;
@@ -172,14 +194,43 @@ public class DoctorBoardController {
 			return json.toJson(items);	
 		}
 		
-		
 		@RequestMapping(value = "/view/doctorBoardView/doctorBoardWriteAdd", method = RequestMethod.POST)
-		public String writeDoctorBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+		public String writeDoctorBoardArticle(QuestionBoardDto dto, int[] rdTag, MultipartHttpServletRequest request) throws Exception {
 			bs.addDoctorArticles(dto, request);
+			int result = dto.getQuestion_table_idx();
+			hs.insertUseTag("d", result, rdTag);
 			return "redirect:/view/doctorBoardView/doctorBoard?currentPage=1";
 		}
 	
-	
+		// hashtag 기능
+		@RequestMapping(value="/view/doctorBoardView/doctorWriteForm/hashCheck", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+		@ResponseBody
+		public String hashtagCompare(HttpServletRequest request, String tag_name) {
+			SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+			int member_idx = sc.getMemberDto().getMember_idx();
+			
+			// 없으면 넣고, 있으면 찾아서 TagDto로 리턴!
+			TagDto tagDto = hs.checkTag(tag_name, member_idx);		
+			Gson json = new Gson();
+			return json.toJson(tagDto);
+		}
+		
+		@RequestMapping(value="/view/doctorBoardView/doctorWriteForm/hashInsert", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+		@ResponseBody
+		public String hashTagInsert(HttpServletRequest request, String tag_name, int board_idx) {
+			SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+			int member_idx = sc.getMemberDto().getMember_idx();
+			
+			TagDto tdto = new TagDto();
+			
+			tdto.setTag_name(tag_name);
+			hs.insertTag(tag_name, member_idx);
+			
+			Gson json = new Gson();
+			return json.toJson(tdto);
+		}
+		
+		
 // 게시글 수정
 	@RequestMapping(value="/view/doctorBoardView/doctorBoardUpdateForm")
 	public ModelAndView toDoctorUpdate(@RequestParam int question_table_idx) throws Exception {
@@ -187,8 +238,8 @@ public class DoctorBoardController {
 		
 		//회원 정보 및 확인
 //		String currentId = session.getAttribute("id");
-		MemberDto info = ms.memberInfo("hellojava");
-		update.addObject("info", info);
+//		MemberDto info = ms.memberInfo("hellojava");
+//		update.addObject("info", info);
 		
 		QuestionBoardDto mlist = bs.getDoctorBoardContents(question_table_idx);
 		
@@ -230,8 +281,24 @@ public class DoctorBoardController {
 	// comment 작성
 		@RequestMapping(value="/view/doctorBoardView/doctorCommentAdd")
 		public String writeDoctorComment(BoardCommentDto commentDto) throws Exception {
-			int result = bs.addDoctorComment(commentDto);
+			
+			//member 확인
+			MemberDto info = ms.memberInfo("testmin");
+			int member_idx = info.getMember_idx();
+			
+			//comment 내용 테이블에 추가
+			bs.addDoctorComment(commentDto);
+			int result = commentDto.getQuestion_board_comment_idx();
 			int backToPage=commentDto.getQuestion_table_idx();
+			
+			//하트 기능 테이블에 정보 추가
+			HeartDto hdto = new HeartDto();
+			hdto.setBoard_comment_idx(result);
+			hdto.setBoard_type("c");
+			hdto.setHeartCheck("n");
+			hdto.setMember_idx(member_idx);
+			hts.insertHeartInfo(hdto);
+			
 			if (result > 0) {
 				return "redirect:/view/doctorBoardView/doctorBoardContent?question_table_idx="+backToPage;
 			} else {
@@ -266,5 +333,44 @@ public class DoctorBoardController {
 				System.out.println("no!!!");
 			return "redirect:history.go(-1)";
 			}
+		}
+		
+	// comment heart 업데이트
+		
+		@RequestMapping(value ="/view/doctorBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+		@ResponseBody
+		public String updateHeart(int question_board_comment_idx) {
+			
+			//회원 정보 및 확인
+			MemberDto info = ms.memberInfo("testmin");
+			int member_idx = info.getMember_idx();
+			int check = hts.memberCheck(member_idx);
+			
+			HeartDto hdto = new HeartDto();
+			hdto.setBoard_comment_idx(question_board_comment_idx);
+			hdto.setMember_idx(member_idx);
+			
+			if(check == 0) {
+				hdto.setBoard_type("c");
+				hdto.setHeartCheck("n");
+				hts.insertHeartInfo(hdto);
+				System.out.println("없을 경우 가져오는 hdto"+hdto);
+				bs.heartProcess(hdto, question_board_comment_idx);
+			}else {
+				hdto=hts.getHeartInfo(hdto);
+				System.out.println("있을 경우 가져오는 hdto"+hdto);
+				bs.heartProcess(hdto, question_board_comment_idx);
+			}
+			
+			BoardCommentDto cdto = new BoardCommentDto();
+			cdto.setQuestion_board_comment_idx(question_board_comment_idx);
+			cdto=bs.getDoctorComment(question_board_comment_idx);
+			
+			int currentHeart = cdto.getHeart();
+			System.out.println(currentHeart);
+			
+			Gson json = new Gson();
+			return json.toJson(currentHeart);
+			
 		}
 }

@@ -13,29 +13,29 @@ import com.careme.model.dto.QuestionBoardDto;
 
 
 public interface QuestionBoardService {
-
-// Doctor Board 게시글 뿌리기
+	
+// 전문 상담 게시판 구현
 	public List<QuestionBoardDto> getDoctorBoard();
 	
 	public List<QuestionBoardDto> getDoctorBoardPage(Map<String,Integer>param);
 	
-	public int getTotal();
+	public int getTotalDoctor();
 	
 	public QuestionBoardDto getDoctorBoardContents (int question_table_idx);
 	
+	public List<BoardFileDto> getDoctorBoardFiles (int question_table_idx);	
+	
 	public void getDoctorBoardViews (int question_table_idx);
-	
-	public List<BoardFileDto> getDoctorBoardFiles (int question_table_idx);
-	
-	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword);
-	
+
 	public List<QuestionBoardDto> getDoctorBoardSearch (SearchBoardCommand sbc);
+
+	public BoardCommentDto getDoctorComment(int question_board_comment_idx);
 	
 	public List<BoardCommentDto> getDoctorBoardComments (int question_table_idx);
 	
 	
 // Doctor Board 작성, 수정, 삭제
-	public void addDoctorArticles (QuestionBoardDto dto, MultipartHttpServletRequest request);
+	public int addDoctorArticles (QuestionBoardDto dto, MultipartHttpServletRequest request);
 	
 	public void addFileForDoctor(int question_table_idx, MultipartHttpServletRequest request);
 	
@@ -51,17 +51,20 @@ public interface QuestionBoardService {
 	
 	public int deleteDoctorComment (int idx);
 	
-	public BoardCommentDto getHeartInfo(int idx);
-	
 	public int addHeartForDoctor(int idx);
 	
 	public int subHeartForDoctor(int idx);
 	
+	public void heartProcessDoctor(HeartDto hdto, int question_board_comment_idx);
+
 	
-// Casual Board 내용 구현
+	
+// 고민 게시판 구현
 	public List<QuestionBoardDto> getCasualBoard();
 	
 	public List<QuestionBoardDto> getCasualBoardPage(Map<String,Integer>param);
+	
+	public int getTotal();
 	
 	public QuestionBoardDto getCasualBoardContents (int question_table_idx);
 	
@@ -96,9 +99,12 @@ public interface QuestionBoardService {
 	
 	public int subHeartForCasual(int idx);
 	
-	public void updateCheckHeart(BoardCommentDto cdto);
+	public void heartProcess(HeartDto hdto, int question_board_comment_idx);	
 	
-	public void heartProcess(HeartDto hdto, int question_board_comment_idx);
 
+
+// 공통	
+	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword);	
+	
 }
 

@@ -23,6 +23,43 @@ function deleteArticle(question_table_idx){
 
 </script>
 
+<script type="text/javascript">
+
+$(function(){
+	$("#heart").click(function(){
+		var idx=$("#heartInfo").data("idx");
+		var url="updateHeart?question_board_comment_idx="+idx;
+		$.ajax({
+			type:"GET",
+			url:url,
+			dataType:"json"})
+			.done(function(currentHeart){
+				$("#heartCount").append(1);
+
+				}).fail(function(e) {
+				alert(e.responseText);
+			});
+	});
+});
+
+	var testFunction = function (idx) {
+		var url="updateHeart?question_board_comment_idx="+idx;
+		$.ajax({
+			type:"GET",
+			url:url,
+			dataType:"json"})
+			.done(function(currentHeart){
+				$("#count"+idx).html(currentHeart);
+				}).fail(function(e) {
+				alert(e.responseText);
+		});
+	}
+
+</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 </head>
 <body>
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
@@ -102,7 +139,7 @@ function deleteArticle(question_table_idx){
 				<hr>
 			<div>
 			
-			<c:forEach var="item" items="${clist}">
+			<c:forEach var="item" items="${clist}" varStatus="status">
 			<div class="row">
 				<div class="card border-dark col-md-3" align="center">
   						<p></p>
@@ -124,15 +161,14 @@ function deleteArticle(question_table_idx){
 							</p>
         				</blockquote>
 					</div>
-					<div class="row">
-					
-						<div class="col-md-7"></div>
-						<div class="col-md-1" align="right">
-							<div><c:out value="${item.heart}"/></div>
+					<div class="row" id="heartInfo" data-idx="${item.question_board_comment_idx}">
+					<div class="col-md-8"></div>
+						<div id="heartDiv${status.index}" class="col-md-1" align="left">
+							
+							<label for="heart${item.question_board_comment_idx}"><span id="count${item.question_board_comment_idx}">${item.heart}</span>&nbsp;<i class="fas fa-heart"></i></label>
+							<button id="heart${item.question_board_comment_idx}" onclick="testFunction(${item.question_board_comment_idx})" style="display:none"></button>
+							
 						</div>	
-						<div class="col-md-1" align="right">
-							<button>heart</button>
-						</div>					
 						<div class="col-md-3" align="right">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
 							onClick="">

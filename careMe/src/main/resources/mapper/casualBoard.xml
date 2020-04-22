@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="casualQuestionBrd">
 
-<!-- 게시판 뿌리기 -->
+<!-- 게시판 레이아웃과 내용 구현 -->
 	
 	<select id="getArticles" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="HashMap">
 		select SQL_CALC_FOUND_ROWS * from question_board inner join members on question_board.member_idx=members.member_idx where question_type like 'n' order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
@@ -20,7 +20,6 @@
 	<select id="getArtFiles" resultType="com.careme.model.dto.BoardFileDto" parameterType="int">
 		select * from question_board_file where question_table_idx=#{question_table_idx}
 	</select>
-	
 	
 	<update id="getArtView" parameterType="com.careme.model.dto.QuestionBoardDto">
 		update question_board set 

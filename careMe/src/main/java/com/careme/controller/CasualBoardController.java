@@ -93,15 +93,11 @@ public class CasualBoardController {
 		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
 		
 		//회원 정보 및 확인
+	//	SessionCommand sc = new SessionCommand();
+	//	System.out.println(sc.getMemberDto().getMember_idx());
 		
-		MemberDto info = ms.memberInfo("testmin");
-		list.addObject("info", info);
-//		System.out.println(info.getMember_idx());
-//		System.out.println(info.getMember_nick());
-		
-//		System.out.println(info.getMember_idx());
-//		System.out.println(info.getMember_nick());
-//		System.out.println(info.getMember_id());
+	//	list.addObject("info", info);
+
 		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
@@ -126,12 +122,14 @@ public class CasualBoardController {
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
-	public ModelAndView casualBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
+	public ModelAndView casualBoardContents(@RequestParam int question_table_idx, HttpServletRequest request) throws Exception {
 		ModelAndView mav = new ModelAndView("casualBoardView/casualBoardContent");
 		
 		//회원 정보 및 확인
-//		String currentId = session.getAttribute("id");
-		MemberDto info = ms.memberInfo("hellojava");
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		String member_id = sc.getMemberDto().getMember_id();
+		
+		MemberDto info = ms.memberInfo(member_id);
 		mav.addObject("info", info);
 		
 		//글내용 불러오기
@@ -179,7 +177,6 @@ public class CasualBoardController {
 		list.addObject("searchn", searchn);
 		list.addObject("searchKeyword", searchKeyword);
 		
-		
 		return list;
 	}
 
@@ -190,11 +187,10 @@ public class CasualBoardController {
 		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
 		
 		//회원 정보 및 확인
-//		String currentId = session.getAttribute("id");
+
+//		SessionCommand sc = new SessionCommand();
+//		int currentIdx = sc.getMemberDto().getMember_idx();
 		MemberDto info = ms.memberInfo("testmin");
-//		System.out.println(info.getMember_nick());
-//		System.out.println(info.getMember_idx());
-		
 		write.addObject("info", info);
 		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 		return write;
@@ -214,11 +210,9 @@ public class CasualBoardController {
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeCasualBoardArticle(QuestionBoardDto dto, int[] rdTag, MultipartHttpServletRequest request) throws Exception {
-			bs.addCasualArticles(dto, request);
-			int result = dto.getQuestion_table_idx();
-			hs.insertUseTag("c", result, rdTag);
-
-		
+		bs.addCasualArticles(dto, request);
+		int result = dto.getQuestion_table_idx();
+		hs.insertUseTag("c", result, rdTag);
 		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 	}
 
@@ -249,7 +243,6 @@ public class CasualBoardController {
 		Gson json = new Gson();
 		return json.toJson(tdto);
 	}
-		
 		
 	
 // 게시글 수정
@@ -315,9 +308,6 @@ public class CasualBoardController {
 			int backToPage=commentDto.getQuestion_table_idx();
 			
 			//하트 기능 테이블에 정보 추가
-			
-			System.out.println(commentDto);
-			System.out.println(result);
 			HeartDto hdto = new HeartDto();
 			hdto.setBoard_comment_idx(result);
 			hdto.setBoard_type("c");
@@ -401,8 +391,6 @@ public class CasualBoardController {
 			return json.toJson(currentHeart);
 			
 		}
-
-		
 		
 	
 // 임시 마이페이지 링크

@@ -4,18 +4,17 @@
 <%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
-
 <title>메인 화면</title>
 <% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
 <c:set var="fullName" value="<%=fullName%>" />
 
 <script type="text/javascript">
+
 function deleteArticle(question_table_idx){
         if(confirm("정말 삭제하시겠습니까?")==true){
             location.href="deleteCasualArticle?question_table_idx="+question_table_idx;
@@ -60,7 +59,6 @@ $(function(){
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-
 </head>
 
 <body>
@@ -85,7 +83,6 @@ $(function(){
   				
 
 		  		<div class="row card-body">
-
   				
   					<div class="col-md-3">
 	       				<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
@@ -109,7 +106,7 @@ $(function(){
   						</div>
   						<br>
   						<div>
-  							<p style="css:mainCSS" align="left">
+  							<p align="left">
 								${mlist.content}
 							</p>
         				</div>
