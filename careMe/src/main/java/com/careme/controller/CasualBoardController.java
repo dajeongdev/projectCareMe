@@ -96,8 +96,8 @@ public class CasualBoardController {
 		
 		MemberDto info = ms.memberInfo("testmin");
 		list.addObject("info", info);
-		System.out.println(info.getMember_idx());
-		System.out.println(info.getMember_nick());
+//		System.out.println(info.getMember_idx());
+//		System.out.println(info.getMember_nick());
 		
 //		System.out.println(info.getMember_idx());
 //		System.out.println(info.getMember_nick());
@@ -121,40 +121,7 @@ public class CasualBoardController {
 		return list;
 	}
 	
-	// comment heart 업데이트
-	
-	@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
-	@ResponseBody
-	public String updateHeart(HttpServletRequest request, int question_board_comment_idx) {
-		
-		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
-		int member_idx = sc.getMemberDto().getMember_idx();
-		
-		HeartDto hdto = hts.getHeartInfo(question_board_comment_idx);
-		String hcheck = hdto.getHeartCheck();
-		
-		if(hcheck.equals("n")) {
-			bs.addHeartForCasual(question_board_comment_idx);
-			hdto.setHeartCheck("y");
-			hts.updateHeartInfo(hdto);
-		
-		}else if(hcheck.equals("y")) {
-			bs.subHeartForCasual(question_board_comment_idx);
-			hdto.setHeartCheck("n");
-			hts.updateHeartInfo(hdto);
-		}
-		
-		BoardCommentDto cdto = new BoardCommentDto();
-		cdto.setQuestion_board_comment_idx(question_board_comment_idx);
-		cdto=bs.getCasualComment(question_board_comment_idx);
-		
-		int currentHeart = cdto.getHeart();
-		System.out.println(currentHeart);
-		
-		Gson json = new Gson();
-		return json.toJson(currentHeart);
-		
-	}
+
 	
 
 //게시글 내용 불러오기
@@ -225,8 +192,8 @@ public class CasualBoardController {
 		//회원 정보 및 확인
 //		String currentId = session.getAttribute("id");
 		MemberDto info = ms.memberInfo("testmin");
-		System.out.println(info.getMember_nick());
-		System.out.println(info.getMember_idx());
+//		System.out.println(info.getMember_nick());
+//		System.out.println(info.getMember_idx());
 		
 		write.addObject("info", info);
 		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
@@ -246,16 +213,17 @@ public class CasualBoardController {
 	}
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public String writeCasualBoardArticle(QuestionBoardDto dto, int[] rdtag, MultipartHttpServletRequest request) throws Exception {
-		
-		bs.addCasualArticles(dto, request);
-		hs.insertUseTag("c", dto.getQuestion_table_idx(), rdtag);
+	public String writeCasualBoardArticle(QuestionBoardDto dto, int[] rdTag, MultipartHttpServletRequest request) throws Exception {
+			bs.addCasualArticles(dto, request);
+			int result = dto.getQuestion_table_idx();
+			hs.insertUseTag("c", result, rdTag);
+
 		
 		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 	}
 
 	// hashtag 기능
-	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String hashtagCompare(HttpServletRequest request, String tag_name) {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
@@ -267,7 +235,7 @@ public class CasualBoardController {
 		return json.toJson(tagDto);
 	}
 	
-	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String hashTagInsert(HttpServletRequest request, String tag_name, int board_idx) {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
@@ -291,8 +259,8 @@ public class CasualBoardController {
 		
 		//회원 정보 및 확인
 //		String currentId = session.getAttribute("id");
-		MemberDto info = ms.memberInfo("hellojava");
-		update.addObject("info", info);
+//		MemberDto info = ms.memberInfo("hellojava");
+//		update.addObject("info", info);
 		
 		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
 		
@@ -336,8 +304,27 @@ public class CasualBoardController {
 	// comment 작성
 		@RequestMapping(value="/view/casualBoardView/casualCommentAdd")
 		public String writeCasualComment(BoardCommentDto commentDto) throws Exception {
-			int result = bs.addCasualComment(commentDto);
+			
+			//member 확인
+			MemberDto info = ms.memberInfo("testmin");
+			int member_idx = info.getMember_idx();
+			
+			//comment 내용 테이블에 추가
+			bs.addCasualComment(commentDto);
+			int result = commentDto.getQuestion_board_comment_idx();
 			int backToPage=commentDto.getQuestion_table_idx();
+			
+			//하트 기능 테이블에 정보 추가
+			
+			System.out.println(commentDto);
+			System.out.println(result);
+			HeartDto hdto = new HeartDto();
+			hdto.setBoard_comment_idx(result);
+			hdto.setBoard_type("c");
+			hdto.setHeartCheck("n");
+			hdto.setMember_idx(member_idx);
+			hts.insertHeartInfo(hdto);
+			
 			if (result > 0) {
 				return "redirect:/view/casualBoardView/casualBoardContent?question_table_idx="+backToPage;
 			} else {
@@ -375,6 +362,45 @@ public class CasualBoardController {
 			}
 		}
 	
+		
+	// comment heart 업데이트
+		
+		@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+		@ResponseBody
+		public String updateHeart(int question_board_comment_idx) {
+			
+			//회원 정보 및 확인
+			MemberDto info = ms.memberInfo("testmin");
+			int member_idx = info.getMember_idx();
+			int check = hts.memberCheck(member_idx);
+			
+			HeartDto hdto = new HeartDto();
+			hdto.setBoard_comment_idx(question_board_comment_idx);
+			hdto.setMember_idx(member_idx);
+			
+			if(check == 0) {
+				hdto.setBoard_type("c");
+				hdto.setHeartCheck("n");
+				hts.insertHeartInfo(hdto);
+				System.out.println("없을 경우 가져오는 hdto"+hdto);
+				bs.heartProcess(hdto, question_board_comment_idx);
+			}else {
+				hdto=hts.getHeartInfo(hdto);
+				System.out.println("있을 경우 가져오는 hdto"+hdto);
+				bs.heartProcess(hdto, question_board_comment_idx);
+			}
+			
+			BoardCommentDto cdto = new BoardCommentDto();
+			cdto.setQuestion_board_comment_idx(question_board_comment_idx);
+			cdto=bs.getCasualComment(question_board_comment_idx);
+			
+			int currentHeart = cdto.getHeart();
+			System.out.println(currentHeart);
+			
+			Gson json = new Gson();
+			return json.toJson(currentHeart);
+			
+		}
 
 		
 		

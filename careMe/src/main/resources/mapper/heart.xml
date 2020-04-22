@@ -6,16 +6,20 @@
 <!-- 하트(추천) 관련 기능 -->
 <!-- 하트 수 추가 기능은 각 게시판 mapper 참조 -->
 
-	<select id="getHeartInfo" resultType="com.careme.model.dto.HeartDto" parameterType="int">
-		select * from heart where member_idx=#{member_idx}
+	<select id="memberCheck" resultType="int">
+		select count(*) from heart where member_idx=#{member_idx}		
+	</select>
+
+	<select id="getHeartInfo" resultType="com.careme.model.dto.HeartDto" parameterType="com.careme.model.dto.HeartDto">
+		select * from heart where member_idx=#{member_idx} and board_comment_idx=#{board_comment_idx}
 	</select>
 	
 	<insert id="newHeartInfo" parameterType="com.careme.model.dto.HeartDto">
-		insert into heart (member_idx, board_type, heartCheck) values (#{member_idx}, #{board_type}, #{heartCheck})
+		insert into heart (board_comment_idx, member_idx, board_type, heartCheck) values (#{board_comment_idx}, #{member_idx}, #{board_type}, #{heartCheck})
 	</insert>
 	
-	<update id="updateCheckHeart" parameterType="com.careme.model.dto.BoardCommentDto">
-		update heart set checkHeart=#{checkHeart} where member_idx=#{member_idx}
+	<update id="updateHeartCheck" parameterType="com.careme.model.dto.HeartDto">
+		update heart set heartCheck=#{heartCheck} where member_idx=#{member_idx} and board_comment_idx=#{board_comment_idx}
 	</update>
 	
 </mapper>
