@@ -21,12 +21,14 @@ import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
+import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
 import com.careme.service.HashTagService;
+import com.careme.service.HeartService;
 import com.careme.service.MemberService;
 import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
@@ -78,6 +80,12 @@ public class CasualBoardController {
 		this.hs = hs;
 	}
 	
+	@Autowired
+	HeartService hts;
+	public void setHeartService(HeartService hts) {
+		this.hts=hts;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
@@ -117,22 +125,28 @@ public class CasualBoardController {
 	
 	@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String updateHeart(@RequestParam int question_board_comment_idx) {
-		BoardCommentDto cdto = bs.getHeartInfo(question_board_comment_idx);
-		String hcheck = cdto.getCheckHeart();
+	public String updateHeart(HttpServletRequest request, int question_board_comment_idx) {
+		
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
+		
+		HeartDto hdto = hts.getHeartInfo(question_board_comment_idx);
+		String hcheck = hdto.getHeartCheck();
 		
 		if(hcheck.equals("n")) {
 			bs.addHeartForCasual(question_board_comment_idx);
-			
-			cdto.setCheckHeart("y");
-			
-			bs.updateCheckHeart(cdto);
+			hdto.setHeartCheck("y");
+			hts.updateHeartInfo(hdto);
 		
 		}else if(hcheck.equals("y")) {
 			bs.subHeartForCasual(question_board_comment_idx);
-			cdto.setCheckHeart("n");
-			bs.updateCheckHeart(cdto);
+			hdto.setHeartCheck("n");
+			hts.updateHeartInfo(hdto);
 		}
+		
+		BoardCommentDto cdto = new BoardCommentDto();
+		cdto.setQuestion_board_comment_idx(question_board_comment_idx);
+		cdto=bs.getCasualComment(question_board_comment_idx);
 		
 		int currentHeart = cdto.getHeart();
 		System.out.println(currentHeart);
@@ -232,8 +246,11 @@ public class CasualBoardController {
 	}
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public String writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
+	public String writeCasualBoardArticle(QuestionBoardDto dto, int[] rdtag, MultipartHttpServletRequest request) throws Exception {
+		
 		bs.addCasualArticles(dto, request);
+		hs.insertUseTag("c", dto.getQuestion_table_idx(), rdtag);
+		
 		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 	}
 
@@ -252,7 +269,7 @@ public class CasualBoardController {
 	
 	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String hashTagInsert(HttpServletRequest request, String tag_name) {
+	public String hashTagInsert(HttpServletRequest request, String tag_name, int board_idx) {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
 		int member_idx = sc.getMemberDto().getMember_idx();
 		
@@ -263,9 +280,6 @@ public class CasualBoardController {
 		
 		Gson json = new Gson();
 		return json.toJson(tdto);
-		
-		
-		
 	}
 		
 		
