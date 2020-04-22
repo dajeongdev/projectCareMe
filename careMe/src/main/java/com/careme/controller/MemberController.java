@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -127,7 +128,7 @@ public class MemberController {
 	@RequestMapping(value = "login/sendMail", produces = "application/json; charset=utf8")
 	@ResponseBody()
 	public String sendMail(@RequestParam() String getemail) throws Exception {
-		System.out.println("getemail::" + getemail);
+		// System.out.println("getemail::" + getemail);
 		EmailDto email = new EmailDto();
 
 		String receiver = getemail; // Receiver.메일 받을 주소
@@ -186,9 +187,9 @@ public class MemberController {
 	// 회원가입 성공
 	@RequestMapping(value = "login/insertok")
 	public String insertOk(MemberDto mdto, HttpSession session) {
-		System.out.println("test" + mdto);
+		// System.out.println("test" + mdto);
 		int i3 = memberService.insertOk(mdto);// 0이나 1리턴
-		System.out.println(i3);
+		// System.out.println(i3);
 		if (i3 == 0) { // 없으면 가입
 			session.setAttribute("sussess", mdto.getMember_id());
 			return "login/signupsu"; // 성공
@@ -206,14 +207,14 @@ public class MemberController {
 	// 의사등록 성공
 	@RequestMapping(value = "login/dinsertok")
 	public String dinsertOk(DoctorDto ddto, HttpSession session) {
-		System.out.println("dtest" + ddto);
+		// System.out.println("dtest" + ddto);
 
 		MemberDto member = (MemberDto) session.getAttribute("sc");
 		// System.out.println(member);
 		ddto.setMember_idx(member.getMember_idx());
 
 		int i4 = memberService.dinsertOk(ddto);// 0이나 1리턴
-		System.out.println(i4);
+		// System.out.println(i4);
 		if (i4 == 1) { // 없으면 가입
 			return "login/doctorOk"; // 성공
 		} else {
@@ -230,7 +231,7 @@ public class MemberController {
 	// 정보수정폼-일반
 	@RequestMapping(value = "login/memberUpdateForm", method = RequestMethod.GET)
 	public String form5() {
-		System.out.println("멤버 업데이트폼");
+		// System.out.println("멤버 업데이트폼");
 		return "login/memberUpdateForm";
 	}
 
@@ -251,25 +252,24 @@ public class MemberController {
 	}
 
 	// 정보수정폼-의사
-	@RequestMapping(value = "login/doctorUpdateForm")
-	public String form6() {
-		return "login/doctorUpdateForm";
+	/*
+	 * @RequestMapping(value = "login/doctorUpdateForm") public String form6() {
+	 * return "login/doctorUpdateForm"; }
+	 */
+	@RequestMapping(value = "login/doctorInsertForm{doctor_idx}", method = RequestMethod.GET)
+	public String doctorInsertForm(@PathVariable int doctor_idx) {
+		return "login/doctorInsertForm";
 	}
 
 	// 정보수정-의사
-	@RequestMapping(value = "login/dupdate")
-	public String dupdateOk(DoctorDto ddto, HttpSession session) {
-		System.out.println("디디티오" + ddto);
-		List<DoctorDto> list = memberService.dupdateOk(ddto);
-		int i6 = list.size();
-		if (i6 == 0) {
-			memberService.dupdateOk(ddto);
-			return "redirect:/main";
-		} else {
-			session.setAttribute("msg", "수정에 실패했습니다. 수정 화면으로 돌아갑니다");
-			return "redirect:/doctorUpdateForm";
-		}
-	}
+	/*
+	 * @RequestMapping(value = "login/dupdateok") public String dupdateOk(DoctorDto
+	 * ddto, HttpSession session) { System.out.println("디디티오" + ddto);
+	 * List<DoctorDto> list = memberService.dupdateOk(ddto); int i6 = list.size();
+	 * if (i6 == 0) { memberService.dupdateOk(ddto); return "redirect:/main"; } else
+	 * { session.setAttribute("msg", "수정에 실패했습니다. 수정 화면으로 돌아갑니다"); return
+	 * "redirect:/doctorUpdateForm"; } }
+	 */
 
 	// 회원탈퇴 폼
 	@RequestMapping(value = "login/deleteMember", method = RequestMethod.GET)

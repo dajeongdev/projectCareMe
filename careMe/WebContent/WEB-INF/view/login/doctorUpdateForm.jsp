@@ -118,16 +118,14 @@
 
 
 		<!-- 성공하면 로 감  -->
-		<form name="form6" action="dupdate" method="post"
-			onsubmit="return Doctorinsert()">
+		<form name="form6" action="<c:url value='/login/dupdateok' />"
+			method="post" onsubmit="return d_up()">
 
 			<table width="685" height="400" align="center" cellspacing="0">
-				<tr height="10" align="center">
-					<!-- 아이디 입력 -->
-					<td style="padding-left: 20px;"><b>ID:</b></td>
-					<td><input type="text" style="width: 530px" id="member_id"
-						name="member_id" value="${sc.memberDto.member_id}"
-						readonly="readonly" class="form-control" /></td>
+
+				<tr>
+					<td><input type="hidden" id="doctor_idx" name="doctor_idx"
+						value="${sc.doctorDto.doctor_idx}" /></td>
 				</tr>
 				<tr>
 					<!-- 의사면허 번호-->
@@ -188,7 +186,7 @@
 					<tr height="10" align="center"></tr>
 
 					<tr>
-						<td><input type="submit" name="d_up" value="수정하기"
+						<td><input type="submit" name="do_up" value="수정하기"
 							class="btn btn-dark btn-sm btn-block"></td>
 						<td><input type="button" name="no" value="취소하기"
 							class="btn btn-dark btn-sm btn-block" onclick="history.go(-1)"></td>

@@ -58,7 +58,7 @@ public class MemberService {
 
 		SessionCommand sc = new SessionCommand();
 		sc.setMemberDto(member);
-		System.out.println(member);
+		//System.out.println(member);
 		DoctorDto doctorDto = dao.selectDoctor(member.getMember_idx());
 		sc.setDoctorDto(doctorDto);
 		System.out.println("닥터 정보"+doctorDto);
@@ -67,7 +67,7 @@ public class MemberService {
 		// sc.setPet_idx(pet_idx);
 
 		session.setAttribute("sc", sc);
-		System.out.println(sc);
+		//System.out.println(sc);
 		session.setAttribute("MINFO", member.getMember_nick());// 이제 닉네임 들고다님
 	}
 

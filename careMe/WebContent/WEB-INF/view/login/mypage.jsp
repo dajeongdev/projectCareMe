@@ -22,7 +22,7 @@
 		<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 	</div>
 	<form name="form7" action="memberUpdateForm" method="post">
-		<a href="memberUpdateForm">정보수정</a> <a href="doctorInsertForm">의사등록</a> <a
+		<a href="memberUpdateForm">정보수정</a><a href="<c:url value='login/doctorInsertForm/${ doctor_idx }' />" class="btn btn-info">의사등록</a> <a
 			href="doctorUpdateForm">의사정보변경</a><br> <input
 			value="id=${sc.memberDto.member_id}" /> <input type="text"
 			value="idx=${sc.memberDto.member_idx}" /> <input type="text"
