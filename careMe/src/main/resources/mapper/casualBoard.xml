@@ -28,11 +28,6 @@
 			where question_table_idx=#{question_table_idx}
 	</update>
 	
-	<select id="getArtComments" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
-		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
-	</select>
-	
-
 	
 <!-- 게시판글 검색 -->
 	<select id="getSrchArticle" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.SearchBoardCommand">
@@ -56,6 +51,11 @@
 		insert into question_board (member_idx, title, question_type, doctor_idx, pet_idx, pet_species_idx, content, 
 		view_count, is_private, reg_date, update_date, del_yn) values (#{member_idx}, #{title}, #{question_type}, #{doctor_idx}, #{pet_idx}, 
 		#{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n')
+		
+		<selectKey keyProperty="question_table_idx" resultType="int">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+		
 	</insert>
 	
 	<insert id="insertFile" parameterType="com.careme.model.dto.BoardFileDto">
@@ -87,15 +87,24 @@
 	<delete id="deleteComment" parameterType="int">
 		delete from question_board_comment where question_board_comment_idx=#{question_board_comment_idx}
 	</delete>
-
-<!-- hashtag 확인 -->
-
-	<select id="hashtagFind" resultType="com.careme.model.dto.TagDto" parameterType="String">
-		select tag_idx, tag_name from tag where tag_name like concat('%', #{tagValue},'%')
+	
+	<select id="getArtComments" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
+		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
 	</select>
 	
-	<insert id="hastagAdd" parameterType="com.careme.model.dto.TagDto" keyProperty="tag_name">
-		insert into tag (tag_name, member_idx, del_yn) values (#{tag_name}, #{member_idx}, #{del_yn})
-	</insert>
+	<select id="getArtCommentsIdx" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
+		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_board_comment_idx=#{question_board_comment_idx} 
+	</select>
+	
+<!-- Heart 기능 -->
+
+	<update id="addHeart" parameterType="int">
+		update question_board_comment set heart=heart+1 where question_board_comment_idx=#{question_board_comment_idx}
+	</update>
+	
+	<update id="subHeart" parameterType="int">
+		update question_board_comment set heart=heart-1 where question_board_comment_idx=#{question_board_comment_idx}
+	</update>
+
 
 </mapper>

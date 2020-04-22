@@ -11,11 +11,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
-import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.QuestionBoardDto;
-import com.careme.model.dto.TagDto;
 
 @Service("QuestionBoardService")
 public class QuestionBoardServiceImpl implements QuestionBoardService {
@@ -40,6 +38,32 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		this.fus = fus;
 	}
 	
+	// 공통
+	
+	public void updateCheckHeart(BoardCommentDto cdto) {
+		dao.updateCheckHeart(cdto);
+	}
+	
+	public BoardCommentDto getHeartInfo(int idx) {
+		return dao.getHeartInfo(idx);
+	}
+	
+	public int addHeartForDoctor(int idx) {
+		return dao.addHeartForCasual(idx);
+	}
+	
+	public int subHeartForDoctor(int idx) {
+		return dao.subHeartForCasual(idx);
+	}
+	
+	public int addHeartForCasual(int idx) {
+		return dao.addHeartForCasual(idx);
+	}
+	
+	public int subHeartForCasual(int idx) {
+		return dao.subHeartForCasual(idx);
+	}
+	
 	// Doctor Board 게시글 뿌리기
 	public List<QuestionBoardDto> getDoctorBoard() {
 		return dao.getDoctorBoard();
@@ -57,6 +81,10 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dao.getDoctorBoardViews(question_table_idx);
 	}
 
+	public List<BoardFileDto> getDoctorBoardFiles (int question_table_idx){
+		return dao.getDoctorBoardFiles(question_table_idx);
+	}
+	
 	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc) {
 		return dao.getDoctorBoardSearch(sbc);
 	}
@@ -73,7 +101,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dto.setReg_date(LocalDateTime.now());
 		dao.insertArticleForDoctor(dto);
 		int idx = dto.getQuestion_table_idx();
-		System.out.println("idx:::"+idx);
 		if (idx>0) {
 			bs.addFileForDoctor(idx, request);
 		}
@@ -105,7 +132,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteArticlesForDoctor(idx);
 	}
 
-// Doctor Board Comments 작성, 수정, 삭제
+// Doctor Board Comments 작성, 수정, 삭제, 추천
 
 	// comment 작성
 	public int addDoctorComment(BoardCommentDto commentDto) {
@@ -123,7 +150,9 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public int deleteDoctorComment(int idx) {
 		return dao.deleteCommentForDoctor(idx);
 	}
-
+	
+	
+	
 // Casual Board 내용 구현
 	public List<QuestionBoardDto> getCasualBoard() {
 		return dao.getCasualBoard();
@@ -141,8 +170,8 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.getCasualBoardContents(question_table_idx);
 	}
 
-	public List<BoardFileDto> getBoardFiles (int question_table_idx){
-		return dao.getBoardFiles(question_table_idx);
+	public List<BoardFileDto> getCasualBoardFiles (int question_table_idx){
+		return dao.getCasualBoardFiles(question_table_idx);
 	}
 	
 	public void getCasualBoardViews(int question_table_idx) {
@@ -169,7 +198,13 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public List<BoardCommentDto> getCasualBoardComments(int question_table_idx) {
 		return dao.getCasualBoardComments(question_table_idx);
 	}
+	
+	public BoardCommentDto getCasualComment(int question_board_comment_idx) {
+		return dao.getCasualComment(question_board_comment_idx);
+	}
 
+	
+	
 // Casual Board 작성, 수정, 삭제
 
 	// 게시글 작성
@@ -178,7 +213,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dto.setReg_date(LocalDateTime.now());
 		dao.insertArticleForCasual(dto);
 		int idx = dto.getQuestion_table_idx();
-		System.out.println(idx);
 		if (idx>0) {
 			bs.addFileForCasual(idx, request);
 		}
@@ -187,7 +221,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public void addFileForCasual(int question_table_idx, MultipartHttpServletRequest request) {
 		List<FileUploadCommand> addfiles;
 		addfiles = fus.upload(request, "/img/boardUpload");
-		System.out.println(addfiles);
 		for (FileUploadCommand file : addfiles) {
 			BoardFileDto bdto = new BoardFileDto();
 			bdto.setQuestion_table_idx(question_table_idx);
@@ -231,15 +264,5 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public int deleteCasualComment(int idx) {
 		return dao.deleteCommentForCasual(idx);
 	}
-
-// Hashtag 추가 및 비교
-	public List<TagDto> compareHashtag(String tagValue){
-		return dao.getHashtag(tagValue);
-	}
 	
-	public List<TagDto> addHashtag(TagCommand tc) {
-		return dao.addHashtag(tc);
-	}
-	
-
 }

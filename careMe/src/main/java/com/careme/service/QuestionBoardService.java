@@ -6,11 +6,9 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.command.SearchBoardCommand;
-import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.QuestionBoardDto;
-import com.careme.model.dto.TagDto;
 
 public interface QuestionBoardService {
 
@@ -24,6 +22,8 @@ public interface QuestionBoardService {
 	public QuestionBoardDto getDoctorBoardContents (int question_table_idx);
 	
 	public void getDoctorBoardViews (int question_table_idx);
+	
+	public List<BoardFileDto> getDoctorBoardFiles (int question_table_idx);
 	
 	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword);
 	
@@ -49,22 +49,29 @@ public interface QuestionBoardService {
 	
 	public int deleteDoctorComment (int idx);
 	
+	public BoardCommentDto getHeartInfo(int idx);
+	
+	public int addHeartForDoctor(int idx);
+	
+	public int subHeartForDoctor(int idx);
+	
 	
 // Casual Board 내용 구현
 	public List<QuestionBoardDto> getCasualBoard();
 	
 	public List<QuestionBoardDto> getCasualBoardPage(Map<String,Integer>param);
 	
-	
 	public QuestionBoardDto getCasualBoardContents (int question_table_idx);
 	
-	public List<BoardFileDto> getBoardFiles (int question_table_idx);
+	public List<BoardFileDto> getCasualBoardFiles (int question_table_idx);
 	
 	public void getCasualBoardViews (int question_table_idx);
 	
 	public List<QuestionBoardDto> getCasualBoardSearch (SearchBoardCommand sbc);
 	
 	public List<BoardCommentDto> getCasualBoardComments (int question_table_idx);
+	
+	public BoardCommentDto getCasualComment(int question_board_comment_idx);
 	
 	
 // Casual Board 작성, 수정, 삭제
@@ -83,10 +90,12 @@ public interface QuestionBoardService {
 	
 	public int deleteCasualComment (int idx);
 	
-// Casual Board Hashtags
-	public List<TagDto> compareHashtag(String tagValue);
+	public int addHeartForCasual(int idx);
 	
-	public List<TagDto> addHashtag(TagCommand tc);
+	public int subHeartForCasual(int idx);
 	
+	public void updateCheckHeart(BoardCommentDto cdto);
+	
+
 }
 

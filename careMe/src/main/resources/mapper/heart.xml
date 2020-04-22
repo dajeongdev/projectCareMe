@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="heartBrd">
+
+<!-- 하트(추천) 관련 기능 -->
+<!-- 하트 수 추가 기능은 각 게시판 mapper 참조 -->
+
+	<select id="getHeartInfo" resultType="com.careme.model.dto.HeartDto" parameterType="int">
+		select * from heart where member_idx=#{member_idx}
+	</select>
+	
+	<insert id="newHeartInfo" parameterType="com.careme.model.dto.HeartDto">
+		insert into heart (member_idx, board_type, heartCheck) values (#{member_idx}, #{board_type}, #{heartCheck})
+	</insert>
+	
+	<update id="updateCheckHeart" parameterType="com.careme.model.dto.BoardCommentDto">
+		update heart set checkHeart=#{checkHeart} where member_idx=#{member_idx}
+	</update>
+	
+</mapper>

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
-import com.careme.model.command.TagCommand;
+import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
+import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
 import com.careme.service.FileUploadService;
+import com.careme.service.HashTagService;
+import com.careme.service.HeartService;
 import com.careme.service.MemberService;
 import com.careme.service.PageNumberService;
 import com.careme.service.PetService;
@@ -71,6 +74,18 @@ public class CasualBoardController {
 		this.ms=ms;
 	}
 	
+	@Autowired
+	HashTagService hs;
+	public void setHashTagService(HashTagService hs) {
+		this.hs = hs;
+	}
+	
+	@Autowired
+	HeartService hts;
+	public void setHeartService(HeartService hts) {
+		this.hts=hts;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/casualBoardView/casualBoard")
@@ -78,7 +93,7 @@ public class CasualBoardController {
 		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
 		
 		//회원 정보 및 확인
-//		String currentId = session.getAttribute("id");
+		
 		MemberDto info = ms.memberInfo("testmin");
 		list.addObject("info", info);
 		System.out.println(info.getMember_idx());
@@ -97,13 +112,48 @@ public class CasualBoardController {
 		param.put("contentPerPage", contentPerPage);
 		
 		List<QuestionBoardDto> getArticles = bs.getCasualBoardPage(param);
-		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoardView/casualBoard?currentPage=");
+		paging = pns.paging(bs.getTotal(), contentPerPage, currentPage, "casualBoard?currentPage=");
 		
 		
 		list.addObject("list", getArticles);
 		list.addObject("paging", paging);
 		
 		return list;
+	}
+	
+	// comment heart 업데이트
+	
+	@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String updateHeart(HttpServletRequest request, int question_board_comment_idx) {
+		
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
+		
+		HeartDto hdto = hts.getHeartInfo(question_board_comment_idx);
+		String hcheck = hdto.getHeartCheck();
+		
+		if(hcheck.equals("n")) {
+			bs.addHeartForCasual(question_board_comment_idx);
+			hdto.setHeartCheck("y");
+			hts.updateHeartInfo(hdto);
+		
+		}else if(hcheck.equals("y")) {
+			bs.subHeartForCasual(question_board_comment_idx);
+			hdto.setHeartCheck("n");
+			hts.updateHeartInfo(hdto);
+		}
+		
+		BoardCommentDto cdto = new BoardCommentDto();
+		cdto.setQuestion_board_comment_idx(question_board_comment_idx);
+		cdto=bs.getCasualComment(question_board_comment_idx);
+		
+		int currentHeart = cdto.getHeart();
+		System.out.println(currentHeart);
+		
+		Gson json = new Gson();
+		return json.toJson(currentHeart);
+		
 	}
 	
 
@@ -120,7 +170,7 @@ public class CasualBoardController {
 		//글내용 불러오기
 		bs.getCasualBoardViews(question_table_idx);
 		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
-		List<BoardFileDto> flist = bs.getBoardFiles(question_table_idx);
+		List<BoardFileDto> flist = bs.getCasualBoardFiles(question_table_idx);
 		List<BoardCommentDto> clist = bs.getCasualBoardComments(question_table_idx);
 		
 		String idx = String.valueOf(question_table_idx);
@@ -174,7 +224,9 @@ public class CasualBoardController {
 		
 		//회원 정보 및 확인
 //		String currentId = session.getAttribute("id");
-		MemberDto info = ms.memberInfo("hellojava");
+		MemberDto info = ms.memberInfo("testmin");
+		System.out.println(info.getMember_nick());
+		System.out.println(info.getMember_idx());
 		
 		write.addObject("info", info);
 		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
@@ -194,35 +246,43 @@ public class CasualBoardController {
 	}
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
-	public String writeCasualBoardArticle(QuestionBoardDto dto, MultipartHttpServletRequest request) throws Exception {
-		System.out.println("컨트롤러 도착");
+	public String writeCasualBoardArticle(QuestionBoardDto dto, int[] rdtag, MultipartHttpServletRequest request) throws Exception {
+		
 		bs.addCasualArticles(dto, request);
+		hs.insertUseTag("c", dto.getQuestion_table_idx(), rdtag);
+		
 		return "redirect:/view/casualBoardView/casualBoard?currentPage=1";
 	}
 
 	// hashtag 기능
 	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String hashtagCompare(@RequestParam String tagValue, int member_idx) {
-		List<TagDto> compared = bs.compareHashtag(tagValue);
-		Gson json = new Gson();
-		int listsize = compared.size();
-		int idx = member_idx;
+	public String hashtagCompare(HttpServletRequest request, String tag_name) {
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
 		
-		if(listsize==0){
-			
-			TagCommand tc = new TagCommand();
-			tc.setTag_name(tagValue);
-			tc.setMember_idx(idx);
-			tc.setDel_yn("n");
-			List<TagDto> added = bs.addHashtag(tc);
-			compared=added;
-			return json.toJson(compared);
-			
-		}else {
-		return json.toJson(compared);
-		}
+		// 없으면 넣고, 있으면 찾아서 TagDto로 리턴!
+		TagDto tagDto = hs.checkTag(tag_name, member_idx);		
+		Gson json = new Gson();
+		return json.toJson(tagDto);
 	}
+	
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String hashTagInsert(HttpServletRequest request, String tag_name, int board_idx) {
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
+		
+		TagDto tdto = new TagDto();
+		
+		tdto.setTag_name(tag_name);
+		hs.insertTag(tag_name, member_idx);
+		
+		Gson json = new Gson();
+		return json.toJson(tdto);
+	}
+		
+		
 	
 // 게시글 수정
 	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateForm")
@@ -234,9 +294,14 @@ public class CasualBoardController {
 		MemberDto info = ms.memberInfo("hellojava");
 		update.addObject("info", info);
 		
+		QuestionBoardDto mlist = bs.getCasualBoardContents(question_table_idx);
+		
 		int idx = question_table_idx;
 			update.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			update.addObject("idx", idx);
+			
+			update.addObject("mlist", mlist);
+			
 			return update;
 	}
 	
