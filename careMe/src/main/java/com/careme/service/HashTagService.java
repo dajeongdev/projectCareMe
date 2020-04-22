@@ -11,10 +11,11 @@ import com.careme.model.dto.TagDto;
 public class HashTagService {
 	@Autowired
 	HashTagDao hashTagDao;
+	
 	public void setHashTagDao(HashTagDao hashTagDao) {
 		this.hashTagDao = hashTagDao;
 	}
-	
+
 	public TagDto checkTag(String tag_name, int member_idx) {
 		TagDto tagDto = hashTagDao.selectHashTag(tag_name);
 		
@@ -37,13 +38,9 @@ public class HashTagService {
 	}
 	
 	public int insertTagType(BoardUseTagDto bdto) {
-		
 		int result = hashTagDao.insertTagType(bdto);
-
 		return result;
-		
 	}
-	
 	
 	public int insertUseTag(String board_type, int board_idx, int[] tag_idx) {
 		BoardUseTagDto bdto = new BoardUseTagDto();
@@ -56,13 +53,11 @@ public class HashTagService {
 			System.out.println("tagidx[]="+tag_idx[i]);
 			result+=insertTagType(bdto);
 		}
-		
 		return result;
 	}
 	
-	
-	
-	
-	
+	public TagDto readTag(String tag_name) {
+		return hashTagDao.selectHashTag(tag_name);
+	}
 
 }
