@@ -121,8 +121,8 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 // Casual Board 작성, 수정, 삭제
 	
 	public int insertArticleForCasual(QuestionBoardDto dto){
-		int idx = getSqlSession().insert("casualQuestionBrd.insertArt", dto);
-		return idx;
+		return getSqlSession().insert("casualQuestionBrd.insertArt", dto);
+	
 	}
 	
 	public int insertFileForCasual(BoardFileDto dto) {

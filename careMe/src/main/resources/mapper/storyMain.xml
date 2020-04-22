@@ -79,9 +79,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 	<!-- 글작성 -->
-	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
-		insert into story_board (member_idx, tag_idx, title, content, heart, view_count, reg_date, update_date, del_yn) 
-		values (#{member_idx}, #{tag_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
+	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto">
+		insert into story_board (member_idx, title, content, heart, view_count, reg_date, update_date, del_yn) 
+		values (#{member_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
 		<selectKey keyProperty="story_board_idx" resultType="int">
 			SELECT LAST_INSERT_ID()
 		</selectKey>

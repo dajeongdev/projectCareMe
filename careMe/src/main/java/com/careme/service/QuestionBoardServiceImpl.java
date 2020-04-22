@@ -13,6 +13,7 @@ import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
+import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.QuestionBoardDto;
 
 @Service("QuestionBoardService")
@@ -36,6 +37,13 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	
 	public void setFileUploadService(FileUploadService fus) {
 		this.fus = fus;
+	}
+	
+	@Autowired
+	HeartService hts;
+	
+	public void setHeartService(HeartService hts) {
+		this.hts = hts;
 	}
 	
 	// 공통
@@ -128,6 +136,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	}
 
 	// 게시글 삭제
+	@Override
 	public int deleteDoctorArticle(int idx) {
 		return dao.deleteArticlesForDoctor(idx);
 	}
@@ -135,22 +144,48 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 // Doctor Board Comments 작성, 수정, 삭제, 추천
 
 	// comment 작성
+	@Override
 	public int addDoctorComment(BoardCommentDto commentDto) {
 		commentDto.setReg_date(LocalDateTime.now());
 		return dao.insertCommentForDoctor(commentDto);
 	}
 
 	// comment 수정
+	@Override
 	public int updateDoctorComment(BoardCommentDto commentDto) {
 		commentDto.setReg_date(LocalDateTime.now());
 		return dao.updateCommentForDoctor(commentDto);
 	}
 
 	// comment 삭제
+	@Override
 	public int deleteDoctorComment(int idx) {
 		return dao.deleteCommentForDoctor(idx);
 	}
 	
+	//heart 추천 여부 확인 후 갯수 정리
+	@Override
+	public void heartProcess(HeartDto hdto, int question_board_comment_idx) {
+	
+	System.out.println("sevice hdto:::" + hdto);
+	String hcheck = hdto.getHeartCheck();
+	if(hcheck.equals("n")) {
+		addHeartForCasual(question_board_comment_idx);
+		hdto.setHeartCheck("y");
+		System.out.println("heartcheck:::"+hdto.getHeartCheck());
+		System.out.println("현재 hdto:::"+hdto);
+		hts.updateHeartCheck(hdto);
+		System.out.println(hcheck);
+
+	}else if(hcheck.equals("y")) {
+		subHeartForCasual(question_board_comment_idx);
+		hdto.setHeartCheck("n");
+		System.out.println("heartcheck:::"+hdto.getHeartCheck());
+		System.out.println("현재 hdto:::"+hdto);
+		hts.updateHeartCheck(hdto);
+		System.out.println(hcheck);
+		}
+	}
 	
 	
 // Casual Board 내용 구현
@@ -178,6 +213,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dao.getCasualBoardViews(question_table_idx);
 	}
 	
+	@Override
 	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword) {
 		SearchBoardCommand sbc = new SearchBoardCommand();
 			if (searchn == 0) {
@@ -191,14 +227,17 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return sbc;
 	}
 	
+	@Override
 	public List<QuestionBoardDto> getCasualBoardSearch(SearchBoardCommand sbc) {
 		return dao.getCasualBoardSearch(sbc);
 	}
 
+	@Override
 	public List<BoardCommentDto> getCasualBoardComments(int question_table_idx) {
 		return dao.getCasualBoardComments(question_table_idx);
 	}
 	
+	@Override
 	public BoardCommentDto getCasualComment(int question_board_comment_idx) {
 		return dao.getCasualComment(question_board_comment_idx);
 	}
@@ -209,15 +248,18 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	// 게시글 작성
 
-	public void addCasualArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
+	@Override
+	public int addCasualArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
 		dto.setReg_date(LocalDateTime.now());
-		dao.insertArticleForCasual(dto);
+		int result = dao.insertArticleForCasual(dto);
 		int idx = dto.getQuestion_table_idx();
 		if (idx>0) {
 			bs.addFileForCasual(idx, request);
 		}
+		return result;
 	}
 
+	@Override
 	public void addFileForCasual(int question_table_idx, MultipartHttpServletRequest request) {
 		List<FileUploadCommand> addfiles;
 		addfiles = fus.upload(request, "/img/boardUpload");

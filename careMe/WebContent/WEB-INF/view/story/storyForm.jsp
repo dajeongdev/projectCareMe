@@ -58,92 +58,72 @@ h3 { font-family: 'GmarketSansBold'; }
 
 </style>
 <title>스토리 글쓰기</title>
+<script>	
+//태그를 저장할 배열
+var tags = [];
+var tagNames = [];
+//태그를 보여줄 element
+$(function() {
+	$("#tag").on("keypress", function (e) {
+		if (e.key === "Enter" || e.keyCode == 32) {
+			var inputText = $("#tag").val(); // input 태그에 입력한 값
+			
+			//inputText를 tagNames[]를 for문 돌려서 비교해서 같으면 중복!
+			for(var i=0; i < tagNames.length; i++){
+				if(tagNames[i] == inputText){
+					console.log(tagNames[i] + "==" + inputText);
+					$("#tag").val("");
+					alert("중복!");
+					return;
+				}				
+			}
+			
+			// 태그 중복확인
+			tagCheck(inputText);
+			e.preventDefault();
+		}
+		console.log("enter");
+	})
+	
+})	
+
+var tagCheck = function (tag) {
+	var url = $(location).attr('pathname') + "/hashCheck"
+	$.ajax({
+		type: "get",
+		url: url + "?tag_name=" + tag,
+		dataType:"json"
+	}).done(function(data) {
+		console.log(data);
+		
+		//배열에 tag의 idx를 넣어준다
+		var idx = data.tag_idx;
+		var name = data.tag_name;
+		var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "<a href='javascript:;'>X</a>" + "</span>";
+
+		//서버에 보낼 배열에 넣기
+		tags.push(idx);
+		// input enter 눌렸을때 input 있는 value text 와 배열에 있는 text를 비교해서 있으면 중복알림! 없으면 ajax!
+		tagNames.push(name);
+		// hidden input 에 넣어주기
+		$("#rdTag").val(tags);
+		
+		// 태그 붙이기
+		$("#tag-list").append(html);
+		// input 비우기
+		$("#tag").val("");
+
+		
+	}).fail(function() {
+		alert("실패!");
+	});
+ 	$("#tag-list").on("click", ".hashTag", function () {
+		$(this).remove();
+	});
+}
+	
+</script>
 <script>
-/* 	var files = [];
-	var previewIndex = 0;
-
-	// image preview 기능, input = file object[]
-	function addPreview(input) {
-		if(input[0].files) {
-			for(var f = 0; f < input[0].files.length; f++) {
-				var file = input[0].files[f];
-				
-				if(validation(file.name)) continue;
-				
-				setPreviewForm(file);
-			}
-		} else {
-			alert("invalid file input");
-		}
-	}
-	function setPreviewForm(file, img) {
-		var reader = new FileReader();
-		reader.onload = function(img) {
-			var imgNum = previewIndex++;
-			$("#preview").append("<div class=\"preview-box\" value=\"" + imgNum + "\">"
-					+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
-					+ "<i class='fas fa-trash-alt'></i>" + "</a>" 
-					+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
-				    + "</div>");
-			files[imgNum] = file;
-		};
-		reader.readAsDataURL(file);
-	}
-	
-	// preview에서 삭제 버튼 클릭시 미리보기 이미지 영역 삭제
-	function deletePreview(obj) {
-		var imgNum = obj.attributes['value'].value;
-		delete files[imgNum];
-		$("#preview .preview-box[value=" + imgNum + "]").remove();
-		resizeHeight();
-	}
-
-	// client-side validation
-	// always server-side validation required
-	function validation(fileName) {
-		fileName = fileName + "";
-		var fileNameExtensionIndex = fileName.lastIndexOf(".") + 1;
-		var fileNameExtension = fileName.toLowerCase().substring(fileNameExtensionIndex, fileName.length);
-		if(!((fileNameExtension == 'jpg') || (fileNameExtension == 'gif') || (fileNameExtension == 'png'))) {
-			alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	$(document).ready(function() {
-		$(".submit a").on("click", function() {
-			var form = $("#insert")[0];
-			var formData = new FormData(form);
-
-			for(var i = 0; i < Object.keys(files).length; i++) {
-				formData.append("files", files[i]);
-			}
-
-			$.ajax({
-				type: "POST",
-				enctype: "multipart/form-data",
-				processData: false,
-				contentType: false,
-				cache: false,
-				url: "/storyForm",
-				dataType: "json",
-				data: formData,
-				success: function(result) {
-					if(result = -1) {
-						alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-					} else {
-						alert("이미지 업로드 성공");
-					}
-				}
-			});
-		});
-		$("input[type=file]").change(function() {
-			addPreview($(this));
-		});
-	}); */
-	
  	var storedFiles = [];
 	var selDivs = "";
 
@@ -161,6 +141,7 @@ h3 { font-family: 'GmarketSansBold'; }
 			for (var i = 0; i < storedFiles.length; i++) {
 				formData.append("files", storedFiles[i]);
 			}
+			formData.append("rdTag", tags);
 			 $.ajax({
 		         url: "storyForm"
 	             , type : "POST"
@@ -209,70 +190,7 @@ h3 { font-family: 'GmarketSansBold'; }
 	} 
 
 </script>
-<script>	
-//태그를 저장할 배열
-var tags = [];
-var tagNames = [];
-//태그를 보여줄 element
-$(function() {
-	$("#tag").on("keypress", function (e) {
-		if (e.key === "Enter" || e.keyCode == 32) {
-			var inputText = $("#tag").val(); // input 태그에 입력한 값
-			
-			//inputText를 tagNames[]를 for문 돌려서 비교해서 같으면 중복!
-			for(var i=0; i < tagNames.length; i++){
-				if(tagNames[i] == inputText){
-					console.log(tagNames[i] + "==" + inputText);
-					$("#tag").val("");
-					alert("중복!");
-					return;
-				}				
-			}
-			
-			// 태그 중복확인
-			tagCheck(inputText);
-			e.preventDefault();
-		}
-		console.log("enter");
-	})
-	
-})	
 
-var tagCheck = function (tag) {
-	var url = $(location).attr('pathname') + "/hashCheck"
-	$.ajax({
-		type: "get",
-		url: url + "?tag_name=" + tag,
-		dataType:"json"
-	}).done(function(data) {
-		console.log(data);
-		
-		//배열에 tag의 idx를 넣어준다
-		var idx = data.tag_idx;
-		var name = data.tag_name;
-		var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "<a href='javascript:;'>X</a>" + "</span>";
-
-		//서버에 보낼 배열에 넣기
-		tags.push(idx);
-		$("#rdTag").val(tags);
-		// input enter 눌렸을때 input 있는 value text 와 배열에 있는 text를 비교해서 있으면 중복알림! 없으면 ajax!
-		tagNames.push(name);
-
-		// 태그 붙이기
-		$("#tag-list").append(html);
-		// input 비우기
-		$("#tag").val("");
-
-		location.href="/careMe/view/story/storyMain?currentPage=1";
-	}).fail(function() {
-		alert("실패!");
-	});
- 	$("#tag-list").on("click", ".hashTag", function () {
-		$(this).remove();
-	});
-}
-	
-</script>
 </head>
 <body>
 
@@ -281,6 +199,7 @@ var tagCheck = function (tag) {
 </div>
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="whole">
+	<input type="hidden" name="member_idx" id="member_idx" value="${info.member_idx}">
 	<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
 		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
@@ -301,9 +220,9 @@ var tagCheck = function (tag) {
   			
   			<!-- 해시태그 -->
 			<div id="tag_content">
-				<input type="hidden" name="tag" id="rdtag">
+				<input type="hidden" value="" id="rdTag">
 			</div>
-			<input type="text" class="form-control" id="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+			<input type="text" class="form-control" id="tag" name="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 			<div id="tag-list">
 										
 			</div>

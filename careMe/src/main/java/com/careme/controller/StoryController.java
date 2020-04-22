@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SessionCommand;
 import com.careme.model.command.StoryCommand;
+import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.StoryBoardDto;
@@ -132,24 +133,27 @@ public class StoryController {
 	
 	// 상세보기
 	@RequestMapping(value = "/view/story/storyDetail", method = RequestMethod.GET)
-	public ModelAndView articleDetail(int story_board_idx) {
+	public ModelAndView articleDetail(int story_board_idx, String tag_name) {
 		ModelAndView mav = new ModelAndView();
 		StoryBoardDto dto = service.read(story_board_idx);
 		List<StoryFileDto> fileDto = service.readFile(story_board_idx);
 		List<StoryCommentDto> comList = service.readCom(story_board_idx);
+		TagDto tagDto = new TagDto();
+		
 		int comCount = comList.size();
 		service.counting(story_board_idx);
 		mav.addObject("dto", dto);
 		mav.addObject("fileDto", fileDto);
 		mav.addObject("comList", comList);
 		mav.addObject("comCount", comCount);
+		mav.addObject("tag", tagService.readTag(tag_name));
 		mav.setViewName("/story/storyDetail");
 		MemberDto info = mem.memberInfo("hellojava");
 		mav.addObject("info", info);
 		return mav;
 	}
 	
-	// 좋아요
+	/*// 좋아요
 	@RequestMapping(value = "/view/story/addSubHeart", method = RequestMethod.GET)
 	@ResponseBody
 	public String addSubHeart(HttpServletRequest request, int story_board_idx) {
@@ -178,33 +182,34 @@ public class StoryController {
 		
 		Gson json = new Gson();
 		return json.toJson(currentHeart);
-	}
+	}*/
 	
 	// 댓글 좋아요
 	@RequestMapping(value = "/view/story/addSubComHeart", method = RequestMethod.GET)
 	@ResponseBody
 	public String addSubComHeart(HttpServletRequest request, int story_comment_idx, int story_board_idx) {
-		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
-		int member_idx = sc.getMemberDto().getMember_idx();
+		MemberDto info = mem.memberInfo("hellojava");
+		int member_idx = info.getMember_idx();
+		int check = heartSer.memberCheck(member_idx);
 		
-		HeartDto heart = heartSer.getHeartInfo(story_comment_idx);
-		String check = heart.getHeartCheck();
+		HeartDto heart = new HeartDto();
+		heart.setBoard_comment_idx(story_comment_idx);
+		heart.setMember_idx(member_idx);
 		
-		if(heart.equals("n")) {
-			service.addComHeart(story_comment_idx);
-			heart.setHeartCheck("y");
-			heartSer.updateHeartInfo(heart);
-		} else if(heart.equals("y")) {
-			service.subComHeart(story_comment_idx);
+		if(check == 0) {
+			heart.setBoard_type("c");
 			heart.setHeartCheck("n");
-			heartSer.updateHeartInfo(heart);
+			heartSer.insertHeartInfo(heart);
+			System.out.println("없을 경우 가져오는 hdto"  +heart);
+			service.hearting(heart, story_comment_idx);
+		}else {
+			heart = heartSer.getHeartInfo(heart);
+			System.out.println("있을 경우 가져오는 hdto"+heart);
+			service.hearting(heart, story_comment_idx);
 		}
-		StoryBoardDto dto = new StoryBoardDto();
-		dto.setStory_board_idx(story_board_idx);
 		
 		StoryCommentDto comDto = new StoryCommentDto();
-		comDto.setStory_comment_idx(story_comment_idx);
-		comDto = service.readComIdx(story_comment_idx);
+		comDto = service.readComIdx(story_board_idx);
 		
 		int currentHeart = comDto.getHeart();
 		System.out.println(currentHeart);
@@ -217,19 +222,24 @@ public class StoryController {
 	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.GET) 
 	public ModelAndView articleInsert(HttpServletRequest request) { 
 		ModelAndView mav = new ModelAndView("/story/storyForm");
-		MemberDto info = mem.memberInfo("hellojava");
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		MemberDto info = sc.getMemberDto();
 		mav.addObject("info", info);
 		return mav;
 	}
 	
 	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.POST)
 	public String insertForm(StoryBoardDto dto, StoryFileDto fileDto, int[] rdTag, MultipartHttpServletRequest request) throws Exception {
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		dto.setMember_idx(sc.getMemberDto().getMember_idx());
 		
-		int no = service.insert(request);
-		fileDto.setStory_board_idx(no);
-		System.out.println("nnononono"+no);
-		service.insertFile(fileDto, request);
-		tagService.insertUseTag("s", dto.getStory_board_idx(), rdTag);
+		System.out.println("member_idx =====" + dto.getMember_idx());
+		
+		int i = service.insert(dto, request);
+		int story_board_idx = dto.getStory_board_idx();
+		System.out.println("getStory_board_idx =====" + dto.getStory_board_idx());
+		
+		tagService.insertUseTag("s", story_board_idx, rdTag);
 		return "/story/storyMain";
 	}
 	
@@ -255,6 +265,7 @@ public class StoryController {
 		tagDto = new TagDto();
 		tagDto.setTag_name(tag_name);
 		tagService.insertTag(tag_name, member_idx);
+		
 		Gson json = new Gson();
 		return json.toJson(tagDto);
 	}
@@ -263,8 +274,20 @@ public class StoryController {
 	// 댓글 작성
 	@RequestMapping(value = "/view/story/insertCom")
 	public String insertCom(HttpServletRequest request, StoryCommentDto comDto) {
+		MemberDto info = mem.memberInfo("hellojava");
+		int member_idx = info.getMember_idx();
+		
 		service.insertCom(comDto);
 		int b = comDto.getStory_board_idx();
+		int res = comDto.getStory_comment_idx();
+		
+		HeartDto heart = new HeartDto();
+		heart.setBoard_comment_idx(res);
+		heart.setBoard_type("s");
+		heart.setHeartCheck("n");
+		heart.setMember_idx(member_idx);
+		heartSer.insertHeartInfo(heart);
+		
 		return "/story/storyDetail?story_board_idx=" + b;
 	}
 	

@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.command.StoryCommand;
 import com.careme.model.command.StoryContentCommand;
+import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -38,10 +39,11 @@ public interface StoryService {
 	public int subHeart(int idx);
 	public int addComHeart(int idx);
 	public int subComHeart(int idx);
-
+	public void hearting(HeartDto heart, int story_comment_idx);
+	
 	// 작성
-	public int insert(MultipartHttpServletRequest request);
-	public void insertFile(StoryFileDto fileDto, MultipartHttpServletRequest request);
+	public int insert(StoryBoardDto dto, MultipartHttpServletRequest request);
+	public void fileRequesting(int story_board_idx, MultipartHttpServletRequest request);
 	public int insertCom(StoryCommentDto comDto);
 	
 	// 수정

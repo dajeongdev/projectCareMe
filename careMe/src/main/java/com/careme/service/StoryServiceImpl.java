@@ -18,6 +18,7 @@ import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
 import com.careme.model.command.StoryContentCommand;
+import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -46,18 +47,20 @@ public class StoryServiceImpl implements StoryService {
 		this.service = service;
 	}
 	
-	PageNumberCommand pageCom;
+	@Autowired
+	HeartService heartSer;
 
-	public void setPageCom(PageNumberCommand pageCom) {
-		this.pageCom = pageCom;
+	public void setHeartSer(HeartService heartSer) {
+		this.heartSer = heartSer;
 	}
 	
-	PageNumberService pageService;
+	@Autowired
+	StoryService ser;
 	
-	public void setPageService(PageNumberService pageService) {
-		this.pageService = pageService;
+	public void setSer(StoryService ser) {
+		this.ser = ser;
 	}
-
+	
 	
 	@Override
 	public List<StoryBoardDto> list(StoryCommand com) {
@@ -124,12 +127,23 @@ public class StoryServiceImpl implements StoryService {
 		return com;
 	}
 	@Override
-	public int insert(MultipartHttpServletRequest request) {
-		dto = requesting(request);
-		return dao.insert(dto);
+	public int insert(StoryBoardDto dto, MultipartHttpServletRequest request) {
+		dto.setReg_date(LocalDateTime.now());
+		int i = dao.insert(dto);
+		int d = dto.getStory_board_idx();
+		if(d > 0) {
+			fileRequesting(d, request);
+		}
+		return i;
 	}
-
-	public StoryBoardDto requesting(HttpServletRequest request) {
+	
+	/*
+	 * public void insertFile(int , MultipartHttpServletRequest request) { int
+	 * story_board_idx = dto.getStory_board_idx(); if(story_board_idx > 0)
+	 * fileRequesting(story_board_idx, request); }
+	 */
+	
+	public StoryBoardDto requesting(MultipartHttpServletRequest request) {
 		dto = new StoryBoardDto();
 		
 		if (request.getParameter("story_board_idx") != null && request.getParameter("story_board_idx") != "") {
@@ -143,13 +157,6 @@ public class StoryServiceImpl implements StoryService {
 		dto.setTitle(request.getParameter("title"));
 		dto.setReg_date(LocalDateTime.now());
 		return dto;
-	}
-	
-	@Override
-	public void insertFile(StoryFileDto dto, MultipartHttpServletRequest request) {
-		int story_board_idx = dto.getStory_board_idx();
-		if(story_board_idx > 0) fileRequesting(story_board_idx, request);
-		
 	}
 	
 	public void fileRequesting(int story_board_idx, MultipartHttpServletRequest request) {
@@ -251,6 +258,22 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public int subComHeart(int idx) {
 		return dao.subComHeart(idx);
+	}
+
+	@Override
+	public void hearting(HeartDto heart, int story_comment_idx) {
+		String check = heart.getHeartCheck();
+		if(check.equals("n")) {
+			addHeart(story_comment_idx);
+			heart.setHeartCheck("y");
+			heartSer.updateHeartCheck(heart);
+			System.out.println(check);
+
+		}else if(check.equals("y")) {
+			subHeart(story_comment_idx);
+			heart.setHeartCheck("n");
+			heartSer.updateHeartCheck(heart);
+		}
 	}
 
 }

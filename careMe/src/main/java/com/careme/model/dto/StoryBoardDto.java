@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 public class StoryBoardDto {
 	private int story_board_idx;
 	private int member_idx;
-	private int tag_idx;
 	private String title;
 	private String content;
 	private int heart;
@@ -13,20 +12,14 @@ public class StoryBoardDto {
 	private LocalDateTime reg_date;
 	private LocalDateTime update_date;
 	private String del_yn;
-	
+
 	private String member_id;
 	
-	public void setMember_id(String member_id) {
-		this.member_id = member_id;
-	}
 	public String getMember_id() {
 		return member_id;
 	}
-	public int getTag_idx() {
-		return tag_idx;
-	}
-	public void setTag_idx(int tag_idx) {
-		this.tag_idx = tag_idx;
+	public void setMember_id(String member_id) {
+		this.member_id = member_id;
 	}
 	public int getHeart() {
 		return heart;
@@ -82,5 +75,13 @@ public class StoryBoardDto {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
+	@Override
+	public String toString() {
+		return "StoryBoardDto [story_board_idx=" + story_board_idx + ", member_idx=" + member_idx + ", title=" + title
+				+ ", content=" + content + ", heart=" + heart + ", view_count=" + view_count + ", reg_date=" + reg_date
+				+ ", update_date=" + update_date + ", del_yn=" + del_yn + "]";
+	}
+	
+	
 	
 }
