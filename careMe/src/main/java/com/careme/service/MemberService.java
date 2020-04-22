@@ -68,11 +68,11 @@ public class MemberService {
 
 		SessionCommand sc = new SessionCommand();
 		sc.setMemberDto(member);
-		// System.out.println(member);
+
 		DoctorDto doctorDto = dao.selectDoctor(member.getMember_idx());
 		sc.setDoctorDto(doctorDto);
-		System.out.println("닥터 정보" + doctorDto);
-		System.out.println(doctorDto);
+		//System.out.println("닥터 정보" + doctorDto);
+		//System.out.println(doctorDto);
 		// int pet_idx = petService.findSelectedPet(member_idx);
 		// sc.setPet_idx(pet_idx);
 
