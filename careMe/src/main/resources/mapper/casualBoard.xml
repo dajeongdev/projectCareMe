@@ -51,6 +51,11 @@
 		insert into question_board (member_idx, title, question_type, doctor_idx, pet_idx, pet_species_idx, content, 
 		view_count, is_private, reg_date, update_date, del_yn) values (#{member_idx}, #{title}, #{question_type}, #{doctor_idx}, #{pet_idx}, 
 		#{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n')
+		
+		<selectKey keyProperty="question_table_idx" resultType="int">
+	        SELECT LAST_INSERT_ID()
+	    </selectKey>
+		
 	</insert>
 	
 	<insert id="insertFile" parameterType="com.careme.model.dto.BoardFileDto">
@@ -70,8 +75,8 @@
 <!-- comment 작성 수정 삭제 -->
 
 	<insert id="insertComment" parameterType="com.careme.model.dto.BoardCommentDto">
-		insert into question_board_comment (question_table_idx, member_idx, content, heart, reg_date, del_yn, checkHeart) 
-		values (#{question_table_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n', 'n')
+		insert into question_board_comment (question_table_idx, member_idx, content, heart, reg_date, del_yn) 
+		values (#{question_table_idx}, #{member_idx}, #{content}, 0, #{reg_date}, 'n')
 	</insert>
 	
     <update id="updateComment" parameterType="com.careme.model.dto.BoardCommentDto">
@@ -87,10 +92,12 @@
 		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_table_idx=#{question_table_idx} 
 	</select>
 	
-	<select id="getHeartInfo" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
-		select * from question_board_comment where question_board_comment_idx=#{question_board_comment_idx}
+	<select id="getArtCommentsIdx" resultType="com.careme.model.dto.BoardCommentDto" parameterType="int">
+		select * from question_board_comment inner join members on question_board_comment.member_idx=members.member_idx where question_board_comment_idx=#{question_board_comment_idx} 
 	</select>
 	
+<!-- Heart 기능 -->
+
 	<update id="addHeart" parameterType="int">
 		update question_board_comment set heart=heart+1 where question_board_comment_idx=#{question_board_comment_idx}
 	</update>
@@ -99,18 +106,5 @@
 		update question_board_comment set heart=heart-1 where question_board_comment_idx=#{question_board_comment_idx}
 	</update>
 
-	<update id="updateCheckHeart" parameterType="com.careme.model.dto.BoardCommentDto">
-		update question_board_comment set checkHeart=#{checkHeart} where question_board_comment_idx=#{question_board_comment_idx}
-	</update>
-
-<!-- hashtag 확인 -->
-
-	<select id="hashtagFind" resultType="com.careme.model.dto.TagDto" parameterType="String">
-		select tag_idx, tag_name from tag where tag_name like concat('%', #{tagValue},'%')
-	</select>
-	
-	<insert id="hastagAdd" parameterType="com.careme.model.dto.TagDto" keyProperty="tag_name">
-		insert into tag (tag_name, member_idx, del_yn) values (#{tag_name}, #{member_idx}, #{del_yn})
-	</insert>
 
 </mapper>

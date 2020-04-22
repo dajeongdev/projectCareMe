@@ -11,11 +11,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.careme.dao.QuestionBoardDao;
 import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.SearchBoardCommand;
-import com.careme.model.command.TagCommand;
 import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.QuestionBoardDto;
-import com.careme.model.dto.TagDto;
 
 @Service("QuestionBoardService")
 public class QuestionBoardServiceImpl implements QuestionBoardService {
@@ -44,6 +42,26 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	
 	public void updateCheckHeart(BoardCommentDto cdto) {
 		dao.updateCheckHeart(cdto);
+	}
+	
+	public BoardCommentDto getHeartInfo(int idx) {
+		return dao.getHeartInfo(idx);
+	}
+	
+	public int addHeartForDoctor(int idx) {
+		return dao.addHeartForCasual(idx);
+	}
+	
+	public int subHeartForDoctor(int idx) {
+		return dao.subHeartForCasual(idx);
+	}
+	
+	public int addHeartForCasual(int idx) {
+		return dao.addHeartForCasual(idx);
+	}
+	
+	public int subHeartForCasual(int idx) {
+		return dao.subHeartForCasual(idx);
 	}
 	
 	// Doctor Board 게시글 뿌리기
@@ -133,19 +151,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteCommentForDoctor(idx);
 	}
 	
-	// comment 추천
-	
-	public BoardCommentDto getHeartInfo(int idx) {
-		return dao.getHeartInfo(idx);
-	}
-	
-	public int addHeartForDoctor(int idx) {
-		return dao.addHeartForCasual(idx);
-	}
-	
-	public int subHeartForDoctor(int idx) {
-		return dao.subHeartForCasual(idx);
-	}
 	
 	
 // Casual Board 내용 구현
@@ -193,7 +198,13 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public List<BoardCommentDto> getCasualBoardComments(int question_table_idx) {
 		return dao.getCasualBoardComments(question_table_idx);
 	}
+	
+	public BoardCommentDto getCasualComment(int question_board_comment_idx) {
+		return dao.getCasualComment(question_board_comment_idx);
+	}
 
+	
+	
 // Casual Board 작성, 수정, 삭제
 
 	// 게시글 작성
@@ -254,23 +265,4 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteCommentForCasual(idx);
 	}
 	
-	public int addHeartForCasual(int idx) {
-		return dao.addHeartForCasual(idx);
-	}
-	
-	public int subHeartForCasual(int idx) {
-		return dao.subHeartForCasual(idx);
-	}
-
-	
-// Hashtag 추가 및 비교
-	public List<TagDto> compareHashtag(String tagValue){
-		return dao.getHashtag(tagValue);
-	}
-	
-	public List<TagDto> addHashtag(TagCommand tc) {
-		return dao.addHashtag(tc);
-	}
-	
-
 }
