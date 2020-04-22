@@ -205,7 +205,8 @@ $(function() {
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />
-						<input name="member_idx" type="hidden" id="subject" value="${info.member_idx}">
+						<input name="member_id" type="hidden" id="subjectId" value="${sc.memberDto.member_id}">
+						<input name="member_idx" type="hidden" id="subject" value="${sc.memberDto.member_idx}">
 
 						<!-- 동물 종류 찾기 -->
 
@@ -234,8 +235,7 @@ $(function() {
 							<br> 
 						</div>
 						
-						
-	
+			
 					<!-- 파일 / 사진 등록 -->
 						<div class="row mb-3" align="left">
 							<div class="col-12" id="images">
