@@ -2,6 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%
+	String hostname = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ "/careMe/";
+%>
+<c:set var="hostname" value="<%=hostname%>" />
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -118,22 +123,26 @@
 
 
 		<!-- 성공하면 로 감  -->
-		<form name="form6" action="<c:url value='/login/dupdateok' />"
-			method="post" onsubmit="return d_up()">
+		<form name="form6" action="dupdateok" method="post"
+			onsubmit="return d_up()">
 
 			<table width="685" height="400" align="center" cellspacing="0">
 
 				<tr>
 					<td><input type="hidden" id="doctor_idx" name="doctor_idx"
-						value="${sc.doctorDto.doctor_idx}" /></td>
+						value="${doctorDto.doctor_idx}" />
+						<input type="hidden" id="member_idx" name="member_idx"
+						value="${doctorDto.member_idx}" />
+						
+						</td>
 				</tr>
 				<tr>
 					<!-- 의사면허 번호-->
 					<td><b>License:</b></td>
 					<td><input type="text" style="width: 530px"
 						id="doctor_license" name="doctor_license" maxlength="45"
-						class="form-control" readonly="readonly"
-						value="${sc.doctorDto.doctor_license}" /></td>
+		   				class="form-control" readonly="readonly"
+						value="${doctorDto.doctor_license}" /></td>
 				</tr>
 				<tr>
 					<!-- 근무하는 병원 입력 -->
@@ -141,7 +150,7 @@
 					<td><input type="text" style="width: 530px"
 						id="doctor_hospital_name" name="doctor_hospital_name"
 						maxlength="17" class="form-control"
-						value="${sc.doctorDto.doctor_hospital_name}" /></td>
+						value="${doctorDto.doctor_hospital_name}" /></td>
 				</tr>
 				<tr>
 					<!-- 주소 -->
@@ -150,7 +159,7 @@
 					<td><input type="text" style="width: 530px"
 						id="doctor_hospital_zipcode" name="doctor_hospital_zipcode"
 						readonly="readonly" class="form-control"
-						value="${sc.doctorDto.doctor_hospital_zipcode}" /></td>
+						value="${doctorDto.doctor_hospital_zipcode}" /></td>
 				</tr>
 				<tr>
 					<!-- 도로명 주소 -->
@@ -159,7 +168,7 @@
 					<td><input type="text" style="width: 530px"
 						id="doctor_hospital_address" name="doctor_hospital_address"
 						readonly="readonly" class="form-control"
-						value="${sc.doctorDto.doctor_hospital_address}" /></td>
+						value="${doctorDto.doctor_hospital_address}" /></td>
 				</tr>
 				<tr>
 					<td>
@@ -169,7 +178,7 @@
 						id="doctor_hospital_address_detail"
 						name="doctor_hospital_address_detail" maxlength="30"
 						class="form-control"
-						value="${sc.doctorDto.doctor_hospital_address_detail}" /></td>
+						value="${doctorDto.doctor_hospital_address_detail}" /></td>
 				</tr>
 
 				<tr>
@@ -177,8 +186,17 @@
 					<td><b>H.Tel:</b></td>
 					<td><input type="text" style="width: 530px"
 						id="doctor_hospital_tel" name="doctor_hospital_tel"
-						class="form-control" value="${sc.doctorDto.doctor_hospital_tel}" /></td>
+						class="form-control" value="${doctorDto.doctor_hospital_tel}" /></td>
 				</tr>
+				
+				<tr>
+					<!-- 면허증 파일 -->
+					<td>File:</td>
+					<td>
+						<img src="${hostname}${doctorDto.certification_document}" id="cert_preview">
+					</td>
+				</tr>
+				
 			</table>
 			<!-- 짧은 버튼 -->
 			<table width="400" height="50" align="center" cellspacing="0">

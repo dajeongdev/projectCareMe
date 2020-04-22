@@ -97,8 +97,10 @@
 			form.doctor_hospital_tel.focus();
 			return false;
 		}
+
 		//form.submit();
 	}
+	
 </script>
 </head>
 <body>
@@ -116,7 +118,7 @@
 
 		<!-- 성공하면 로 감  -->
 		<form name="form4" action="dinsertok" method="post"
-			onsubmit="return Doctorinsert()">
+			enctype="multipart/form-data" onsubmit="return Doctorinsert()">
 
 			<table width="685" height="400" align="center" cellspacing="0">
 				<tr height="10" align="center">
@@ -176,6 +178,27 @@
 					<td><input type="text" style="width: 530px"
 						id="doctor_hospital_tel" name="doctor_hospital_tel"
 						class="form-control" placeholder="병원 연락처를 입력해주세요" /></td>
+				</tr>
+				<tr>
+					<!-- 면허증 파일 -->
+					<td><b>File:</b></td>
+					<td><input type="file" style="width: 530px" id="cert_file"
+						name="cert_file" class="form-control" placeholder="면허증 파일을 올려주세요" />
+					</td>
+				</tr>
+				<tr>
+					<!-- 체크박스 폼 -->
+					<td><b>Mjor:</b></td>
+					<td>
+						<c:forEach var="item" items="${addpet}">
+							<input type="checkbox" id="addpet${item.pet_species_idx}" 
+								   name="addpet1" value="${item.pet_species_idx}">
+							<label for="addpet${item.pet_species_idx}">
+								${item.pet_species_name}
+							</label>	
+							
+						</c:forEach>
+					</td>
 				</tr>
 				<!-- 짧은 버튼 -->
 				<table width="400" height="50" align="center" cellspacing="0">
