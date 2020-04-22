@@ -8,6 +8,9 @@ import com.careme.model.dto.PetCareFileDto;
 public class CarediaryCommand {
 	private PetCareDto diary;
 	private List<PetCareFileDto> files;
+	private String urineContent;
+	private String fecesContent;
+	
 	public PetCareDto getDiary() {
 		return diary;
 	}
@@ -20,6 +23,23 @@ public class CarediaryCommand {
 	public void setFiles(List<PetCareFileDto> files) {
 		this.files = files;
 	}
-	
+	public String getUrineContent() {
+		return urineContent;
+	}
+	public void setUrineContent(String urineContent) {
+		this.urineContent = urineContent;
+	}
+	public String getFecesContent() {
+		return fecesContent;
+	}
+	public void setFecesContent(String fecesContent) {
+		this.fecesContent = fecesContent;
+	}
+
+	@Override
+	public String toString() {
+		return "CarediaryCommand [diary=" + diary + ", files=" + files + ", urineContent=" + urineContent
+				+ ", fecesContent=" + fecesContent + "]";
+	}
 	
 }

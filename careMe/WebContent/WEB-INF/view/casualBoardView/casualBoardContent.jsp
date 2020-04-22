@@ -15,6 +15,51 @@
 <% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
 <c:set var="fullName" value="<%=fullName%>" />
 
+<script type="text/javascript">
+function deleteArticle(question_table_idx){
+        if(confirm("정말 삭제하시겠습니까?")==true){
+            location.href="deleteCasualArticle?question_table_idx="+question_table_idx;
+        }
+    };
+</script>
+
+<script type="text/javascript">
+
+$(function(){
+	$("#heart").click(function(){
+		var idx=$("#heartInfo").data("idx");
+		var url="updateHeart?question_board_comment_idx="+idx;
+		$.ajax({
+			type:"GET",
+			url:url,
+			dataType:"json"})
+			.done(function(currentHeart){
+				$("#heartCount").append(1);
+
+				}).fail(function(e) {
+				alert(e.responseText);
+			});
+	});
+});
+
+	var testFunction = function (idx) {
+		var url="updateHeart?question_board_comment_idx="+idx;
+		$.ajax({
+			type:"GET",
+			url:url,
+			dataType:"json"})
+			.done(function(currentHeart){
+				$("#count"+idx).html(currentHeart);
+				}).fail(function(e) {
+				alert(e.responseText);
+		});
+	}
+
+</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 
 </head>
 
@@ -82,11 +127,10 @@
 			<table align="right">
 				<tr height="30">
 					<td colspan="4" align="right">
-					<input type="button" class="btn btn-dark btn-sm" value="글수정"
-						onClick="document.location.href='casualBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">
-					<input type="button" class="btn btn-dark btn-sm" value="글삭제"
-						onClick="document.location.href='deleteCasualArticle?question_table_idx=${mlist.question_table_idx}'">
-					<input type="button" class="btn btn-dark btn-sm" value="글목록" onClick="location.href='casualBoard?currentPage=1'"></td>
+					<button type="button" class="btn btn-dark btn-sm" onclick="document.location.href='casualBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">글수정</button>
+					<button type="button" class="btn btn-dark btn-sm" onclick="deleteArticle('${mlist.question_table_idx}')">글삭제</button>
+					<button type="button" class="btn btn-dark btn-sm" onClick="location.href='casualBoard?currentPage=1'">글목록</button>
+					</td>
 				</tr>
 			</table>
 			<br>
@@ -98,7 +142,8 @@
 				<hr>
 			<div>
 			
-			<c:forEach var="item" items="${clist}">
+			<c:forEach var="item" items="${clist}" varStatus="status">
+			
 			<div class="row">
 				<div class="card border-dark col-md-3" align="center">
   						<p></p>
@@ -114,12 +159,20 @@
 				
 				<div class="card border-dark col-md-9">
   					<div class="row card-body my-3 p-3 bg-white rounded shadow-sm">
+    					<blockquote>	
     						<p style="" align="left">
 								<c:out value="${item.content}"/>
 							</p>
+						</blockquote>
         			</div>
-					<div class="row">
-						<div class="col-md-9"></div>					
+					<div class="row" id="heartInfo" data-idx="${item.question_board_comment_idx}">
+					<div class="col-md-8"></div>
+						<div id="heartDiv${status.index}" class="col-md-1" align="left">
+							
+							<label for="heart${item.question_board_comment_idx}"><span id="count${item.question_board_comment_idx}">${item.heart}</span>&nbsp;<i class="fas fa-heart"></i></label>
+							<button id="heart${item.question_board_comment_idx}" onclick="testFunction(${item.question_board_comment_idx})"></button>
+							
+						</div>	
 						<div class="col-md-3" align="right">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
 							onClick="">

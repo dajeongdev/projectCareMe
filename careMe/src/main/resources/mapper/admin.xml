@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="admin">
+	<select id="selectMember" resultType="com.careme.model.dto.MemberDto">
+		select * from members where del_yn = 'n' and member_idx = ${member_idx}
+	</select>
+
+	<select id="selectMemberList" resultType="com.careme.model.dto.MemberDto" parameterType="HashMap">
+		select SQL_CALC_FOUND_ROWS * from members where del_yn = 'n'
+		<if test="pageStart != null">
+			limit ${pageStart}, ${contentPerPage}
+		</if> 
+	</select>
+	
+	<select id="searchMemberList" resultType="com.careme.model.dto.MemberDto" parameterType="HashMap">
+		select SQL_CALC_FOUND_ROWS * 
+		from members 
+		where del_yn = 'n' 
+		and ${searchColumn} like concat('%', #{searchText}, '%')
+		<if test="pageStart != null">
+			limit ${pageStart}, ${contentPerPage}
+		</if>
+	</select>
+	
+	<select id="selectTotalCount" resultType="int">
+		SELECT FOUND_ROWS()
+	</select>
+	
+	<update id="deleteMember">
+		update members set del_yn = 'y' where member_idx = #{member_idx}
+	</update>
+	
+	<update id="updateMember" parameterType="com.careme.model.dto.MemberDto">
+		update members
+		<set>
+			<if test="member_id != null">member_id=#{member_id},</if>
+			<if test="member_email != null">member_email=#{member_email},</if>
+			<if test="member_phone != null">member_phone=#{member_phone},</if>
+			<if test="member_nick != null">member_nick=#{member_nick},</if>
+			<if test="member_profile != null">member_profile=#{member_profile},</if>
+		</set>
+		where member_idx = ${member_idx}
+	</update>
+
+</mapper>

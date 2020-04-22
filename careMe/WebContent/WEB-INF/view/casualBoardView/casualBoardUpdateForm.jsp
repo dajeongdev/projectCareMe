@@ -196,7 +196,7 @@ $(function() {
 					<p></p>
 						<div class="mb-3" align="left">
 			          		<label for="title">제목</label>
-          					<input id="title" name="title" width="100%" type="text" class="form-control"/>
+          					<input id="title" name="title" width="100%" type="text" class="form-control" value="${mlist.title}"/>
         				</div>
 						<input name="question_type" type="hidden" value="n" /> 
 						<input name="is_private" type="hidden" value="n" /> 
@@ -227,7 +227,7 @@ $(function() {
 
 						<div align="left">
 							내용<br>
-							<textarea name="content" style="width: 100%; height: 250px"></textarea>
+							<textarea name="content" style="width: 100%; height: 250px" >${mlist.content}</textarea>
 							<br> 
 						</div>
 						

@@ -16,11 +16,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.MemberDao;
 import com.careme.model.command.LoginCommand;
-import com.careme.model.dto.DocterDto;
+import com.careme.model.dto.DoctorDto;
 import com.careme.model.dto.EmailDto;
 import com.careme.model.dto.MemberDto;
 import com.careme.service.EmailService;
 import com.careme.service.MemberService;
+import com.careme.service.EmailPwService;
 import com.google.gson.Gson;
 
 @Controller
@@ -34,6 +35,9 @@ public class MemberController {
 
 	@Autowired
 	EmailService emailService;
+
+	@Autowired
+	EmailPwService emailPwService;
 
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
@@ -119,7 +123,7 @@ public class MemberController {
 		return "login/mailform";
 	}
 
-	// 이메일 보내기
+	// 인증 이메일 보내기
 	@RequestMapping(value = "login/sendMail", produces = "application/json; charset=utf8")
 	@ResponseBody()
 	public String sendMail(@RequestParam() String getemail) throws Exception {
@@ -127,7 +131,7 @@ public class MemberController {
 		EmailDto email = new EmailDto();
 
 		String receiver = getemail; // Receiver.메일 받을 주소
-		String subject = "[CAREME]인증메일입니다";
+		String subject = "[CARE ME!]인증메일입니다";
 		String content = "";
 
 		email.setReceiver(receiver);
@@ -136,6 +140,39 @@ public class MemberController {
 
 		int result = emailService.sendMail(email);
 		return result + "";
+	}
+
+	// 비밀번호 찾기 창 열기
+	@RequestMapping(value = "login/pwFind", method = RequestMethod.GET)
+	public String form9() {
+		return "login/pwFind";
+	}
+
+	// 비밀번호 찾기 이메일 보내기
+	@RequestMapping(value = "login/find_pass")
+	@ResponseBody
+	public String sendMail2(String member_email) throws Exception {
+
+		EmailDto email2 = new EmailDto();
+
+		System.out.println(member_email);
+
+		String receiver = member_email; // Receiver. //회원 계정 이메일//
+
+		String subject = "[CARE ME!] 임시 비밀번호 안내 이메일 입니다."; // 제목
+
+		String content = "[CARE ME!]"; // 내용
+
+		email2.setReceiver(receiver);
+
+		email2.setSubject(subject);
+
+		email2.setContent(content);
+
+		boolean result = emailPwService.sendMail2(email2);
+
+		return "이메일이 전송 되었습니다: " + result + "<p><button type='button'  onclick=\"location.href='loginform';\">확인</button></p>";
+
 	}
 
 	// 회원가입 성공
@@ -153,19 +190,23 @@ public class MemberController {
 	}
 
 	// 의사등록폼
-	@RequestMapping(value = "login/doctorInsert")
+	@RequestMapping(value = "login/doctorInsertForm")
 	public String form4() {
-		return "login/doctorInsert";
+		return "login/doctorInsertForm";
 	}
 
 	// 의사등록 성공
 	@RequestMapping(value = "login/dinsertok")
-	public String dinsertOk(DocterDto ddto, HttpSession session) {
-		// System.out.println("dtest" + ddto);
+	public String dinsertOk(DoctorDto ddto, HttpSession session) {
+		System.out.println("dtest" + ddto);
+
+		MemberDto member = (MemberDto) session.getAttribute("sc");
+		// System.out.println(member);
+		ddto.setMember_idx(member.getMember_idx());
+
 		int i4 = memberService.dinsertOk(ddto);// 0이나 1리턴
-		// System.out.println(i4);
-		if (i4 == 0) { // 없으면 가입
-			session.setAttribute("dsussess", ddto.getDoctor_license());
+		System.out.println(i4);
+		if (i4 == 1) { // 없으면 가입
 			return "login/doctorOk"; // 성공
 		} else {
 			return "redirect:doctorInsert"; // 실패
@@ -181,15 +222,17 @@ public class MemberController {
 	// 정보수정폼-일반
 	@RequestMapping(value = "login/memberUpdateForm", method = RequestMethod.GET)
 	public String form5() {
+		System.out.println("멤버 업데이트폼");
 		return "login/memberUpdateForm";
 	}
 
-	// 정보수정-일반
+	// 정보수정-비밀번호 변경
 	@RequestMapping(value = "login/update")
 	public String updateOk(MemberDto mdto, HttpSession session) {
-		int i5 = memberService.updateOk(mdto);
-		System.out.println(i5);
-		if (i5 == 1) { // 일치하면 수정
+		List<MemberDto> list = memberService.updateOk(mdto);
+		int i5 = list.size();
+		// System.out.println(i5);
+		if (i5 == 0) { // 일치하면 수정
 			memberService.updateOk(mdto);
 			return "redirect:/main";
 		} else {
