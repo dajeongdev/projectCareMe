@@ -111,6 +111,7 @@ public class StoryController {
 		return mav;
 	}
 	
+	// 검색
 	@RequestMapping(value = "/view/story/storyMainSearch")
 	public ModelAndView searching(@RequestParam int searchType, @RequestParam String keyword, int currentPage) {
 		ModelAndView mav = new ModelAndView("/story/storyMain");
@@ -138,15 +139,16 @@ public class StoryController {
 		StoryBoardDto dto = service.read(story_board_idx);
 		List<StoryFileDto> fileDto = service.readFile(story_board_idx);
 		List<StoryCommentDto> comList = service.readCom(story_board_idx);
-		TagDto tagDto = new TagDto();
-		
+		story_board_idx = dto.getStory_board_idx();
+		List<TagDto> tagList = service.readTags(story_board_idx);
+		System.out.println("태그" + tagList);
 		int comCount = comList.size();
 		service.counting(story_board_idx);
 		mav.addObject("dto", dto);
 		mav.addObject("fileDto", fileDto);
 		mav.addObject("comList", comList);
 		mav.addObject("comCount", comCount);
-		mav.addObject("tag", tagService.readTag(tag_name));
+		mav.addObject("tags", tagList);
 		mav.setViewName("/story/storyDetail");
 		MemberDto info = mem.memberInfo("hellojava");
 		mav.addObject("info", info);
@@ -274,8 +276,8 @@ public class StoryController {
 	// 댓글 작성
 	@RequestMapping(value = "/view/story/insertCom")
 	public String insertCom(HttpServletRequest request, StoryCommentDto comDto) {
-		MemberDto info = mem.memberInfo("hellojava");
-		int member_idx = info.getMember_idx();
+		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
 		
 		service.insertCom(comDto);
 		int b = comDto.getStory_board_idx();
@@ -294,22 +296,28 @@ public class StoryController {
 	
 	// 글수정
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.GET)
-	public ModelAndView updateForm(int story_board_idx) throws Exception {
+	public ModelAndView updateForm(HttpServletRequest request, int story_board_idx) throws Exception {
 		ModelAndView mav = new ModelAndView("/story/storyEdit");
 		StoryBoardDto dto = service.read(story_board_idx);
 		List<StoryFileDto> fileDto = service.readFile(story_board_idx);
+		List<TagDto> tagList = service.readTags(story_board_idx);
+		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
 		
 		mav.addObject("getContent", service.getContent(story_board_idx));
-		mav.addObject("member_idx", dto.getMember_idx());
+		mav.addObject("member_idx", member_idx);
 		mav.addObject("story_board_idx", dto.getStory_board_idx());
 		mav.addObject("title", dto.getTitle());
 		mav.addObject("content", dto.getContent());
 		mav.addObject("fileDto", fileDto);
+		mav.addObject("tags", tagList);
 		return mav;
 	}
 	
 	@RequestMapping(value = "/view/story/storyEdit", method = RequestMethod.POST)
 	public String articleUpdate(StoryBoardDto dto, StoryFileDto fileDto, MultipartHttpServletRequest request, Integer[] deletedFiles) throws Exception {
+		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
+		int member_idx = sc.getMemberDto().getMember_idx();
 		
 		service.update(dto, request);
 		service.updateFile(fileDto, deletedFiles, request);
@@ -341,6 +349,47 @@ public class StoryController {
 		service.deleteCom(story_comment_idx);
 		return "redirect:/view/story/storyDetail";
 	}
+	@RequestMapping(value = "/view/story/storyMain")
+	public ModelAndView dlisting(HttpSession session, int currentPage) {
+		ModelAndView mav = new ModelAndView();
+		PageNumberCommand paging = new PageNumberCommand();
+		int contentPerPage = 9;
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("start_idx", page.getStartIdx(currentPage, contentPerPage));
+		map.put("contentPerPage", contentPerPage);
+		
+		List<StoryBoardDto> list = service.listPaging(map);
+		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyMain?currentPage=");
+		List<StoryFileDto> fList = service.fileList();
+		List<StoryBoardDto> hlist = service.hitList();
+		
+		mav.addObject("list", list);
+		mav.addObject("fList", fList);
+		mav.addObject("hlist", hlist);
+		mav.addObject("paging", paging);
+		MemberDto info = mem.memberInfo("hellojava");
+		mav.addObject("info", info);
+		mav.setViewName("/story/storyMain");
+		return mav;
+	}
+	// 태그 리스트
 	
+	public ModelAndView tagListing(HttpSession session, int tag_idx, int currentPage) {
+		ModelAndView mav = new ModelAndView();
+		PageNumberCommand paging = new PageNumberCommand();
+		int contentPerPage = 12;
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("start_idx", page.getStartIdx(currentPage, contentPerPage));
+		map.put("contentPerPage", contentPerPage);
+		
+		List<TagDto> tagList = service.readTagList(map);
+		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyTag?currentPage=");
+		int tag = service.tagSelect(tag_idx);
+		List<StoryFileDto> tagFileList = service.readTagFileList(tag);
+		
+		mav.addObject("tagList", tagList);
+		mav.addObject("tagFileList", tagFileList);
+		return mav;
+	}
 
 }

@@ -18,6 +18,7 @@ import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
 import com.careme.model.command.StoryContentCommand;
+import com.careme.model.dto.BoardUseTagDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
@@ -274,6 +275,27 @@ public class StoryServiceImpl implements StoryService {
 			heart.setHeartCheck("n");
 			heartSer.updateHeartCheck(heart);
 		}
+	}
+
+	@Override
+	public List<TagDto> readTags(int story_board_idx) {
+		return dao.readTags(story_board_idx);
+	}
+
+	// 태그 리스트
+	@Override
+	public List<TagDto> readTagList(Map<String, Integer> map) {
+		return dao.readTagList(map);
+	}
+
+	@Override
+	public List<StoryFileDto> readTagFileList(int story_board_idx) {
+		return dao.readTagFileList(story_board_idx);
+	}
+	
+	@Override
+	public int tagSelect(int tag_idx) {
+		return dao.tagSelect(tag_idx);
 	}
 
 }

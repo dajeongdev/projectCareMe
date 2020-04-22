@@ -37,6 +37,13 @@ hr { width: 700px; }
 .updateCom, .deleteCome { float: right;}
 .content { font-size: 20px; margin-top: 20px;}
 .content-heart {float: right; color: red;}
+.hashTag { 
+	background: #82b1ff;
+	padding: 5px 5px;
+	margin: 5px 5px;
+	border-radius: 10%;
+	display: inline-block;
+}
 </style>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
@@ -88,16 +95,19 @@ $(function(){
 				<span class="date"><c:out value="${dto.reg_date}"/></span>&nbsp
 				<span class="view"><i class="fas fa-eye"></i><c:out value="${dto.view_count}"/></span>
 				<span class="heart"><i class="fas fa-heart"></i>&nbsp<c:out value="${dto.heart}"/></span>
+				<input type="hidden" name="member_idx" id="member_idx" value="${info.member_idx}">
 				</div>
 			</div>
 			<div class="img">
 				<img width="700" height="500" src="${fullName}${fileDto[0].file_path}">
 			</div>
 			<div>
-				<p class="content"><c:out value="${dto.content}"/><c:out value="${dto.member_id}"/><span class="content-heart"><i class="fas fa-heart fa-2x"></i></span></p>
+				<p class="content"><c:out value="${dto.content}"/><c:out value="${info.member_id}"/><span class="content-heart"><i class="fas fa-heart fa-2x"></i></span></p>
 			</div>
-			<div class="box_tag">
-
+			<div id="tag-list">
+				<c:forEach var="taging" items="${tags}">
+					<span class="hashTag">#<c:out value="${taging.tag_name}"/></span>
+				</c:forEach>
 			</div>
 				<div class="btn-group">
 					<button type="button" class="update_btn btn btn-outline-dark" onClick="document.location.href='storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
@@ -138,7 +148,7 @@ $(function(){
 							</span>
 							</span>
 							<c:if test="">
-							<input type="hidden" name="member_idx" value="2">
+							<input type="hidden" name="member_idx" value="${info.member_idx}">
 							<span class="updateCom"><i class="fas fa-edit"></i></span>
 							</c:if>
 							<span class="deleteCom"><i class="fas fa-trash-alt" onClick="deleteCom('${coms.story_comment_idx}')"></i></span>

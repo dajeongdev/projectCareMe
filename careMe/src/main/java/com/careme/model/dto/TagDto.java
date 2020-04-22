@@ -30,5 +30,11 @@ public class TagDto {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
+	
+	@Override
+	public String toString() {
+		return "TagDto [tag_idx=" + tag_idx + ", tag_name=" + tag_name + ", member_idx=" + member_idx + ", del_yn="
+				+ del_yn + "]";
+	}
 
 }

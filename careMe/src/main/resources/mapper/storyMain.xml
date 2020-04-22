@@ -144,4 +144,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		delete from story_comment where del_yn = 'y' and story_board_idx = #{story_board_idx}
 	</delete>
 	
+	
+	<select id="tags" resultType="com.careme.model.dto.TagDto">
+		select * from tag inner join board_use_tag on tag.tag_idx = board_use_tag.tag_idx 
+		where board_idx = #{board_idx}
+	</select>
+	<select id="tagList" parameterType="HashMap" resultType="com.careme.model.dto.TagDto">
+		select SQL_CALC_FOUND_ROWS * from story_board where story_board_idx in
+		(select story_board_idx from story_board inner join board_use_tag 
+		on story_board.story_board_idx = board_use_tag.board_idx 
+		where board_use_tag.tag_idx = #{tag_idx} and board_use_tag.board_type = 's') 
+		order by story_board.story_board_idx desc 
+		limit #{start_idx}, #{contentPerPage}
+	<!-- 태그 idx가 같은 글번호를 가져와서 forEach로 뿌림 -->
+	</select>
+	<select id="tagSelect" resultType="com.careme.model.dto.TagDto">
+		select story_board_idx from story_board, tag where tag.tag_idx = #{tag_idx} order by story_board.story_board_idx desc
+	</select>
+	<select id="tagFileList" resultType="com.careme.model.dto.StoryFileDto">
+		select * from story_board inner join story_file on story_board.story_board_idx = story_file.story_board_idx 
+		where story_board.story_board_idx = #{story_board_idx} 
+	</select>
 </mapper>

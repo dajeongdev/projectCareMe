@@ -206,6 +206,7 @@ function removeFile(e) {
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="whole">
 		<input type="hidden" name="story_board_idx" value="${story_board_idx}">
+		<input type="hidden" id="member_idx" name="member_idx" value="${member_idx}">
 		<form name="insert" method="POST" enctype="multipart/form-data">
 		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
@@ -213,7 +214,7 @@ function removeFile(e) {
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 
 					value="${title}">
-				<input type="hidden" id="member_idx" value="1">
+				
 				 <label class="custom-file-label" for="files">사진 선택</label>
 				<div class="row" id="selectedFiles">
 					<c:if test="${getContent.fileDto.size() > 0}">
@@ -235,7 +236,9 @@ function removeFile(e) {
 				<input type="hidden" name="tag" id="rdtag">
 				<input type="text" class="form-control" id="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div id="tag-list">
-										
+					<c:forEach var="taging" items="${tags}">
+						<span class='hashTag' data-idx="${taging.tag_idx}"><c:out value="${taging.tag_name} " /><a href='javascript:;'>X</a></span>
+					</c:forEach>				
 				</div>
 			</div>
 

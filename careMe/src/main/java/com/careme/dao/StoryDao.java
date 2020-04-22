@@ -9,6 +9,7 @@ import com.careme.model.command.StoryCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
+import com.careme.model.dto.TagDto;
 
 public class StoryDao extends SqlSessionDaoSupport {
 	// 글목록
@@ -43,6 +44,20 @@ public class StoryDao extends SqlSessionDaoSupport {
 	}
 	public StoryCommentDto readComIdx(int story_comment_idx) {
 		return getSqlSession().selectOne("story.readComIdx", story_comment_idx);
+	}
+	public List<TagDto> readTags(int board_idx) {
+		return getSqlSession().selectList("story.tags", board_idx);
+	}
+	
+	// 태그 리스트
+	public List<TagDto> readTagList(Map<String, Integer> map) {
+		return getSqlSession().selectList("story.tagList", map);
+	}
+	public List<StoryFileDto> readTagFileList(int story_board_idx) {
+		return getSqlSession().selectList("story.tagFileList", story_board_idx);
+	}
+	public int tagSelect(int tag_idx) {
+		return getSqlSession().selectOne("story.tagSelect", tag_idx);
 	}
 	
 	// 조회수
