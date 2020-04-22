@@ -124,9 +124,6 @@ $(function() {
              }
         })
 	}
-
-	
-
 })
 
 function handleFileSelect(e) {
