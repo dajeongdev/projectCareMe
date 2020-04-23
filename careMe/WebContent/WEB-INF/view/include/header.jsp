@@ -5,6 +5,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page import="com.careme.model.command.SessionCommand"%>
 <%@ page import="com.careme.model.command.LoginCommand"%>
+
+<%
+	String hostname = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ "/careMe/";
+%>
+<c:set var="hostname" value="<%=hostname%>" />
 <style>
 body { font-family: 'GmarketSansMedium'; }
 
@@ -34,33 +40,37 @@ body { font-family: 'GmarketSansMedium'; }
 <spring:url value="/resources/img/dog.jpg" var="profile" />
 <c:set var="currentMenu" value="<%=currentMenu%>" />
 
-<header class="blog-header py-3" style="padding: 1rem;">
+<header class="blog-header pb-0" style="padding: 1rem;">
 
 	<!-- 비로그인 상태 -->
 	<c:if test="${empty sessionScope.MINFO}">
 		<div
 			class="row flex-nowrap justify-content-between align-items-center">
 			<div class="col-12 text-center">
-				<a class="blog-header-logo text-dark" href="#">LOGO</a>
+				<a class="blog-header-logo text-dark" href="/careMe/main"><img src="${hostname}resources/img/LOGO.png" style="height:145px;"></a>
 			</div>
 
-			<div
-				class="col-12 d-flex justify-content-end align-items-center position-absolute">
+			
+		</div>
+		<div
+				class="col-12 pb-2 d-flex justify-content-end align-items-center">
 				<a class="btn btn-sm btn-outline-secondary"
 					href="/careMe/login/loginform">Sign up</a>
 			</div>
-		</div>
 	</c:if>
 	<!-- 로그인 상태 -->
 	<c:if test="${not empty sessionScope.MINFO}">
 		<div
 			class="row flex-nowrap justify-content-between align-items-center">
 			<div class="col-12 text-center">
-				<a class="blog-header-logo text-dark" href="#">LOGO</a>
+				<a class="blog-header-logo text-dark" href="/careMe/main"><img src="${hostname}resources/img/LOGO.png" style="height:145px;"></a>
 			</div>
 
+			
+		</div>
+		<div class="row">
 			<div
-				class="col-12 d-flex justify-content-end align-items-center position-absolute">
+				class="col-12 d-flex justify-content-end align-items-center">
 				<img src="${profile}" style="padding: 5px; width: 60px;">
 				
 					
