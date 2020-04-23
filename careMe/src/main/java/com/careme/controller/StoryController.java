@@ -114,7 +114,7 @@ public class StoryController {
 	
 	// 검색
 	@RequestMapping(value = "/view/story/storyMainSearch")
-	public ModelAndView searching(int searchType, String keyword, int currentPage) {
+	public ModelAndView searching(int story_board_idx, int searchType, String keyword, int currentPage) {
 		ModelAndView mav = new ModelAndView();
 		int contentPerPage = 9;
 		StoryCommand com = new StoryCommand();
@@ -122,13 +122,17 @@ public class StoryController {
 		int start_idx = page.getStartIdx(currentPage, contentPerPage);
 		com.setStart_idx(start_idx);
 		com.setContentPerPage(contentPerPage);
+		StoryBoardDto dto = service.read(story_board_idx);
+		story_board_idx = dto.getStory_board_idx();
 		List<StoryBoardDto> list = service.searching(com);
+		List<StoryFileDto> fileDto = service.readFile(story_board_idx);
 		
 		PageNumberCommand paging = new PageNumberCommand();
 		paging = page.paging(service.getTotal(), contentPerPage, currentPage, 
 					"storyMain?currentPage="+currentPage+"&searchType="+searchType+"&keyword="+keyword);
 		
 		mav.addObject("list", list);
+		mav.addObject("fileDto", fileDto);
 		mav.addObject("paging", paging);
 		mav.addObject("searchType", searchType);
 		mav.addObject("keyword", keyword);
