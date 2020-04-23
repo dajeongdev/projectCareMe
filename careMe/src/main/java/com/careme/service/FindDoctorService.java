@@ -1,5 +1,6 @@
 package com.careme.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import com.careme.dao.FindDoctorDao;
 import com.careme.model.command.DoctorCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.dto.DoctorDto;
-import com.careme.model.dto.DoctorMajorDto;
+import com.careme.model.dto.DoctorMajorWithSpeciesName;
 
 @Service
 public class FindDoctorService {
@@ -23,6 +24,7 @@ public class FindDoctorService {
 		this.findDoctorDao = findDoctorDao;
 	}
 	
+	@Autowired
 	PageNumberService pageNumberService;
 	public void setPageNumberService(PageNumberService pageNumberService) {
 		this.pageNumberService = pageNumberService;
@@ -36,16 +38,11 @@ public class FindDoctorService {
 		int totalCount = findDoctorDao.selectTotalCount();
 		
 		List<DoctorCommand> doctors = getDoctorCommand(doctorDtoList);
-		System.out.println(doctors);
 		data.put("doctors", doctors);
 		
 		String path = "findDoctor?page=";
-		System.out.println(totalCount + ", " + currentPage + "," + contentPerPage + "," + path);
 		PageNumberCommand paging = pageNumberService.paging(totalCount, contentPerPage, 1, path);
-		System.out.println(paging);
 		data.put("paging", paging);
-		
-		
 		
 		return data;
 	}
@@ -66,29 +63,33 @@ public class FindDoctorService {
 		return data;
 	}
 	
+	public List<DoctorCommand> getPopularDoctors() {
+		LocalDate now = LocalDate.now();
+		String monthAgo = now.minusMonths(1).toString(); 
+		List<DoctorDto> doctorDtoList = findDoctorDao.getPopularDoctorDtoList(monthAgo);
+		System.out.println("인기의사:::::::" + doctorDtoList);
+		
+		List<DoctorCommand> doctors = getDoctorCommand(doctorDtoList);
+		return doctors;
+	}
+	
 	public List<DoctorCommand> getDoctorCommand(List<DoctorDto> doctorDtoList) {
 		List<DoctorCommand> list = new ArrayList<DoctorCommand>();
 		
 		for (DoctorDto doctorDto : doctorDtoList) {
 			DoctorCommand command = new DoctorCommand();
 			command.setDoctorDto(doctorDto);
-			command.setDoctorMajorDto(getDoctorMajors(doctorDto.getDoctor_idx()));
+			command.setDoctorMajor(getDoctorMajors(doctorDto.getDoctor_idx()));
 			list.add(command);
 		}
 		return list;
 	}
 	
+
 	
-	public List<DoctorCommand> getPopularDoctors() {
-		List<DoctorCommand> list = new ArrayList<DoctorCommand>();
-		DoctorCommand command = new DoctorCommand();
-		List<DoctorDto> doctorDtoList = findDoctorDao.getDoctorDtoList();
-		return list;
-	}
-	
-	public List<DoctorMajorDto> getDoctorMajors(int doctor_idx) {
-		List<DoctorMajorDto> list = new ArrayList<DoctorMajorDto>();
-		list = findDoctorDao.getDoctorMajorDtoList(doctor_idx);
+	public List<DoctorMajorWithSpeciesName> getDoctorMajors(int doctor_idx) {
+		List<DoctorMajorWithSpeciesName> list = new ArrayList<DoctorMajorWithSpeciesName>();
+		list = findDoctorDao.getDoctorMajorWithSpeciesName(doctor_idx);
 		return list;
 	}
 	

@@ -1,5 +1,6 @@
 package com.careme.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.DoctorCommand;
 import com.careme.model.command.SessionCommand;
 import com.careme.service.FindDoctorService;
 
@@ -36,9 +38,13 @@ public class FindDoctorController {
 			items = findDoctorService.getDoctors(page, 10);
 		}
 		
+		List<DoctorCommand> popularDoctors = findDoctorService.getPopularDoctors();
+		
 		ModelAndView mav = new ModelAndView("/findDoctor/list");
+		mav.addObject("popularDoctors", popularDoctors);
 		mav.addObject("doctors", items.get("doctors"));
 		mav.addObject("paging", items.get("paging"));
+		
 		
 		return mav;
 	}

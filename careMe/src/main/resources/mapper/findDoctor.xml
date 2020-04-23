@@ -8,6 +8,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select SQL_CALC_FOUND_ROWS * from doctor where del_yn = 'n' and is_certified = 'y'
 	</select>
 	
+	<select id="selectPopularDoctorList" resultType="com.careme.model.dto.DoctorDto">
+		select * from doctor
+		inner join (
+					  select doctor.member_idx, doctor_idx, IFNULL(sum(board.heart), 0) heartCount from doctor
+					  left join (
+						   	     select * 
+								 from question_board_comment 
+								 where reg_date > #{monthAgo}
+								 and del_yn = 'n'
+								 ) board on doctor.member_idx = board.member_idx
+					  where doctor.del_yn = 'n'
+					  and doctor.is_certified = 'y'
+					  group by member_idx
+					  order by heartCount
+					  limit 3
+	   				) popular on doctor.doctor_idx = popular.doctor_idx
+	</select>
+	
 	<select id="selectDoctorListOrderByMatching" resultType="com.careme.model.dto.DoctorDto">
 		select SQL_CALC_FOUND_ROWS doctor.* from 
 		(
@@ -40,9 +58,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from doctor_major where doctor_idx = #{doctor_idx};
 	</select>
 	
-	<select id="selectPopularDoctorList">
-		select * from doctor where del_yn = 'n' and is_certified = 'y'
+	<select id="selectDoctorMajorWithSpeciesName" resultType="com.careme.model.dto.DoctorMajorWithSpeciesName">
+		select major.*, spec.pet_species_name
+		from doctor_major major
+		inner join pet_species spec on major.pet_species_idx = spec.pet_species_idx
+		where major.doctor_idx = #{doctor_idx}
 	</select>
+	
 	
 	<select id="selectTotalCount" resultType="int">
 		SELECT FOUND_ROWS()
