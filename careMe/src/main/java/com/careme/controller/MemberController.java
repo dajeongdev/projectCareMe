@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.dao.MemberDao;
+import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.LoginCommand;
 import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.DoctorDto;
@@ -24,6 +25,7 @@ import com.careme.model.dto.MemberDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.service.EmailPwService;
 import com.careme.service.EmailService;
+import com.careme.service.FileUploadService;
 import com.careme.service.MemberService;
 import com.careme.service.PetService;
 
@@ -184,12 +186,13 @@ public class MemberController {
 
 	// 회원가입 성공
 	@RequestMapping(value = "login/insertok")
-	public String insertOk(MemberDto mdto, HttpSession session) {
+	public String insertOk(MemberDto mdto, HttpSession session, MultipartHttpServletRequest request) {
 		// System.out.println("test" + mdto);
-		int i3 = memberService.insertOk(mdto);// 0이나 1리턴
-		// System.out.println(i3);
-		if (i3 == 0) { // 없으면 가입
-			session.setAttribute("sussess", mdto.getMember_id());
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		int i3 = memberService.insertOk(mdto, request);// 0이나 1리턴
+		 System.out.println(i3);
+		if (i3 == 1) { // 없으면 가입
+			session.setAttribute("sussess", mdto.getMember_idx());
 			return "login/signupsu"; // 성공
 		} else {
 			return "redirect:signup"; // 실패

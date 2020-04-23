@@ -107,6 +107,11 @@
 		form.submit();
 
 	}
+
+	$(document).ready(function() {
+				$('#addpet1').val('${item.pet_species_idx}').attr('selected','selected');
+				$("input:checkbox[name='item']").prop('checked', true);
+			});
 </script>
 </head>
 <body>

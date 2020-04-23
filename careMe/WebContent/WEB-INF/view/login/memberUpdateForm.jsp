@@ -2,6 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%
+	String hostname = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ "/careMe/";
+%>
+<c:set var="hostname" value="<%=hostname%>" />
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -53,6 +58,7 @@ function godelete(){
      }
 }
 
+
 </script>
 
 </head>
@@ -80,8 +86,8 @@ function godelete(){
 					<!-- 아이디 입력 -->
 					<td style="padding-left: 20px;"><b>ID:</b></td>
 					<td><input type="text" style="width: 530px" id="member_id"
-						readonly="readonly" name="member_id" value="${sc.memberDto.member_id}"
-						class="form-control" /></td>
+						readonly="readonly" name="member_id"
+						value="${sc.memberDto.member_id}" class="form-control" /></td>
 				</tr>
 				<tr>
 					<!-- 비밀번호 입력 -->
@@ -101,15 +107,21 @@ function godelete(){
 					<!-- 닉네임 입력 -->
 					<td style="padding-left: 16px;"><b>Nick:</b></td>
 					<td><input type="text" style="width: 530px" id="member_nick"
-						readonly="readonly" name="member_nick" value="${sc.memberDto.member_nick}"
-						class="form-control" /></td>
+						readonly="readonly" name="member_nick"
+						value="${sc.memberDto.member_nick}" class="form-control" /></td>
 				</tr>
 				<tr>
 					<!-- 이메일 입력 -->
 					<td style="padding-left: 16px;"><b>Email:</b></td>
 					<td><input type="text" style="width: 530px" id="member_email"
-						readonly="readonly" name="member_email" value="${sc.memberDto.member_email}"
-						class="form-control" /></td>
+						readonly="readonly" name="member_email"
+						value="${sc.memberDto.member_email}" class="form-control" /></td>
+				</tr>
+				<tr>
+					<!-- 프로필 파일 -->
+					<td style="padding-left: 20px; padding-top: 10px;"><b>프로필:</b></td>
+					<td><img src="${hostname}${memberDto.member_profile}"
+						id="cert_preview2"></td>
 				</tr>
 			</table>
 			<br>

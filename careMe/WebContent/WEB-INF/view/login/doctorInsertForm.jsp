@@ -122,6 +122,19 @@
 
 		//form.submit();
 	}
+
+	$(document).ready(
+			function() {
+				$("addpet1").click(function()){
+					var str="";
+
+				$("addpet1").each(function(){
+					if($(this).is(":checked"))
+							str += $(this).val()+ "";
+						});
+					
+					}
+			});
 </script>
 </head>
 <body>
@@ -207,7 +220,9 @@
 							items="${addpet}">
 							<input type="checkbox" id="addpet${item.pet_species_idx}"
 								name="addpet1" value="${item.pet_species_idx}">
-							<label style="padding-left: 3px;" for="addpet${item.pet_species_idx}">
+
+							<label style="padding-left: 3px;"
+								for="addpet${item.pet_species_idx}">
 								${item.pet_species_name} </label>
 
 						</c:forEach></td>

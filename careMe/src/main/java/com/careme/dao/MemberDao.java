@@ -46,8 +46,8 @@ public class MemberDao extends SqlSessionDaoSupport {
 	}
 
 	// 회원가입
-	public List<MemberDto> insert(MemberDto mdto) {
-		return getSqlSession().selectList("member.insert", mdto);
+	public int insert(MemberDto mdto) {
+		return getSqlSession().insert("member.insert", mdto);
 	}
 
 	// 정보수정 비밀번호 변경

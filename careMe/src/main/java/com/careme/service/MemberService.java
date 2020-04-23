@@ -71,8 +71,8 @@ public class MemberService {
 
 		DoctorDto doctorDto = dao.selectDoctor(member.getMember_idx());
 		sc.setDoctorDto(doctorDto);
-		//System.out.println("닥터 정보" + doctorDto);
-		//System.out.println(doctorDto);
+		// System.out.println("닥터 정보" + doctorDto);
+		// System.out.println(doctorDto);
 		// int pet_idx = petService.findSelectedPet(member_idx);
 		// sc.setPet_idx(pet_idx);
 
@@ -97,24 +97,28 @@ public class MemberService {
 	}
 
 	// 회원가입 성공
-	public int insertOk(MemberDto mdto) {
-		List<MemberDto> lok = dao.insert(mdto);
-		return lok.size();
+	public int insertOk(MemberDto mdto, MultipartHttpServletRequest request) {
+		List<FileUploadCommand> list = fileUploadService.upload(request, "/img/member/");
+		if (list.size() > 0) {
+			FileUploadCommand file = list.get(0);
+			mdto.setMember_profile(file.getFilePath());
+		}
+		int lok = dao.insert(mdto);
+		return lok;
 	}
 
 	// 의사등록 성공
 	public int dinsertOk(DoctorDto ddto, MultipartHttpServletRequest request) {
-		//System.out.println("서비스 도착1");
+		// System.out.println("서비스 도착1");
 		List<FileUploadCommand> list = fileUploadService.upload(request, "/img/doctor/");
 		if (list.size() > 0) {
 			FileUploadCommand file = list.get(0);
 			ddto.setCertification_document(file.getFilePath());
 		}
-		//System.out.println("서비스 도착2");
+		// System.out.println("서비스 도착2");
 		int dok = dao.dinsert(ddto);
 		return dok;
 	}
-
 
 	// 정보수정
 	public List<MemberDto> updateOk(MemberDto mdto) {

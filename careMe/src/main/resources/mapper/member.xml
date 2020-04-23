@@ -12,7 +12,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 로그인 -->
 	<select id="login" resultType="com.careme.model.dto.MemberDto"
 		parameterType="com.careme.model.command.LoginCommand">
-		select member_id,member_pass, member_idx, member_email, member_nick from
+		select member_id,member_pass, member_idx, member_email,
+		member_nick from
 		members where
 		member_id=#{member_id} and
 		member_pass=#{member_pass}
@@ -58,10 +59,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 회원가입 -->
 	<insert id="insert"
 		parameterType="com.careme.model.dto.MemberDto">
-		insert into members(member_id, member_pass,
-		member_email, member_nick)
-		values(#{member_id},#{member_pass},#{member_email},
-		#{member_nick})
+		insert into members(member_idx,member_id, member_pass,
+		member_email, member_nick,member_profile)
+		values(#{member_idx},#{member_id},#{member_pass},#{member_email},
+		#{member_nick},#{member_profile})
 	</insert>
 
 	<!-- 비밀번호 변경 -->
