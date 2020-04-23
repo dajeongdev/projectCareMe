@@ -1,13 +1,11 @@
 package com.careme.dao;
 
 import java.util.List;
+
 import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
-
-import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.StoryCommand;
-import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -15,8 +13,8 @@ import com.careme.model.dto.TagDto;
 
 public class StoryDao extends SqlSessionDaoSupport {
 	// 글목록
-	public List<StoryBoardDto> listing() {
-		return getSqlSession().selectList("story.list");
+	public List<StoryBoardDto> listing(StoryCommand com) {
+		return getSqlSession().selectList("story.list", com);
 	}
 	
 	public List<StoryBoardDto> totalListing(Map<String, Integer> map) {
@@ -38,12 +36,30 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public StoryBoardDto read(int story_board_idx) {
 		return getSqlSession().selectOne("story.read", story_board_idx);
 	}	
-	public StoryFileDto readFile(int story_board_idx) {
-		return getSqlSession().selectOne("story.readFile", story_board_idx);
+	public List<StoryFileDto> readFile(int story_board_idx) {
+		return getSqlSession().selectList("story.readFile", story_board_idx);
 	}
 	public List<StoryCommentDto> readCom(int story_board_idx) {
 		return getSqlSession().selectList("story.readCom", story_board_idx);
 	}
+	public StoryCommentDto readComIdx(int story_comment_idx) {
+		return getSqlSession().selectOne("story.readComIdx", story_comment_idx);
+	}
+	public List<TagDto> readTags(int board_idx) {
+		return getSqlSession().selectList("story.tags", board_idx);
+	}
+	
+	// 태그 리스트
+	public List<TagDto> readTagList(Map<String, Integer> map) {
+		return getSqlSession().selectList("story.tagList", map);
+	}
+	public List<StoryFileDto> readTagFileList(int story_board_idx) {
+		return getSqlSession().selectList("story.tagFileList", story_board_idx);
+	}
+	public List<TagDto> tagSelect(Map<String, Integer> map) {
+		return getSqlSession().selectList("story.tagSelect", map);
+	}
+	
 	// 조회수
 	public int counting(int story_board_idx) {
 		return getSqlSession().update("story.viewCount", story_board_idx);
@@ -75,11 +91,10 @@ public class StoryDao extends SqlSessionDaoSupport {
 	
 	// 수정
 	public int update(StoryBoardDto dto) {
-		getSqlSession().update("story.update", dto);
-		return dto.getStory_board_idx();
+		return getSqlSession().update("story.update", dto);
 	}
-	public int updateFfile(StoryFileDto fileDto) {
-		return getSqlSession().update("story.updateFile", fileDto);
+	public int updateFfile(Map<String, Object> map) {
+		return getSqlSession().update("story.updateFile", map);
 	} 
 	public int updateCom(StoryCommentDto comDto) {
 		return getSqlSession().update("story.updateCom", comDto);
@@ -89,34 +104,25 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int delete(int story_board_idx) {
 		return getSqlSession().delete("story.delete", story_board_idx);
 	}
-	public int deleteFile(int story_file_idx) {
-		return getSqlSession().delete("story.deleteFile", story_file_idx);
-	}
 	public int deleteCom(int story_comment_idx) {
 		return getSqlSession().delete("story.deleteCom", story_comment_idx);
 	}
-
-
-	// 태그
-	public List<TagDto> readTag() {
-		return getSqlSession().selectList("story.readTag");
-	}
-	public int insertTag(TagDto tagDto) {
-		getSqlSession().insert("story.insertTag", tagDto);
-		return tagDto.getTag_idx();
-	}
-	public int insertTagType(TagDto tagDto) {
-		return getSqlSession().insert("story.insertTagType", tagDto);
-	}
-	public int updateTag(TagDto tagDto) {
-		return getSqlSession().update("story.updateTag", tagDto);
-	}
-	public int deleteTag(int tag_idx) {
-		return getSqlSession().delete("story.deleteTag", tag_idx);
+	
+	// 좋아요
+	public int addHeart(int idx) {
+		return getSqlSession().update("story.addHeart", idx);
 	}
 	
-	// 메인용 스토리 이미지 리스트
-	public List<StoryFileDto> mainImageList() {
-		return getSqlSession().selectList("story.main_story");
+	public int subHeart(int idx) {
+		return getSqlSession().update("story.subHeart", idx);
 	}
+	
+	public int addComHeart(int idx) {
+		return getSqlSession().update("story.addComHeart", idx);
+	}
+	
+	public int subComHeart(int idx) {
+		return getSqlSession().update("story.subComHeart", idx);
+	}
+
 }
