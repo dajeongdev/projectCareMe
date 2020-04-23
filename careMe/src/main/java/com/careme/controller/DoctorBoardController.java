@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.SessionCommand;
@@ -23,9 +24,11 @@ import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
+import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
+import com.careme.service.CarediaryService;
 import com.careme.service.FileUploadService;
 import com.careme.service.HashTagService;
 import com.careme.service.HeartService;
@@ -82,8 +85,15 @@ public class DoctorBoardController {
 	@Autowired
 	HeartService hts;
 	public void setHeartService(HeartService hts) {
-		this.hts=hts;
+		this.hts = hts;
 	}
+	
+	@Autowired
+	CarediaryService cds;
+	public void setCarediaryService(CarediaryService cds) {
+		this.cds = cds;
+	}
+	
 	
 //게시판 뿌리기(게시글 / 댓글 / 글개수)
 	@RequestMapping(value = "/view/doctorBoardView/doctorBoard")
@@ -127,12 +137,17 @@ public class DoctorBoardController {
 		List<BoardFileDto> flist = bs.getDoctorBoardFiles(question_table_idx);
 		List<BoardCommentDto> clist = bs.getDoctorBoardComments(question_table_idx);
 		
+		int carediaryIdx = mlist.getPet_care_idx();
+		CarediaryCommand dlist = cds.getCarediaryByIdx(carediaryIdx);
 		String idx = String.valueOf(question_table_idx);
-		
 		int commentCount = clist.size();
+		
+		System.out.println("diary 확인 ::::"+dlist);
+		
 		mav.addObject("info", info);
 		mav.addObject("mlist", mlist);
 		mav.addObject("flist", flist);
+		mav.addObject("dlist", dlist);
 		mav.addObject("idx", idx);
 		mav.addObject("clist", clist);
 		mav.addObject("commCount", commentCount);
@@ -179,7 +194,11 @@ public class DoctorBoardController {
 			MemberDto info = sc.getMemberDto(); 
 			int member_idx = info.getMember_idx();
 			
+			//pet정보 가져오기
+			List<PetDto> petInfo = ps.selectPetList(member_idx);
+			
 			write.addObject("info", info);
+			write.addObject("myPet", petInfo);
 			write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			return write;
 		}
@@ -194,6 +213,22 @@ public class DoctorBoardController {
 			
 			Gson json = new Gson();
 			return json.toJson(items);	
+		}
+		
+		@RequestMapping(value = "/view/doctorBoardView/doctorWriteForm/pet_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+		@ResponseBody
+		public String getCasualPetListLevel2(int level, int selectPet) {
+			
+			HashMap<String, Object> petItems = null;
+			int currentPage=1;
+			int contentPerPage=10;
+			if (level == 2) petItems = cds.getCarediaryListByPetIdx(selectPet, currentPage, contentPerPage);
+			
+			@SuppressWarnings("unchecked")
+			List<CarediaryCommand> plist = (List<CarediaryCommand>) petItems.get("list");
+			System.out.println("plisting::::"+plist);
+			Gson json = new Gson();
+			return json.toJson(plist);	
 		}
 		
 		@RequestMapping(value = "/view/doctorBoardView/doctorBoardWriteAdd", method = RequestMethod.POST)

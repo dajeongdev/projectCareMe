@@ -70,6 +70,37 @@
 </script>
 
 <script>
+<!-- MyPET CHOOSE -->
+ $(function(){
+		$("#selectMyPet").on("change", function(){
+		var selectPet=$(this).find("option:selected").data("pnum");
+			if(!selectPet){
+				$("#pet_care_idx option").remove();
+				return false;
+			}
+		var url ="doctorWriteForm/pet_idx?level=2&selectPet="+selectPet;
+		$.ajax(
+			{type:"GET",
+			url:url,
+			dataType:"json"})
+			.done(function(plist){
+			$("#pet_care_idx option").remove();
+				if (plist.length > 0) {
+					for (pitems in plist) {
+						var s = plist[pitems];
+						var option = "<option value=" + s.diary.pet_care_idx + ">" + s.diary.title + " on " + s.diary.diary_date + "</option>"
+						$("#pet_care_idx").append(option);
+					}
+				}
+				}).fail(function(e) {
+					alert(e.responseText);
+				});
+			})
+		})
+
+</script>
+
+<script>
 <!-- 해시태그 기능 -->
 	//태그를 저장할 배열
 	var tags = [];
@@ -87,7 +118,7 @@
 					if (tagNames[i] == inputText) {
 						console.log(tagNames[i] + "==" + inputText);
 						$("#tag").val("");
-						alert("중복!");
+						alert("태그가 중복됩니다!");
 						return;
 					}
 				}
@@ -259,11 +290,32 @@
 								</select>
 							</div>
 						</div>
+		
+
+					<!-- 마이펫 찾기 -->
+						<div class="row" style="width: 100%;">
+							<div class="col-md-6  mb-3">
+								<label for="myPet">등록 펫 찾기</label> 
+								<select class="form-control" id="selectMyPet">
+									<option>==선택==</option>
+									<c:if test="${myPet != null}">
+										<c:forEach var="option" items="${myPet}">
+											<option data-pnum="${option.pet_idx}">${option.name}</option>
+										</c:forEach>
+									</c:if>
+								</select>
+							</div>
+							<div class="col-md-6  mb-3">
+								<label for="selectPetDiary">다이어리 찾기</label> 
+								<select class="form-control" id="pet_care_idx" name="pet_care_idx">
+								</select>
+							</div>
+						</div>
 
 						<div align="left">
 							내용<br>
 							<textarea name="content" style="width: 100%; height: 250px"></textarea>
-							<br>
+							<br> 
 						</div>
 
 

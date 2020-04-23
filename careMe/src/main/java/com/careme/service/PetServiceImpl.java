@@ -54,11 +54,6 @@ public class PetServiceImpl implements PetService  {
 	public PetDto selectPet(int petIdx) {
 		return dao.selectPet(petIdx);
 	}
-	//PetDto 리스트
-	@Override
-	public List<PetDto> selectPetList(int memberIdx){
-		return dao.selectPetList(memberIdx);
-	}
 	
 	@Override
 	public List<PetDto> selectPetList(int memberIdx) {

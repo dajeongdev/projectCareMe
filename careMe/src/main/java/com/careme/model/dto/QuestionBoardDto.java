@@ -22,6 +22,7 @@ public class QuestionBoardDto {
 	LocalDateTime reg_date;
 	LocalDateTime update_date;
 	String del_yn;
+	int pet_care_idx;
 	
 	private String file_name;
 	private String file_path;
@@ -166,19 +167,22 @@ public class QuestionBoardDto {
 		this.contentPerPage = contentPerPage;
 	}
 	
+	public int getPet_care_idx() {
+		return pet_care_idx;
+	}
+	public void setPet_care_idx(int pet_care_idx) {
+		this.pet_care_idx = pet_care_idx;
+	}
 	@Override
 	public String toString() {
 		return "QuestionBoardDto [question_table_idx=" + question_table_idx + ", member_idx=" + member_idx
 				+ ", doctor_idx=" + doctor_idx + ", member_id=" + member_id + ", param=" + param + ", start_idx="
 				+ start_idx + ", contentPerPage=" + contentPerPage + ", title=" + title + ", question_type="
 				+ question_type + ", content=" + content + ", view_count=" + view_count + ", is_private=" + is_private
-				+ ", reg_date=" + reg_date + ", update_date=" + update_date + ", del_yn=" + del_yn + ", file_name="
-				+ file_name + ", file_path=" + file_path + ", file_size=" + file_size + ", pet_idx=" + pet_idx
-				+ ", pet_species_idx=" + pet_species_idx + ", pet_species_level=" + pet_species_level
-				+ ", pet_species_name=" + pet_species_name + "]";
+				+ ", reg_date=" + reg_date + ", update_date=" + update_date + ", del_yn=" + del_yn + ", pet_care_idx="
+				+ pet_care_idx + ", file_name=" + file_name + ", file_path=" + file_path + ", file_size=" + file_size
+				+ ", pet_idx=" + pet_idx + ", pet_species_idx=" + pet_species_idx + ", pet_species_level="
+				+ pet_species_level + ", pet_species_name=" + pet_species_name + "]";
 	}
-	
-	
-	
 	
 }

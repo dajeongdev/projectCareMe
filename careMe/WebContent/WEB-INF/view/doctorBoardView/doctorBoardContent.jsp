@@ -83,7 +83,6 @@ $(function(){
   				
 
 		  		<div class="row card-body" style="height:auto;">
-
   					<div class="col-md-3">
 	       				<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
     	    			<title>Placeholder</title><rect width="100%" height="100%" fill="#777">
@@ -111,8 +110,61 @@ $(function(){
 							</p>
         				</div>
 					</div>
-				
-  				</div>
+				</div>
+  				
+  				<!-- 다이어리 -->
+ 		  		<div class="row">
+  				<c:if test="${d.size() > 0}">
+						<c:forEach var="d" items="${dlist}" varStatus="status">
+							<div class="card b-1 hover-shadow mb-20">
+								<header class="card-header flexbox align-items-center">
+									<div>
+										<strong>${d.diary.title} : </strong> <span>${d.diary.reg_date}</span>
+									</div>
+								</header>
+
+								<div class="media card-body table-responsive row">
+									<div class="row mb-2 w-100">
+										<div class="col-md-6 p-2">
+											<div class="card-body">
+												<table class="table-sm w-100 text-center">
+													<thead class="border-bottom">
+														<tr>
+															<th>날짜</th>
+															<th>산책</th>
+															<th>소변</th>
+															<th>대변</th>
+															<th>몸무게</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>${d.diary.diary_date}</td>
+															<td>${d.diary.exercise}/m</td>
+															<td>
+																<div class="color-circle"
+																	style="background-color:${article.urineContent};"></div>
+															</td>
+															<td>${d.fecesContent}</td>
+															<td>${d.diary.weight}111/kg</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<div class="col-md-6 p-2">
+											<div class="card-body">
+												<p>${d.diary.memo}</p>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<!-- E:diary -->
+						</c:forEach>
+					</c:if>
+  					</div>
   				
   			
   			</div>
@@ -124,8 +176,10 @@ $(function(){
 			<table align="right">
 				<tr height="30">
 					<td colspan="4" align="right">
+					<c:if test="${sc.memberDto.member_idx==mlist.member_idx}">
 					<button type="button" class="btn btn-dark btn-sm" onclick="document.location.href='doctorBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">글수정</button>
 					<button type="button" class="btn btn-dark btn-sm" onclick="deleteArticle('${mlist.question_table_idx}')">글삭제</button>
+					</c:if>
 					<button type="button" class="btn btn-dark btn-sm" onClick="location.href='doctorBoard?currentPage=1'">글목록</button>
 					</td>
 				</tr>
@@ -170,10 +224,12 @@ $(function(){
 							
 						</div>	
 						<div class="col-md-3" align="right">
+						<c:if test="${sc.memberDto.member_idx==item.member_idx}">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
 							onClick="">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 삭제"
 							onClick="">
+						</c:if>	
 						</div>
 					</div>
 					<p></p>
@@ -194,7 +250,7 @@ $(function(){
 				<textarea name="content" style="width: 100%; height: 100px" rows="3"></textarea>
 						<div class="col-md-12" align="right">
 							<input class="btn btn-dark btn-sm" type="submit" name="submit" value="확인"> 
-							<input type="hidden" name="member_idx" value="1">
+							<input type="hidden" name="member_idx" value="${sc.memberDto.member_idx}">
 						</div>
 			</form>
 			</div>

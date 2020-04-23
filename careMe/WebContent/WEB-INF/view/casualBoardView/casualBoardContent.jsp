@@ -94,7 +94,10 @@ $(function(){
         				<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
   					</div>
   					
-  					<div class="col-md-9 shadow-sm">
+  					<!-- 다이어리 -->
+  					
+  					<div class="row">
+  					<div class="col-md-12 shadow-sm">
   						<div>
   							<c:if test="${flist.size()>0}">
   								<c:forEach var="flist" items="${flist}">
@@ -111,8 +114,85 @@ $(function(){
 							</p>
         				</div>
 					</div>
-				
-  				</div>
+				</div>
+  				
+  				<div class="row">
+  				<c:if test="${dlist.size() > 0}">
+						<c:forEach var="d" items="${dlist}" varStatus="status">
+							<div class="card b-1 hover-shadow mb-20">
+								<header class="card-header flexbox align-items-center">
+									<div>
+										<strong>${d.diary.title} : </strong> <span>${d.diary.reg_date}</span>
+									</div>
+									<div class="card-hover-show">
+										<a class="btn btn-xs fs-10 btn-dark btn-sm"
+											href="update?d_id=${d.diary.pet_care_idx}">수정</a> 
+										<button type="button" class="btn btn-xs fs-10 btn-dark btn-sm"
+											data-toggle="collapse" data-target="#image${status.index}"
+											aria-expanded="false" aria-controls="image${status.index}">열기</button>
+										<!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
+									</div>
+								</header>
+
+								<div class="media card-body table-responsive row">
+
+									<div class="row mb-2 w-100">
+										<div class="col-md-6 p-2">
+											<div class="card-body">
+												<table class="table-sm w-100 text-center">
+													<thead class="border-bottom">
+														<tr>
+															<th>날짜</th>
+															<th>산책</th>
+															<th>소변</th>
+															<th>대변</th>
+															<th>몸무게</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>${d.diary.diary_date}</td>
+															<td>${d.diary.exercise}/m</td>
+															<td>
+																<div class="color-circle"
+																	style="background-color:${article.urineContent};"></div>
+															</td>
+															<td>${d.fecesContent}</td>
+															<td>${d.diary.weight}111/kg</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<div class="col-md-6 p-2">
+											<div class="card-body">
+												<p>${d.diary.memo}</p>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-12 p-2 collapse" id="image${status.index}">
+											<div class="card-body">
+												<div class="row">
+													<c:if test="${d.files.size() > 0}">
+														<c:forEach var="image" items="${article.files}">
+															<div class="col-md-3">
+																<img src="${hostname}${image.file_path}">
+															</div>
+														</c:forEach>
+													</c:if>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<!-- E:diary -->
+						</c:forEach>
+					</c:if>
+  					</div>
   				
   			
   			</div>

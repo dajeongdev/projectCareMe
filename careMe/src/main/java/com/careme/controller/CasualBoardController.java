@@ -26,6 +26,7 @@ import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
+import com.careme.model.dto.PetCareDto;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
@@ -151,12 +152,17 @@ public class CasualBoardController {
 		List<BoardFileDto> flist = bs.getCasualBoardFiles(question_table_idx);
 		List<BoardCommentDto> clist = bs.getCasualBoardComments(question_table_idx);
 		
+		int carediaryIdx = mlist.getPet_care_idx();
+		CarediaryCommand dlist = cds.getCarediaryByIdx(carediaryIdx);
 		String idx = String.valueOf(question_table_idx);
-		
 		int commentCount = clist.size();
+		
+		System.out.println("diary 확인 ::::"+dlist);
+		
 		mav.addObject("info", info);
 		mav.addObject("mlist", mlist);
 		mav.addObject("flist", flist);
+		mav.addObject("dlist", dlist);
 		mav.addObject("idx", idx);
 		mav.addObject("clist", clist);
 		mav.addObject("commCount", commentCount);
@@ -206,13 +212,10 @@ public class CasualBoardController {
 		int member_idx = info.getMember_idx();
 		
 		//pet정보 가져오기
-//		List<PetDto> petInfo = ps.selectPetList(member_idx);
-		
-//		petInfo = ps.selectPet(pet_idx);
-//		petInfo.getName();
+		List<PetDto> petInfo = ps.selectPetList(member_idx);
 		
 		write.addObject("info", info);
-//		write.addObject("myPet", petInfo);
+		write.addObject("myPet", petInfo);
 		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 		return write;
 	}
@@ -229,38 +232,23 @@ public class CasualBoardController {
 		return json.toJson(items);	
 	}
 	
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_idx", method = RequestMethod.GET)
-	public ModelAndView myPetForm(int selectPet) {
-		ModelAndView mav = new ModelAndView("pet/regist");
-		mav.addObject("petOption", ps.selectPet(selectPet)); 		
-		return mav;
-	}
-	
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
-	public String getCasualPetList(int level, int selectPet) {
-		PetDto items = null;
+	public String getCasualPetListLevel2(int level, int selectPet) {
 		
-		if (level == 1) {items = ps.selectPet(selectPet);}
-		else if (level == 2) {
-			int currentPage=1;
-			int contentPerPage=10;
-			List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
-			HashMap<String, Integer> param = new HashMap<String, Integer>();
-			int start = pns.getStartIdx(currentPage, contentPerPage);
-			param.put("pet_idx", selectPet);
-			param.put("start", start);
-			param.put("contentPerPage", contentPerPage);
-			list = cddao.selectCarediaryListByPetIdx(param);
-			
-		//	items = list;
-			
+		HashMap<String, Object> petItems = null;
+		int currentPage=1;
+		int contentPerPage=10;
+		if (level == 2) petItems = cds.getCarediaryListByPetIdx(selectPet, currentPage, contentPerPage);
 		
-		}
-		
+		@SuppressWarnings("unchecked")
+		List<CarediaryCommand> plist = (List<CarediaryCommand>) petItems.get("list");
+		System.out.println("plisting::::"+plist);
 		Gson json = new Gson();
-		return json.toJson(items);	
+		return json.toJson(plist);	
 	}
+		
+		
 	
 	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
 	public String writeCasualBoardArticle(QuestionBoardDto dto, int[] rdTag, MultipartHttpServletRequest request) throws Exception {
