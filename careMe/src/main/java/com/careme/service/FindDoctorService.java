@@ -25,49 +25,67 @@ public class FindDoctorService {
 	}
 	
 	@Autowired
-	PageNumberService pageNumberService;
-	public void setPageNumberService(PageNumberService pageNumberService) {
-		this.pageNumberService = pageNumberService;
+	PageNumberService pageService;
+	public void setPageNumberService(PageNumberService pageService) {
+		this.pageService = pageService;
 	}
 	
 	
-	// 전체 의사 리스트
-	public Map<String, Object> getDoctors(int currentPage, int contentPerPage) {
+	// 전체 의사 리스트(비회원일때)
+	public Map<String, Object> getDoctors(int currentPage, int contentPerPage, Integer petSpec) {
 		Map<String, Object> data = new HashMap<String, Object>();
-		List<DoctorDto> doctorDtoList = findDoctorDao.getDoctorDtoList();
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		
+		int start = pageService.getStartIdx(currentPage, contentPerPage);
+		params.put("start", start);
+		params.put("contentPerPage", contentPerPage);
+		if (petSpec != null) params.put("pet_species_idx", petSpec);
+		
+		List<DoctorDto> doctorDtoList = findDoctorDao.getDoctorDtoList(params);
 		int totalCount = findDoctorDao.selectTotalCount();
 		
 		List<DoctorCommand> doctors = getDoctorCommand(doctorDtoList);
 		data.put("doctors", doctors);
 		
 		String path = "findDoctor?page=";
-		PageNumberCommand paging = pageNumberService.paging(totalCount, contentPerPage, 1, path);
+		if (petSpec != null) path = "findDoctor?petSpec=" + petSpec + "page=";
+
+		PageNumberCommand paging = pageService.paging(totalCount, contentPerPage, currentPage, path);
 		data.put("paging", paging);
 		
 		return data;
 	}
 	
 	// member_idx를 넣으면 그 회원이 등록한 pet과 관련된 의사를 소환함
-	public Map<String, Object> getDoctors(int currentPage, int contentPerPage, int member_idx) {
+	public Map<String, Object> getDoctors(int currentPage, int contentPerPage, Integer petSpec, int member_idx) {
 		Map<String, Object> data = new HashMap<String, Object>();
-		List<DoctorDto> doctorDtoList = findDoctorDao.getDoctorDtoListOrderByMatching(member_idx);
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		
+		int start = pageService.getStartIdx(currentPage, contentPerPage);
+		params.put("start", start);
+		params.put("contentPerPage", contentPerPage);
+		params.put("member_idx", member_idx);
+		if (petSpec != null) params.put("pet_species_idx", petSpec);
+		
+		List<DoctorDto> doctorDtoList = findDoctorDao.getDoctorDtoListOrderByMatching(params);
 		int totalCount = findDoctorDao.selectTotalCount();
 		
 		List<DoctorCommand> doctors = getDoctorCommand(doctorDtoList);
 		data.put("doctors", doctors);
 		
 		String path = "findDoctor?page=";
-		PageNumberCommand paging = pageNumberService.paging(totalCount, contentPerPage, currentPage, path);
+		if (petSpec != null) path = "findDoctor?petSpec=" + petSpec + "page=";
+		PageNumberCommand paging = pageService.paging(totalCount, contentPerPage, currentPage, path);
 		data.put("paging", paging);
 		
 		return data;
 	}
 	
+	// 한달동안 답변에 좋아요 많이 받은 top3 의사 
 	public List<DoctorCommand> getPopularDoctors() {
 		LocalDate now = LocalDate.now();
 		String monthAgo = now.minusMonths(1).toString(); 
 		List<DoctorDto> doctorDtoList = findDoctorDao.getPopularDoctorDtoList(monthAgo);
-		System.out.println("인기의사:::::::" + doctorDtoList);
 		
 		List<DoctorCommand> doctors = getDoctorCommand(doctorDtoList);
 		return doctors;
@@ -85,13 +103,12 @@ public class FindDoctorService {
 		return list;
 	}
 	
-
-	
 	public List<DoctorMajorWithSpeciesName> getDoctorMajors(int doctor_idx) {
 		List<DoctorMajorWithSpeciesName> list = new ArrayList<DoctorMajorWithSpeciesName>();
 		list = findDoctorDao.getDoctorMajorWithSpeciesName(doctor_idx);
 		return list;
 	}
+	
 	
 	
 

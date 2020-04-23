@@ -62,44 +62,7 @@
 				<div class="card-body pb-0">
 					<div class="row d-flex align-items-stretch">
 						<c:forEach var="doctor" items="${popularDoctors}">
-							<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-								<div class="card bg-light">
-									<div class="card-header text-muted border-bottom-0">
-										Digital Strategist</div>
-									<div class="card-body pt-0">
-										<div class="row">
-											<div class="col-7">
-												<h2 class="lead">
-													<b>${doctor.doctorDto.doctor_name}</b>
-												</h2>
-												<p class="text-muted text-sm">
-													<b>전문분야: </b>
-													<c:forEach var="major" items="${doctor.doctorMajor}">
-														${major.pet_species_name}
-													</c:forEach>
-												</p>
-												<ul class="ml-4 mb-0 fa-ul text-muted">
-													<li class="small"><span class="fa-li">
-														<i class="fas fa-lg fa-building"></i></span> 병원: ${doctor.doctorDto.doctor_hospital_name}
-													</li>
-													<li class="small"><span class="fa-li">
-														<i class="fas fa-lg fa-phone"></i></span> Phone #: ${doctor.doctorDto.doctor_hospital_tel}
-													</li>
-												</ul>
-											</div>
-											<div class="col-5 text-center">
-												<img src="${adminResources}/dist/img/user1-128x128.jpg" alt="" class="img-circle img-fluid">
-											</div>
-										</div>
-									</div>
-									<div class="card-footer">
-										<div class="text-right">
-											<a href="#" class="btn btn-sm bg-teal"><i class="fas fa-comments"></i></a> 
-											<a href="#" class="btn btn-sm btn-primary"><i class="fas fa-user"></i> View Profile</a>
-										</div>
-									</div>
-								</div>
-							</div>
+							<%@ include file="/WEB-INF/view/findDoctor/doctorCard.jspf" %>
 						</c:forEach>
 					</div>
 				</div>
@@ -125,10 +88,27 @@
 					</div>
 				</div>
 				
+				
+				
 				<div class="card card-solid">
-					<div class="card-body pb-0">
+					<div class="card-body p-1 pl-3">
 						<div class="row d-flex align-items-stretch">
-							고양이, 강아지, 거북이, 앵무새, 말, 소
+							<a href="findDoctor" class="mx-1">
+								<small class="badge
+									<c:if test="${petSpec == '0'}">badge-primary</c:if>
+									<c:if test="${petSpec != null}">badge-secondary</c:if> ">
+									전체
+								</small>
+							</a>
+							<c:forEach var="spec" items="${petSpecs}">
+								<a href="findDoctor?petSpec=${spec.pet_species_idx}" class="mx-1">
+									<small class="badge
+										<c:if test="${petSpec == spec.pet_species_idx}">badge-primary</c:if>
+										<c:if test="${petSpec != spec.pet_species_idx}">badge-secondary</c:if> ">
+										${spec.pet_species_name}
+									</small>
+								</a>
+							</c:forEach>							
 						</div>
 					</div>
 				</div>
@@ -144,44 +124,7 @@
 				<div class="card-body pb-0">
 					<div class="row d-flex align-items-stretch">
 						<c:forEach var="doctor" items="${doctors}">
-							<div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-								<div class="card bg-light">
-									<div class="card-header text-muted border-bottom-0">
-										Digital Strategist</div>
-									<div class="card-body pt-0">
-										<div class="row">
-											<div class="col-7">
-												<h2 class="lead">
-													<b>${doctor.doctorDto.doctor_name}</b>
-												</h2>
-												<p class="text-muted text-sm">
-													<b>전문분야: </b>
-													<c:forEach var="major" items="${doctor.doctorMajor}">
-														${major.pet_species_name}
-													</c:forEach>
-												</p>
-												<ul class="ml-4 mb-0 fa-ul text-muted">
-													<li class="small"><span class="fa-li">
-														<i class="fas fa-lg fa-building"></i></span> 병원: ${doctor.doctorDto.doctor_hospital_name}
-													</li>
-													<li class="small"><span class="fa-li">
-														<i class="fas fa-lg fa-phone"></i></span> Phone #: ${doctor.doctorDto.doctor_hospital_tel}
-													</li>
-												</ul>
-											</div>
-											<div class="col-5 text-center">
-												<img src="${adminResources}/dist/img/user1-128x128.jpg" alt="" class="img-circle img-fluid">
-											</div>
-										</div>
-									</div>
-									<div class="card-footer">
-										<div class="text-right">
-											<a href="#" class="btn btn-sm bg-teal"><i class="fas fa-comments"></i></a> 
-											<a href="#" class="btn btn-sm btn-primary"><i class="fas fa-user"></i> View Profile</a>
-										</div>
-									</div>
-								</div>
-							</div>
+							<%@ include file="/WEB-INF/view/findDoctor/doctorCard.jspf" %>
 						</c:forEach>
 					</div>
 				</div>

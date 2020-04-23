@@ -4,8 +4,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="findDoctor">
-	<select id="selectDoctorList" resultType="com.careme.model.dto.DoctorDto">
-		select SQL_CALC_FOUND_ROWS * from doctor where del_yn = 'n' and is_certified = 'y'
+	<select id="selectDoctorList" resultType="com.careme.model.dto.DoctorDto" parameterType="HashMap">
+		select SQL_CALC_FOUND_ROWS doctor.* 
+		from doctor
+		inner join doctor_major major on doctor.doctor_idx = major.doctor_idx
+		where doctor.del_yn = 'n'
+		   and doctor.is_certified = 'y'
+		<if test="pet_species_idx != null"> and major.pet_species_idx = #{pet_species_idx}</if>
+		group by doctor.doctor_idx
+		limit #{start}, #{contentPerPage}
 	</select>
 	
 	<select id="selectPopularDoctorList" resultType="com.careme.model.dto.DoctorDto">
@@ -26,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	   				) popular on doctor.doctor_idx = popular.doctor_idx
 	</select>
 	
-	<select id="selectDoctorListOrderByMatching" resultType="com.careme.model.dto.DoctorDto">
+	<select id="selectDoctorListOrderByMatching" resultType="com.careme.model.dto.DoctorDto" parameterType="HashMap">
 		select SQL_CALC_FOUND_ROWS doctor.* from 
 		(
 			select major.doctor_idx, ifnull(sum(own_pet.own_count), 0) matching_point
@@ -41,17 +48,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				from pet 
 				inner join pet_species spec on pet.pet_species_idx = spec.pet_species_idx
 				inner join pet_species spec_anc on spec.pet_species_ancestor = spec_anc.pet_species_idx
-				where pet.member_idx = 1
+				where pet.member_idx = #{member_idx}
 				and pet.del_yn = 'n'
 				group by spec.pet_species_ancestor
 				order by own_count desc
 			) own_pet on own_pet.pet_species = major.pet_species_idx
 			where doctor.is_certified = 'y'
 			  and doctor.del_yn = 'n'
+			  <if test="pet_species_idx != null">
+			  and pet_species_idx = #{pet_species_idx}
+			  </if>
 			group by major.doctor_idx
 			order by matching_point desc
 		) matched
-		inner join doctor on matched.doctor_idx = doctor.doctor_idx;
+		inner join doctor on matched.doctor_idx = doctor.doctor_idx
+		limit #{start}, #{contentPerPage}
 	</select>
 	
 	<select id="selectDoctorMajor" resultType="com.careme.model.dto.DoctorMajorDto">
