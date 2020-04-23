@@ -49,7 +49,7 @@
 	<insert id="insertArt" parameterType="com.careme.model.dto.QuestionBoardDto">
 		insert into question_board (member_idx, title, question_type, doctor_idx, pet_idx, pet_species_idx, content, 
 		view_count, is_private, reg_date, update_date, del_yn) values (#{member_idx}, #{title}, #{question_type}, #{doctor_idx}, #{pet_idx}, 
-		#{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n')
+		#{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n' #{pet_care_idx})
 		
 		<selectKey keyProperty="question_table_idx" resultType="int">
 	        SELECT LAST_INSERT_ID()

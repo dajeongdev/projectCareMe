@@ -307,7 +307,7 @@
 							</div>
 							<div class="col-md-6  mb-3">
 								<label for="selectPetDiary">다이어리 찾기</label> 
-								<select class="form-control" id="pet_care_idx" name="pet_care_idx">
+								<select class="form-control" id="pet_care_idx" name="pet_care_idx" required>
 								</select>
 							</div>
 						</div>
