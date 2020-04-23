@@ -4,6 +4,7 @@
 <%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<Spring:url value="/resources/img/profile_dog.jpg" var="default_image" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -196,10 +197,10 @@ $(function(){
 			<c:forEach var="item" items="${clist}" varStatus="status">
 			<div class="row">
 				<div class="card border-dark col-md-3" align="center">
-  						<p></p>
-  						<svg class="bd-placeholder-img rounded-circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
-    	    			<title>Placeholder</title><rect width="100%" height="100%" fill="#777">
-        				</rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+  						<div class="w-100">
+	  						<img src="${default_image}" class="w-100" style="border-radius:50%"/>
+	  						
+  						</div>
         
         				<h2 class="card-title"><c:out value="${item.member_id}"/></h2>
         
@@ -216,13 +217,13 @@ $(function(){
         				</blockquote>
 					</div>
 					<div class="row" id="heartInfo" data-idx="${item.question_board_comment_idx}">
-					<div class="col-md-8"></div>
+					<div class="col-md-2">
 						<div id="heartDiv${status.index}" class="col-md-1" align="left">
-							
 							<label for="heart${item.question_board_comment_idx}"><span id="count${item.question_board_comment_idx}">${item.heart}</span>&nbsp;<i class="fas fa-heart"></i></label>
 							<button id="heart${item.question_board_comment_idx}" onclick="testFunction(${item.question_board_comment_idx})" style="display:none"></button>
-							
-						</div>	
+						</div>
+					</div>	
+					<div class="col-md-7"></div>	
 						<div class="col-md-3" align="right">
 						<c:if test="${sc.memberDto.member_idx==item.member_idx}">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"

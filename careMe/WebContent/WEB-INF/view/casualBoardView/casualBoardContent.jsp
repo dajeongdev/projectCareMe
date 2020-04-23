@@ -117,7 +117,7 @@ $(function(){
 				</div>
   				
   				<div class="row">
-  				<c:if test="${dlist.size() > 0}">
+  				<c:if test="${d.size() > 0}">
 						<c:forEach var="d" items="${dlist}" varStatus="status">
 							<div class="card b-1 hover-shadow mb-20">
 								<header class="card-header flexbox align-items-center">
@@ -247,13 +247,12 @@ $(function(){
 						</blockquote>
         			</div>
 					<div class="row" id="heartInfo" data-idx="${item.question_board_comment_idx}">
-					<div class="col-md-8"></div>
+					<div class="col-md-1"></div>
 						<div id="heartDiv${status.index}" class="col-md-1" align="left">
-							
 							<label for="heart${item.question_board_comment_idx}"><span id="count${item.question_board_comment_idx}">${item.heart}</span>&nbsp;<i class="fas fa-heart"></i></label>
 							<button id="heart${item.question_board_comment_idx}" onclick="testFunction(${item.question_board_comment_idx})" style="display:none"></button>
-							
 						</div>	
+						<div class="col-md-8"></div>
 						<div class="col-md-3" align="right">
 						
 						<c:if test="${sc.memberDto.member_idx==item.member_idx}">
