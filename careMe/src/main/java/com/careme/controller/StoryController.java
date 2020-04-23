@@ -113,26 +113,28 @@ public class StoryController {
 	}
 	
 	// 검색
-	@RequestMapping(value = "/view/story/storyMainSearch")
-	public ModelAndView searching(int searchType, String keyword, int currentPage) {
-		ModelAndView mav = new ModelAndView();
-		int contentPerPage = 9;
+	@RequestMapping(value = "/view/story/storySearch")
+	public ModelAndView searching(@RequestParam int searchType, String keyword, int currentPage) {
+		ModelAndView mav = new ModelAndView("story/storySearch");
+		int contentPerPage = 12;
 		StoryCommand com = new StoryCommand();
 		com = service.searchList(searchType, keyword);
 		int start_idx = page.getStartIdx(currentPage, contentPerPage);
 		com.setStart_idx(start_idx);
 		com.setContentPerPage(contentPerPage);
 		List<StoryBoardDto> list = service.searching(com);
+		List<StoryFileDto> fList = service.fileList();
 		
+		// 페이징
 		PageNumberCommand paging = new PageNumberCommand();
 		paging = page.paging(service.getTotal(), contentPerPage, currentPage, 
-					"storyMain?currentPage="+currentPage+"&searchType="+searchType+"&keyword="+keyword);
-		
+					"story/storySearch?currentPage="+currentPage+"&searchType="+searchType+"&keyword="+keyword);
 		mav.addObject("list", list);
+		mav.addObject("fList", fList);
 		mav.addObject("paging", paging);
 		mav.addObject("searchType", searchType);
 		mav.addObject("keyword", keyword);
-		mav.setViewName("/story/storyMain");
+		mav.addObject("currentPage", currentPage);
 		return mav;
 	}
 	
@@ -165,8 +167,7 @@ public class StoryController {
 		mav.setViewName("/story/storyDetail");
 		return mav;
 	}
-	
-
+	 
 	
 	// 글작성
 	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.GET) 
@@ -371,10 +372,10 @@ public class StoryController {
 	}
 	
 	// 태그 리스트
-	@RequestMapping(value = "/view/story/storyTagList")
+	@RequestMapping(value = "/view/story/storyTagList", method = RequestMethod.GET)
 	public ModelAndView tagListing(StoryBoardDto dto, HttpSession session, int tag_idx, int currentPage) {
-		ModelAndView mav = new ModelAndView();
-		PageNumberCommand paging = new PageNumberCommand();
+		ModelAndView mav = new ModelAndView("/story/storyTagList");
+		
 		int contentPerPage = 12;
 		
 		TagListCommand tagListCom = new TagListCommand();
@@ -388,14 +389,16 @@ public class StoryController {
 		tag_idx = tagDto.getTag_idx();
 		List<TagDto> tagList = service.tagSelect(tagListCom);
 		
-		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyTag?currentPage=");
+		PageNumberCommand paging = new PageNumberCommand();
+		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyTagList?currentPage="+currentPage+"&tag_idx="+tag_idx);
 		int story_board_idx = dto.getStory_board_idx();
 		
 		List<StoryFileDto> tagFileList = service.readTagFileList(story_board_idx);
+		System.out.println("tagList :::::::   "+tagList);
 		
 		mav.addObject("tagList", tagList);
 		mav.addObject("tagFileList", tagFileList);
-		mav.setViewName("/view/story/storyTagList");
+		mav.addObject("currentPage", currentPage);
 		return mav;
 	}
 

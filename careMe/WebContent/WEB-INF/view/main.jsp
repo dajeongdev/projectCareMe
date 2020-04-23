@@ -81,16 +81,16 @@ hr { width: 1140px; margin-top: 0!important; }
 		<hr>
 		<div class="doctor-content">
 			<div class="row row-doctor1">
-				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-dog.jpg"></a></div>
-				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-cat.jpg"></a></div>
-				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-ham.jpg"></a></div>
-				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-parrot.jpg"></a></div>
+				<div class="col-sm-3 col-auto"><a href="/findDoctor?petSpec=1"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-dog.jpg"></a></div>
+				<div class="col-sm-3 col-auto"><a href="/findDoctor?petSpec=2"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-cat.jpg"></a></div>
+				<div class="col-sm-3 col-auto"><a href="/findDoctor?petSpec=6"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-ham.jpg"></a></div>
+				<div class="col-sm-3 col-auto"><a href="/findDoctor?petSpec=3"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-parrot.jpg"></a></div>
 			</div>
 			<div class="row row-doctor2">
-				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-bunny.jpg"></a></div>
-				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-hedgehog.jpg"></a></div>
-				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-gecko.jpg"></a></div>
-				<div class="col-sm-3 col-auto"><a href="#"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-guinea.jpg"></a></div>
+				<div class="col-sm-3 col-auto"><a href="/findDoctor?petSpec=4"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-turtles.jpg"></a></div>
+				<div class="col-sm-3 col-auto"><a href="/findDoctor?petSpec=5"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-raccoon.jpg"></a></div>
+				<div class="col-sm-3 col-auto"><a href="/findDoctor?petSpec=7"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-horse.jpg"></a></div>
+				<div class="col-sm-3 col-auto"><a href="/findDoctor?petSpec=9"><img width="100%" height="220" class="img" src="<%=request.getContextPath()%>/resources/img/main/doctor-fish.jpg"></a></div>
 			</div>	
 		</div>
 		</div>

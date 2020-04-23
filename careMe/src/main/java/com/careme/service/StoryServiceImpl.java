@@ -1,6 +1,6 @@
 package com.careme.service;
 import java.time.LocalDateTime;
-
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -130,7 +130,7 @@ public class StoryServiceImpl implements StoryService {
 	}
 	@Override
 	public int insert(StoryBoardDto dto, MultipartHttpServletRequest request) {
-		dto.setReg_date(LocalDateTime.now());
+		dto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		int i = dao.insert(dto);
 		int d = dto.getStory_board_idx();
 		if(d > 0) {
@@ -139,11 +139,6 @@ public class StoryServiceImpl implements StoryService {
 		return i;
 	}
 	
-	/*
-	 * public void insertFile(int , MultipartHttpServletRequest request) { int
-	 * story_board_idx = dto.getStory_board_idx(); if(story_board_idx > 0)
-	 * fileRequesting(story_board_idx, request); }
-	 */
 	
 	public StoryBoardDto requesting(MultipartHttpServletRequest request) {
 		dto = new StoryBoardDto();
@@ -157,7 +152,7 @@ public class StoryServiceImpl implements StoryService {
 		}
 		dto.setContent(request.getParameter("content"));
 		dto.setTitle(request.getParameter("title"));
-		dto.setReg_date(LocalDateTime.now());
+		dto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dto;
 	}
 	
@@ -177,7 +172,7 @@ public class StoryServiceImpl implements StoryService {
 
 	@Override
 	public int insertCom(StoryCommentDto comDto) {
-		comDto.setReg_date(LocalDateTime.now());
+		comDto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.insertCom(comDto);
 	}
 	
@@ -206,7 +201,7 @@ public class StoryServiceImpl implements StoryService {
 	
 	@Override
 	public int updateCom(StoryCommentDto comDto) {
-		comDto.setReg_date(LocalDateTime.now());
+		comDto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.updateCom(comDto);
 	}
 	

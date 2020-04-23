@@ -28,7 +28,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 </div>
 
 <div class="storyMain">
-<form action="/story/storyForm" method="post">
+
 	<h2><strong>펫스토리</strong></h2>
 	<hr>
 	<div class="album py-5 bg-light">
@@ -48,7 +48,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
             <div class="card-body">
              <div class="part">
               <div class="profile">
-               <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+                <img class="rounded-circle" width="40" height="40" src="${fullName}/resources/upload/img/story/profile.jpg">
               </div>
               <div class="content">
                <h5 class="card-text">${hlist.title}</h5>
@@ -85,7 +85,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
             <div class="card-body">
             <div class="part">
              <div class="profile">
-              <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+              <img class="rounded-circle" width="40" height="40" src="${fullName}/resources/upload/img/story/profile.jpg">
               </div>
               <div class="content">
               <h5 class="card-text">${list.title}</h5>
@@ -140,10 +140,10 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 			</div>
 		</div>
 	</div>
-	 </form>
+
 	
 	<div class="form-inline">
-		<form class="searching" action="storyMainSearch?currentPage=${currentPage}&searchType=${searchType}&keyword=${keyword}">
+		<form action="storySearch?currentPage=${currentPage}&searchType=${searchType}&keyword=${keyword}">
 			<select name="searchType">
 				<option value="0">작성자</option>
 				<option value="1">제목</option>
@@ -152,7 +152,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 			<input type="hidden" name="currentPage" value="1" />
 			<input type="text" class="form-control" name="keyword"
 				 placeholder="검색어를 입력하세요.">
-			<button id="searchBtn" class="btn btn-primary">검색</button>
+			<button type="submit" id="searchBtn" class="btn btn-primary">검색</button>
 		</form>
 	</div>
 </div> 

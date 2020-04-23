@@ -27,20 +27,21 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
 
-<div class="storyTag">
-<form action="/story/storyTagList" method="POST">
+<div class="storyMain">
+
 	<h2><strong>펫스토리</strong></h2>
 	<hr>
 	<div class="album py-5 bg-light">
     <div class="container">
-    
-    <h4><strong>${tagList.tag_name}</strong></h4>
-    <hr>
-    <c:forEach items="${tagList}" var="list" begin="${start_idx}" end="${start_idx + 11}">
-	<div class="row"  onClick="location.href='storyTagList?story_board_idx=${tagList.story_board_idx}'">
+    <h4><strong>${keyword}</strong></h4>
+	<hr>
+	<div>
+	<div class="row">
+	
+    <c:forEach items="${list}" var="list" begin="${start_idx}" end="${start_idx + 8}">
          <div class="col-md-4">
           <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${list.story_board_idx}'">
-           	<c:forEach items="${tagFileList}" var="fList" varStatus="f">
+           	<c:forEach items="${fList}" var="fList" varStatus="f">
            	<c:if test="${fList.story_board_idx == list.story_board_idx}">
            	 <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
            	</c:if>
@@ -48,7 +49,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
             <div class="card-body">
             <div class="part">
              <div class="profile">
-              <svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+              <img class="rounded-circle" width="40" height="40" src="${fullName}/resources/upload/img/story/profile.jpg">
               </div>
               <div class="content">
               <h5 class="card-text">${list.title}</h5>
@@ -63,12 +64,12 @@ h2, h4 { font-family: 'GmarketSansBold'; }
             </div>
           </div>
         </div>
-        </div>
        </c:forEach>
       
         </div>
         </div>
-     
+     </div>
+    </div>
 	
 	
 	<div id="paging">
@@ -102,9 +103,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
   				</ul>
 			</div>
 		</div>
-		</div> 
-	 </form>
 	</div>
-	
+</div>
 </body>
 </html>

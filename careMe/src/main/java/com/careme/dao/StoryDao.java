@@ -30,7 +30,7 @@ public class StoryDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("story.fileList");
 	}
 	public List<StoryBoardDto> searching(StoryCommand com){
-		return getSqlSession().selectList("story.search");
+		return getSqlSession().selectList("story.searchStory", com);
 	}
 	
 	// 글 상세보기

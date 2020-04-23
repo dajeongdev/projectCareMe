@@ -21,7 +21,7 @@
 	left: 50%;
 	top: 50%;
 	margin-left: -500px;
-	margin-top: -330px;
+	margin-top: -150px;
 }
 h3 { font-family: 'GmarketSansBold';}
 .container { margin:0 auto;}
@@ -75,21 +75,21 @@ $(function(){
 			});
 	});
 });
+
 </script>
 </head>
 <body>
-<div class="container-fluid" style="padding:0;">
-	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
+<div>
+<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 </div>
-<div class="whole">
 	<div class="detail-form">
 	<div class="container">
-	<form name="readForm" >
+	
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
 			<div class="header">
 				<div class="profile">
-					<svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+					 <img class="rounded-circle" width="40" height="40" src="${fullName}/resources/upload/img/story/profile.jpg">
 				</div>
 				<div class="rest">
 				<h4><c:out value="${dto.title}"/></h4>
@@ -102,21 +102,24 @@ $(function(){
 			<div class="img">
 				<img width="700" height="500" src="${fullName}${fileDto[0].file_path}">
 			</div>
+			
 			<div>
 				<p class="content"><c:out value="${dto.content}"/><span class="content-heart"><i class="fas fa-heart fa-2x"></i></span></p>
 			</div>
 			<div id="tag-list">
 				<c:forEach var="taging" items="${tags}">
-					<span class="hashTag" data-idx="${taging.tag_idx}">#<c:out value="${taging.tag_name}"/></span>
+					<input type="hidden" name="currentPage" value="1">
+					<a href="storyTagList?currentPage=${currentPage}&tag_idx=${tag_idx}"><span class="hashTag" data-idx="${taging.tag_idx}">#<c:out value="${taging.tag_name}"/></span></a>
 				</c:forEach>
 			</div>
+			
+				<form name="readForm" >
 				<div class="btn-group">
 					<button type="button" class="update_btn btn btn-outline-dark" onClick="document.location.href='storyEdit?story_board_idx=${dto.story_board_idx}'">수정</button>
 					<button type="button" class="delete_btn btn btn-outline-dark delete_btn" onClick="delete('${dto.story_board_idx}')">삭제</button>
 					<button type="button" class="list_btn btn btn-outline-dark" onClick="location.href='storyMain?currentPage=1'">목록</button>
 				</div>
-		</form>
-		
+				</form>
 		<br>
 		<div class="bottom">
 		<br>
@@ -138,7 +141,7 @@ $(function(){
 				<c:forEach items="${comList}" var="coms" varStatus="status">
 					<div class="comL">
 						<div class="profile">
-							<svg class="bd-placeholder-img rounded-circle" width="40" height="40" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"><rect width="100%" height="100%" fill="#777"/></svg>
+							<img class="rounded-circle" width="40" height="40" src="${fullName}/resources/upload/img/story/profile2.jpg">
 						</div>
 						<div>
 							<span class="comId"><c:out value="${coms.member_id}"/></span>&nbsp;&nbsp;<c:out value="${coms.content}"/><br>
@@ -161,7 +164,7 @@ $(function(){
 			</div>
 		</div>
 	</div>
-</div>
-</div>
+	</div>
+
 </body>
 </html>

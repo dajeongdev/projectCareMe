@@ -23,7 +23,7 @@ h3 { font-family: 'GmarketSansBold'; }
 	left: 50%;
 	top: 50%;
 	margin-left: -500px;
-	margin-top: -330px;
+	margin-top: -400px;
 	font-family: 'GmarketSansMedium';
 }
 #hash-search, #content, #title, .custom-file-label, #tag_name {
@@ -207,15 +207,15 @@ function removeFile(e) {
 	<div class="whole">
 		<input type="hidden" name="story_board_idx" value="${story_board_idx}">
 		<input type="hidden" id="member_idx" name="member_idx" value="${member_idx}">
-		<form name="storyEdit" method="POST" enctype="multipart/form-data">
+		
 		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
 			<div class="story_content">
 				<input type="text" class="form-control" id="title" name="title" 
 					value="${title}">
-				
-				 <label class="custom-file-label" for="files">사진 선택</label>
+				<form name="storyEdit" method="POST" enctype="multipart/form-data">
+				 <label class="custom-file-label" for="files">사진 추가 선택</label>
 				<div class="row" id="selectedFiles">
 					<c:if test="${getContent.fileDto.size() > 0}">
 						<c:forEach var="image" items="${getContent.fileDto}">
@@ -226,6 +226,7 @@ function removeFile(e) {
 						</c:forEach>
 					</c:if>
 				</div>
+				</form>
 			<div class="form-group">
 			 	<textarea class="form-control" name="content"
     			id="content" rows="3" ><c:out value="${content}"/></textarea>
@@ -247,7 +248,7 @@ function removeFile(e) {
 				<button type="button" class="list_btn btn btn-outline-dark" OnClick="document.location.href='storyMain?currentPage=1'">목록</button>
 			</div>
 		</div>
-	</form>
+	
 	<input type="file" class="custom-file-input" id="files" name="file" multiple>
 	</div>
 </div>

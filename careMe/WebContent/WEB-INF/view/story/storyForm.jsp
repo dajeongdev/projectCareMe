@@ -21,7 +21,7 @@ h3 { font-family: 'GmarketSansBold'; }
 	left: 50%;
 	top: 50%;
 	margin-left: -500px;
-	margin-top: -330px;
+	margin-top: -150px;
 	font-family: 'GmarketSansMedium';
 }
 #hash-search, #content, #title, .custom-file-label, #tag {
