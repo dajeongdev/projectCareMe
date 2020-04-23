@@ -3,27 +3,26 @@ package com.careme.model.command;
 import java.util.List;
 
 import com.careme.model.dto.DoctorDto;
-import com.careme.model.dto.DoctorMajorDto;
+import com.careme.model.dto.DoctorMajorWithSpeciesName;
 
 public class DoctorCommand {
 	private DoctorDto doctorDto;
-	private List<DoctorMajorDto> doctorMajorDto;
+	private List<DoctorMajorWithSpeciesName> doctorMajor;
 	public DoctorDto getDoctorDto() {
 		return doctorDto;
 	}
 	public void setDoctorDto(DoctorDto doctorDto) {
 		this.doctorDto = doctorDto;
 	}
-	public List<DoctorMajorDto> getDoctorMajorDto() {
-		return doctorMajorDto;
+	public List<DoctorMajorWithSpeciesName> getDoctorMajor() {
+		return doctorMajor;
 	}
-	public void setDoctorMajorDto(List<DoctorMajorDto> doctorMajorDto) {
-		this.doctorMajorDto = doctorMajorDto;
+	public void setDoctorMajor(List<DoctorMajorWithSpeciesName> doctorMajor) {
+		this.doctorMajor = doctorMajor;
 	}
-	
 	@Override
 	public String toString() {
-		return "DoctorCommand [doctorDto=" + doctorDto + ", doctorMajorDto=" + doctorMajorDto + "]";
+		return "DoctorCommand [doctorDto=" + doctorDto + ", doctorMajor=" + doctorMajor + "]";
 	}
 
 }
