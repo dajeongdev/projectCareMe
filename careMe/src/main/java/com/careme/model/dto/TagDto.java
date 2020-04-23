@@ -5,7 +5,7 @@ public class TagDto {
 	private String tag_name;
 	private int member_idx;
 	private String del_yn;
-	
+
 	public int getTag_idx() {
 		return tag_idx;
 	}
@@ -30,10 +30,11 @@ public class TagDto {
 	public void setDel_yn(String del_yn) {
 		this.del_yn = del_yn;
 	}
+	
 	@Override
 	public String toString() {
 		return "TagDto [tag_idx=" + tag_idx + ", tag_name=" + tag_name + ", member_idx=" + member_idx + ", del_yn="
 				+ del_yn + "]";
 	}
-	
+
 }

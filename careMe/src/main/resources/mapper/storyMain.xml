@@ -5,16 +5,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="story">
 	<!-- 글목록 O-->
 	<select id="list" parameterType="HashMap" resultType="com.careme.model.dto.StoryBoardDto">
-		select *
-		from story_board inner join members
-		where story_board.member_idx = members.member_idx
-		order by story_board_idx desc limit #{start_idx}, #{contentPerPage}
+		select SQL_CALC_FOUND_ROWS * 
+		from story_board inner join members 
+		on story_board.member_idx = members.member_idx 
+		order by story_board.story_board_idx desc 
+		limit #{start_idx}, #{contentPerPage}
 	</select>
 	<select id="selectTotal" resultType="int">
 		select FOUND_ROWS()
 	</select>
 	<select id="fileList" resultType="com.careme.model.dto.StoryFileDto">
-		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc
+		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc 
 	</select>
 	<!-- 인기글 -->
 	<select id="hit" parameterType="com.careme.model.dto.StoryBoardDto" resultType="com.careme.model.dto.StoryBoardDto">
@@ -22,16 +23,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 검색 -->
 	<select id="search" parameterType="com.careme.model.command.StoryCommand" resultType="com.careme.model.dto.StoryBoardDto">
-		select * from story_board inner join members
+		select SQL_CALC_FOUND_ROWS * from story_board inner join members on story_board.member_idx = members.member_idx
 		<choose>
 			<when test='searchType != null and searchType.equals("member_id")'>
-				where member_id like concat('%',#{keyword},'%')
+				where member_id like concat('%',#{searchKeyword},'%') order by story_board_idx desc limit #{start_idx}, #{contentPerPage}
 			</when>
 			<when test='searchType != null and searchType.equals("title")'>
-				where title like concat('%',#{keyword},'%')
+				where title like concat('%',#{keyword},'%') order by story_board_idx desc limit #{start_idx}, #{contentPerPage}
 			</when>
 			<when test='searchType != null and searchType.equals("content")'>
-				where content like concat('%',#{keyword},'%')
+				where content like concat('%',#{keyword},'%') order by story_board_idx desc limit #{start_idx}, #{contentPerPage}
 			</when>
 		</choose>
 	</select>
@@ -53,24 +54,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		on story_comment.member_idx = members.member_idx 
 		where story_comment.story_board_idx = #{story_board_idx}
 	</select>
+	<select id="readComIdx" parameterType="int" resultType="com.careme.model.dto.StoryCommentDto">
+		select * from story_comment inner join members 
+		on story_comment.member_idx = members.member_idx 
+		where story_comment.story_board_idx = #{story_board_idx}
+	</select>
 	<!-- 조회수 증가 O-->
 	<update id="viewCount" parameterType="com.careme.model.dto.StoryBoardDto">
 		update story_board 
 		set view_count = view_count + 1 
 		where story_board_idx = #{story_board_idx}
 	</update>
-	<!-- 좋아요 수 증가 -->
-	<update id="heart" parameterType="com.careme.model.dto.StoryBoardDto">
+	<!-- 좋아요 수 -->
+	<update id="addHeart" parameterType="int">
 		update story_board 
 		set heart = heart + 1 
+		where story_board_idx = #{story_board_idx}
+	</update>
+	<update id="subHeart" parameterType="int">
+		update story_board 
+		set heart = heart -1 
 		where story_board_idx = #{story_board_idx}
 	</update>
 	
 	
 	<!-- 글작성 -->
-	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto" useGeneratedKeys="true" keyProperty="story_board_idx" >
-		insert into story_board (member_idx, tag_idx, title, content, heart, view_count, reg_date, update_date, del_yn) 
-		values (#{member_idx}, #{tag_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
+	<insert id="insert" parameterType="com.careme.model.dto.StoryBoardDto">
+		insert into story_board (member_idx, title, content, heart, view_count, reg_date, update_date, del_yn) 
+		values (#{member_idx}, #{title}, #{content}, 0, 0, #{reg_date}, null, 'n')
 		<selectKey keyProperty="story_board_idx" resultType="int">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
@@ -89,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 글수정 O -->
 	<update id="update" parameterType="com.careme.model.dto.StoryBoardDto">
 		update story_board
-		<set> 
+		<set>
 			<if test="title != null">title = #{title},</if>
 			<if test="content != null">content = #{content}</if>
 		</set>
@@ -97,17 +108,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	<update id="updateFile" parameterType="com.careme.model.dto.StoryFileDto">
 		update story_file 
-		<set>file_name = #{file_name}, file_path = #{file_path}, file_size = #{file_size}</set>
-		<where>story_board_idx = #{story_board_idx}</where>
+		<set>
+		<if test="file_name != null">file_name = #{file_name},</if>
+		<if test="file_name != null">file_path = #{file_path},</if>
+		<if test="file_name != null">file_size = #{file_size},</if>
+		</set>
+		where story_board_idx = #{story_board_idx}
 	</update>
 	<update id="updateCom" parameterType="com.careme.model.dto.StoryCommentDto">
 		update story_board set content = #{content}
 	</update>
 	<!-- 좋아요 수 증가 -->
-	<update id="comHeart" parameterType="com.careme.model.dto.StoryCommentDto">
-		update story_comment 
+	<update id="addComHeart" parameterType="int">
+		update story_comment
 		set heart = heart + 1 
-		where story_comment_idx = #{story_comment_idx}
+		where story_board_idx = #{story_board_idx}
+	</update>
+	<update id="subComHeart" parameterType="int">
+		update story_comment 
+		set heart = heart -1 
+		where story_board_idx = #{story_board_idx}
 	</update>
 	
 	
@@ -123,37 +143,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteCom" parameterType="int">
 		delete from story_comment where del_yn = 'y' and story_board_idx = #{story_board_idx}
 	</delete>
-
-
-	<!-- 태그 
-	<select id="readTag" resultType="com.careme.model.dto.TagDto">
-		select b.tag_name 
-		from board_use_tag a 
-		inner join tag b 
-		on a.tag_idx = b.tag_idx 
-		where board_idx = #{board_idx} and board_type = 's'
+	
+	
+	<select id="tags" resultType="com.careme.model.dto.TagDto">
+		select * from tag inner join board_use_tag on tag.tag_idx = board_use_tag.tag_idx 
+		where board_idx = #{board_idx}
 	</select>
-	<insert id="insertTag" parameterType="com.careme.model.dto.TagDto"  useGeneratedKeys="true" keyProperty="tag_idx" >
-		insert into tag(tag_idx, tag_name, member_idx, del_yn) values(0, #{tag_name}, #{member_idx}, 'n')
-		<selectKey keyProperty="tag_idx" resultType="int">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
-	</insert>	
-	<insert id="insertTagType" parameterType="com.careme.model.dto.TagDto">
-		insert into board_use_tag(board_use_tag_idx, tag_idx, board_idx, board_type) 
-		values(2, #{tag_idx}, #{board_idx}, 's')
-	</insert>
-	<update id="updateTag" parameterType="com.careme.model.dto.TagDto">
-		update tag set tag_name = #{tag_name} where tag_idx = ${tag_idx}
-	</update>
-	<update id="deleteTag" parameterType="int">
-		update tag set del_yn = 'y' where tag_idx = #{tag_idx}
-	</update>-->
-	
-	
-	<!-- 메인용 스토리 -->
-	<select id="main_story"  resultType="com.careme.model.dto.StoryFileDto">
-		select * from story_board inner join story_file where story_board.story_board_idx = story_file.story_board_idx order by story_board.story_board_idx desc limit 4
+	<select id="tagList" parameterType="HashMap" resultType="com.careme.model.dto.TagDto">
+		select SQL_CALC_FOUND_ROWS * from story_board where story_board_idx in
+		(select story_board_idx from story_board inner join board_use_tag 
+		on story_board.story_board_idx = board_use_tag.board_idx 
+		where board_use_tag.tag_idx = #{tag_idx} and board_use_tag.board_type = 's') 
+		order by story_board.story_board_idx desc 
+		limit #{start_idx}, #{contentPerPage}
+	<!-- 태그 idx가 같은 글번호를 가져와서 forEach로 뿌림 -->
 	</select>
-	
+	<select id="tagSelect" resultType="com.careme.model.dto.TagDto">
+		select story_board_idx from story_board, tag where tag.tag_idx = #{tag_idx} order by story_board.story_board_idx desc
+	</select>
+	<select id="tagFileList" resultType="com.careme.model.dto.StoryFileDto">
+		select * from story_board inner join story_file on story_board.story_board_idx = story_file.story_board_idx 
+		where story_board.story_board_idx = #{story_board_idx} 
+	</select>
 </mapper>

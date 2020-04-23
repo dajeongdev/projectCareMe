@@ -5,16 +5,27 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false"/>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
-.story_form {margin: 0 auto; padding: 0;}
-.container {
+@font-face { font-family: 'GmarketSansMedium'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
+h3 { font-family: 'GmarketSansBold'; }
+.whole {
 	width: 1000px;
+	height: 1100px;  
 	margin: 40px;
+	font-size: 16px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -500px;
+	margin-top: -330px;
+	font-family: 'GmarketSansMedium';
 }
-#hash-search, #content, #title, .custom-file-label, #tag_name {
-	width: 700px;
+#hash-search, #content, #title, .custom-file-label, #tag {
+	width: 1000px;
 }
 .custom-file-label {
 	position: relative;
@@ -22,13 +33,14 @@
 #content {
 	height: 300px;
 }
-#hash-inbox { 
+#title { margin-bottom: 30px;}
+#tag-list { 
 	margin-top:2px;
 	background: #bdbdbd;
-	width: 700px;
+	width: 1000px;
 	height: 100px;
 }
-.added-tag {
+.hashTag { 
 	background: #82b1ff;
 	padding: 5px 5px;
 	margin: 5px 5px;
@@ -42,192 +54,143 @@
 .form-group, #file {
 	padding-top: 20px;
 }
-#preview img {
-	width: 700px;
-	height: 500px;
-}
-#preview {
-	display: inline-block;
-}
+.preview { padding-left: 30px; width:800px; }
+
 </style>
 <title>스토리 글쓰기</title>
-<script>
-
-// 해쉬태그 입력
-/*$(function (){
-	  $("#hash-search").on("keyup", function (e) {// 해시태그 입력칸 이벤트
-	    var tag = "";
-	    var existed = false;// 이미 태그에 올라갔나 확인하기 위함
-
-	    if (e.which == 188 || e.which == 13) {// 누른게 쉼표거나 엔터
-	      tag = $(this).val().replace(/[\s,]+/g, ""); // 쉼표나 엔터 ""으로 바꿔서 tag에 저장
-	      $(this).val("");// 입력창 비우기
-
-	      $("#hash-inbox span").each(function () { // 해시태그 들어간 div 안의 span
-	        var name = $(this).find(".htag-name").val();// input hidden의 값
-	        if (name == tag) existed = true;// 이미 있음
-	      });
-
-	      if (tag != "" && !existed) { // 태그가 빈문자열이 아니고 이미 올린게 아니면
-	        $("#hash-inbox").append(
-	            '<span class="added-tag">#' +
-	            tag + '<a href="javascript:;"> X</a>' +
-	            '<input type="hidden" class="htag-name" name="recipe[hashtags][][name]" value="' + tag + '" >' +
-	            '</span> '
-	        );
-	      }
-	    }
-	  });
-})*/
-$(document).ready(function () {
-
-    var tag = {};
-    var counter = 0;
-
-    // 태그를 추가한다.
-    function addTag (value) {
-        tag[counter] = value; // 태그를 Object 안에 추가
-        counter++; // counter 증가 삭제를 위한 del-btn 의 고유 id 가 된다.
-    }
-
-    // 최종적으로 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘긴다.
-    function marginTag () {
-        return Object.values(tag).filter(function (word) {
-            return word !== "";
-        });
-    }
-
-    // 서버에 넘기기
-    $("#tag-form").on("submit", function (e) {
-        var value = marginTag(); // return array
-        $("#rdTag").val(value); 
-
-        $(this).submit();
-    });
-
-    $("#tag").on("keypress", function (e) {
-        var self = $(this);
-
-        // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
-        if (e.key === "Enter" || e.keyCode == 32) {
-
-            var tagValue = self.val(); // 값 가져오기
-
-            // 값이 없으면 동작 ㄴㄴ
-            if (tagValue !== "") {
-
-                // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
-                var result = Object.values(tag).filter(function (word) {
-                    return word === tagValue;
-                })
-            
-                // 태그 중복 검사
-                if (result.length == 0) { 
-                    $("#tag-list").append("<li class='tag-item'>"+tagValue+"<span class='del-btn' idx='"+counter+"'>x</span></li>");
-                    addTag(tagValue);
-                    self.val("");
-                } else {
-                    alert("태그값이 중복됩니다.");
-                }
-            }
-            e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
-        }
-    });
-
-    // 삭제 버튼 
-    // 삭제 버튼은 비동기적 생성이므로 document 최초 생성시가 아닌 검색을 통해 이벤트를 구현시킨다.
-    $(document).on("click", ".del-btn", function (e) {
-        var index = $(this).attr("idx");
-        tag[index] = "";
-        $(this).parent().remove();
-    });
-})
-	var files = [];
-	var previewIndex = 0;
-
-	// image preview 기능, input = file object[]
-	function addPreview(input) {
-		if(input[0].files) {
-			for(var f = 0; f < input[0].files.length; f++) {
-				var file = input[0].files[f];
-				
-				if(validation(file.name)) continue;
-				
-				setPreviewForm(file);
+<script>	
+//태그를 저장할 배열
+var tags = [];
+var tagNames = [];
+//태그를 보여줄 element
+$(function() {
+	$("#tag").on("keypress", function (e) {
+		if (e.key === "Enter" || e.keyCode == 32) {
+			var inputText = $("#tag").val(); // input 태그에 입력한 값
+			
+			//inputText를 tagNames[]를 for문 돌려서 비교해서 같으면 중복!
+			for(var i=0; i < tagNames.length; i++){
+				if(tagNames[i] == inputText){
+					console.log(tagNames[i] + "==" + inputText);
+					$("#tag").val("");
+					alert("중복!");
+					return;
+				}				
 			}
-		} else {
-			alert("invalid file input");
+			
+			// 태그 중복확인
+			tagCheck(inputText);
+			e.preventDefault();
 		}
-	}
-	function setPreviewForm(file, img) {
-		var reader = new FileReader();
-		reader.onload = function(img) {
-			var imgNum = previewIndex++;
-			$("#preview").append("<div class=\"preview-box\" value=\"" + imgNum + "\">"
-					+ "<a href=\"#\" value=\"" + imgNum + "\" onclick=\"deletePreview(this)\">"
-					+ "<i class='fas fa-trash-alt'></i>" + "</a>" 
-					+ "<img class=\"thumbnail\" src=\"" + img.target.result + "\"\/>"
-				    + "</div>");
-			files[imgNum] = file;
-		};
-		reader.readAsDataURL(file);
-	}
+		console.log("enter");
+	})
 	
-	// preview에서 삭제 버튼 클릭시 미리보기 이미지 영역 삭제
-	function deletePreview(obj) {
-		var imgNum = obj.attributes['value'].value;
-		delete files[imgNum];
-		$("#preview .preview-box[value=" + imgNum + "]").remove();
-		resizeHeight();
-	}
+})	
 
-	// client-side validation
-	// always server-side validation required
-	function validation(fileName) {
-		fileName = fileName + "";
-		var fileNameExtensionIndex = fileName.lastIndexOf(".") + 1;
-		var fileNameExtension = fileName.toLowerCase().substring(fileNameExtensionIndex, fileName.length);
-		if(!((fileNameExtension == 'jpg') || (fileNameExtension == 'gif') || (fileNameExtension == 'png'))) {
-			alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-			return true;
-		} else {
-			return false;
-		}
-	}
+var tagCheck = function (tag) {
+	var url = $(location).attr('pathname') + "/hashCheck"
+	$.ajax({
+		type: "get",
+		url: url + "?tag_name=" + tag,
+		dataType:"json"
+	}).done(function(data) {
+		console.log(data);
+		
+		//배열에 tag의 idx를 넣어준다
+		var idx = data.tag_idx;
+		var name = data.tag_name;
+		var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "<a href='javascript:;'>X</a>" + "</span>";
 
-	$(document).ready(function() {
-		$(".submit a").on("click", function() {
-			var form = $("#insert")[0];
-			var formData = new FormData(form);
+		//서버에 보낼 배열에 넣기
+		tags.push(idx);
+		// input enter 눌렸을때 input 있는 value text 와 배열에 있는 text를 비교해서 있으면 중복알림! 없으면 ajax!
+		tagNames.push(name);
+		// hidden input 에 넣어주기
+		$("#rdTag").val(tags);
+		
+		// 태그 붙이기
+		$("#tag-list").append(html);
+		// input 비우기
+		$("#tag").val("");
 
-			for(var i = 0; i < Object.keys(files).length; i++) {
-				formData.append("files", files[i]);
-			}
-
-			$.ajax({
-				type: "POST",
-				enctype: "multipart/form-data",
-				processData: false,
-				contentType: false,
-				cache: false,
-				url: "/storyForm",
-				dataType: "json",
-				data: formData,
-				success: function(result) {
-					if(result = -1) {
-						alert("jpg, gif, png 확장자만 업로드 가능합니다.");
-					} else {
-						alert("이미지 업로드 성공");
-					}
-				}
-			});
-		});
-		$("input[type=file]").change(function() {
-			addPreview($(this));
-		});
+		
+	}).fail(function() {
+		alert("실패!");
 	});
+ 	$("#tag-list").on("click", ".hashTag", function () {
+		$(this).remove();
+	});
+}
+	
+</script>
+<script>
+ 	var storedFiles = [];
+	var selDivs = "";
+
+	$(function() {
+		selDiv = $("#selectedFiles");
+
+		$("#files").on("change", preview);
+		
+		$("body").on("click", ".fa-trash", removeFile);
+
+		form = $("form[name=insert]")[0];
+		form.onsubmit = function (e) {
+			e.preventDefault();
+			var formData = new FormData(form);
+			for (var i = 0; i < storedFiles.length; i++) {
+				formData.append("files", storedFiles[i]);
+			}
+			formData.append("rdTag", tags);
+			 $.ajax({
+		         url: "storyForm"
+	             , type : "POST"
+	             , enctype: "multipart/form-data"
+		         , contentType: false
+		         , processData: false
+	             , data : formData
+            	 , success : function() {
+            		 location.href="/careMe/view/story/storyMain?currentPage=1";
+                 }
+	        })
+		}
+	})
+	
+	function preview(e) {
+		var files = e.target.files;
+		var filesArr = Array.prototype.slice.call(files);
+		filesArr.forEach(function(f) {			
+
+			if(!f.type.match("image.*")) {
+				return;
+			}
+			storedFiles.push(f);
+			
+			var reader = new FileReader();
+			reader.onload = function (e) {
+				var html  = "<div class='preview'>";
+				html += "<i class='fa fa-trash fa-2x' data-file='"+f.name+"' title='Click to remove'></i>";
+				html += "<img src=\"" + e.target.result + "\" class='w-100 h-70'>";
+				html += "</div>"
+				selDiv.append(html);
+			}
+			reader.readAsDataURL(f); 
+		});
+	}
+
+	function removeFile(e) {
+		var file = $(this).data("file");
+		for(var i=0;i<storedFiles.length;i++) {
+			if(storedFiles[i].name === file) {
+				storedFiles.splice(i,1);
+				break;
+			}
+		}
+		$(this).parent().remove();
+	} 
 
 </script>
+
 </head>
 <body>
 
@@ -236,38 +199,42 @@ $(document).ready(function () {
 </div>
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="whole">
-	<div class="container">
+	<input type="hidden" name="member_idx" id="member_idx" value="${info.member_idx}">
+	<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
+		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
-			<input type="hidden" name="member_idx" value="1">
 			<div class="story_content">
-			<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
 				<input type="text" class="form-control" id="title" name="title" 
 				placeholder="제목을 입력해주세요.">
-				<input type="file" class="custom-file-input" id=inputGroupFile04 name="file">
-				 <label class="custom-file-label" for="inputGroupFile04">사진 선택</label>
-				<div class="row" id="selectedFiles"></div>
-				<div id="preview">
+				
+				<!-- 사진(파일) 등록 -->
+				<label class="custom-file-label" for="files">사진 선택</label>
+				<div class="row" id="selectedFiles">
+				
 				</div>
 			<div class="form-group">
 			 	<textarea class="form-control" name="content"
-    			id="content" rows="3" placeholder="스토리를 들려주세요."></textarea>
+    			id="content" rows="2" placeholder="스토리를 들려주세요."></textarea>
   			</div>
-  			</form>
-  			</div>
-			<div id="info-tag">
-				<input type="hidden" name="tag_idx" name="tag_idx">
-				<input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
-				<div class="tag-list">
-					
-				</div>
-			</div>		
+  			
+  			<!-- 해시태그 -->
+			<div id="tag_content">
+				<input type="hidden" value="" id="rdTag">
+			</div>
+			<input type="text" class="form-control" id="tag" name="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+			<div id="tag-list">
+										
+			</div>
 
 			<div class="btn-group">
-				<button type="submit" class="insert_btn btn btn-outline-dark" OnClick="document.location.href='storyDetail?story_board_idx=${story_board_idx}'">등록</button>
-				<button type="submit" class="list_btn btn btn-outline-dark" OnClick="document.location.href='storyMain'">목록</button>
+				<button type="submit" class="insert_btn btn btn-outline-dark" >등록</button>
+				<button type="button" class="list_btn btn btn-outline-dark" onClick="document.location.href='storyMain?currentPage=1'">목록</button>
 			</div>
-	</div>
+			</div>
+		</div>
+	</form>
+	<input type="file" class="custom-file-input" id="files" name="file" multiple>
 	</div>
 </div>
 </body>
