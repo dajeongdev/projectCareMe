@@ -8,6 +8,11 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+<style type="text/css">
+.filebox input {
+	border: 0;
+}
+</style>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>의사등록</title>
@@ -202,7 +207,7 @@
 							items="${addpet}">
 							<input type="checkbox" id="addpet${item.pet_species_idx}"
 								name="addpet1" value="${item.pet_species_idx}">
-							<label for="addpet${item.pet_species_idx}">
+							<label style="padding-left: 3px;" for="addpet${item.pet_species_idx}">
 								${item.pet_species_name} </label>
 
 						</c:forEach></td>

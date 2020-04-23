@@ -204,7 +204,7 @@
 				</tr>
 				<tr>
 					<!-- 면허증 파일 -->
-					<td style="padding-left: 28px; padding-top: 10px;"><b>면허증:</b></td>
+					<td style="padding-left: 20px; padding-top: 10px;"><b>면허증:</b></td>
 					<td><img src="${hostname}${doctorDto.certification_document}"
 						id="cert_preview"></td>
 				</tr>
