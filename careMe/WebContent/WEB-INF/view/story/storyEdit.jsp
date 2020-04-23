@@ -134,7 +134,7 @@ $(function() {
 	
 	$("body").on("click", ".fa-trash", removeFile);
 
-	form = $("form[name='insert']")[0];
+	form = $("form[name='storyEdit']")[0];
 	form.onsubmit = function (e) {
 		e.preventDefault();
 		var formData = new FormData(form);
@@ -207,7 +207,7 @@ function removeFile(e) {
 	<div class="whole">
 		<input type="hidden" name="story_board_idx" value="${story_board_idx}">
 		<input type="hidden" id="member_idx" name="member_idx" value="${member_idx}">
-		<form name="insert" method="POST" enctype="multipart/form-data">
+		<form name="storyEdit" method="POST" enctype="multipart/form-data">
 		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
@@ -237,7 +237,7 @@ function removeFile(e) {
 				<input type="text" class="form-control" id="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div id="tag-list">
 					<c:forEach var="taging" items="${tags}">
-						<span class='hashTag'><c:out value="${taging.tag_name} " /><a href='javascript:;'>X</a></span>
+						<span class='hashTag'><c:out value="${taging.tag_name}" /><a href='javascript:;'>X</a></span>
 					</c:forEach>				
 				</div>
 			</div>
