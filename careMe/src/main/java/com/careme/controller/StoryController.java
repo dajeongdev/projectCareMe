@@ -249,7 +249,7 @@ public class StoryController {
 		List<TagDto> tagList = service.readTags(story_board_idx);
 		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
 		int member_idx = sc.getMemberDto().getMember_idx();
-		
+
 		mav.addObject("getContent", service.getContent(story_board_idx));
 		mav.addObject("member_idx", member_idx);
 		mav.addObject("story_board_idx", dto.getStory_board_idx());
