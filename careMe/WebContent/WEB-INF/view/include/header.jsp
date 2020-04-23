@@ -85,7 +85,7 @@
 			<c:if test="${currentMenu != 'main'}">
 				<li class="nav-item">
 			</c:if>
-			<li><a class="nav-link" href="view/main">Main</a></li>
+			<li><a class="nav-link" href="/careMe/main">Main</a></li>
 
 			<li class="nav-item"><a class="nav-link"
 				href="/careMe/view/doctorBoardView/doctorBoard?currentPage=1">전문가 상담</a></li>
@@ -93,7 +93,7 @@
 			<li class="nav-item"><a class="nav-link"
 				href="/careMe/carediary">케어일기</a></li>
 
-			<li class="nav-item"><a class="nav-link" href="#">전문의 찾기</a></li>
+			<li class="nav-item"><a class="nav-link" href="/careMe/findDoctor">전문의 찾기</a></li>
 
 			<li class="nav-item"><a class="nav-link" href="/careMe/view/story/storyMain?currentPage=1">펫스토리</a></li>
 
