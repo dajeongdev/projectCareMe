@@ -37,7 +37,7 @@ public interface StoryService {
 	// 태그 리스트
 	public List<TagDto> readTagList(Map<String, Integer> map);
 	public List<StoryFileDto> readTagFileList(int story_board_idx);
-	public int tagSelect(int tag_idx);
+	public List<TagDto> tagSelect(Map<String, Integer> map);
 	// 조회수
 	public int counting(int story_board_idx);
 	// 좋아요
@@ -53,10 +53,9 @@ public interface StoryService {
 	public int insertCom(StoryCommentDto comDto);
 	
 	// 수정
-	public int update(StoryBoardDto dto, MultipartHttpServletRequest request);
-	public void updateFile(StoryFileDto fileDto, Integer[] deletedFiles, MultipartHttpServletRequest request);
+	public void update(StoryBoardDto dto, StoryFileDto fileDto, Integer[] deletedFiles, MultipartHttpServletRequest request);
+	public void updateFile(Map<String, Integer> map);
 	public int updateCom(StoryCommentDto comDto);
-	
 	
 	// 삭제
 	public int delete(int story_board_idx);

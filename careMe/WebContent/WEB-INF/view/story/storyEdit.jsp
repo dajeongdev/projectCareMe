@@ -237,7 +237,7 @@ function removeFile(e) {
 				<input type="text" class="form-control" id="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
 				<div id="tag-list">
 					<c:forEach var="taging" items="${tags}">
-						<span class='hashTag' data-idx="${taging.tag_idx}"><c:out value="${taging.tag_name} " /><a href='javascript:;'>X</a></span>
+						<span class='hashTag'><c:out value="${taging.tag_name} " /><a href='javascript:;'>X</a></span>
 					</c:forEach>				
 				</div>
 			</div>

@@ -56,8 +56,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public List<StoryFileDto> readTagFileList(int story_board_idx) {
 		return getSqlSession().selectList("story.tagFileList", story_board_idx);
 	}
-	public int tagSelect(int tag_idx) {
-		return getSqlSession().selectOne("story.tagSelect", tag_idx);
+	public List<TagDto> tagSelect(Map<String, Integer> map) {
+		return getSqlSession().selectList("story.tagSelect", map);
 	}
 	
 	// 조회수
@@ -93,8 +93,8 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public int update(StoryBoardDto dto) {
 		return getSqlSession().update("story.update", dto);
 	}
-	public int updateFfile(StoryFileDto fileDto) {
-		return getSqlSession().update("story.updateFile", fileDto);
+	public int updateFfile(Map<String, Object> map) {
+		return getSqlSession().update("story.updateFile", map);
 	} 
 	public int updateCom(StoryCommentDto comDto) {
 		return getSqlSession().update("story.updateCom", comDto);
@@ -103,9 +103,6 @@ public class StoryDao extends SqlSessionDaoSupport {
 	// 삭제(del_yn 'y')
 	public int delete(int story_board_idx) {
 		return getSqlSession().delete("story.delete", story_board_idx);
-	}
-	public int deleteFile(Map<String, Object> list) {
-		return getSqlSession().delete("story.deleteFile", list);
 	}
 	public int deleteCom(int story_comment_idx) {
 		return getSqlSession().delete("story.deleteCom", story_comment_idx);
