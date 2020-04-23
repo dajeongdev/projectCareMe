@@ -9,7 +9,7 @@
 <style>
 @font-face { font-family: 'GmarketSansMedium'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); font-weight: normal; font-style: normal; }
 @font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
-.storyMain { margin: 40px; font-family: 'GmarketSansMedium';}
+.storySearch { margin: 40px; font-family: 'GmarketSansMedium';}
 h2, h4 { font-family: 'GmarketSansBold'; }
 .card-text, .card-heart, .card-count { font-size: 15px; }
 .part > div { float: left; }
@@ -27,7 +27,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false"/>
 </div>
 
-<div class="storyMain">
+<div class="storySearch">
 
 	<h2><strong>펫스토리</strong></h2>
 	<hr>

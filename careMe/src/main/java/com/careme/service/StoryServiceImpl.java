@@ -232,7 +232,7 @@ public class StoryServiceImpl implements StoryService {
 		return storyCom;
 	}
 
-
+	// 좋아요 
 	@Override
 	public int addHeart(int idx) {
 		return dao.addHeart(idx);
@@ -246,14 +246,14 @@ public class StoryServiceImpl implements StoryService {
 
 
 	@Override
-	public int addComHeart(int idx) {
-		return dao.addComHeart(idx);
+	public int addComHeart(StoryCommentDto comDto) {
+		return dao.addComHeart(comDto);
 	}
 
 
 	@Override
-	public int subComHeart(int idx) {
-		return dao.subComHeart(idx);
+	public int subComHeart(StoryCommentDto comDto) {
+		return dao.subComHeart(comDto);
 	}
 
 	@Override
@@ -271,15 +271,16 @@ public class StoryServiceImpl implements StoryService {
 			heartSer.updateHeartCheck(heart);
 		}
 	}
+	
+	@Override
+	public void updateHeartCheck(StoryCommentDto comDto) {
+		dao.updateHeartCheck(comDto);
+	}
 
 	// 태그 리스트
 	@Override
-	public List<TagDto> readTagList(Map<String, Integer> map) {
-		return dao.readTagList(map);
-	}
-
-	@Override
 	public List<StoryFileDto> readTagFileList(int story_board_idx) {
+		System.out.println("story_board_idx: " +story_board_idx);
 		return dao.readTagFileList(story_board_idx);
 	}
 	

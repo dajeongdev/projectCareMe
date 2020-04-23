@@ -120,7 +120,9 @@ var tagCheck = function (tag) {
 		alert("실패!");
 	});
 	$("#tag-list").on("click", ".hashTag", function () {
-		$(this).remove();
+		var idx = $(this).attr("idx");
+ 	 	tags[idx] = "";
+		$(this).parent().remove();
 	});
 }
 var storedFiles = [];
