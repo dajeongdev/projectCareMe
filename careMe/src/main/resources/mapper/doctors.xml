@@ -13,21 +13,56 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 의사등록 -->
 	<insert id="dinsert"
 		parameterType="com.careme.model.dto.DoctorDto">
-		insert into doctor(member_idx, doctor_name, doctor_license, doctor_profile_image,
-		doctor_hospital_name, doctor_hospital_tel, doctor_hospital_address, doctor_hospital_address_detail,doctor_hospital_zipcode,
-		certification_document, is_certified, reg_date, update_date, del_yn) 
-		values(#{member_idx}, #{doctor_name}, #{doctor_license}, #{doctor_profile_image},
-		#{doctor_hospital_name}, #{doctor_hospital_tel}, #{doctor_hospital_address},#{doctor_hospital_address_detail}, #{doctor_hospital_zipcode},
-		'N', 'N', #{reg_date}, null, 'n')
+		insert into doctor(member_idx, doctor_name,
+		doctor_license, doctor_profile_image,
+		doctor_hospital_name,
+		doctor_hospital_tel, doctor_hospital_address,
+		doctor_hospital_address_detail,doctor_hospital_zipcode,
+		certification_document)
+
+		values(#{member_idx}, #{doctor_name},
+		#{doctor_license},
+		#{doctor_profile_image},
+		#{doctor_hospital_name},
+		#{doctor_hospital_tel},
+		#{doctor_hospital_address},#{doctor_hospital_address_detail},
+		#{doctor_hospital_zipcode},
+		#{certification_document})
 	</insert>
+
+
+	<!-- 펫 담는거 -->
+	<select id="selectPet"
+		resultType="com.careme.model.dto.DoctorMajor"
+		parameterType="com.careme.model.dto.PetSpeciesDto">
+		select * from pet_species where pet_species_level='1'
+	</select>
+
+	<!-- 펫 버리는거 -->
+	<update id="deletePet"
+		parameterType="com.careme.model.dto.DoctorMajor">
+		delete from doctor_major where doctor_idx =
+		#{doctor_idx}
+	</update>
 
 	<!-- 정보수정 의사 -->
 	<update id="dupdate"
 		parameterType="com.careme.model.dto.DoctorDto">
 		update doctor set
-		doctor_hospital_name=#{doctor_hospital_name},doctor_hospital_tel=#{doctor_hospital_tel},docotor_hospital_address=#{docotor_hospital_address},doctor_hospital_zipcode=#{doctor_hospital_zipcode},doctor_hospital_address_detail=#{doctor_hospital_address_detail}
+		doctor_hospital_name=#{doctor_hospital_name},doctor_hospital_tel=#{doctor_hospital_tel},
+		doctor_hospital_address=#{doctor_hospital_address},doctor_hospital_zipcode=#{doctor_hospital_zipcode},
+		doctor_hospital_address_detail=#{doctor_hospital_address_detail}
 		where
 		doctor_idx=#{doctor_idx}
 	</update>
+
+	<!-- idx로 찾음 -->
+	<select id="selectDoctor"
+		resultType="com.careme.model.dto.DoctorDto" parameterType="int">
+		select *
+		from doctor where del_yn='n' and
+		member_idx=#{member_idx}
+
+	</select>
 
 </mapper>

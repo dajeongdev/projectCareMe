@@ -63,7 +63,7 @@ function godelete(){
 	</div>
 
 	<div style="margin: 0 auto; margin-top: 100px;" class="text-center">
-		<h1>정보수정</h1>
+		<h1>비밀번호 변경</h1>
 	</div>
 	<br>
 	<div style="padding: 15px; margin: 0 auto; max-width: 700px">
@@ -99,14 +99,14 @@ function godelete(){
 				</tr>
 				<tr>
 					<!-- 닉네임 입력 -->
-					<td style="padding-left: 10px;"><b>Nick:</b></td>
+					<td style="padding-left: 16px;"><b>Nick:</b></td>
 					<td><input type="text" style="width: 530px" id="member_nick"
 						readonly="readonly" name="member_nick" value="${sc.memberDto.member_nick}"
 						class="form-control" /></td>
 				</tr>
 				<tr>
 					<!-- 이메일 입력 -->
-					<td style="padding-left: 10px;"><b>Email:</b></td>
+					<td style="padding-left: 16px;"><b>Email:</b></td>
 					<td><input type="text" style="width: 530px" id="member_email"
 						readonly="readonly" name="member_email" value="${sc.memberDto.member_email}"
 						class="form-control" /></td>
