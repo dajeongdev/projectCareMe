@@ -17,33 +17,56 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.PageNumberCommand;
+import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.PetCareDto;
+import com.careme.model.dto.PetDto;
 import com.careme.service.CarediaryService;
+import com.careme.service.PetService;
 
 @Controller
 public class CarediaryController {
 	@Autowired
 	private CarediaryService carediaryService;
-	
-	public void setDao(CarediaryService carediaryService) {
+	public void setCarediaryService(CarediaryService carediaryService) {
 		this.carediaryService = carediaryService;
 	}
 	
-	@RequestMapping("/carediary/{pet_idx}")
-	public ModelAndView toCarediaryMain(@PathVariable("pet_idx") int pet_idx, Integer page, HttpServletRequest request) {
-		//carediary 화면으로 들어와서 선택한 펫idx session에 저장
-		//SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
-		//sc.setPet_idx(pet_idx);
-		
-		request.getSession().setAttribute("pet_idx", pet_idx);
+	@Autowired
+	private PetService petService;
+	public void setPetService(PetService petService) {
+		this.petService = petService;
+	}
+	
+	@RequestMapping("/carediary/{petIdx}")
+	public ModelAndView toCarediaryMain(@PathVariable("petIdx") int petIdx, Integer page, HttpServletRequest request) {
 		if (page == null) page = 1;
-		HashMap<String, Object> data = carediaryService.getCarediaryListByPetIdx(pet_idx, page, 2);
+		
+		// header script 에서 session에 pet_idx 없으면 로그인화면으로 이동하게 처리
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		if (sc == null) {
+			return new ModelAndView("/main");
+		}
+		int memberIdx = sc.getMemberDto().getMember_idx();
+		
+		// pet Info
+		PetDto petDto = petService.selectPet(petIdx);
+		// 선택펫 변경
+		petService.changeSelectedPet(memberIdx, petIdx);
+		// session에 저장
+		sc.setPet_idx(petIdx);
+		// pet list
+		List<PetDto> pets = petService.selectPetList(memberIdx);
+		
+		// diary list
+		HashMap<String, Object> data = carediaryService.getCarediaryListByPetIdx(petIdx, page, 2);
 		@SuppressWarnings("unchecked")
-		List<CarediaryCommand> list = (List<CarediaryCommand>) data.get("list");
+		List<CarediaryCommand> articles = (List<CarediaryCommand>) data.get("list");
 		PageNumberCommand paging = (PageNumberCommand) data.get("paging");
 		
 		ModelAndView mav = new ModelAndView("/carediary/main");
-		mav.addObject("articles", list);
+		mav.addObject("pet", petDto);
+		mav.addObject("pets", pets);
+		mav.addObject("articles", articles);
 		mav.addObject("paging", paging);
 		
 		System.out.println(paging);
@@ -52,10 +75,16 @@ public class CarediaryController {
 	}
 	
 	@RequestMapping("/carediary")
-	public String toCarediaryMain() {
-		System.out.println("pet 선택:: 안함");
-		// login했을때 pet idx 구해서 넣기
-		return "redirect:/carediary/9";
+	public String toCarediaryMain(HttpServletRequest request) {
+		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		
+		if (sc != null) {
+			int memberIdx = sc.getMemberDto().getMember_idx();
+			int petIdx = petService.findSelectedPet(memberIdx);
+			return "redirect:/carediary/" + petIdx;
+		}
+		
+		return "/main";
 	}
 	
 	@RequestMapping(value= "/carediary/write", method = RequestMethod.GET)
@@ -69,13 +98,12 @@ public class CarediaryController {
 	@RequestMapping(value= "/carediary/write", method = RequestMethod.POST)
 	public String writeDairy(PetCareDto dto, MultipartHttpServletRequest request) throws SQLException, Exception {
 		carediaryService.writeCarediary(dto, request);
-		return "/carediary/main";
+		return "redirect:/carediary/" + dto.getPet_idx();
 	}
 	
 	@RequestMapping(value= "/carediary/update", method = RequestMethod.GET)
 	public ModelAndView updateForm(@RequestParam("d_id") int carediaryIdx) {
 		ModelAndView mav = new ModelAndView("/carediary/update");
-		//HttpServletResponse response = new HttpServletResponse
 		
 		mav.addObject("smallDef", carediaryService.selectSmallDef());
 		mav.addObject("bigDef", carediaryService.selectBigDef());

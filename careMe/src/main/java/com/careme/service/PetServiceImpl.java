@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.dao.PetDao;
 import com.careme.model.command.FileUploadCommand;
+import com.careme.model.command.SessionCommand;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 
@@ -23,7 +24,6 @@ public class PetServiceImpl implements PetService  {
 	}
 	
 	PetDto pet;
-	
 	public void setpet(PetDto pet) {
 		this.pet = pet;
 	}
@@ -56,11 +56,28 @@ public class PetServiceImpl implements PetService  {
 	}
 	
 	@Override
+	public List<PetDto> selectPetList(int memberIdx) {
+		return dao.selectPetList(memberIdx);
+	}
+	
+	// 펫등록
+	@Override
 	public int insertPet(MultipartHttpServletRequest request) {
+		SessionCommand sc = (SessionCommand) request.getAttribute("sc");
 		pet = requestToPetDto(request);
+		int pet_idx = 0;
+		try {
+			pet_idx = dao.insertPet(pet);
+			// 회원의 펫리스트 선택해제
+			deSelectPet(sc.getMemberDto().getMember_idx());
+			// 지금 등록한 펫으로 선택
+			updateToselectedPet(pet_idx);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		return dao.insertPet(pet);
-	};
+		return pet_idx; 
+	}
 	
 	@Override
 	public int updatePet(MultipartHttpServletRequest request) {
@@ -79,8 +96,8 @@ public class PetServiceImpl implements PetService  {
 	public PetDto requestToPetDto(MultipartHttpServletRequest request) {
 		pet = new PetDto();
 		
-		// MemberDto member =  (MemberDto) request.getSession().getAttribute("member");
-		int memberIdx = 1;
+		SessionCommand sc =  (SessionCommand) request.getSession().getAttribute("sc");
+		int memberIdx = sc.getMemberDto().getMember_idx();
 		
 		if (request.getParameter("p") != null && request.getParameter("p") != "") {
 			pet.setPet_idx(Integer.parseInt(request.getParameter("p")));
@@ -99,7 +116,6 @@ public class PetServiceImpl implements PetService  {
 		pet.setGender(request.getParameter("gender"));
 		
 		if (request.getParameter("weight") != null && !request.getParameter("weight").isEmpty()) {
-			System.out.println("weight 이 empty인가... : " + request.getParameter("weight"));
 			pet.setWeight(Double.parseDouble(request.getParameter("weight")));
 		}
 			
@@ -118,5 +134,24 @@ public class PetServiceImpl implements PetService  {
 		}
 		
 		return pet;
+	}
+	
+	public void changeSelectedPet(int memberIdx, int petIdx) {
+		// 선택된 펫 전부 취소
+		deSelectPet(memberIdx	);
+		// 새로 펫 선택
+		updateToselectedPet(petIdx);
+	}
+	
+	public int findSelectedPet(int memberIdx) {
+		return dao.findSelectedPet(memberIdx);
+	}
+	
+	public int updateToselectedPet(int petIdx) {
+		return dao.updateToselectedPet(petIdx);
+	}
+	
+	public void deSelectPet(int memberIdx) {
+		dao.deSelectPet(memberIdx);
 	}
 }

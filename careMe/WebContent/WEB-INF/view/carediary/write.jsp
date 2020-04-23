@@ -113,7 +113,8 @@
 	<div class="container min-vh-100 pt-3"  style="max-width:720px">
 	
 		<form name="pet_regist" enctype="multipart/form-data">
-
+		
+		<input type="hidden" name="pet_idx" value="${sc.pet_idx}">
 		<div class="my-3 p-3 bg-white rounded shadow-sm">
 			<div class="row mb-3 col-12" style="font-size:20px">
 				<strong>일기작성</strong>
