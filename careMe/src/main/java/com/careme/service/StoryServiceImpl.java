@@ -182,16 +182,8 @@ public class StoryServiceImpl implements StoryService {
 	
 	
 	@Override
-	public int update(StoryBoardDto dto, MultipartHttpServletRequest request)  {
-		int i = 0;
-		dto = requesting(request);
-		i = dao.update(dto);
-		return i;
-	}
-	
-	@Override
-	public void updateFile(StoryFileDto fileDto, Integer[] deletedFiles, MultipartHttpServletRequest request) {
-		int i = dao.updateFfile(fileDto);
+	public void update(StoryBoardDto dto, StoryFileDto fileDto, Integer[] deletedFiles, MultipartHttpServletRequest request)  {
+		int i = dao.update(dto);
 		int story_board_idx = dto.getStory_board_idx();
 		System.out.println("삭제파일 길이: " + deletedFiles.length);
 		
@@ -202,12 +194,15 @@ public class StoryServiceImpl implements StoryService {
 				List<Integer> list = Arrays.asList(deletedFiles);
 				deleteList.put("deleteList", list);
 				
-				dao.deleteFile(deleteList);
+				dao.updateFfile(deleteList);
 			}
 			if (request.getFileMap().size() > 0) fileRequesting(story_board_idx, request);
 		}
 	}
-
+	
+	@Override
+	public void updateFile(Map<String, Integer> map) {}
+	
 	@Override
 	public int updateCom(StoryCommentDto comDto) {
 		comDto.setReg_date(LocalDateTime.now());
@@ -294,8 +289,8 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
-	public int tagSelect(int tag_idx) {
-		return dao.tagSelect(tag_idx);
+	public List<TagDto> tagSelect(Map<String, Integer> map) {
+		return dao.tagSelect(map);
 	}
 
 }

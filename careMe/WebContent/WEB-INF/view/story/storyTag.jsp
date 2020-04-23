@@ -28,7 +28,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 </div>
 
 <div class="storyTag">
-<form action="/story/storyTag" method="POST">
+<form action="/story/storyTagList" method="POST">
 	<h2><strong>펫스토리</strong></h2>
 	<hr>
 	<div class="album py-5 bg-light">
@@ -36,11 +36,11 @@ h2, h4 { font-family: 'GmarketSansBold'; }
     
     <h4><strong>${tagList.tag_name}</strong></h4>
     <hr>
-	<div class="row">
-    <c:forEach items="${list}" var="list" begin="${start_idx}" end="${start_idx + 11}">
+    <c:forEach items="${tagList}" var="list" begin="${start_idx}" end="${start_idx + 11}">
+	<div class="row"  onClick="location.href='storyTagList?story_board_idx=${tagList.story_board_idx}'">
          <div class="col-md-4">
           <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${list.story_board_idx}'">
-           	<c:forEach items="${fList}" var="fList" varStatus="f">
+           	<c:forEach items="${tagFileList}" var="fList" varStatus="f">
            	<c:if test="${fList.story_board_idx == list.story_board_idx}">
            	 <img width="100%" height="170" class="img" src="${fullName}${fList.file_path}">
            	</c:if>
@@ -63,11 +63,12 @@ h2, h4 { font-family: 'GmarketSansBold'; }
             </div>
           </div>
         </div>
+        </div>
        </c:forEach>
       
         </div>
         </div>
-     </div>
+     
 	
 	
 	<div id="paging">
@@ -101,9 +102,9 @@ h2, h4 { font-family: 'GmarketSansBold'; }
   				</ul>
 			</div>
 		</div>
-	</div>
+		</div> 
 	 </form>
-	
+	</div>
 	<div class="form-inline">
 		<form class="searching" action="storyMainSearch?currentPage=${currentPage}&searchType=${searchType}&keyword=${keyword}">
 			<select name="searchType">
@@ -117,7 +118,7 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 			<button id="searchBtn" class="btn btn-primary">검색</button>
 		</form>
 	</div>
-</div> 
+
 
 
 	
