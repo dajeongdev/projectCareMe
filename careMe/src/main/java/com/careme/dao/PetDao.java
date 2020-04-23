@@ -32,12 +32,28 @@ public class PetDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("pet.selectPetList", memberIdx);
 	}
 	
+	public List<PetDto> selectPetList(int memberIdx) {
+		return getSqlSession().selectList("pet.selectPetList", memberIdx);
+	}
+	
 	public int updatePet(PetDto dto) {
 		return getSqlSession().update("pet.updatePet", dto);
 	}
 	
 	public int deletePet(int petIdx) {
 		return getSqlSession().update("pet.deletePet", petIdx);
+	}
+	
+	public int findSelectedPet(int memberIdx) {
+		return getSqlSession().selectOne("pet.findSelectedPet", memberIdx);
+	}
+	
+	public int updateToselectedPet(int petIdx) {
+		return getSqlSession().update("pet.updateToselectedPet", petIdx);
+	}
+	
+	public void deSelectPet(int memberIdx) {
+		getSqlSession().update("pet.deSelectPet", memberIdx);
 	}
 
 }

@@ -39,6 +39,7 @@ public class AdminService {
 		return adminDao.selectMember(memberIdx);
 	}
 	
+	// 회원리스트
 	public HashMap<String, Object> getMemberList(int page, int contentPerPage) {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		
@@ -57,6 +58,7 @@ public class AdminService {
 		return data;
 	}
 	
+	// 회원리스트 검색
 	public HashMap<String, Object> searchMemberList(String searchType, String searchText, int page, int contentPerPage) {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		
@@ -79,7 +81,7 @@ public class AdminService {
 	public HashMap<String, Object> getParams(String searchType, String searchText, int page, int contentPerPage, int pageStart) {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		
-		if (searchType != "") {
+		if (!searchType.equals("")) {
 			String searchColumn = getSearchColumn(searchType);
 			
 			params.put("searchColumn", searchColumn);

@@ -106,7 +106,11 @@ public class AdminController {
 	@RequestMapping("/admin/download/member")
 	public ModelAndView downloadMemberXls(String searchType, String searchText, String page) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("searchColumn", adminService.getSearchColumn(searchType));
+		String searchColumn = null;
+		
+		if (searchType != null) searchColumn = adminService.getSearchColumn(searchType);
+		
+		params.put("searchColumn", searchColumn);
 		params.put("searchText", searchText);
 		params.put("page", page);
 		System.out.println(params);
