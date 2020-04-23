@@ -136,18 +136,18 @@ public class DoctorBoardController {
 		QuestionBoardDto mlist=bs.getDoctorBoardContents(question_table_idx);
 		List<BoardFileDto> flist = bs.getDoctorBoardFiles(question_table_idx);
 		List<BoardCommentDto> clist = bs.getDoctorBoardComments(question_table_idx);
+		List<TagDto> tlist = bs.getTagContent(question_table_idx);
 		
 		int carediaryIdx = mlist.getPet_care_idx();
 		CarediaryCommand dlist = cds.getCarediaryByIdx(carediaryIdx);
 		String idx = String.valueOf(question_table_idx);
 		int commentCount = clist.size();
 		
-		System.out.println("diary 확인 ::::"+dlist);
-		
 		mav.addObject("info", info);
 		mav.addObject("mlist", mlist);
 		mav.addObject("flist", flist);
 		mav.addObject("dlist", dlist);
+		mav.addObject("tlist", tlist);
 		mav.addObject("idx", idx);
 		mav.addObject("clist", clist);
 		mav.addObject("commCount", commentCount);

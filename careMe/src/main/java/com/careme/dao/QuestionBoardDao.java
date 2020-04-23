@@ -245,5 +245,11 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	public List<QuestionBoardDto> getContents(){
 		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
 	}
+	
+// Tag 가져오기
+	
+	public List<TagDto> getTagContent(int board_idx){
+		return getSqlSession().selectList("doctorQuestionBrd.getTagsDoctor", board_idx);
+	}
 		
 }

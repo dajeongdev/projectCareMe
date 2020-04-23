@@ -9,7 +9,7 @@ public class BoardFileDto {
 	String file_name;
 	String file_path;
 	long file_size;
-	LocalDateTime reg_date;
+	String reg_date;
 	String del_yn;
 	
 	public int getTable_ref_idx() {
@@ -42,10 +42,10 @@ public class BoardFileDto {
 	public void setFile_size(long file_size) {
 		this.file_size = file_size;
 	}
-	public LocalDateTime getReg_date() {
+	public String getReg_date() {
 		return reg_date;
 	}
-	public void setReg_date(LocalDateTime reg_date) {
+	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
 	public String getDel_yn() {

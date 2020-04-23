@@ -145,8 +145,7 @@
 					//배열에 tag의 idx를 넣어준다
 					var idx = data.tag_idx;
 					var name = data.tag_name;
-					var html = "<li class='hashTag' data-idx=" + idx + ">"
-							+ "#" + name + "</li>";
+					var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "<a href='javascript:;'>X</a>" + "</span>";
 
 					//서버에 보낼 배열에 넣기
 					tags.push(idx);
@@ -162,9 +161,15 @@
 
 					//alert("성공!");
 				}).fail(function() {
-			alert("실패!");
-		});
-	}
+					alert("실패!");
+				});
+
+	 			$("#tag-list").on("click", ".hashTag", function () {
+					$(this).remove();
+				});
+		}
+		
+	
 </script>
 
 

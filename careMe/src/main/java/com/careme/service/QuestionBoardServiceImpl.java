@@ -1,6 +1,7 @@
 package com.careme.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
 
 @Service("QuestionBoardService")
 public class QuestionBoardServiceImpl implements QuestionBoardService {
@@ -117,7 +119,8 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	// 게시글 작성
 
 	public int addDoctorArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
-		dto.setReg_date(LocalDateTime.now());
+		dto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+	
 		int result = dao.insertArticleForDoctor(dto);
 		int idx = dto.getQuestion_table_idx();
 		if (idx>0) {
@@ -135,7 +138,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 			bdto.setFile_name(file.getFileOriginName());
 			bdto.setFile_path(file.getFilePath());
 			bdto.setFile_size(file.getFileSize());
-			bdto.setReg_date(LocalDateTime.now());
+			bdto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 			dao.insertFileForDoctor(bdto);
 		}
 	}
@@ -143,7 +146,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	// 게시글 수정
 
 	public int updateDoctorArticle(QuestionBoardDto dto) {
-		dto.setReg_date(LocalDateTime.now());
+		dto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.updateArticlesForDoctor(dto);
 	}
 
@@ -158,14 +161,14 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	// comment 작성
 	@Override
 	public int addDoctorComment(BoardCommentDto commentDto) {
-		commentDto.setReg_date(LocalDateTime.now());
+		commentDto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.insertCommentForDoctor(commentDto);
 	}
 
 	// comment 수정
 	@Override
 	public int updateDoctorComment(BoardCommentDto commentDto) {
-		commentDto.setReg_date(LocalDateTime.now());
+		commentDto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.updateCommentForDoctor(commentDto);
 	}
 
@@ -243,7 +246,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	@Override
 	public int addCasualArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
-		dto.setReg_date(LocalDateTime.now());
+		dto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		int result = dao.insertArticleForCasual(dto);
 		int idx = dto.getQuestion_table_idx();
 		if (idx>0) {
@@ -262,7 +265,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 			bdto.setFile_name(file.getFileOriginName());
 			bdto.setFile_path(file.getFilePath());
 			bdto.setFile_size(file.getFileSize());
-			bdto.setReg_date(LocalDateTime.now());
+			bdto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 			dao.insertFileForCasual(bdto);
 		}
 	}
@@ -272,7 +275,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	public int updateCasualArticle(QuestionBoardDto dto) {
 
-		dto.setUpdate_date(LocalDateTime.now());
+		dto.setUpdate_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.updateArticlesForCasual(dto);
 	}
 
@@ -285,13 +288,13 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 
 	// comment 작성
 	public int addCasualComment(BoardCommentDto commentDto) {
-		commentDto.setReg_date(LocalDateTime.now());
+		commentDto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.insertCommentForCasual(commentDto);
 	}
 
 	// comment 수정
 	public int updateCasualComment(BoardCommentDto commentDto) {
-		commentDto.setReg_date(LocalDateTime.now());
+		commentDto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.updateCommentForCasual(commentDto);
 	}
 
@@ -304,23 +307,16 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		@Override
 		public void heartProcess(HeartDto hdto, int question_board_comment_idx) {
 		
-		System.out.println("sevice hdto:::" + hdto);
 		String hcheck = hdto.getHeartCheck();
 		if(hcheck.equals("n")) {
 			addHeartForCasual(question_board_comment_idx);
 			hdto.setHeartCheck("y");
-			System.out.println("heartcheck:::"+hdto.getHeartCheck());
-			System.out.println("현재 hdto:::"+hdto);
 			hts.updateHeartCheck(hdto);
-			System.out.println(hcheck);
-
+			
 		}else if(hcheck.equals("y")) {
 			subHeartForCasual(question_board_comment_idx);
 			hdto.setHeartCheck("n");
-			System.out.println("heartcheck:::"+hdto.getHeartCheck());
-			System.out.println("현재 hdto:::"+hdto);
 			hts.updateHeartCheck(hdto);
-			System.out.println(hcheck);
 			}
 		}
 	
@@ -338,6 +334,9 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		sbc.setSearchKeyword(searchKeyword);
 		return sbc;
 	}
-		
+	
+	public List<TagDto> getTagContent(int question_table_idx){
+		return dao.getTagContent(question_table_idx);
+	}
 		
 }

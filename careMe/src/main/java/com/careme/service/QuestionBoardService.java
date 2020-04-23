@@ -10,6 +10,7 @@ import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.QuestionBoardDto;
+import com.careme.model.dto.TagDto;
 
 
 public interface QuestionBoardService {
@@ -104,7 +105,9 @@ public interface QuestionBoardService {
 
 
 // 공통	
-	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword);	
+	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword);
+	
+	public List<TagDto> getTagContent(int question_table_idx);
 	
 }
 

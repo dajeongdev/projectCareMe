@@ -42,7 +42,7 @@
 								<tr onClick="location.href='casualBoardContent?question_table_idx=${item.question_table_idx}'">
 									<td><c:out value="${item.question_table_idx}"/></td>
 									<td><c:out value="${item.title}"/></td>
-									<td><c:out value="${info.member_id}" /></td>
+									<td><c:out value="${item.member_id}" /></td>
 									<td><c:out value="${item.reg_date}" /></td>
 									<td><c:out value="${item.view_count}" /></td>
 								</tr>

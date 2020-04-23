@@ -191,7 +191,7 @@ $(function() {
 			<div class="row my-3 p-3">
 				<main role="main" class="col-lg-12 bg-white rounded shadow-sm">
 					
-					<h2 align="left">고민 상담</h2>
+					<h2 align="left">고민 나누기</h2>
 					<p></p>
 						<div class="mb-3" align="left">
 			          		<label for="title">제목</label>
