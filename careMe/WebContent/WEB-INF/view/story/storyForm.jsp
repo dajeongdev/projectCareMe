@@ -118,7 +118,9 @@ var tagCheck = function (tag) {
 		alert("실패!");
 	});
  	$("#tag-list").on("click", ".hashTag", function () {
-		$(this).remove();
+ 	 	var idx = $(this).attr("idx");
+ 	 	tags[idx] = "";
+		$(this).parent().remove();
 	});
 }
 	
@@ -200,7 +202,7 @@ var tagCheck = function (tag) {
 <div class="story_form col-md-4-order-md-2 mb-4">
 	<div class="whole">
 	<input type="hidden" name="member_idx" id="member_idx" value="${info.member_idx}">
-	<form name="insert" method="POST" action="storyForm" enctype="multipart/form-data">
+	<form name="insert" method="POST"enctype="multipart/form-data">
 		<div class="container">
 		<h3><strong>펫스토리</strong></h3>
 		<hr>
