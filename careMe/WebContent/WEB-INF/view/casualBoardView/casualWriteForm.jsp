@@ -40,7 +40,39 @@ $(function(){
 			})
 		})
 
-</script>	
+</script>
+
+<script>
+<!-- MyPET CHOOSE -->
+$(function(){
+		$("#myPet").on("change", function(){
+		var selectPet=$(this).find("option:selected").data("num");
+			if(!selectPet){
+				$("#petDiary option").remove();
+				return false;
+			}
+		var url ="casualWriteForm/pet_idx?level=2&selectPet="+selectPet;
+		$.ajax(
+			{type:"GET",
+			url:url,
+			dataType:"json"})
+			.done(function(items){
+			$("#petDiary option").remove();
+				if (items.length > 0) {
+					for (item in items) {
+					var s = items[item];
+					var option = "<option value=" + s.pet_care_idx + ">" + s.title + " " + s.diary_date + "</option>"
+					$("#petDiary").append(option);
+					}
+				}
+				}).fail(function(e) {
+					alert(e.responseText);
+				});
+			})
+		})
+
+</script>
+	
 	
 <script>
 <!-- 해시태그 기능 -->
@@ -218,6 +250,26 @@ $(function(){
 							<div class="col-md-6  mb-3">
 								<label for="petSpecies2">소분류</label> 
 								<select class="form-control" id="petSpeciesLevel2" name="pet_species_idx" required>
+								</select>
+							</div>
+						</div>
+
+					<!-- 마이펫 찾기 -->
+						<div class="row" style="width: 100%;">
+							<div class="col-md-6  mb-3">
+								<label for="myPet">등록 펫 찾기</label> 
+								<select class="form-control" id="selectMyPet">
+									<option>==선택==</option>
+									<c:if test="${petOption != null}">
+										<c:forEach var="option" items="${petOption}">
+											<option data-num="${option.pet_species_idx}">${option.pet_species_name}</option>
+										</c:forEach>
+									</c:if>
+								</select>
+							</div>
+							<div class="col-md-6  mb-3">
+								<label for="careDiary">다이어리 찾기</label> 
+								<select class="form-control" id="selectPetDiary" name="pet_care_idx" required>
 								</select>
 							</div>
 						</div>

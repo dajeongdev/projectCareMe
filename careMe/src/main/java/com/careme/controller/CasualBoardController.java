@@ -1,5 +1,6 @@
 package com.careme.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.careme.dao.CarediaryDao;
+import com.careme.model.command.CarediaryCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.SearchBoardCommand;
 import com.careme.model.command.SessionCommand;
@@ -23,9 +26,11 @@ import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
+import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
 import com.careme.model.dto.TagDto;
+import com.careme.service.CarediaryService;
 import com.careme.service.FileUploadService;
 import com.careme.service.HashTagService;
 import com.careme.service.HeartService;
@@ -84,6 +89,18 @@ public class CasualBoardController {
 	HeartService hts;
 	public void setHeartService(HeartService hts) {
 		this.hts=hts;
+	}
+	
+	@Autowired
+	CarediaryService cds;
+	public void setCarediaryService(CarediaryService cds) {
+		this.cds=cds;
+	}
+	
+	@Autowired
+	CarediaryDao cddao;
+	public void setCarediaryDao(CarediaryDao ccdao) {
+		this.cddao=cddao;
 	}
 	
 	
@@ -203,6 +220,39 @@ public class CasualBoardController {
 		
 		if (level == 1) items = ps.selectPetSpeciesLevel1();
 		else if (level == 2) items = ps.selectPetSpeciesLevel2(ancestor);
+		
+		Gson json = new Gson();
+		return json.toJson(items);	
+	}
+	
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_idx", method = RequestMethod.GET)
+	public ModelAndView myPetForm(int selectPet) {
+		ModelAndView mav = new ModelAndView("pet/regist");
+		mav.addObject("petOption", ps.selectPet(selectPet)); 		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/selected", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@ResponseBody
+	public String getCasualPetList(int level, int selectPet) {
+		PetDto items = null;
+		
+		if (level == 1) {items = ps.selectPet(selectPet);}
+		else if (level == 2) {
+			int currentPage=1;
+			int contentPerPage=10;
+			List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
+			HashMap<String, Integer> param = new HashMap<String, Integer>();
+			int start = pns.getStartIdx(currentPage, contentPerPage);
+			param.put("pet_idx", selectPet);
+			param.put("start", start);
+			param.put("contentPerPage", contentPerPage);
+			list = cddao.selectCarediaryListByPetIdx(param);
+			
+			items = list;
+			
+		
+		}
 		
 		Gson json = new Gson();
 		return json.toJson(items);	
