@@ -4,18 +4,17 @@
 <%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
-
 <title>메인 화면</title>
 <% String fullName = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort() + "/careMe/"; %>
 <c:set var="fullName" value="<%=fullName%>" />
 
 <script type="text/javascript">
+
 function deleteArticle(question_table_idx){
         if(confirm("정말 삭제하시겠습니까?")==true){
             location.href="deleteCasualArticle?question_table_idx="+question_table_idx;
@@ -60,7 +59,6 @@ $(function(){
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-
 </head>
 
 <body>
@@ -85,7 +83,6 @@ $(function(){
   				
 
 		  		<div class="row card-body">
-
   				
   					<div class="col-md-3">
 	       				<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
@@ -97,7 +94,10 @@ $(function(){
         				<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
   					</div>
   					
-  					<div class="col-md-9 shadow-sm">
+  					<!-- 다이어리 -->
+  					
+  					<div class="row">
+  					<div class="col-md-12 shadow-sm">
   						<div>
   							<c:if test="${flist.size()>0}">
   								<c:forEach var="flist" items="${flist}">
@@ -109,13 +109,90 @@ $(function(){
   						</div>
   						<br>
   						<div>
-  							<p style="css:mainCSS" align="left">
+  							<p align="left">
 								${mlist.content}
 							</p>
         				</div>
 					</div>
-				
-  				</div>
+				</div>
+  				
+  				<div class="row">
+  				<c:if test="${dlist.size() > 0}">
+						<c:forEach var="d" items="${dlist}" varStatus="status">
+							<div class="card b-1 hover-shadow mb-20">
+								<header class="card-header flexbox align-items-center">
+									<div>
+										<strong>${d.diary.title} : </strong> <span>${d.diary.reg_date}</span>
+									</div>
+									<div class="card-hover-show">
+										<a class="btn btn-xs fs-10 btn-dark btn-sm"
+											href="update?d_id=${d.diary.pet_care_idx}">수정</a> 
+										<button type="button" class="btn btn-xs fs-10 btn-dark btn-sm"
+											data-toggle="collapse" data-target="#image${status.index}"
+											aria-expanded="false" aria-controls="image${status.index}">열기</button>
+										<!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
+									</div>
+								</header>
+
+								<div class="media card-body table-responsive row">
+
+									<div class="row mb-2 w-100">
+										<div class="col-md-6 p-2">
+											<div class="card-body">
+												<table class="table-sm w-100 text-center">
+													<thead class="border-bottom">
+														<tr>
+															<th>날짜</th>
+															<th>산책</th>
+															<th>소변</th>
+															<th>대변</th>
+															<th>몸무게</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>${d.diary.diary_date}</td>
+															<td>${d.diary.exercise}/m</td>
+															<td>
+																<div class="color-circle"
+																	style="background-color:${article.urineContent};"></div>
+															</td>
+															<td>${d.fecesContent}</td>
+															<td>${d.diary.weight}111/kg</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<div class="col-md-6 p-2">
+											<div class="card-body">
+												<p>${d.diary.memo}</p>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-12 p-2 collapse" id="image${status.index}">
+											<div class="card-body">
+												<div class="row">
+													<c:if test="${d.files.size() > 0}">
+														<c:forEach var="image" items="${article.files}">
+															<div class="col-md-3">
+																<img src="${hostname}${image.file_path}">
+															</div>
+														</c:forEach>
+													</c:if>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<!-- E:diary -->
+						</c:forEach>
+					</c:if>
+  					</div>
   				
   			
   			</div>
@@ -127,8 +204,12 @@ $(function(){
 			<table align="right">
 				<tr height="30">
 					<td colspan="4" align="right">
+					
+					<c:if test="${sc.memberDto.member_idx==mlist.member_idx}">
 					<button type="button" class="btn btn-dark btn-sm" onclick="document.location.href='casualBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">글수정</button>
 					<button type="button" class="btn btn-dark btn-sm" onclick="deleteArticle('${mlist.question_table_idx}')">글삭제</button>
+					</c:if>
+					
 					<button type="button" class="btn btn-dark btn-sm" onClick="location.href='casualBoard?currentPage=1'">글목록</button>
 					</td>
 				</tr>
@@ -174,10 +255,14 @@ $(function(){
 							
 						</div>	
 						<div class="col-md-3" align="right">
+						
+						<c:if test="${sc.memberDto.member_idx==item.member_idx}">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
 							onClick="">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 삭제"
 							onClick="">
+						</c:if>
+						
 						</div>
 					</div>
 					<p></p>
@@ -198,7 +283,7 @@ $(function(){
 				<textarea name="content" style="width: 100%; height: 100px"></textarea>
 						<div class="col-md-12" align="right">
 							<input class="btn btn-dark btn-sm" type="submit" name="submit" value="확인"> 
-							<input type="hidden" name="member_idx" value="1">
+							<input type="hidden" name="member_idx" value="${sc.memberDto.member_idx}">
 						</div>
 			</form>
 			</div>

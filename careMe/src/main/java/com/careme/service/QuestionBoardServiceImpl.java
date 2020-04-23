@@ -72,7 +72,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.subHeartForCasual(idx);
 	}
 	
-	// Doctor Board 게시글 뿌리기
+	// 전문 상담 게시판 구현
 	public List<QuestionBoardDto> getDoctorBoard() {
 		return dao.getDoctorBoard();
 	}
@@ -81,37 +81,49 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.getDoctorBoardList(param);
 	}
 
+	public int getTotalDoctor() {
+		return dao.getTotalDoctor();
+	}
+	
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx) {
 		return dao.getDoctorBoardContents(question_table_idx);
-	}
-
-	public void getDoctorBoardViews(int question_table_idx) {
-		dao.getDoctorBoardViews(question_table_idx);
 	}
 
 	public List<BoardFileDto> getDoctorBoardFiles (int question_table_idx){
 		return dao.getDoctorBoardFiles(question_table_idx);
 	}
 	
+	public void getDoctorBoardViews(int question_table_idx) {
+		dao.getDoctorBoardViews(question_table_idx);
+	}
+	
+	@Override
 	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc) {
 		return dao.getDoctorBoardSearch(sbc);
 	}
 
+	@Override
 	public List<BoardCommentDto> getDoctorBoardComments(int question_table_idx) {
 		return dao.getDoctorBoardComments(question_table_idx);
 	}
+	
+	@Override
+	public BoardCommentDto getDoctorComment(int question_board_comment_idx) {
+		return dao.getDoctorComment(question_board_comment_idx);
+	}
 
-// Doctor Board 작성, 수정, 삭제
+// 전문 상담 게시판 작성, 수정, 삭제
 
 	// 게시글 작성
 
-	public void addDoctorArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
+	public int addDoctorArticles(QuestionBoardDto dto, MultipartHttpServletRequest request) {
 		dto.setReg_date(LocalDateTime.now());
-		dao.insertArticleForDoctor(dto);
+		int result = dao.insertArticleForDoctor(dto);
 		int idx = dto.getQuestion_table_idx();
 		if (idx>0) {
 			bs.addFileForDoctor(idx, request);
 		}
+		return result;
 	}
 
 	public void addFileForDoctor(int question_table_idx, MultipartHttpServletRequest request) {
@@ -141,7 +153,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteArticlesForDoctor(idx);
 	}
 
-// Doctor Board Comments 작성, 수정, 삭제, 추천
+// 전문 상담 게시판 Comments 작성, 수정, 삭제, 추천
 
 	// comment 작성
 	@Override
@@ -165,25 +177,18 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	
 	//heart 추천 여부 확인 후 갯수 정리
 	@Override
-	public void heartProcess(HeartDto hdto, int question_board_comment_idx) {
+	public void heartProcessDoctor(HeartDto hdto, int question_board_comment_idx) {
 	
-	System.out.println("sevice hdto:::" + hdto);
 	String hcheck = hdto.getHeartCheck();
 	if(hcheck.equals("n")) {
-		addHeartForCasual(question_board_comment_idx);
+		addHeartForDoctor(question_board_comment_idx);
 		hdto.setHeartCheck("y");
-		System.out.println("heartcheck:::"+hdto.getHeartCheck());
-		System.out.println("현재 hdto:::"+hdto);
 		hts.updateHeartCheck(hdto);
-		System.out.println(hcheck);
-
+	
 	}else if(hcheck.equals("y")) {
-		subHeartForCasual(question_board_comment_idx);
+		subHeartForDoctor(question_board_comment_idx);
 		hdto.setHeartCheck("n");
-		System.out.println("heartcheck:::"+hdto.getHeartCheck());
-		System.out.println("현재 hdto:::"+hdto);
 		hts.updateHeartCheck(hdto);
-		System.out.println(hcheck);
 		}
 	}
 	
@@ -213,19 +218,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dao.getCasualBoardViews(question_table_idx);
 	}
 	
-	@Override
-	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword) {
-		SearchBoardCommand sbc = new SearchBoardCommand();
-			if (searchn == 0) {
-				sbc.setSearch_option("member_id");
-			} else if (searchn == 1) {
-				sbc.setSearch_option("title");
-			} else if (searchn == 2) {
-				sbc.setSearch_option("content");
-			}
-		sbc.setSearchKeyword(searchKeyword);
-		return sbc;
-	}
+
 	
 	@Override
 	public List<QuestionBoardDto> getCasualBoardSearch(SearchBoardCommand sbc) {
@@ -307,4 +300,44 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.deleteCommentForCasual(idx);
 	}
 	
+	//heart 추천 여부 확인 후 갯수 정리
+		@Override
+		public void heartProcess(HeartDto hdto, int question_board_comment_idx) {
+		
+		System.out.println("sevice hdto:::" + hdto);
+		String hcheck = hdto.getHeartCheck();
+		if(hcheck.equals("n")) {
+			addHeartForCasual(question_board_comment_idx);
+			hdto.setHeartCheck("y");
+			System.out.println("heartcheck:::"+hdto.getHeartCheck());
+			System.out.println("현재 hdto:::"+hdto);
+			hts.updateHeartCheck(hdto);
+			System.out.println(hcheck);
+
+		}else if(hcheck.equals("y")) {
+			subHeartForCasual(question_board_comment_idx);
+			hdto.setHeartCheck("n");
+			System.out.println("heartcheck:::"+hdto.getHeartCheck());
+			System.out.println("현재 hdto:::"+hdto);
+			hts.updateHeartCheck(hdto);
+			System.out.println(hcheck);
+			}
+		}
+	
+	// 공통
+	@Override
+	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword) {
+		SearchBoardCommand sbc = new SearchBoardCommand();
+			if (searchn == 0) {
+				sbc.setSearch_option("member_id");
+			} else if (searchn == 1) {
+				sbc.setSearch_option("title");
+			} else if (searchn == 2) {
+				sbc.setSearch_option("content");
+			}
+		sbc.setSearchKeyword(searchKeyword);
+		return sbc;
+	}
+		
+		
 }
