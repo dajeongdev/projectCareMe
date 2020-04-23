@@ -71,6 +71,7 @@ public class MemberController {
 	@RequestMapping(value = "login/loginok")
 	public String loginOk(LoginCommand lc, HttpSession session) {
 		int i = memberService.loginOk(lc);// 1이나 0리턴
+
 		// System.out.println(i);
 		if (i == 0) {// 실패
 			return "redirect:loginform";
@@ -152,26 +153,17 @@ public class MemberController {
 	@RequestMapping(value = "login/find_pass")
 	@ResponseBody
 	public String sendMail2(String member_email) throws Exception {
-
 		EmailDto email2 = new EmailDto();
-
 		System.out.println(member_email);
-
 		String receiver = member_email; // Receiver. //회원 계정 이메일//
-
 		String subject = "[CARE ME!] 임시 비밀번호 안내 이메일 입니다."; // 제목
-
 		String content = "[CARE ME!]"; // 내용
-
 		email2.setReceiver(receiver);
-
 		email2.setSubject(subject);
-
 		email2.setContent(content);
-
 		boolean result = emailPwService.sendMail2(email2);
-
-		return "이메일이 전송 되었습니다: " + result + "<p><button type='button'  onclick=\"location.href='loginform';\">확인</button></p>";
+		return "이메일이 전송 되었습니다: " + result
+				+ "<p><button type='button'  onclick=\"location.href='loginform';\">확인</button></p>";
 
 	}
 
