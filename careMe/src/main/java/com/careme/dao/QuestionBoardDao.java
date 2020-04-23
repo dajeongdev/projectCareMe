@@ -26,6 +26,10 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("doctorQuestionBrd.getArticles", param);
 	}
 	
+	public int getTotalDoctor() {
+		return getSqlSession().selectOne("doctorQuestionBrd.selectTotal");
+	}
+	
 	public QuestionBoardDto getDoctorBoardContents(int question_table_idx){
 		return getSqlSession().selectOne("doctorQuestionBrd.getArtContent", question_table_idx);
 	}
@@ -41,17 +45,13 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc){
 		return getSqlSession().selectList("doctorQuestionBrd.getSrchArticle");
 	}
-	
-	public List<BoardCommentDto> getDoctorBoardComments(int question_table_idx){
-		return getSqlSession().selectList("doctorQuestionBrd.getArtComments", question_table_idx);
-	}
+
 	
 	
 // Doctor Board 작성, 수정, 삭제
 	
 	public int insertArticleForDoctor(QuestionBoardDto dto){
-		int idx= getSqlSession().insert("doctorQuestionBrd.insertArt", dto);
-		return idx;
+		return getSqlSession().insert("doctorQuestionBrd.insertArt", dto);
 	}
 	
 	public int insertFileForDoctor(BoardFileDto dto) {
@@ -80,8 +80,56 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().delete("doctorQuestionBrd.deleteComment", idx);
 	}
 	
+	public List<BoardCommentDto> getDoctorBoardComments(int question_table_idx){
+		return getSqlSession().selectList("doctorQuestionBrd.getArtComments", question_table_idx);
+	}
+	
+	public BoardCommentDto getDoctorComment(int question_board_comment_idx){
+		return getSqlSession().selectOne("doctorQuestionBrd.getArtCommentsIdx", question_board_comment_idx);
+	}
+	
+	public BoardCommentDto getHeartInfoDoctor(int question_board_comment_idx) {
+		return getSqlSession().selectOne("doctorQuestionBrd.getHeartInfo", question_board_comment_idx);
+	}
+	
+// Heart 추천
+	
+	public int addHeartForDoctor(int idx) {
+		return getSqlSession().update("doctorQuestionBrd.addHeart", idx);
+	}
+		
+	public int subHeartForDoctor(int idx) {
+		return getSqlSession().update("doctorQuestionBrd.subHeart", idx);
+	}
+	
+	public int updateDoctorCheckHeart(BoardCommentDto cdto) {
+		return getSqlSession().update("doctorQuestionBrd.updateCheckHeart", cdto);
+	}
+	
+	
+// Hashtag 확인
+	
+	public List<TagDto> getHashtagDoctor(String tagValue){
+		return getSqlSession().selectList("doctorQuestionBrd.hashtagFind", tagValue);
+	}
+		
+	public List<TagDto> addHashtagDoctor(TagCommand tc) {
+		return getSqlSession().selectList("doctorQuestionBrd.hashtagAdd", tc);
+	}
+
+		
+// Page Numbering
+		
+	public List<PageNumberCommand> getPagesDoctor(){
+		return getSqlSession().selectList("doctorQuestionBrd.contentCount");
+	}
+		
+	public List<QuestionBoardDto> getContentsDoctor(){
+		return getSqlSession().selectList("doctorQuestionBrd.contentDivide");
+	}
 
 	
+/////////////////////////////////////////////////////////////////////////////////////////
 	
 	
 // Casual Board 내용 및 검색
@@ -114,9 +162,6 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("casualQuestionBrd.getSrchArticle", sbc);
 	}
 	
-
-
-	
 	
 // Casual Board 작성, 수정, 삭제
 	
@@ -137,6 +182,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().delete("casualQuestionBrd.deleteArticle", idx);
 	}
 
+	
 // Casual Comment 작성, 수정, 삭제
 
 	public int insertCommentForCasual(BoardCommentDto commentDto){
@@ -162,30 +208,10 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	public BoardCommentDto getHeartInfo(int question_board_comment_idx) {
 		return getSqlSession().selectOne("casualQuestionBrd.getHeartInfo", question_board_comment_idx);
 	}
-	
-	
-// Hashtag 확인
-	
-	public List<TagDto> getHashtag(String tagValue){
-		return getSqlSession().selectList("casualQuestionBrd.hashtagFind", tagValue);
-	}
-	
-	public List<TagDto> addHashtag(TagCommand tc) {
-		return getSqlSession().selectList("casualQuestionBrd.hashtagAdd", tc);
-	}
 
-// Page Numbering
-	
-	public List<PageNumberCommand> getPages(){
-		return getSqlSession().selectList("causalQuestionBrd.contentCount");
-	}
-	
-	public List<QuestionBoardDto> getContents(){
-		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
-	}
 	
 // Heart 추천
-	
+
 	public int addHeartForCasual(int idx) {
 		return getSqlSession().update("casualQuestionBrd.addHeart", idx);
 	}
@@ -198,13 +224,26 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().update("casualQuestionBrd.updateCheckHeart", cdto);
 	}
 	
-	public int addHeartForDoctor(int idx) {
-		return getSqlSession().update("doctorQuestionBrd.addHeart", idx);
+	
+// Hashtag 확인
+	
+	public List<TagDto> getHashtag(String tagValue){
+		return getSqlSession().selectList("casualQuestionBrd.hashtagFind", tagValue);
 	}
 	
-	public int subHeartForDoctor(int idx) {
-		return getSqlSession().update("doctorQuestionBrd.subHeart", idx);
+	public List<TagDto> addHashtag(TagCommand tc) {
+		return getSqlSession().selectList("casualQuestionBrd.hashtagAdd", tc);
+	}
+
+	
+// Page Numbering
+	
+	public List<PageNumberCommand> getPages(){
+		return getSqlSession().selectList("casualQuestionBrd.contentCount");
 	}
 	
+	public List<QuestionBoardDto> getContents(){
+		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
+	}
 		
 }
