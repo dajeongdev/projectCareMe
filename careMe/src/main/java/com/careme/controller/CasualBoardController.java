@@ -232,7 +232,7 @@ public class CasualBoardController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/selected", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getCasualPetList(int level, int selectPet) {
 		PetDto items = null;
@@ -249,7 +249,7 @@ public class CasualBoardController {
 			param.put("contentPerPage", contentPerPage);
 			list = cddao.selectCarediaryListByPetIdx(param);
 			
-			items = list;
+		//	items = list;
 			
 		
 		}
