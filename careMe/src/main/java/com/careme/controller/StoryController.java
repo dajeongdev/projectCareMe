@@ -141,7 +141,8 @@ public class StoryController {
 		List<StoryCommentDto> comList = service.readCom(story_board_idx);
 		story_board_idx = dto.getStory_board_idx();
 		List<TagDto> tagList = service.readTags(story_board_idx);
-		System.out.println("태그" + tagList);
+		TagDto tag = new TagDto();
+		int i = tag.getTag_idx();
 		int comCount = comList.size();
 		service.counting(story_board_idx);
 		mav.addObject("dto", dto);
@@ -149,6 +150,7 @@ public class StoryController {
 		mav.addObject("comList", comList);
 		mav.addObject("comCount", comCount);
 		mav.addObject("tags", tagList);
+		mav.addObject("tag_idx", i);
 		mav.setViewName("/story/storyDetail");
 		MemberDto info = mem.memberInfo("hellojava");
 		mav.addObject("info", info);
@@ -235,11 +237,8 @@ public class StoryController {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
 		dto.setMember_idx(sc.getMemberDto().getMember_idx());
 		
-		System.out.println("member_idx =====" + dto.getMember_idx());
-		
 		int i = service.insert(dto, request);
 		int story_board_idx = dto.getStory_board_idx();
-		System.out.println("getStory_board_idx =====" + dto.getStory_board_idx());
 		
 		tagService.insertUseTag("s", story_board_idx, rdTag);
 		return "/story/storyMain";
@@ -319,8 +318,7 @@ public class StoryController {
 		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
 		int member_idx = sc.getMemberDto().getMember_idx();
 		
-		service.update(dto, request);
-		service.updateFile(fileDto, deletedFiles, request);
+		service.update(dto, fileDto, deletedFiles, request);
 		return "/story/storyMain";
 	}
 	
@@ -333,8 +331,7 @@ public class StoryController {
 		List<StoryCommentDto> com = service.readCom(story_board_idx);
 		mav.addObject("com", com);
 		return mav;
-	}
-	
+	}	
 	
 	// 글삭제
 	@RequestMapping(value = "/view/story/delete")
@@ -349,32 +346,10 @@ public class StoryController {
 		service.deleteCom(story_comment_idx);
 		return "redirect:/view/story/storyDetail";
 	}
-	@RequestMapping(value = "/view/story/storyMain")
-	public ModelAndView dlisting(HttpSession session, int currentPage) {
-		ModelAndView mav = new ModelAndView();
-		PageNumberCommand paging = new PageNumberCommand();
-		int contentPerPage = 9;
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("start_idx", page.getStartIdx(currentPage, contentPerPage));
-		map.put("contentPerPage", contentPerPage);
-		
-		List<StoryBoardDto> list = service.listPaging(map);
-		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyMain?currentPage=");
-		List<StoryFileDto> fList = service.fileList();
-		List<StoryBoardDto> hlist = service.hitList();
-		
-		mav.addObject("list", list);
-		mav.addObject("fList", fList);
-		mav.addObject("hlist", hlist);
-		mav.addObject("paging", paging);
-		MemberDto info = mem.memberInfo("hellojava");
-		mav.addObject("info", info);
-		mav.setViewName("/story/storyMain");
-		return mav;
-	}
-	// 태그 리스트
 	
-	public ModelAndView tagListing(HttpSession session, int tag_idx, int currentPage) {
+	// 태그 리스트
+	@RequestMapping(value = "/view/story/storyTagList")
+	public ModelAndView tagListing(StoryBoardDto dto, HttpSession session, int tag_idx, int currentPage) {
 		ModelAndView mav = new ModelAndView();
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 12;
@@ -382,13 +357,14 @@ public class StoryController {
 		map.put("start_idx", page.getStartIdx(currentPage, contentPerPage));
 		map.put("contentPerPage", contentPerPage);
 		
-		List<TagDto> tagList = service.readTagList(map);
+		List<TagDto> tagList = service.tagSelect(map);
 		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyTag?currentPage=");
-		int tag = service.tagSelect(tag_idx);
-		List<StoryFileDto> tagFileList = service.readTagFileList(tag);
+		int story_board_idx = dto.getStory_board_idx();
+		List<StoryFileDto> tagFileList = service.readTagFileList(story_board_idx);
 		
 		mav.addObject("tagList", tagList);
 		mav.addObject("tagFileList", tagFileList);
+		mav.setViewName("/view/story/storyTagList");
 		return mav;
 	}
 

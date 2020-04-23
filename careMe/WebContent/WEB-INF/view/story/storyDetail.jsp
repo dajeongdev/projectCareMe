@@ -106,7 +106,7 @@ $(function(){
 			</div>
 			<div id="tag-list">
 				<c:forEach var="taging" items="${tags}">
-					<span class="hashTag">#<c:out value="${taging.tag_name}"/></span>
+					<span class="hashTag" onClick="location.href='storyTagList?currentPage=1'" data-idx="${taging.tag_idx}">#<c:out value="${taging.tag_name}"/></span>
 				</c:forEach>
 			</div>
 				<div class="btn-group">
