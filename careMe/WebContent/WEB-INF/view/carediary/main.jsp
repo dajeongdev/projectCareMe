@@ -4,7 +4,7 @@
 <%@ page import="com.careme.model.dto.MemberDto"%>
 <%
 	String hostname = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
-			+ "/careMe/";
+			+ "/careMe/";	
 %>
 <c:set var="hostname" value="<%=hostname%>" />
 <!DOCTYPE html>
@@ -47,7 +47,10 @@
 </head>
 <body>
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
-
+	<c:set var="isOwnPet" value="n" />
+	<c:if test="${pet.member_idx eq sc.memberDto.member_idx}">
+		<c:set var="isOwnPet" value="y" />
+	</c:if>
 	<div
 		class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 		<div class="container min-vh-100 pt-3">
@@ -58,30 +61,36 @@
 					<img alt="" src="${hostname}${pet.profile_image_file_path}"
 						style="width: 200px; border-radius: 50%;">
 					<h1>${pet.name}</h1>
-					<div>
+					<c:if test="${isOwnPet eq 'y'}">
+						<div>
 						<button class="btn btn-dark btn-sm"
 							onclick="toPetUpdateForm(${petIdx})">수정</button>
-					</div>
+						</div>
+					</c:if>
 					
-					<div class="col-10 text-right">
-					<button type="button" class="btn btn-dark btn-sm"
-						data-toggle="modal" data-target="#modalPetInfo">정보조회</button>
-					</div>
-					
+					<c:if test="${isOwnPet eq 'n'}">
+						<div>
+						<button type="button" class="btn btn-dark btn-sm"
+							data-toggle="modal" data-target="#modalPetInfo">정보조회</button>
+						</div>
+					</c:if>
 				</div>
 
 			</div>
 
+			<c:if test="${isOwnPet eq 'y'}">
 			<div class="row mb-2">
 				<div class="col-2 text-left">
 					<button class="btn btn-dark btn-sm" onclick="location.href='write'">일기작성</button>
 				</div>
+				
 
 				<div class="col-10 text-right">
 					<button type="button" class="btn btn-dark btn-sm"
 						data-toggle="modal" data-target="#modalSample">반려동물 목록</button>
 				</div>
 			</div>
+			</c:if>
 
 			<!-- S:diary list box -->
 			<div class="row">
@@ -97,8 +106,10 @@
 								<div class="col-md-4">
 									<p>아직 작성한 일기가 없습니다.</p>
 									<p>일기를 작성 해주세요.</p>
+									<c:if test="${isOwnPet eq 'y'}">
 									<button class="btn btn-dark btn-sm"
 										onclick="location.href='write'">일기작성</button>
+									</c:if>
 								</div>
 							</div>
 						</div>
@@ -112,14 +123,21 @@
 										<strong>${article.diary.title} </strong>
 									</div>
 									<div class="card-hover-show">
-										<a class="btn btn-xs fs-10 btn-dark btn-sm"
-											href="update?d_id=${article.diary.pet_care_idx}">수정</a> <a
-											class="btn btn-xs fs-10 btn-bold btn-dark btn-sm"
-											href="/careMe/view/casualBoardView/casualWriteForm?carediary=${article.diary.pet_care_idx}&pet=${petIdx}">질문하기</a>
+										<c:if test="${isOwnPet eq 'y'}">
+											<a class="btn btn-xs fs-10 btn-dark btn-sm"
+												href="update?d_id=${article.diary.pet_care_idx}">
+												수정
+											</a> 
+											<a class="btn btn-xs fs-10 btn-bold btn-dark btn-sm"
+												href="/careMe/view/casualBoardView/casualWriteForm?carediary=${article.diary.pet_care_idx}&pet=${petIdx}">
+												질문하기
+											</a>
+										</c:if>
 										<button type="button" class="btn btn-xs fs-10 btn-dark btn-sm"
 											data-toggle="collapse" data-target="#image${status.index}"
-											aria-expanded="false" aria-controls="image${status.index}">열기</button>
-										<!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
+											aria-expanded="false" aria-controls="image${status.index}">
+											열기
+										</button>
 									</div>
 								</header>
 
@@ -251,7 +269,7 @@
 			<!-- S: 펫 정보조회 모달 -->
 			<div class="modal fade" id="modalPetInfo" tabindex="-1" role="dialog">
 				<div class="modal-dialog modal-md" role="document">
-
+					<div class="modal-content">
 					<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 						<div class="container min-vh-100 pt-3" style="max-width: 720px">
 
@@ -292,22 +310,30 @@
 									<div class="row mb-3">
 										<div class="col-12">
 											<p class="mb-1">중성화 여부</p>
+											
 											<div class="d-block mb-3">
+												<c:if test="${pet.neutralized eq 'y'}">
 												<div class="custom-control custom-radio">
 													<input id="neutY" name="neutralized" type="radio"
 														class="custom-control-input" value="y" checked> <label
 														class="custom-control-label" for="neutY">예</label>
 												</div>
+												</c:if>
+												
+												<c:if test="${pet.neutralized eq 'n'}">
 												<div class="custom-control custom-radio">
 													<input id="neutN" name="neutralized" type="radio"
 														class="custom-control-input" value="n" required> <label
 														class="custom-control-label" for="neutN">아니오</label>
 												</div>
+												</c:if>
+												<c:if test="${pet.neutralized eq 'd'}">
 												<div class="custom-control custom-radio">
 													<input id="neutD" name="neutralized" type="radio"
 														class="custom-control-input" value="d" required> <label
 														class="custom-control-label" for="neutD">모름</label>
 												</div>
+												</c:if>
 											</div>
 										</div>
 									</div>
@@ -344,8 +370,8 @@
 
 										<div class="row mb-3">
 											<div class="col-12">
-												<label for="birth">생일은 언제인가요</label> <input type="date"
-													class="form-control" id="birth" name="birth">
+												<label for="birth">생년월일</label>
+												<input type="date" class="form-control" id="birth" name="birth" value="${pet.birth}" disabled>
 											</div>
 										</div>
 
@@ -353,30 +379,44 @@
 											<div class="col-12">
 												<p class="mb-1">성별</p>
 												<div class="d-block">
+													<c:if test="${pet.gender eq 'm'}">
 													<div class="custom-control custom-radio">
 														<input id="genM" name="gender" type="radio"
-															class="custom-control-input" value="m"> <label
-															class="custom-control-label" for="genM">남</label>
+															class="custom-control-input" value="m" checked>
+															<label class="custom-control-label" for="genM">남</label>
 													</div>
+													</c:if>
+													<c:if test="${pet.gender eq 'f'}">
 													<div class="custom-control custom-radio">
 														<input id="genF" name="gender" type="radio"
-															class="custom-control-input" value="f"> <label
-															class="custom-control-label" for="genF">여</label>
+															class="custom-control-input" value="f" checked> 
+															<label class="custom-control-label" for="genF">여</label>
 													</div>
+													</c:if>
+													<c:if test="${pet.gender eq 'n'}">
 													<div class="custom-control custom-radio">
 														<input id="genN" name="gender" type="radio"
-															class="custom-control-input" value="n"> <label
-															class="custom-control-label" for="genN">기타</label>
+															class="custom-control-input" value="n" checked> 
+															<label class="custom-control-label" for="genN">기타</label>
 													</div>
+													</c:if>
+													<c:if test="${pet.gender == null}">
+														<div class="custom-control custom-radio">
+														<input id="genN" name="gender" type="radio"
+															class="custom-control-input" value="" checked> 
+															<label class="custom-control-label" for="genN" >정보없음</label>
+														</div>
+													</c:if>
 												</div>
 											</div>
 										</div>
 
 										<div class="row mb-3">
 											<div class="col-12">
-												<label for="weight">몸무게(kg)</label> <input type="number"
+												<label for="weight">몸무게(kg)</label>
+												<input type="number" value="${pet.weight}"
 													class="form-control" id="weight" name="weight"
-													placeholder="">
+													placeholder="" disabled>
 											</div>
 										</div>
 
@@ -384,38 +424,52 @@
 											<div class="col-12">
 												<p class="mb-1">기초 예방접종</p>
 												<div class="d-block">
+													<c:if test="${pet.vaccination eq 'y'}">
 													<div class="custom-control custom-radio">
 														<input id="vaccY" name="vaccination" type="radio"
-															class="custom-control-input" value="y"> <label
-															class="custom-control-label" for="vaccY">예</label>
+															class="custom-control-input" value="y" checked> 
+															<label class="custom-control-label" for="vaccY">예</label>
 													</div>
+													</c:if>
+													<c:if test="${pet.vaccination eq 'n'}">
 													<div class="custom-control custom-radio">
 														<input id="vaccN" name="vaccination" type="radio"
-															class="custom-control-input" value="n"> <label
-															class="custom-control-label" for="vaccN">아니오</label>
+															class="custom-control-input" value="n" checked> 
+															<label class="custom-control-label" for="vaccN">아니오</label>
 													</div>
+													</c:if>
+													<c:if test="${pet.vaccination eq 'd'}">
 													<div class="custom-control custom-radio">
 														<input id="vaccD" name="vaccination" type="radio"
-															class="custom-control-input" value="d"> <label
-															class="custom-control-label" for="vaccD">모름</label>
+															class="custom-control-input" value="d" checked> 
+															<label class="custom-control-label" for="vaccD">모름</label>
 													</div>
+													</c:if>
+													<c:if test="${pet.vaccination == null}">
+													<div class="custom-control custom-radio">
+														<input id="vaccD" name="vaccination" type="radio" 
+														  class="custom-control-input" value="" checked> 
+															<label class="custom-control-label" for="vaccD">정보없음</label>
+													</div>
+													</c:if>
+													
 												</div>
 											</div>
 										</div>
 
 										<div class="row mb-3">
 											<div class="col-12">
-												<label for="bloodType">혈액형</label> <input type="text"
-													class="form-control" id="bloodType" name="bloodType"
-													placeholder="">
+												<label for="bloodType">혈액형</label> 
+												<input type="text" class="form-control" id="bloodType" 
+												  name="bloodType" placeholder="" value="${pet.blood_type}" disabled>
 											</div>
 										</div>
 
 										<div class="row mb-3">
 											<div class="col-12">
-												<label for="registrationNumber">등록번호</label> <input
-													type="text" class="form-control" id="registrationNumber"
-													name="registrationNumber" placeholder="">
+												<label for="registrationNumber">등록번호</label> 
+												<input type="text" class="form-control" id="registrationNumber"
+													name="registrationNumber" placeholder="" value="${pet.registration_number}" disabled>
 											</div>
 										</div>
 
@@ -423,7 +477,7 @@
 											<div class="col-12">
 												<label for="memo">기타 특이사항</label>
 												<textarea class="form-control" id="memo" name="memo"
-													placeholder=""></textarea>
+													placeholder="" disabled>${pet.memo}</textarea>
 											</div>
 										</div>
 
@@ -434,7 +488,7 @@
 
 						</div>
 					</div>
-
+				</div>
 				</div>
 			</div>
 			<!-- E: 펫 정보조회 모달 -->

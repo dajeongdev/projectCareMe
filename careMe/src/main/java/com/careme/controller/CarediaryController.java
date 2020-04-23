@@ -37,6 +37,7 @@ public class CarediaryController {
 		this.petService = petService;
 	}
 	
+	// 메인화면
 	@RequestMapping("/carediary/{petIdx}")
 	public ModelAndView toCarediaryMain(@PathVariable("petIdx") int petIdx, Integer page, HttpServletRequest request) {
 		if (page == null) page = 1;
@@ -72,8 +73,6 @@ public class CarediaryController {
 		mav.addObject("petSpecName", petSpecName);
 		mav.addObject("articles", articles);
 		mav.addObject("paging", paging);
-		
-		System.out.println(paging);
 		
 		return mav;
 	}
