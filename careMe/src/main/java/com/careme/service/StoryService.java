@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.careme.model.command.StoryCommand;
 import com.careme.model.command.StoryContentCommand;
+import com.careme.model.command.TagListCommand;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
@@ -37,7 +38,8 @@ public interface StoryService {
 	// 태그 리스트
 	public List<TagDto> readTagList(Map<String, Integer> map);
 	public List<StoryFileDto> readTagFileList(int story_board_idx);
-	public List<TagDto> tagSelect(Map<String, Integer> map);
+	public TagListCommand tagInfo(int tag_idx);
+	public List<TagDto> tagSelect(TagListCommand tagListCom);
 	// 조회수
 	public int counting(int story_board_idx);
 	// 좋아요
@@ -59,5 +61,6 @@ public interface StoryService {
 	
 	// 삭제
 	public int delete(int story_board_idx);
+	public int deleteFile(int story_board_idx);
 	public int deleteCom(int story_comment_idx);
 }
