@@ -244,7 +244,12 @@
 	}
 </script>
 
-
+<!-- <script type="text/javascript">
+    $(document).ready(function() {
+        $("[name=pet_species_idx]").attr("required" , false);
+        $("[name=pet_care_idx]").attr("required" , false);
+    })
+</script>-->
 
 
 </head>
@@ -265,14 +270,12 @@
 							<label for="title">제목</label> <input id="title" name="title"
 								width="100%" type="text" class="form-control" />
 						</div>
-						<input name="question_type" type="hidden" value="y" /> <input
-							name="is_private" type="hidden" value="n" /> <input
-							name="doctor_idx" type="hidden" value="1" /> <input
-							name="pet_idx" type="hidden" value="1" /> <input
-							name="member_id" type="hidden" id="subjectId"
-							value="${sc.memberDto.member_id}"> <input
-							name="member_idx" type="hidden" id="subject"
-							value="${sc.memberDto.member_idx}">
+						<input name="question_type" type="hidden" value="y" /> 
+						<input name="is_private" type="hidden" value="n" /> 
+						<input name="doctor_idx" type="hidden" value="${sc.memberDto.member_id}" /> 
+						<input name="pet_idx" type="hidden" value="1" /> 
+						<input name="member_id" type="hidden" id="subjectId" value="${sc.memberDto.member_id}"> 
+						<input name="member_idx" type="hidden" id="subject" value="${sc.memberDto.member_idx}">
 
 						<!-- 동물 종류 찾기 -->
 

@@ -58,20 +58,20 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return dao.getHeartInfo(idx);
 	}
 	
-	public int addHeartForDoctor(int idx) {
-		return dao.addHeartForCasual(idx);
+	public int addHeartForDoctor(int question_board_comment_idx) {
+		return dao.addHeartForDoctor(question_board_comment_idx);
 	}
 	
-	public int subHeartForDoctor(int idx) {
-		return dao.subHeartForCasual(idx);
+	public int subHeartForDoctor(int question_board_comment_idx) {
+		return dao.subHeartForDoctor(question_board_comment_idx);
 	}
 	
-	public int addHeartForCasual(int idx) {
-		return dao.addHeartForCasual(idx);
+	public int addHeartForCasual(int question_board_comment_idx) {
+		return dao.addHeartForCasual(question_board_comment_idx);
 	}
 	
-	public int subHeartForCasual(int idx) {
-		return dao.subHeartForCasual(idx);
+	public int subHeartForCasual(int question_board_comment_idx) {
+		return dao.subHeartForCasual(question_board_comment_idx);
 	}
 	
 	// 전문 상담 게시판 구현
@@ -99,6 +99,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		dao.getDoctorBoardViews(question_table_idx);
 	}
 	
+	// 검색 기능
 	@Override
 	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc) {
 		return dao.getDoctorBoardSearch(sbc);
@@ -306,7 +307,6 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	//heart 추천 여부 확인 후 갯수 정리
 		@Override
 		public void heartProcess(HeartDto hdto, int question_board_comment_idx) {
-		
 		String hcheck = hdto.getHeartCheck();
 		if(hcheck.equals("n")) {
 			addHeartForCasual(question_board_comment_idx);
@@ -338,5 +338,27 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	public List<TagDto> getTagContent(int question_table_idx){
 		return dao.getTagContent(question_table_idx);
 	}
+	
+	// 회원이 쓴 글 가져오기
+	@Override
+
+	public List<QuestionBoardDto> getMemberDoctorBoard (int member_idx, Map<String,Integer>param){
+		int contentPerPage= 5;
+		param.put("member_idx", member_idx);
+		param.put("contentPerPage", contentPerPage);
+		return dao.getMemberDoctorBoard(param);
+	}
+	
+	
+	public List<QuestionBoardDto> getMemberCasualBoard (int member_idx, Map<String,Integer>param){
+		int contentPerPage= 5;
+		param.put("member_idx", member_idx);
+		param.put("contentPerPage", contentPerPage);
+		return dao.getMemberCasualBoard(param);
+	}
+	
+	
+	
+	
 		
 }

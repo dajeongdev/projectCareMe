@@ -30,19 +30,19 @@
 
 <!-- 게시판글 검색 -->
 	<select id="getSrchArticle" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="com.careme.model.command.SearchBoardCommand">
-		select * from question_board natural join members
+		select SQL_CALC_FOUND_ROWS * from question_board inner join members on question_board.member_idx=members.member_idx
 			<choose>
-				<when test='search_option != null and search_option.equals("member_id")'>
-					where question_type like 'y' and content like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
+				<when test='search_option.equals("member_id")'>
+					where question_type like 'y' and member_id like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
-				<when test='search_option != null and search_option.equals("title")'>
-					where question_type like 'y' and content like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
+				<when test='search_option.equals("title")'>
+					where question_type like 'y' and title like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
-				<when test='search_option != null and search_option.equals("content")'>
+				<when test='search_option.equals("content")'>
 					where question_type like 'y' and content like concat('%',#{searchKeyword},'%') order by question_table_idx desc limit #{start_idx}, #{contentPerPage}
 				</when>
 			</choose>
-	</select>  
+	</select> 
 
 
 
@@ -118,6 +118,11 @@
 	<select id="getTagsDoctor" resultType="com.careme.model.dto.TagDto">
 		select * from tag inner join board_use_tag on tag.tag_idx = board_use_tag.tag_idx 
 		where board_idx = #{board_idx} and board_type = 'd'
+	</select>
+	
+<!-- 회원 작성 글 가져오기 -->
+	<select id="getMemberDoctorBrd" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="HashMap">
+		select SQL_CALC_FOUND_ROWS * from question_board where question_type like 'y' order by reg_date desc limit 1, #{contentPerPage}
 	</select>
 	
 </mapper>

@@ -210,17 +210,22 @@ $(function(){
 
 			<!-- comment 작성 -->
 			<div class="col-lg-12" style="width:100%;">
+			
+			
+			<c:if test="${sc.doctorDto.member_idx!=null}">
 				<h5>
 					댓글을 달아주세요 
 				</h5>
-
-			<form action="doctorCommentAdd?question_table_idx=${mlist.question_table_idx}" method="post">
+			
+				<form action="doctorCommentAdd?question_table_idx=${mlist.question_table_idx}" method="post">
 				<textarea name="content" style="width: 100%; height: 100px" rows="3"></textarea>
 						<div class="col-md-12" align="right">
 							<input class="btn btn-dark btn-sm" type="submit" name="submit" value="확인"> 
 							<input type="hidden" name="member_idx" value="${sc.memberDto.member_idx}">
 						</div>
-			</form>
+				</form>
+			</c:if>
+			
 			</div>
 			</div>
 			</div>

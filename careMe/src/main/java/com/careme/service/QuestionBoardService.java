@@ -52,9 +52,9 @@ public interface QuestionBoardService {
 	
 	public int deleteDoctorComment (int idx);
 	
-	public int addHeartForDoctor(int idx);
+	public int addHeartForDoctor(int question_board_comment_idx);
 	
-	public int subHeartForDoctor(int idx);
+	public int subHeartForDoctor(int question_board_comment_idx);
 	
 	public void heartProcessDoctor(HeartDto hdto, int question_board_comment_idx);
 
@@ -96,9 +96,9 @@ public interface QuestionBoardService {
 	
 	public int deleteCasualComment (int idx);
 	
-	public int addHeartForCasual(int idx);
+	public int addHeartForCasual(int question_board_comment_idx);
 	
-	public int subHeartForCasual(int idx);
+	public int subHeartForCasual(int question_board_comment_idx);
 	
 	public void heartProcess(HeartDto hdto, int question_board_comment_idx);	
 	
@@ -108,6 +108,11 @@ public interface QuestionBoardService {
 	public SearchBoardCommand listSearchInfo (int searchn, String searchKeyword);
 	
 	public List<TagDto> getTagContent(int question_table_idx);
+	
+// 회원 작성글 가져오기
+	public List<QuestionBoardDto> getMemberDoctorBoard (int member_idx, Map<String,Integer>param);
+	
+	public List<QuestionBoardDto> getMemberCasualBoard (int member_idx, Map<String,Integer>param);
 	
 }
 

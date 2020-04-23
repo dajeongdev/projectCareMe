@@ -114,6 +114,11 @@
 		select * from tag inner join board_use_tag on tag.tag_idx = board_use_tag.tag_idx 
 		where board_idx = #{board_idx} and board_type = 'c'
 	</select>
+	
+<!-- 회원 작성 글 가져오기 -->
+	<select id="getMemberCasualBrd" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="HashMap">
+		select SQL_CALC_FOUND_ROWS * from question_board where question_type like 'n' order by reg_date desc limit 1, #{contentPerPage}
+	</select>
 
 
 </mapper>

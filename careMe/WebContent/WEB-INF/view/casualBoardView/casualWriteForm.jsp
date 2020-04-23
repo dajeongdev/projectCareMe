@@ -55,38 +55,6 @@ $(function(){
 		})
 
 </script>
-
-<script>
-<!-- MyPET CHOOSE -->
- $(function(){
-		$("#selectMyPet").on("change", function(){
-		var selectPet=$(this).find("option:selected").data("pnum");
-			if(!selectPet){
-				$("#selectPetDiary option").remove();
-				return false;
-			}
-		var url ="casualWriteForm/pet_idx?level=2&selectPet="+selectPet;
-		$.ajax(
-			{type:"GET",
-			url:url,
-			dataType:"json"})
-			.done(function(plist){
-			$("#selectPetDiary option").remove();
-				if (plist.length > 0) {
-					for (pitems in plist) {
-						var s = plist[pitems];
-						var option = "<option value=" + s.diary.pet_care_idx + ">" + s.diary.title + " on " + s.diary.diary_date + "</option>"
-						$("#selectPetDiary").append(option);
-					}
-				}
-				}).fail(function(e) {
-					alert(e.responseText);
-				});
-			})
-		})
-
-</script>
-	
 	
 <script>
 <!-- 해시태그 기능 -->
@@ -227,6 +195,13 @@ $(function(){
 	}
 </script>
 
+<!-- <script type="text/javascript">
+    $(document).ready(function() {
+        $("[name=pet_species_idx]").attr("required" , false);
+    })
+        
+</script> -->
+
 </head>
 
 <body>
@@ -269,26 +244,6 @@ $(function(){
 							<div class="col-md-6  mb-3">
 								<label for="petSpecies2">소분류</label> 
 								<select class="form-control" id="petSpeciesLevel2" name="pet_species_idx" required>
-								</select>
-							</div>
-						</div>
-
-					<!-- 마이펫 찾기 -->
-						<div class="row" style="width: 100%;">
-							<div class="col-md-6  mb-3">
-								<label for="myPet">등록 펫 찾기</label> 
-								<select class="form-control" id="selectMyPet">
-									<option>==선택==</option>
-									<c:if test="${myPet != null}">
-										<c:forEach var="option" items="${myPet}">
-											<option data-pnum="${option.pet_idx}">${option.name}</option>
-										</c:forEach>
-									</c:if>
-								</select>
-							</div>
-							<div class="col-md-6  mb-3">
-								<label for="selectPetDiary">다이어리 찾기</label> 
-								<select class="form-control" id="selectPetDiary" name="pet_care_idx" required>
 								</select>
 							</div>
 						</div>

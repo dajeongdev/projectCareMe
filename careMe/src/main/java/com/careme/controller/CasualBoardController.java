@@ -1,6 +1,5 @@
 package com.careme.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
-import com.careme.model.dto.PetCareDto;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
@@ -110,11 +108,6 @@ public class CasualBoardController {
 	public ModelAndView toCasualBoard(int currentPage, HttpSession session) {
 		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
 		
-		//회원 정보 및 확인
-	//	SessionCommand sc = (SessionCommand)session.getAttribute("sc")
-	//	MemberDto info = sc.getMemberDto();
-	//	list.addObject("info", info);
-		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
@@ -129,7 +122,6 @@ public class CasualBoardController {
 		
 		list.addObject("list", getArticles);
 		list.addObject("paging", paging);
-		
 		return list;
 	}
 	
@@ -142,8 +134,9 @@ public class CasualBoardController {
 		ModelAndView mav = new ModelAndView("casualBoardView/casualBoardContent");
 		
 		//회원 정보 및 확인
-		SessionCommand sc = (SessionCommand) session.getAttribute("sc");
+		SessionCommand sc = (SessionCommand)session.getAttribute("sc");
 		MemberDto info = sc.getMemberDto();
+		System.out.println(info);
 		mav.addObject("info", info);
 		
 		//글내용 불러오기
@@ -341,10 +334,7 @@ public class CasualBoardController {
 		public String writeCasualComment(BoardCommentDto commentDto, HttpSession session) throws Exception {
 			
 			//member 확인
-			SessionCommand sc = (SessionCommand)session.getAttribute("sc");
-			MemberDto info = sc.getMemberDto();
 			int member_idx = commentDto.getMember_idx();
-			System.out.println(member_idx);
 			
 			//comment 내용 테이블에 추가
 			bs.addCasualComment(commentDto);
@@ -404,17 +394,9 @@ public class CasualBoardController {
 		public String updateHeart(int question_board_comment_idx, HttpSession session) {
 			
 			//회원 정보 및 확인
-		
+			SessionCommand sc = (SessionCommand)session.getAttribute("sc");
+			int member_idx=sc.getMemberDto().getMember_idx();
 			
-			MemberDto info = ms.memberInfo("testmin");
-			int member_idx = info.getMember_idx();
-			
-//			MemberDto info = 
-		//	int member_idx = mdto.getMember_id("testman");
-	//		System.out.println(member_idx);
-			
-//			int member_idx = (int)session.getAttribute("member_idx");
-	//		System.out.println(member_idx);
 			int check = hts.memberCheck(member_idx);
 			
 			HeartDto hdto = new HeartDto();

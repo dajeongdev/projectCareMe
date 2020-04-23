@@ -117,9 +117,10 @@ body { font-family: 'GmarketSansMedium'; }
 				data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Community</a>
 				<div class="dropdown-menu" aria-labelledby="dropdown04">
 					<a class="dropdown-item"
-						href="/careMe/view/myPageView/myPageDoctor">의사 마이페이지 (임시)</a> <a
-						class="dropdown-item" href="/careMe/view/myPageView/myPageCasual">일반
-						마이페이지 (임시)</a> <a class="dropdown-item"
+						href="/careMe/view/myPageView/myPageCasual">의사 마이페이지 (임시)</a> 
+					<a class="dropdown-item" 
+						href="myPageCasual">일반 마이페이지 (임시)</a> 
+					<a class="dropdown-item"
 						href="/careMe/view/casualBoardView/casualBoard?currentPage=1">고민상담</a>
 				</div></li>
 		</ul>
