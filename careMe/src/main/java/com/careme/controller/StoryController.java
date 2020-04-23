@@ -113,10 +113,12 @@ public class StoryController {
 	}
 	
 	// 검색
+
 	@RequestMapping(value = "/view/story/storySearch")
 	public ModelAndView searching(@RequestParam int searchType, String keyword, int currentPage) {
 		ModelAndView mav = new ModelAndView("story/storySearch");
 		int contentPerPage = 12;
+
 		StoryCommand com = new StoryCommand();
 		com = service.searchList(searchType, keyword);
 		int start_idx = page.getStartIdx(currentPage, contentPerPage);
@@ -124,6 +126,7 @@ public class StoryController {
 		com.setContentPerPage(contentPerPage);
 		List<StoryBoardDto> list = service.searching(com);
 		List<StoryFileDto> fList = service.fileList();
+
 		
 		// 페이징
 		PageNumberCommand paging = new PageNumberCommand();
