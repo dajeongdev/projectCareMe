@@ -37,6 +37,7 @@ hr { width: 700px; }
 .updateCom, .deleteCome { float: right;}
 .content { font-size: 20px; margin-top: 20px;}
 .content-heart {float: right; color: red;}
+.view, .heart { float: right;}
 .hashTag { 
 	background: #82b1ff;
 	padding: 5px 5px;
@@ -48,14 +49,14 @@ hr { width: 700px; }
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script>
-function delete(story_board_idx) {
+function delete(idx) {
 	if(confirm("정말 삭제하시겠습니까?") == true) {
-		location.href="delete?story_board_idx=" + story_board_idx;
+		location.href="delete?story_board_idx=" + idx;
 	}
 };
-function deleteCom(story_comment_idx) {
+function deleteCom(idx) {
 	if(confirm("정말 삭제하시겠습니까?") == true) {
-		location.href="delete?story_comment_idx=" + story_comment_idx;
+		location.href="delete?story_comment_idx=" + idx;
 	}
 }
 $(function(){
@@ -65,15 +66,15 @@ $(function(){
 		$.ajax({
 			type:"GET",
 			url:url,
-			dataType:"json"
-			}).done(function(currentHeart){
+			dataType:"json"})
+			.done(function(currentHeart){
 				$("#heartCount").append(1);
+
 				}).fail(function(e) {
 				alert(e.responseText);
 			});
 	});
 });
-
 </script>
 </head>
 <body>
@@ -92,9 +93,9 @@ $(function(){
 				</div>
 				<div class="rest">
 				<h4><c:out value="${dto.title}"/></h4>
-				<span class="date"><c:out value="${dto.reg_date}"/></span>&nbsp
-				<span class="view"><i class="fas fa-eye"></i><c:out value="${dto.view_count}"/></span>
-				<span class="heart"><i class="fas fa-heart"></i>&nbsp<c:out value="${dto.heart}"/></span>
+				<span class="date"><c:out value="${dto.reg_date}"/></span>&nbsp&nbsp&nbsp
+				<span class="view">&nbsp<i class="fas fa-eye"></i>&nbsp<c:out value="${dto.view_count}"/></span>
+				<span class="heart">&nbsp<i class="fas fa-heart"></i>&nbsp<c:out value="${dto.heart}"/></span>
 				<input type="hidden" name="member_idx" id="member_idx" value="${info.member_idx}">
 				</div>
 			</div>
@@ -102,11 +103,11 @@ $(function(){
 				<img width="700" height="500" src="${fullName}${fileDto[0].file_path}">
 			</div>
 			<div>
-				<p class="content"><c:out value="${dto.content}"/><c:out value="${info.member_id}"/><span class="content-heart"><i class="fas fa-heart fa-2x"></i></span></p>
+				<p class="content"><c:out value="${dto.content}"/><span class="content-heart"><i class="fas fa-heart fa-2x"></i></span></p>
 			</div>
 			<div id="tag-list">
 				<c:forEach var="taging" items="${tags}">
-					<span class="hashTag" onClick="location.href='storyTagList?currentPage=1'" data-idx="${taging.tag_idx}">#<c:out value="${taging.tag_name}"/></span>
+					<span class="hashTag" data-idx="${taging.tag_idx}">#<c:out value="${taging.tag_name}"/></span>
 				</c:forEach>
 			</div>
 				<div class="btn-group">
@@ -124,7 +125,8 @@ $(function(){
 				댓글 <c:out value="${comCount}"/>
 				
 				<div>
-					<form name="insertCom" action="insertCom?story_board_idx=${dto.story_board_idx}" method="POST">
+					<form name="insertCom" action="insertCom" method="POST">
+					<input type="hidden" name="story_board_idx" id="story_board_idx" value="${dto.story_board_idx}">
 						<div class="input-group mb-3">
 						  <input type="text" name="content" class="form-control comm" placeholder="댓글을 입력해주세요.">
 						  <div class="input-group-append">
@@ -141,7 +143,7 @@ $(function(){
 						<div>
 							<span class="comId"><c:out value="${coms.member_id}"/></span>&nbsp;&nbsp;<c:out value="${coms.content}"/><br>
 							<c:out value="${coms.reg_date}"/>
-							<span id="heartInfo">
+							<span id="heartInfo" data-idx="${coms.story_comment_idx}">
 							<span id="heartDiv${status.index}">
 								<label for="heart${coms.story_comment_idx}"><span id="count${coms.story_comment_idx}">${coms.heart}</span><i class="fas fa-heart" onclick="testFunction(${coms.story_comment_idx})"></i></label>
 								<button id="heart${coms.story_comment_idx}" style="display:none" onclick="testFunction(${coms.story_comment_idx})"></button>

@@ -8,6 +8,11 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+<style type="text/css">
+.filebox input {
+	border: 0;
+}
+</style>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>회원가입폼</title>
@@ -174,8 +179,8 @@ function fn_sendChk(){
 	<div style="padding: 15px; margin: 0 auto; max-width: 700px">
 
 		<!-- 성공하면 insertok로 감  -->
-		<form name="form2" action=insertok method="get"
-			onsubmit="return Signup()">
+		<form name="form2" action=insertok method="post"
+			enctype="multipart/form-data" onsubmit="return Signup()">
 			<table width="685" height="400" align="center" cellspacing="0">
 				<tr height="10" align="center">
 				</tr>
@@ -239,8 +244,15 @@ function fn_sendChk(){
 					<!--이메일 인증 -->
 					<td><button type="button"
 							class="btn btn-dark btn-sm btn-block" name="sendMail" value="N"
-							id="sendMail" onclick="fn_sendChk();">인증받기</button>
-							<input type="hidden" id="checkM" name="checkM"> </td>
+							id="sendMail" onclick="fn_sendChk();">인증받기</button> <input
+						type="hidden" id="checkM" name="checkM"></td>
+				</tr>
+				<tr class="filebox">
+					<!-- 면허증 파일 -->
+					<td style="padding-left: 20px; padding-top: 10px;"><b><label
+							for="cert_file2">프로필:</label></b></td>
+					<td><input type="file" style="width: 530px" id="cert_file2"
+						name="cert_file2" class="form-control" placeholder="면허증 파일을 올려주세요" /></td>
 				</tr>
 			</table>
 			<br>

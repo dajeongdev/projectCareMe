@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import com.careme.model.command.StoryCommand;
+import com.careme.model.command.TagListCommand;
 import com.careme.model.dto.StoryBoardDto;
 import com.careme.model.dto.StoryCommentDto;
 import com.careme.model.dto.StoryFileDto;
@@ -56,20 +57,13 @@ public class StoryDao extends SqlSessionDaoSupport {
 	public List<StoryFileDto> readTagFileList(int story_board_idx) {
 		return getSqlSession().selectList("story.tagFileList", story_board_idx);
 	}
-	public List<TagDto> tagSelect(Map<String, Integer> map) {
-		return getSqlSession().selectList("story.tagSelect", map);
+	public List<TagDto> tagSelect(TagListCommand tagListCom) {
+		return getSqlSession().selectList("story.tagSelect", tagListCom);
 	}
 	
 	// 조회수
 	public int counting(int story_board_idx) {
 		return getSqlSession().update("story.viewCount", story_board_idx);
-	}
-	// 좋아요
-	public int heart(int story_board_idx) {
-		return getSqlSession().update("story.heart", story_board_idx);
-	}
-	public int comHeart(int story_comment_idx) {
-		return getSqlSession().update("story.comHeart", story_comment_idx);
 	}
 	
 	// 인기글
@@ -103,6 +97,9 @@ public class StoryDao extends SqlSessionDaoSupport {
 	// 삭제(del_yn 'y')
 	public int delete(int story_board_idx) {
 		return getSqlSession().delete("story.delete", story_board_idx);
+	}
+	public int deleteFile(int story_board_idx) {
+		return getSqlSession().delete("story.deleteFile", story_board_idx);
 	}
 	public int deleteCom(int story_comment_idx) {
 		return getSqlSession().delete("story.deleteCom", story_comment_idx);

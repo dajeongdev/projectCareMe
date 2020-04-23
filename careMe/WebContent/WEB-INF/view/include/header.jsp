@@ -7,6 +7,17 @@
 <%@ page import="com.careme.model.command.LoginCommand"%>
 
 <%
+	String hostname = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ "/careMe/";
+%>
+<c:set var="hostname" value="<%=hostname%>" />
+<style>
+body { font-family: 'GmarketSansMedium'; }
+
+@font-face { font-family: 'GmarketSansMedium'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
+</style>
+<%
 	String uri, currentMenu;
 	uri = (String) request.getAttribute("javax.servlet.forward.request_uri");
 	uri = uri.substring(uri.indexOf("/careMe") + 8);
@@ -29,33 +40,37 @@
 <spring:url value="/resources/img/dog.jpg" var="profile" />
 <c:set var="currentMenu" value="<%=currentMenu%>" />
 
-<header class="blog-header py-3" style="padding: 1rem;">
+<header class="blog-header pb-0" style="padding: 1rem;">
 
 	<!-- 비로그인 상태 -->
 	<c:if test="${empty sessionScope.MINFO}">
 		<div
 			class="row flex-nowrap justify-content-between align-items-center">
 			<div class="col-12 text-center">
-				<a class="blog-header-logo text-dark" href="#">LOGO</a>
+				<a class="blog-header-logo text-dark" href="/careMe/main"><img src="${hostname}resources/img/LOGO.png" style="height:145px;"></a>
 			</div>
 
-			<div
-				class="col-12 d-flex justify-content-end align-items-center position-absolute">
+			
+		</div>
+		<div
+				class="col-12 pb-2 d-flex justify-content-end align-items-center">
 				<a class="btn btn-sm btn-outline-secondary"
 					href="/careMe/login/loginform">Sign up</a>
 			</div>
-		</div>
 	</c:if>
 	<!-- 로그인 상태 -->
 	<c:if test="${not empty sessionScope.MINFO}">
 		<div
 			class="row flex-nowrap justify-content-between align-items-center">
 			<div class="col-12 text-center">
-				<a class="blog-header-logo text-dark" href="#">LOGO</a>
+				<a class="blog-header-logo text-dark" href="/careMe/main"><img src="${hostname}resources/img/LOGO.png" style="height:145px;"></a>
 			</div>
 
+			
+		</div>
+		<div class="row">
 			<div
-				class="col-12 d-flex justify-content-end align-items-center position-absolute">
+				class="col-12 d-flex justify-content-end align-items-center">
 				<img src="${profile}" style="padding: 5px; width: 60px;">
 				
 					
@@ -85,7 +100,7 @@
 			<c:if test="${currentMenu != 'main'}">
 				<li class="nav-item">
 			</c:if>
-			<li><a class="nav-link" href="/careMe/main">Main</a></li>
+			<!-- <li><a class="nav-link" href="/careMe/main">Main</a></li> -->
 
 			<li class="nav-item"><a class="nav-link"
 				href="/careMe/view/doctorBoardView/doctorBoard?currentPage=1">전문가 상담</a></li>

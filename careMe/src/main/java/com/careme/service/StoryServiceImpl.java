@@ -18,6 +18,7 @@ import com.careme.model.command.FileUploadCommand;
 import com.careme.model.command.PageNumberCommand;
 import com.careme.model.command.StoryCommand;
 import com.careme.model.command.StoryContentCommand;
+import com.careme.model.command.TagListCommand;
 import com.careme.model.dto.BoardUseTagDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.StoryBoardDto;
@@ -213,7 +214,11 @@ public class StoryServiceImpl implements StoryService {
 	public int delete(int story_board_idx) {
 		return dao.delete(story_board_idx); 
 	}
-
+	@Override
+	public int deleteFile(int story_board_idx) {
+		return dao.deleteFile(story_board_idx);
+	}
+	
 	@Override
 	public int deleteCom(int story_comment_idx) {
 		return dao.deleteCom(story_comment_idx);
@@ -272,11 +277,6 @@ public class StoryServiceImpl implements StoryService {
 		}
 	}
 
-	@Override
-	public List<TagDto> readTags(int story_board_idx) {
-		return dao.readTags(story_board_idx);
-	}
-
 	// 태그 리스트
 	@Override
 	public List<TagDto> readTagList(Map<String, Integer> map) {
@@ -289,8 +289,21 @@ public class StoryServiceImpl implements StoryService {
 	}
 	
 	@Override
-	public List<TagDto> tagSelect(Map<String, Integer> map) {
-		return dao.tagSelect(map);
+	public List<TagDto> tagSelect(TagListCommand tagListCom) {
+		return dao.tagSelect(tagListCom);
 	}
+	
+	@Override
+	public TagListCommand tagInfo(int tag_idx) {
+		TagListCommand tagListCom = new TagListCommand();
+		tagListCom.setTag_idx(tag_idx);
+		return tagListCom;
+	}
+
+	@Override
+	public List<TagDto> readTags(int story_board_idx) {
+		return dao.readTags(story_board_idx);
+	}
+
 
 }

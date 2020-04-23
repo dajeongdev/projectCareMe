@@ -8,12 +8,16 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+<style type="text/css">
+.filebox input {
+	border: 0;
+}
+</style>
 <meta charset="UTF-8">
 <jsp:include page="/WEB-INF/view/include/sources.jsp" flush="false" />
 <title>의사등록</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<%-- <script src="/resources/js/addressapi.js"></script> --%>
 <script type="text/javascript">
 	function PostCode() {
 		new daum.Postcode({
@@ -97,8 +101,40 @@
 			form.doctor_hospital_tel.focus();
 			return false;
 		}
+		//병원 번호를 입력했는지
+		if (form.doctor_hospital_tel.value == "") {
+			alert("병원번호를 입력해 주세요");
+			form.doctor_hospital_tel.focus();
+			return false;
+		}
+		//체크박스 선택 했는지
+		/* if (!form.addpet1.value) {
+			alert("주종목을 선택해주세요");
+			return false;
+		} */
+		//면허증 올렸는지
+		if (form.cert_file.value == "") {
+			alert("파일을 넣어야 합니다");
+			form.cert_file.focus();
+			return false;
+		}
+
 		//form.submit();
 	}
+
+	/* 
+	 $(document).ready(
+	 function() {
+	 $("addpet1").click(function()){
+	 var str="";
+
+	 $("addpet1").each(function(){
+	 if($(this).is(":checked"))
+	 str += $(this).val()+ "";
+	 });
+	
+	 }
+	 }); */
 </script>
 </head>
 <body>
@@ -116,7 +152,7 @@
 
 		<!-- 성공하면 로 감  -->
 		<form name="form4" action="dinsertok" method="post"
-			onsubmit="return Doctorinsert()">
+			enctype="multipart/form-data" onsubmit="return Doctorinsert()">
 
 			<table width="685" height="400" align="center" cellspacing="0">
 				<tr height="10" align="center">
@@ -124,14 +160,14 @@
 
 				<tr>
 					<!-- 이름 입력 -->
-					<td><b>Name:</b></td>
+					<td style="padding-left: 14px;"><b>Name:</b></td>
 					<td><input type="text" style="width: 530px" id="doctor_name"
 						name="doctor_name" maxlength="45" class="form-control" /></td>
 				</tr>
 
 				<tr>
 					<!-- 의사면허 번호-->
-					<td><b>License:</b></td>
+					<td style="padding-left: 12px;"><b>License:</b></td>
 					<td><input type="text" style="width: 530px"
 						id="doctor_license" name="doctor_license" maxlength="45"
 						class="form-control" placeholder=" ※면허번호" /></td>
@@ -139,7 +175,7 @@
 
 				<tr>
 					<!-- 근무하는 병원 입력 -->
-					<td><b>Hospital:</b></td>
+					<td style="padding-left: 10px;"><b>Hospital:</b></td>
 					<td><input type="text" style="width: 530px"
 						id="doctor_hospital_name" name="doctor_hospital_name"
 						maxlength="17" class="form-control" placeholder=" ※병원 이름" /></td>
@@ -147,7 +183,7 @@
 				<tr>
 					<!-- 주소 -->
 					<!-- 우편번호 -->
-					<td><b>Address:</b></td>
+					<td style="padding-left: 11px;"><b>Address:</b></td>
 					<td><input type="text" style="width: 530px"
 						id="doctor_hospital_zipcode" name="doctor_hospital_zipcode"
 						readonly="readonly" class="form-control" /></td>
@@ -171,11 +207,32 @@
 				</tr>
 
 				<tr>
-					<!-- 핸드폰 입력 -->
-					<td><b>H.Tel:</b></td>
+					<!-- 병원번호 입력 -->
+					<td style="padding-left: 20px;"><b>H.Tel:</b></td>
 					<td><input type="text" style="width: 530px"
 						id="doctor_hospital_tel" name="doctor_hospital_tel"
 						class="form-control" placeholder="병원 연락처를 입력해주세요" /></td>
+				</tr>
+				<tr>
+					<!-- 체크박스 폼 -->
+					<td style="padding-left: 20px;"><b>Mjor:</b></td>
+					<td style="padding-top: 10px;"><c:forEach var="item"
+							items="${addpet}">
+							<input type="checkbox" id="addpet${item.pet_species_idx}"
+								name="addpet1" value="${item.pet_species_idx}">
+
+							<label style="padding-left: 3px;"
+								for="addpet${item.pet_species_idx}">
+								${item.pet_species_name} </label>
+
+						</c:forEach></td>
+				</tr>
+				<tr class="filebox">
+					<!-- 면허증 파일 -->
+					<td style="padding-left: 20px; padding-top: 10px;"><b><label
+							for="cert_file">면허증:</label></b></td>
+					<td><input type="file" style="width: 530px" id="cert_file"
+						name="cert_file" class="form-control" placeholder="면허증 파일을 올려주세요" /></td>
 				</tr>
 				<!-- 짧은 버튼 -->
 				<table width="400" height="50" align="center" cellspacing="0">
