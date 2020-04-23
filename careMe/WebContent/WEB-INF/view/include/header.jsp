@@ -5,7 +5,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ page import="com.careme.model.command.SessionCommand"%>
 <%@ page import="com.careme.model.command.LoginCommand"%>
+<style>
+body { font-family: 'GmarketSansMedium'; }
 
+@font-face { font-family: 'GmarketSansMedium'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
+</style>
 <%
 	String uri, currentMenu;
 	uri = (String) request.getAttribute("javax.servlet.forward.request_uri");
@@ -85,7 +90,7 @@
 			<c:if test="${currentMenu != 'main'}">
 				<li class="nav-item">
 			</c:if>
-			<li><a class="nav-link" href="/careMe/main">Main</a></li>
+			<!-- <li><a class="nav-link" href="/careMe/main">Main</a></li> -->
 
 			<li class="nav-item"><a class="nav-link"
 				href="/careMe/view/doctorBoardView/doctorBoard?currentPage=1">전문가 상담</a></li>

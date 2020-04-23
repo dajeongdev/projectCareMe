@@ -18,7 +18,6 @@
 <title>의사등록</title>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-<%-- <script src="/resources/js/addressapi.js"></script> --%>
 <script type="text/javascript">
 	function PostCode() {
 		new daum.Postcode({
@@ -109,10 +108,10 @@
 			return false;
 		}
 		//체크박스 선택 했는지
-		if (!form.addpet1.value) {
+		/* if (!form.addpet1.value) {
 			alert("주종목을 선택해주세요");
 			return false;
-		}
+		} */
 		//면허증 올렸는지
 		if (form.cert_file.value == "") {
 			alert("파일을 넣어야 합니다");
@@ -123,18 +122,19 @@
 		//form.submit();
 	}
 
-	$(document).ready(
-			function() {
-				$("addpet1").click(function()){
-					var str="";
+	/* 
+	 $(document).ready(
+	 function() {
+	 $("addpet1").click(function()){
+	 var str="";
 
-				$("addpet1").each(function(){
-					if($(this).is(":checked"))
-							str += $(this).val()+ "";
-						});
-					
-					}
-			});
+	 $("addpet1").each(function(){
+	 if($(this).is(":checked"))
+	 str += $(this).val()+ "";
+	 });
+	
+	 }
+	 }); */
 </script>
 </head>
 <body>
