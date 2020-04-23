@@ -28,6 +28,7 @@ public class PetDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectOne("pet.selectPet", petIdx);
 	}
 	
+	
 	public List<PetDto> selectPetList(int memberIdx) {
 		return getSqlSession().selectList("pet.selectPetList", memberIdx);
 	}

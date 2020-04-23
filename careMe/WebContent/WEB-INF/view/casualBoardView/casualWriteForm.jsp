@@ -11,6 +11,20 @@
 <title>메인 화면</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<style>
+#hash-search, #content, #title, .custom-file-label, #tag {
+	width: 1000px;
+}
+
+.hashTag { 
+	background: #82b1ff;
+	padding: 5px 5px;
+	margin: 5px 5px;
+	border-radius: 10%;
+	display: inline-block;
+}
+</style>
+
 <script>
 <!-- PET CHOOSE -->
 $(function(){
@@ -40,7 +54,39 @@ $(function(){
 			})
 		})
 
-</script>	
+</script>
+
+<script>
+<!-- MyPET CHOOSE -->
+ $(function(){
+		$("#selectMyPet").on("change", function(){
+		var selectPet=$(this).find("option:selected").data("pnum");
+			if(!selectPet){
+				$("#selectPetDiary option").remove();
+				return false;
+			}
+		var url ="casualWriteForm/pet_idx?level=2&selectPet="+selectPet;
+		$.ajax(
+			{type:"GET",
+			url:url,
+			dataType:"json"})
+			.done(function(plist){
+			$("#selectPetDiary option").remove();
+				if (plist.length > 0) {
+					for (pitems in plist) {
+						var s = plist[pitems];
+						var option = "<option value=" + s.diary.pet_care_idx + ">" + s.diary.title + " on " + s.diary.diary_date + "</option>"
+						$("#selectPetDiary").append(option);
+					}
+				}
+				}).fail(function(e) {
+					alert(e.responseText);
+				});
+			})
+		})
+
+</script>
+	
 	
 <script>
 <!-- 해시태그 기능 -->
@@ -60,8 +106,8 @@ $(function() {
 				if(tagNames[i] == inputText){
 					console.log(tagNames[i] + "==" + inputText);
 					$("#tag").val("");
-					alert("중복!");
-					return;
+					alert("태그가 중복됩니다!");
+					return false;
 				}				
 			}
 
@@ -73,7 +119,7 @@ $(function() {
 	})
 	
 })	
-
+	
 var tagCheck = function (tag) {
 	var url = $(location).attr('pathname') + "/hashCheck";
 	$.ajax({
@@ -86,7 +132,7 @@ var tagCheck = function (tag) {
 		//배열에 tag의 idx를 넣어준다
 		var idx = data.tag_idx;
 		var name = data.tag_name;
-		var html = "<li class='hashTag' data-idx=" + idx + ">" + "#" + name + "</li>";
+		var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "<a href='javascript:;'>X</a>" + "</span>";
 
 		//서버에 보낼 배열에 넣기
 		tags.push(idx);
@@ -104,6 +150,10 @@ var tagCheck = function (tag) {
 		//alert("성공!");
 	}).fail(function() {
 		alert("실패!");
+	});
+
+ 	$("#tag-list").on("click", ".hashTag", function () {
+		$(this).remove();
 	});
 }
 	
@@ -199,7 +249,8 @@ $(function(){
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />
-						<input name="member_idx" type="hidden" id="subject" value="${info.member_idx}">
+						<input name="member_id" type="hidden" id="subjectId" value="${sc.memberDto.member_id}">
+						<input name="member_idx" type="hidden" id="subject" value="${sc.memberDto.member_idx}">
 
 					<!-- 동물 종류 찾기 -->
 
@@ -218,6 +269,26 @@ $(function(){
 							<div class="col-md-6  mb-3">
 								<label for="petSpecies2">소분류</label> 
 								<select class="form-control" id="petSpeciesLevel2" name="pet_species_idx" required>
+								</select>
+							</div>
+						</div>
+
+					<!-- 마이펫 찾기 -->
+						<div class="row" style="width: 100%;">
+							<div class="col-md-6  mb-3">
+								<label for="myPet">등록 펫 찾기</label> 
+								<select class="form-control" id="selectMyPet">
+									<option>==선택==</option>
+									<c:if test="${myPet != null}">
+										<c:forEach var="option" items="${myPet}">
+											<option data-pnum="${option.pet_idx}">${option.name}</option>
+										</c:forEach>
+									</c:if>
+								</select>
+							</div>
+							<div class="col-md-6  mb-3">
+								<label for="selectPetDiary">다이어리 찾기</label> 
+								<select class="form-control" id="selectPetDiary" name="pet_care_idx" required>
 								</select>
 							</div>
 						</div>
@@ -242,16 +313,17 @@ $(function(){
 						</div>
 
 						<br>
-    					
-					<!-- 해시태그 추가 -->
-						<div class="content" align="left">
-       						<input type="hidden" value="" id="rdTag"/>
- 	 	  			   	<div>
-     				       <input type="text" id="tag" size="7" placeholder="태그입력" />
-     				    </div>
-     				    <br>  
-      			        <ul id="tag-list"></ul>
-    			   		</div> 
+   
+    			   		
+    			   	<!-- 해시태그 -->
+						<div id="content">
+							<input type="hidden" value="" id="rdTag">
+						</div>
+						<input type="text" class="form-control" id="tag" name="tag" placeholder="태그를 입력해보세요." style="margin-bottom: 0;">
+						<div id="tag-list">
+						</div>
+						<p></p>
+    			   		
     			  </main>
 			</div>		
 						
