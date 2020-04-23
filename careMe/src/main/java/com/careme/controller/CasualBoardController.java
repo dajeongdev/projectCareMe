@@ -144,9 +144,9 @@ public class CasualBoardController {
 		
 		//회원 정보 및 확인
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
-		String member_id = sc.getMemberDto().getMember_id();
+		String scmember = sc.getMemberDto().getMember_id();
 		
-		MemberDto info = ms.memberInfo(member_id);
+		MemberDto info = ms.memberInfo(scmember);
 		mav.addObject("info", info);
 		
 		//글내용 불러오기
@@ -407,11 +407,20 @@ public class CasualBoardController {
 		
 		@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 		@ResponseBody
-		public String updateHeart(int question_board_comment_idx) {
+		public String updateHeart(int question_board_comment_idx, HttpSession session) {
 			
 			//회원 정보 및 확인
+		
+			
 			MemberDto info = ms.memberInfo("testmin");
 			int member_idx = info.getMember_idx();
+			
+//			MemberDto info = 
+		//	int member_idx = mdto.getMember_id("testman");
+	//		System.out.println(member_idx);
+			
+//			int member_idx = (int)session.getAttribute("member_idx");
+	//		System.out.println(member_idx);
 			int check = hts.memberCheck(member_idx);
 			
 			HeartDto hdto = new HeartDto();

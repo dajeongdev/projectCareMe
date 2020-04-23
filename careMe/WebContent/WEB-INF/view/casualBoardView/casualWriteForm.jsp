@@ -231,7 +231,8 @@ $(function(){
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />
-						<input name="member_id" type="hidden" id="subject" value="${sc.memberDto.member_id}">
+						<input name="member_id" type="hidden" id="subjectId" value="${sc.memberDto.member_id}">
+						<input name="member_idx" type="hidden" id="subject" value="${sc.memberDto.member_idx}">
 
 					<!-- 동물 종류 찾기 -->
 
