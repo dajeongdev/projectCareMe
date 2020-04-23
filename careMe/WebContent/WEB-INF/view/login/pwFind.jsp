@@ -30,6 +30,7 @@
 			alert("이메일 체크를 해주세요.")
 			return false;
 		}
+		
 	}
 
 	/* 이메일 있는지 확인 */
@@ -57,11 +58,11 @@
 <body>
 
 	<!-- 헤더 -->
-	<div class="container-fluid" style="padding: 0;">
+<%-- 	<div class="container-fluid" style="padding: 0;">
 		<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
-	</div>
+	</div> --%>
 	<br>
-	<div style="margin: 0 auto; margin-top: 100px;" class="text-center">
+	<div style="margin: 0 auto;" class="text-center"> <!-- margin-top: 100px; -->
 		<h3>비밀번호 찾기</h3>
 	</div>
 	<br>

@@ -25,8 +25,8 @@ public class EmailPwService {
 		this.dao = dao;
 	}
 
-	//임시 비밀번호
-	public boolean sendMail2(EmailDto email) throws Exception {
+	// 임시 비밀번호
+	public String sendMail2(EmailDto email) throws Exception {
 
 		try {
 			MemberDto dto = new MemberDto(); // dto 객체 생성
@@ -45,17 +45,17 @@ public class EmailPwService {
 			msg.setText(email.getContent());
 
 			// HTML 컨텐츠를 전송하려면.
-			msg.setContent(
-					"<p>안녕하세요. [CARE ME!] 입니다.<br> " + "회원님의 임시 비밀번호는 " + ranPw + " 입니다." + "보안을 위해 비밀번호 변경을 권장드립니다."
-							+ "<a href=http://localhost:8080/careMe/login/loginform >변경하러 가기</a></p>"
-					// 마이페이지 비밀번호 변경
+			msg.setContent("<p>안녕하세요. [CARE ME!] 입니다.<br><br><br><br><br> " + "회원님의 임시 비밀번호는 " + ranPw + " 입니다.<br><br>"
+					+ "보안을 위해 비밀번호 변경을 권장드립니다.<br>"
+					+ "<br><br><br><a href=http://localhost:8080/careMe/login/loginform ><b><h3>▼▼▼▼▼변경하러 가기▼▼▼▼▼<h3></b></a></p>"
+			// 마이페이지 비밀번호 변경
 					, "text/html;charset=utf-8");
 
 			msg.setRecipient(RecipientType.TO, new InternetAddress(email.getReceiver()));// 수신자 setting
 
 			mailSender.send(msg);
 
-			return true;
+			return "메일을 확인해주세요";
 
 		} catch (Exception ex) {
 
@@ -63,7 +63,7 @@ public class EmailPwService {
 
 		}
 
-		return false;
+		return "이메일을 보내는데 실패했습니다";
 
 	}
 
