@@ -124,8 +124,12 @@ $(function(){
 			<table align="right">
 				<tr height="30">
 					<td colspan="4" align="right">
+					
+					<c:if test="${sc.memberDto.member_idx==mlist.member_idx}">
 					<button type="button" class="btn btn-dark btn-sm" onclick="document.location.href='casualBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">글수정</button>
 					<button type="button" class="btn btn-dark btn-sm" onclick="deleteArticle('${mlist.question_table_idx}')">글삭제</button>
+					</c:if>
+					
 					<button type="button" class="btn btn-dark btn-sm" onClick="location.href='casualBoard?currentPage=1'">글목록</button>
 					</td>
 				</tr>
@@ -171,10 +175,14 @@ $(function(){
 							
 						</div>	
 						<div class="col-md-3" align="right">
+						
+						<c:if test="${sc.memberDto.member_idx==item.member_idx}">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
 							onClick="">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 삭제"
 							onClick="">
+						</c:if>
+						
 						</div>
 					</div>
 					<p></p>
@@ -195,7 +203,7 @@ $(function(){
 				<textarea name="content" style="width: 100%; height: 100px"></textarea>
 						<div class="col-md-12" align="right">
 							<input class="btn btn-dark btn-sm" type="submit" name="submit" value="확인"> 
-							<input type="hidden" name="member_idx" value="1">
+							<input type="hidden" name="member_idx" value="${sc.memberDto.member_idx}">
 						</div>
 			</form>
 			</div>

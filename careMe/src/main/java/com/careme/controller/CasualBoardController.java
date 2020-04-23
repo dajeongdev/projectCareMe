@@ -110,11 +110,9 @@ public class CasualBoardController {
 		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
 		
 		//회원 정보 및 확인
-	//	SessionCommand sc = new SessionCommand();
-	//	System.out.println(sc.getMemberDto().getMember_idx());
-		
+	//	SessionCommand sc = (SessionCommand)session.getAttribute("sc")
+	//	MemberDto info = sc.getMemberDto();
 	//	list.addObject("info", info);
-
 		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
@@ -139,14 +137,12 @@ public class CasualBoardController {
 
 //게시글 내용 불러오기
 	@RequestMapping(value = "/view/casualBoardView/casualBoardContent", method = RequestMethod.GET)
-	public ModelAndView casualBoardContents(@RequestParam int question_table_idx, HttpServletRequest request) throws Exception {
+	public ModelAndView casualBoardContents(@RequestParam int question_table_idx, HttpSession session) throws Exception {
 		ModelAndView mav = new ModelAndView("casualBoardView/casualBoardContent");
 		
 		//회원 정보 및 확인
-		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
-		String scmember = sc.getMemberDto().getMember_id();
-		
-		MemberDto info = ms.memberInfo(scmember);
+		SessionCommand sc = (SessionCommand) session.getAttribute("sc");
+		MemberDto info = sc.getMemberDto();
 		mav.addObject("info", info);
 		
 		//글내용 불러오기
@@ -158,6 +154,7 @@ public class CasualBoardController {
 		String idx = String.valueOf(question_table_idx);
 		
 		int commentCount = clist.size();
+		mav.addObject("info", info);
 		mav.addObject("mlist", mlist);
 		mav.addObject("flist", flist);
 		mav.addObject("idx", idx);
@@ -200,15 +197,22 @@ public class CasualBoardController {
 	
 // 게시글 작성
 	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
-	public ModelAndView toWriteForm() throws Exception {
+	public ModelAndView toWriteForm(HttpSession session) throws Exception {
 		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
 		
 		//회원 정보 및 확인
-
-//		SessionCommand sc = new SessionCommand();
-//		int currentIdx = sc.getMemberDto().getMember_idx();
-		MemberDto info = ms.memberInfo("testmin");
+		SessionCommand sc = (SessionCommand)session.getAttribute("sc");
+		MemberDto info = sc.getMemberDto(); 
+		int member_idx = info.getMember_idx();
+		
+		//pet정보 가져오기
+//		List<PetDto> petInfo = ps.selectPetList(member_idx);
+		
+//		petInfo = ps.selectPet(pet_idx);
+//		petInfo.getName();
+		
 		write.addObject("info", info);
+//		write.addObject("myPet", petInfo);
 		write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 		return write;
 	}
@@ -346,11 +350,13 @@ public class CasualBoardController {
 	
 	// comment 작성
 		@RequestMapping(value="/view/casualBoardView/casualCommentAdd")
-		public String writeCasualComment(BoardCommentDto commentDto) throws Exception {
+		public String writeCasualComment(BoardCommentDto commentDto, HttpSession session) throws Exception {
 			
 			//member 확인
-			MemberDto info = ms.memberInfo("testmin");
-			int member_idx = info.getMember_idx();
+			SessionCommand sc = (SessionCommand)session.getAttribute("sc");
+			MemberDto info = sc.getMemberDto();
+			int member_idx = commentDto.getMember_idx();
+			System.out.println(member_idx);
 			
 			//comment 내용 테이블에 추가
 			bs.addCasualComment(commentDto);

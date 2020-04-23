@@ -91,8 +91,9 @@ public class DoctorBoardController {
 		ModelAndView listPro = new ModelAndView("/doctorBoardView/doctorBoard");
 		
 		//회원 정보 및 확인
-		MemberDto info = ms.memberInfo("testmin");
-		listPro.addObject("info", info);
+		//	SessionCommand sc = (SessionCommand)session.getAttribute("sc")
+		//	MemberDto info = sc.getMemberDto();
+		//	list.addObject("info", info);
 		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
@@ -116,8 +117,8 @@ public class DoctorBoardController {
 		ModelAndView mav = new ModelAndView("doctorBoardView/doctorBoardContent");
 		
 		//회원 정보 및 확인
-//		String currentId = session.getAttribute("id");
-		MemberDto info = ms.memberInfo("hellojava");
+		SessionCommand sc = (SessionCommand) session.getAttribute("sc");
+		MemberDto info = sc.getMemberDto();
 		mav.addObject("info", info);
 		
 		//글내용 불러오기
@@ -129,6 +130,7 @@ public class DoctorBoardController {
 		String idx = String.valueOf(question_table_idx);
 		
 		int commentCount = clist.size();
+		mav.addObject("info", info);
 		mav.addObject("mlist", mlist);
 		mav.addObject("flist", flist);
 		mav.addObject("idx", idx);
@@ -169,14 +171,14 @@ public class DoctorBoardController {
 	
 	// 게시글 작성
 		@RequestMapping(value = "/view/doctorBoardView/doctorWriteForm", method = RequestMethod.GET)
-		public ModelAndView toWriteForm() throws Exception {
+		public ModelAndView toWriteForm(HttpSession session) throws Exception {
 			ModelAndView write = new ModelAndView("doctorBoardView/doctorWriteForm");
 			
 			//회원 정보 및 확인
-//			SessionCommand sc = new SessionCommand();
-//			int currentIdx = sc.getMemberDto().getMember_idx();
-
-			MemberDto info = ms.memberInfo("testmin");
+			SessionCommand sc = (SessionCommand)session.getAttribute("sc");
+			MemberDto info = sc.getMemberDto(); 
+			int member_idx = info.getMember_idx();
+			
 			write.addObject("info", info);
 			write.addObject("speciesOption", ps.selectPetSpeciesLevel1());
 			return write;

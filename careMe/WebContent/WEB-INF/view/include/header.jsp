@@ -57,10 +57,13 @@
 			<div
 				class="col-12 d-flex justify-content-end align-items-center position-absolute">
 				<img src="${profile}" style="padding: 5px; width: 60px;">
+				
+					
 				<a class="btn btn-sm btn-outline-secondary"
 					href="/careMe/login/mypage">정보수정</a>
 				<a class="btn btn-sm btn-outline-secondary"
 					href="/careMe/login/logoutok">${MINFO} Logout</a>
+				
 			</div>
 		</div>
 	</c:if>

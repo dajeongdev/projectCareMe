@@ -19,6 +19,8 @@ public interface PetService {
 	
 	public PetDto selectPet(int petIdx);
 	
+	public List<PetDto> selectPetList(int memberIdx);
+	
 	public int insertPet(MultipartHttpServletRequest request);
 	
 	public int updatePet(MultipartHttpServletRequest request);
