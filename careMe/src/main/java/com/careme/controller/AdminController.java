@@ -39,7 +39,7 @@ public class AdminController {
 
 	@RequestMapping("/admin")
 	public String toMain() {
-		return "/admin/main";
+		return "redirect:/admin/member";
 	}
 
 	// S: 일반회원
