@@ -36,7 +36,6 @@ public interface StoryService {
 	public StoryCommentDto readComIdx(int story_comment_idx);
 	public List<TagDto> readTags(int story_board_idx);
 	// 태그 리스트
-	public List<TagDto> readTagList(Map<String, Integer> map);
 	public List<StoryFileDto> readTagFileList(int story_board_idx);
 	public TagListCommand tagInfo(int tag_idx);
 	public List<TagDto> tagSelect(TagListCommand tagListCom);
@@ -45,9 +44,10 @@ public interface StoryService {
 	// 좋아요
 	public int addHeart(int idx);
 	public int subHeart(int idx);
-	public int addComHeart(int idx);
-	public int subComHeart(int idx);
+	public int addComHeart(StoryCommentDto comDto);
+	public int subComHeart(StoryCommentDto comDto);
 	public void hearting(HeartDto heart, int story_comment_idx);
+	public void updateHeartCheck(StoryCommentDto comDto);
 	
 	// 작성
 	public int insert(StoryBoardDto dto, MultipartHttpServletRequest request);

@@ -47,8 +47,9 @@ public class MemberService {
 	}
 
 	// 로그인 성공
-	public int loginOk(LoginCommand lc) {
+	public int loginOk(LoginCommand lc, HttpSession session) {
 		List<MemberDto> lok = dao.login(lc);
+		setSession(session, lc);
 		return lok.size();
 	}
 

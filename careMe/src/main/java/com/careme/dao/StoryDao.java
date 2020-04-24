@@ -30,7 +30,7 @@ public class StoryDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("story.fileList");
 	}
 	public List<StoryBoardDto> searching(StoryCommand com){
-		return getSqlSession().selectList("story.search");
+		return getSqlSession().selectList("story.searchStory", com);
 	}
 	
 	// 글 상세보기
@@ -51,14 +51,11 @@ public class StoryDao extends SqlSessionDaoSupport {
 	}
 	
 	// 태그 리스트
-	public List<TagDto> readTagList(Map<String, Integer> map) {
-		return getSqlSession().selectList("story.tagList", map);
-	}
 	public List<StoryFileDto> readTagFileList(int story_board_idx) {
 		return getSqlSession().selectList("story.tagFileList", story_board_idx);
 	}
 	public List<TagDto> tagSelect(TagListCommand tagListCom) {
-		return getSqlSession().selectList("story.tagSelect", tagListCom);
+		return getSqlSession().selectList("story.tagList", tagListCom);
 	}
 	
 	// 조회수
@@ -114,12 +111,16 @@ public class StoryDao extends SqlSessionDaoSupport {
 		return getSqlSession().update("story.subHeart", idx);
 	}
 	
-	public int addComHeart(int idx) {
-		return getSqlSession().update("story.addComHeart", idx);
+	public int addComHeart(StoryCommentDto comDto) {
+		return getSqlSession().update("story.addComHeart", comDto);
 	}
 	
-	public int subComHeart(int idx) {
-		return getSqlSession().update("story.subComHeart", idx);
+	public int subComHeart(StoryCommentDto comDto) {
+		return getSqlSession().update("story.subComHeart", comDto);
+	}
+	
+	public int updateHeartCheck(StoryCommentDto comDto) {
+		return getSqlSession().update("heartBrd.updateHeartCheck", comDto);
 	}
 
 }

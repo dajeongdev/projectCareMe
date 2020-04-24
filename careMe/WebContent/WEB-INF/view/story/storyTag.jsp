@@ -9,7 +9,7 @@
 <style>
 @font-face { font-family: 'GmarketSansMedium'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff'); font-weight: normal; font-style: normal; }
 @font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
-.storyMain { margin: 40px; font-family: 'GmarketSansMedium';}
+.storyTag { margin: 40px; font-family: 'GmarketSansMedium';}
 h2, h4 { font-family: 'GmarketSansBold'; }
 .card-text, .card-heart, .card-count { font-size: 15px; }
 .part > div { float: left; }
@@ -28,16 +28,14 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 </div>
 
 <div class="storyTag">
-<form action="/story/storyTagList" method="POST">
+
 	<h2><strong>펫스토리</strong></h2>
 	<hr>
 	<div class="album py-5 bg-light">
     <div class="container">
-    
-    <h4><strong>${tagList.tag_name}</strong></h4>
-    <hr>
+    <div class="row">
     <c:forEach items="${tagList}" var="list" begin="${start_idx}" end="${start_idx + 11}">
-	<div class="row"  onClick="location.href='storyTagList?story_board_idx=${tagList.story_board_idx}'">
+	
          <div class="col-md-4">
           <div class="card mb-4 shadow-sm" onClick="document.location.href='storyDetail?story_board_idx=${list.story_board_idx}'">
            	<c:forEach items="${tagFileList}" var="fList" varStatus="f">
@@ -63,9 +61,9 @@ h2, h4 { font-family: 'GmarketSansBold'; }
             </div>
           </div>
         </div>
-        </div>
+        
        </c:forEach>
-      
+      </div>
         </div>
         </div>
      
@@ -84,12 +82,12 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 						<c:choose>
                            <c:when test="${page eq paging.currentPage}"> 			
 							 	<li class="page-item active" style="font-weight: bold;">
-      								<a class="page-link" href="storyMain?currentPage=${page}">${page}</a>
+      								<a class="page-link" href="storyTag?currentPage=${page}">${page}</a>
     							</li>
     						</c:when>
    					 		<c:otherwise>
 					   			<li class="page-item active">
-		      						<a class="page-link" href="storyMain?currentPage=${page}">${page}</a>
+		      						<a class="page-link" href="storyTag?currentPage=${page}">${page}</a>
 		    					</li>
 							</c:otherwise>
 						</c:choose>
@@ -103,7 +101,6 @@ h2, h4 { font-family: 'GmarketSansBold'; }
 			</div>
 		</div>
 		</div> 
-	 </form>
 	</div>
 	
 </body>

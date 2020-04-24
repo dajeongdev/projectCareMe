@@ -113,26 +113,30 @@ public class StoryController {
 	}
 	
 	// 검색
-	@RequestMapping(value = "/view/story/storyMainSearch")
+	@RequestMapping(value = "/view/story/storySearch")
 	public ModelAndView searching(int searchType, String keyword, int currentPage) {
-		ModelAndView mav = new ModelAndView();
-		int contentPerPage = 9;
+		ModelAndView mav = new ModelAndView("story/storySearch");
+		int contentPerPage = 12;
+
 		StoryCommand com = new StoryCommand();
 		com = service.searchList(searchType, keyword);
 		int start_idx = page.getStartIdx(currentPage, contentPerPage);
+		System.out.println("currentPage1: " + currentPage);
 		com.setStart_idx(start_idx);
 		com.setContentPerPage(contentPerPage);
 		List<StoryBoardDto> list = service.searching(com);
+		List<StoryFileDto> fList = service.fileList();
 		
+		// 페이징
 		PageNumberCommand paging = new PageNumberCommand();
 		paging = page.paging(service.getTotal(), contentPerPage, currentPage, 
-					"storyMain?currentPage="+currentPage+"&searchType="+searchType+"&keyword="+keyword);
-		
+					"story/storySearch?currentPage="+currentPage+"&searchType="+searchType+"&keyword="+keyword);
 		mav.addObject("list", list);
+		mav.addObject("fList", fList);
 		mav.addObject("paging", paging);
 		mav.addObject("searchType", searchType);
 		mav.addObject("keyword", keyword);
-		mav.setViewName("/story/storyMain");
+		mav.addObject("currentPage", currentPage);
 		return mav;
 	}
 	
@@ -143,14 +147,13 @@ public class StoryController {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
 		MemberDto info = sc.getMemberDto();
 		int member_idx = sc.getMemberDto().getMember_idx();
-		
+		int contentPerPage = 12;
 		StoryBoardDto dto = service.read(story_board_idx);
 		List<StoryFileDto> fileDto = service.readFile(story_board_idx);
 		List<StoryCommentDto> comList = service.readCom(story_board_idx);
 		story_board_idx = dto.getStory_board_idx();
 		List<TagDto> tagList = service.readTags(story_board_idx);
-		TagDto tag = new TagDto();
-		int i = tag.getTag_idx();
+		int currentPage = 1;
 		int comCount = comList.size();
 		service.counting(story_board_idx);
 		
@@ -161,12 +164,11 @@ public class StoryController {
 		mav.addObject("comList", comList);
 		mav.addObject("comCount", comCount);
 		mav.addObject("tags", tagList);
-		mav.addObject("tag_idx", i);
+		mav.addObject("currentPage", currentPage);
 		mav.setViewName("/story/storyDetail");
 		return mav;
 	}
-	
-
+	 
 	
 	// 글작성
 	@RequestMapping(value = "/view/story/storyForm", method = RequestMethod.GET) 
@@ -248,7 +250,7 @@ public class StoryController {
 		List<TagDto> tagList = service.readTags(story_board_idx);
 		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
 		int member_idx = sc.getMemberDto().getMember_idx();
-		
+
 		mav.addObject("getContent", service.getContent(story_board_idx));
 		mav.addObject("member_idx", member_idx);
 		mav.addObject("story_board_idx", dto.getStory_board_idx());
@@ -284,12 +286,14 @@ public class StoryController {
 	
 	// 글삭제
 	@RequestMapping(value = "/view/story/delete")
-	public String articleDelete(HttpServletRequest request, StoryBoardDto dto) throws Exception {
+	public String articleDelete(HttpServletRequest request, StoryBoardDto dto, StoryCommentDto comDto) throws Exception {
 		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
 		int member_idx = sc.getMemberDto().getMember_idx();
 		int story_board_idx = dto.getStory_board_idx();
-		service.delete(story_board_idx);
+		int story_comment_idx = comDto.getStory_comment_idx();
 		service.deleteFile(story_board_idx);
+		service.deleteCom(story_comment_idx);
+		service.delete(story_board_idx);
 		return "redirect:/view/story/storyMain";
 	}
 	
@@ -305,41 +309,10 @@ public class StoryController {
 		return "redirect:/view/story/storyDetail?story_board_idx=" + i;
 	}
 	
-	/*// 좋아요
-	@RequestMapping(value = "/view/story/addSubHeart", method = RequestMethod.GET)
-	@ResponseBody
-	public String addSubHeart(HttpServletRequest request, int story_board_idx) {
-		SessionCommand sc = (SessionCommand)request.getSession().getAttribute("sc");
-		int member_idx = sc.getMemberDto().getMember_idx();
-		
-		HeartDto heart = heartSer.getHeartInfo(story_board_idx);
-		String check = heart.getHeartCheck();
-		
-		if(heart.equals("n")) {
-			service.addHeart(story_board_idx);
-			heart.setHeartCheck("y");
-			heartSer.updateHeartInfo(heart);
-		} else if(heart.equals("y")) {
-			service.subHeart(story_board_idx);
-			heart.setHeartCheck("n");
-			heartSer.updateHeartInfo(heart);
-		}
-		
-		StoryBoardDto dto = new StoryBoardDto();
-		dto.setStory_board_idx(story_board_idx);
-		dto = service.read(story_board_idx);
-		
-		int currentHeart = dto.getHeart();
-		System.out.println(currentHeart);
-		
-		Gson json = new Gson();
-		return json.toJson(currentHeart);
-	}*/
-	
 	// 댓글 좋아요
 	@RequestMapping(value = "/view/story/addSubComHeart", method = RequestMethod.GET)
 	@ResponseBody
-	public String addSubComHeart(HttpServletRequest request, int story_comment_idx, int story_board_idx) {
+	public String updateHeart(HttpServletRequest request, int story_comment_idx, int story_board_idx) {
 		MemberDto info = mem.memberInfo("hellojava");
 		int member_idx = info.getMember_idx();
 		int check = heartSer.memberCheck(member_idx);
@@ -361,6 +334,7 @@ public class StoryController {
 		}
 		
 		StoryCommentDto comDto = new StoryCommentDto();
+		comDto.setStory_comment_idx(story_comment_idx);
 		comDto = service.readComIdx(story_comment_idx);
 		
 		int currentHeart = comDto.getHeart();
@@ -371,31 +345,29 @@ public class StoryController {
 	}
 	
 	// 태그 리스트
-	@RequestMapping(value = "/view/story/storyTagList")
+	@RequestMapping(value = "/view/story/storyTag")
 	public ModelAndView tagListing(StoryBoardDto dto, HttpSession session, int tag_idx, int currentPage) {
-		ModelAndView mav = new ModelAndView();
-		PageNumberCommand paging = new PageNumberCommand();
-		int contentPerPage = 12;
+		ModelAndView mav = new ModelAndView("/story/storyTag");
 		
+		int contentPerPage = 12;
+		currentPage = 1;
 		TagListCommand tagListCom = new TagListCommand();
 		tagListCom = service.tagInfo(tag_idx);
-		
 		int start_idx = page.getStartIdx(currentPage, contentPerPage);
 		tagListCom.setStart_idx(start_idx);
 		tagListCom.setContentPerPage(contentPerPage);
 		
-		tagDto.setTag_idx(tag_idx);
-		tag_idx = tagDto.getTag_idx();
 		List<TagDto> tagList = service.tagSelect(tagListCom);
-		
-		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyTag?currentPage=");
-		int story_board_idx = dto.getStory_board_idx();
-		
-		List<StoryFileDto> tagFileList = service.readTagFileList(story_board_idx);
+		System.out.println(tagList); 
+		List<StoryFileDto> fList = service.fileList();
+		PageNumberCommand paging = new PageNumberCommand();
+		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyTag?currentPage="+currentPage+"&tag_idx="+tag_idx);
 		
 		mav.addObject("tagList", tagList);
-		mav.addObject("tagFileList", tagFileList);
-		mav.setViewName("/view/story/storyTagList");
+		mav.addObject("tagFileList", fList);
+		mav.addObject("tag_idx", tag_idx);
+		mav.addObject("currentPage", currentPage);
+		mav.addObject("story_board_idx", dto.getStory_board_idx());
 		return mav;
 	}
 

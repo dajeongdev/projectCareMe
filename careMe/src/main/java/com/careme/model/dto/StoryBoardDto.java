@@ -9,8 +9,8 @@ public class StoryBoardDto {
 	private String content;
 	private int heart;
 	private int view_count;
-	private LocalDateTime reg_date;
-	private LocalDateTime update_date;
+	private String reg_date;
+	private String update_date;
 	private String del_yn;
 
 	private String member_id;
@@ -57,16 +57,16 @@ public class StoryBoardDto {
 	public void setView_count(int view_count) {
 		this.view_count = view_count;
 	}
-	public LocalDateTime getReg_date() {
+	public String getReg_date() {
 		return reg_date;
 	}
-	public void setReg_date(LocalDateTime reg_date) {
+	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
-	public LocalDateTime getUpdate_date() {
+	public String getUpdate_date() {
 		return update_date;
 	}
-	public void setUpdate_date(LocalDateTime update_date) {
+	public void setUpdate_date(String update_date) {
 		this.update_date = update_date;
 	}
 	public String getDel_yn() {

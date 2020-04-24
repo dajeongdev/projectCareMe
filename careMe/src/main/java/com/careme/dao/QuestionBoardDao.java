@@ -246,6 +246,9 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
 	}
 	
+<<<<<<< HEAD
+	// 회원 작성글 가져오기(최근 순)
+=======
 // Tag 가져오기
 	
 	public List<TagDto> getTagContent(int board_idx){
@@ -253,6 +256,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	}
 	
 // 회원 작성글 가져오기(최근 순)
+>>>>>>> master
 	public List<QuestionBoardDto> getMemberDoctorBoard (Map<String,Integer>param){
 		return getSqlSession().selectList("doctorQuestionBrd.getMemberDoctorBrd", param);
 	}
@@ -260,5 +264,9 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	public List<QuestionBoardDto> getMemberCasualBoard (Map<String,Integer>param){
 		return getSqlSession().selectList("casualQuestionBrd.getMemberCasualBrd", param);
 	}
+<<<<<<< HEAD
+
+=======
+>>>>>>> master
 		
 }

@@ -89,6 +89,11 @@ public interface QuestionBoardService {
 	
 	public int deleteCasualArticle (int idx);
 	
+	public List<QuestionBoardDto> getMemberDoctorBoard (int member_idx, Map<String,Integer>param);
+	
+	public List<QuestionBoardDto> getMemberCasualBoard (int member_idx, Map<String,Integer>param);
+
+	
 // Casual Board Comments 작성, 수정, 삭제
 	public int addCasualComment (BoardCommentDto commentDto);
 	

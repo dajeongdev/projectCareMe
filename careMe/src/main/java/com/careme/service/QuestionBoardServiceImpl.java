@@ -335,6 +335,9 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		return sbc;
 	}
 	
+<<<<<<< HEAD
+	@Override
+=======
 	public List<TagDto> getTagContent(int question_table_idx){
 		return dao.getTagContent(question_table_idx);
 	}
@@ -342,6 +345,7 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 	// 회원이 쓴 글 가져오기
 	@Override
 
+>>>>>>> master
 	public List<QuestionBoardDto> getMemberDoctorBoard (int member_idx, Map<String,Integer>param){
 		int contentPerPage= 5;
 		param.put("member_idx", member_idx);
@@ -356,9 +360,13 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		param.put("contentPerPage", contentPerPage);
 		return dao.getMemberCasualBoard(param);
 	}
+<<<<<<< HEAD
+		
+=======
 	
 	
 	
 	
+>>>>>>> master
 		
 }

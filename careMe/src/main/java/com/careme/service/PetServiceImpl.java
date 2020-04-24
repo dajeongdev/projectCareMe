@@ -106,6 +106,7 @@ public class PetServiceImpl implements PetService  {
 		
 		SessionCommand sc =  (SessionCommand) request.getSession().getAttribute("sc");
 		int memberIdx = sc.getMemberDto().getMember_idx();
+		System.out.println("pet등록 member_idx" + memberIdx);
 		
 		if (request.getParameter("p") != null && request.getParameter("p") != "") {
 			pet.setPet_idx(Integer.parseInt(request.getParameter("p")));

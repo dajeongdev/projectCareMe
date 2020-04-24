@@ -83,6 +83,7 @@ public class CarediaryController {
 		
 		if (sc != null) {
 			int memberIdx = sc.getMemberDto().getMember_idx();
+			System.out.println(memberIdx);
 			int petIdx = petService.findSelectedPet(memberIdx);		
 			sc.setPet_idx(petIdx);
 			request.getSession().setAttribute("sc", sc);

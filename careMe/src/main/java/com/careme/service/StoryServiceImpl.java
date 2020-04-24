@@ -1,6 +1,6 @@
 package com.careme.service;
 import java.time.LocalDateTime;
-
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -130,7 +130,7 @@ public class StoryServiceImpl implements StoryService {
 	}
 	@Override
 	public int insert(StoryBoardDto dto, MultipartHttpServletRequest request) {
-		dto.setReg_date(LocalDateTime.now());
+		dto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		int i = dao.insert(dto);
 		int d = dto.getStory_board_idx();
 		if(d > 0) {
@@ -139,11 +139,6 @@ public class StoryServiceImpl implements StoryService {
 		return i;
 	}
 	
-	/*
-	 * public void insertFile(int , MultipartHttpServletRequest request) { int
-	 * story_board_idx = dto.getStory_board_idx(); if(story_board_idx > 0)
-	 * fileRequesting(story_board_idx, request); }
-	 */
 	
 	public StoryBoardDto requesting(MultipartHttpServletRequest request) {
 		dto = new StoryBoardDto();
@@ -157,7 +152,7 @@ public class StoryServiceImpl implements StoryService {
 		}
 		dto.setContent(request.getParameter("content"));
 		dto.setTitle(request.getParameter("title"));
-		dto.setReg_date(LocalDateTime.now());
+		dto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dto;
 	}
 	
@@ -177,7 +172,7 @@ public class StoryServiceImpl implements StoryService {
 
 	@Override
 	public int insertCom(StoryCommentDto comDto) {
-		comDto.setReg_date(LocalDateTime.now());
+		comDto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.insertCom(comDto);
 	}
 	
@@ -206,7 +201,7 @@ public class StoryServiceImpl implements StoryService {
 	
 	@Override
 	public int updateCom(StoryCommentDto comDto) {
-		comDto.setReg_date(LocalDateTime.now());
+		comDto.setReg_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
 		return dao.updateCom(comDto);
 	}
 	
@@ -237,7 +232,7 @@ public class StoryServiceImpl implements StoryService {
 		return storyCom;
 	}
 
-
+	// 좋아요 
 	@Override
 	public int addHeart(int idx) {
 		return dao.addHeart(idx);
@@ -251,14 +246,14 @@ public class StoryServiceImpl implements StoryService {
 
 
 	@Override
-	public int addComHeart(int idx) {
-		return dao.addComHeart(idx);
+	public int addComHeart(StoryCommentDto comDto) {
+		return dao.addComHeart(comDto);
 	}
 
 
 	@Override
-	public int subComHeart(int idx) {
-		return dao.subComHeart(idx);
+	public int subComHeart(StoryCommentDto comDto) {
+		return dao.subComHeart(comDto);
 	}
 
 	@Override
@@ -276,15 +271,16 @@ public class StoryServiceImpl implements StoryService {
 			heartSer.updateHeartCheck(heart);
 		}
 	}
+	
+	@Override
+	public void updateHeartCheck(StoryCommentDto comDto) {
+		dao.updateHeartCheck(comDto);
+	}
 
 	// 태그 리스트
 	@Override
-	public List<TagDto> readTagList(Map<String, Integer> map) {
-		return dao.readTagList(map);
-	}
-
-	@Override
 	public List<StoryFileDto> readTagFileList(int story_board_idx) {
+		System.out.println("story_board_idx: " +story_board_idx);
 		return dao.readTagFileList(story_board_idx);
 	}
 	
