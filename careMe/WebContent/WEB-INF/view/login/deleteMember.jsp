@@ -54,7 +54,7 @@
 					<!-- 아이디  -->
 					<td style="padding-left: 20px;"><b>ID:</b></td>
 					<td><input type="text" style="width: 430px" id="member_id"
-						readonly="readonly" name="member_id" value="${sc.member_id}"
+						readonly="readonly" name="member_id" value="${sc.memberDto.member_id}"
 						class="form-control" /></td>
 				</tr>
 				<tr>

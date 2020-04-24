@@ -233,6 +233,7 @@
 							for="cert_file">면허증:</label></b></td>
 					<td><input type="file" style="width: 530px" id="cert_file"
 						name="cert_file" class="form-control" placeholder="면허증 파일을 올려주세요" /></td>
+						
 				</tr>
 				<!-- 짧은 버튼 -->
 				<table width="400" height="50" align="center" cellspacing="0">
