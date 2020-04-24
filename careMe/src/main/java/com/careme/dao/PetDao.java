@@ -1,5 +1,6 @@
 package com.careme.dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -49,8 +50,16 @@ public class PetDao extends SqlSessionDaoSupport {
 		return getSqlSession().update("pet.updateToselectedPet", petIdx);
 	}
 	
+	public int updateToselectedPetTop1(int member_idx) {
+		return getSqlSession().update("pet.updateToselectedPetTop1", member_idx);
+	}
+	
 	public void deSelectPet(int memberIdx) {
 		getSqlSession().update("pet.deSelectPet", memberIdx);
+	}
+	
+	public HashMap<String, Object> getPetSpecName(int pet_idx) {
+		return getSqlSession().selectOne("pet.selectPetSpecName", pet_idx);
 	}
 
 }

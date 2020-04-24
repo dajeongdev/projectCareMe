@@ -1,5 +1,6 @@
 package com.careme.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,5 +35,7 @@ public interface PetService {
 	public int updateToselectedPet(int petIdx);
 	
 	public void deSelectPet(int memberIdx);
+	
+	public HashMap<String, Object> getPetSpecName(int pet_idx);
 	
 }

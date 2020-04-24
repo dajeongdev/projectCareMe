@@ -75,12 +75,7 @@
                 <p>의사회원</p>
               </a>
             </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>하나뭐였지</p>
-              </a>
-            </li>
+
           </ul>
         </li>
       </ul>

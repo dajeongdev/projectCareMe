@@ -42,9 +42,9 @@ public class FindDoctorController {
 		// 로그인상태면(세션 확인) 자신의 펫정보와 매칭되는순서로 의사출력
 		if (sc != null) {
 			int member_idx = sc.getMemberDto().getMember_idx();
-			items = findDoctorService.getDoctors(page, 10, petSpec, member_idx);
+			items = findDoctorService.getDoctors(page, 9, petSpec, member_idx);
 		} else {
-			items = findDoctorService.getDoctors(page, 10, petSpec);
+			items = findDoctorService.getDoctors(page, 9, petSpec);
 		}
 		
 		// 펫 종류

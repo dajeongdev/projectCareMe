@@ -1,5 +1,6 @@
 package com.careme.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -84,12 +85,19 @@ public class PetServiceImpl implements PetService  {
 		int res = 0;
 		pet = requestToPetDto(request);
 		res = dao.updatePet(pet);
-		request.getSession().removeAttribute("pet_idx");
-		return res;
+		
+		if (res == 1) return pet.getPet_idx();
+		else return 0; 
 	};
 	
 	@Override
 	public int deletePet(HttpServletRequest request) {
+		SessionCommand sc =  (SessionCommand) request.getSession().getAttribute("sc");
+		int memberIdx = sc.getMemberDto().getMember_idx();
+		// 다른펫 선택상태 y로 바꿈
+		updateToselectedPetTop1(memberIdx);
+		
+		// 선택펫 삭제
 		return dao.deletePet((int) request.getSession().getAttribute("pet_idx")); 
 	};
 	
@@ -136,11 +144,19 @@ public class PetServiceImpl implements PetService  {
 		return pet;
 	}
 	
+	public HashMap<String, Object> getPetSpecName(int pet_idx) {
+		return dao.getPetSpecName(pet_idx);
+	}
+
+	
 	public void changeSelectedPet(int memberIdx, int petIdx) {
-		// 선택된 펫 전부 취소
-		deSelectPet(memberIdx	);
 		// 새로 펫 선택
 		updateToselectedPet(petIdx);
+	}
+	
+	public void changeSelectedPet(int memberIdx) {
+		// 새로 펫 선택
+		updateToselectedPetTop1(memberIdx);
 	}
 	
 	public int findSelectedPet(int memberIdx) {
@@ -149,6 +165,10 @@ public class PetServiceImpl implements PetService  {
 	
 	public int updateToselectedPet(int petIdx) {
 		return dao.updateToselectedPet(petIdx);
+	}
+	
+	public int updateToselectedPetTop1(int memberIdx) {
+		return dao.updateToselectedPet(memberIdx);
 	}
 	
 	public void deSelectPet(int memberIdx) {
