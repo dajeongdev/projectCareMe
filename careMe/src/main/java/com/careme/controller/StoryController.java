@@ -358,6 +358,7 @@ public class StoryController {
 		tagListCom.setContentPerPage(contentPerPage);
 		
 		List<TagDto> tagList = service.tagSelect(tagListCom);
+		System.out.println(tagList); 
 		List<StoryFileDto> fList = service.fileList();
 		PageNumberCommand paging = new PageNumberCommand();
 		paging = page.paging(service.getTotal(), contentPerPage, currentPage, "story/storyTag?currentPage="+currentPage+"&tag_idx="+tag_idx);
@@ -366,6 +367,7 @@ public class StoryController {
 		mav.addObject("tagFileList", fList);
 		mav.addObject("tag_idx", tag_idx);
 		mav.addObject("currentPage", currentPage);
+		mav.addObject("story_board_idx", dto.getStory_board_idx());
 		return mav;
 	}
 

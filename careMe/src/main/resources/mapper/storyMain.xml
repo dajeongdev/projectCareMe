@@ -132,7 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	
-	<select id="tags" resultType="com.careme.model.dto.TagDto">
+	<select id="tags" parameterType="com.careme.model.dto.StoryBoardDto" resultType="com.careme.model.dto.TagDto">
 		select * from tag inner join board_use_tag on tag.tag_idx = board_use_tag.tag_idx 
 		where board_idx = #{board_idx} and board_type = 's'
 	</select>
