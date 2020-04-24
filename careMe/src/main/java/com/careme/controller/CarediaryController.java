@@ -37,6 +37,7 @@ public class CarediaryController {
 		this.petService = petService;
 	}
 	
+	// 메인화면
 	@RequestMapping("/carediary/{petIdx}")
 	public ModelAndView toCarediaryMain(@PathVariable("petIdx") int petIdx, Integer page, HttpServletRequest request) {
 		if (page == null) page = 1;
@@ -58,18 +59,20 @@ public class CarediaryController {
 		List<PetDto> pets = petService.selectPetList(memberIdx);
 		
 		// diary list
-		HashMap<String, Object> data = carediaryService.getCarediaryListByPetIdx(petIdx, page, 2);
+		HashMap<String, Object> data = carediaryService.getCarediaryListByPetIdx(petIdx, page, 5);
 		@SuppressWarnings("unchecked")
 		List<CarediaryCommand> articles = (List<CarediaryCommand>) data.get("list");
 		PageNumberCommand paging = (PageNumberCommand) data.get("paging");
 		
+		//pet species name
+		HashMap<String, Object> petSpecName = petService.getPetSpecName(petIdx);
+		
 		ModelAndView mav = new ModelAndView("/carediary/main");
 		mav.addObject("pet", petDto);
 		mav.addObject("pets", pets);
+		mav.addObject("petSpecName", petSpecName);
 		mav.addObject("articles", articles);
 		mav.addObject("paging", paging);
-		
-		System.out.println(paging);
 		
 		return mav;
 	}
@@ -80,7 +83,9 @@ public class CarediaryController {
 		
 		if (sc != null) {
 			int memberIdx = sc.getMemberDto().getMember_idx();
-			int petIdx = petService.findSelectedPet(memberIdx);
+			int petIdx = petService.findSelectedPet(memberIdx);		
+			sc.setPet_idx(petIdx);
+			request.getSession().setAttribute("sc", sc);
 			return "redirect:/carediary/" + petIdx;
 		}
 		

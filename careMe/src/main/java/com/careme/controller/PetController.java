@@ -43,8 +43,8 @@ public class PetController {
 	
 	@RequestMapping(value = "/pet/update", method = RequestMethod.POST)
 	public String updatePet(MultipartHttpServletRequest request) {
-		petService.updatePet(request);
-		return "redirect:/main";
+		int pet_idx = petService.updatePet(request);
+		return "redirect:/carediary/" + pet_idx;
 	}
 	
 	@RequestMapping(value = "/pet/update", method = RequestMethod.GET)
