@@ -71,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update members set
 		member_pass=#{member_pass}
 		where
-		member_email=#{member_email}
+		member_idx=#{member_idx}
 	</update>
 
 	<!-- 회원탈퇴 -->
