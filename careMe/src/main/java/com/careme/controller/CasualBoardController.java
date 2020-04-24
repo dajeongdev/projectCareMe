@@ -1,6 +1,5 @@
 package com.careme.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import com.careme.model.dto.BoardCommentDto;
 import com.careme.model.dto.BoardFileDto;
 import com.careme.model.dto.HeartDto;
 import com.careme.model.dto.MemberDto;
-import com.careme.model.dto.PetCareDto;
 import com.careme.model.dto.PetDto;
 import com.careme.model.dto.PetSpeciesDto;
 import com.careme.model.dto.QuestionBoardDto;
@@ -110,11 +108,6 @@ public class CasualBoardController {
 	public ModelAndView toCasualBoard(int currentPage, HttpSession session) {
 		ModelAndView list = new ModelAndView("/casualBoardView/casualBoard");
 		
-		//회원 정보 및 확인
-	//	SessionCommand sc = (SessionCommand)session.getAttribute("sc")
-	//	MemberDto info = sc.getMemberDto();
-	//	list.addObject("info", info);
-		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
@@ -129,7 +122,6 @@ public class CasualBoardController {
 		
 		list.addObject("list", getArticles);
 		list.addObject("paging", paging);
-		
 		return list;
 	}
 	
@@ -142,8 +134,9 @@ public class CasualBoardController {
 		ModelAndView mav = new ModelAndView("casualBoardView/casualBoardContent");
 		
 		//회원 정보 및 확인
-		SessionCommand sc = (SessionCommand) session.getAttribute("sc");
+		SessionCommand sc = (SessionCommand)session.getAttribute("sc");
 		MemberDto info = sc.getMemberDto();
+		System.out.println(info);
 		mav.addObject("info", info);
 		
 		//글내용 불러오기
@@ -202,7 +195,7 @@ public class CasualBoardController {
 
 	
 // 게시글 작성
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
 	public ModelAndView toWriteForm(HttpSession session) throws Exception {
 		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
 		
@@ -220,7 +213,7 @@ public class CasualBoardController {
 		return write;
 	}
 	
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getCasualPetSpeciesList(int level, int ancestor) {
 		List<PetSpeciesDto> items = null;
@@ -232,7 +225,7 @@ public class CasualBoardController {
 		return json.toJson(items);	
 	}
 	
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_idx", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getCasualPetListLevel2(int level, int selectPet) {
 		
@@ -250,7 +243,7 @@ public class CasualBoardController {
 		
 		
 	
-	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
+	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd")
 	public String writeCasualBoardArticle(QuestionBoardDto dto, int[] rdTag, MultipartHttpServletRequest request) throws Exception {
 		bs.addCasualArticles(dto, request);
 		int result = dto.getQuestion_table_idx();
@@ -259,7 +252,7 @@ public class CasualBoardController {
 	}
 
 	// hashtag 기능
-	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String hashtagCompare(HttpServletRequest request, String tag_name) {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
@@ -271,7 +264,7 @@ public class CasualBoardController {
 		return json.toJson(tagDto);
 	}
 	
-	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String hashTagInsert(HttpServletRequest request, String tag_name, int board_idx) {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
@@ -309,7 +302,7 @@ public class CasualBoardController {
 	}
 	
 
-	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
+	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd")
 	public String updateCasualArticle(QuestionBoardDto dto) throws Exception {
 		int result = bs.updateCasualArticle(dto);
 		if (result > 0) {
@@ -341,10 +334,7 @@ public class CasualBoardController {
 		public String writeCasualComment(BoardCommentDto commentDto, HttpSession session) throws Exception {
 			
 			//member 확인
-			SessionCommand sc = (SessionCommand)session.getAttribute("sc");
-			MemberDto info = sc.getMemberDto();
 			int member_idx = commentDto.getMember_idx();
-			System.out.println(member_idx);
 			
 			//comment 내용 테이블에 추가
 			bs.addCasualComment(commentDto);
@@ -369,7 +359,7 @@ public class CasualBoardController {
 
 		
 	// comment 수정
-		@RequestMapping(value = "/view/casualBoardView/casualCommentUpdate", method = RequestMethod.POST)
+		@RequestMapping(value = "/view/casualBoardView/casualCommentUpdate")
 		public String updateCasualComment(BoardCommentDto commentDto) throws Exception {
 			int result = bs.updateCasualComment(commentDto);
 			int backToPage=commentDto.getQuestion_table_idx();
@@ -399,22 +389,14 @@ public class CasualBoardController {
 		
 	// comment heart 업데이트
 		
-		@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+		@RequestMapping(value ="/view/casualBoardView/updateHeart", produces = "text/plain;charset=UTF-8")
 		@ResponseBody
 		public String updateHeart(int question_board_comment_idx, HttpSession session) {
 			
 			//회원 정보 및 확인
-		
+			SessionCommand sc = (SessionCommand)session.getAttribute("sc");
+			int member_idx=sc.getMemberDto().getMember_idx();
 			
-			MemberDto info = ms.memberInfo("testmin");
-			int member_idx = info.getMember_idx();
-			
-//			MemberDto info = 
-		//	int member_idx = mdto.getMember_id("testman");
-	//		System.out.println(member_idx);
-			
-//			int member_idx = (int)session.getAttribute("member_idx");
-	//		System.out.println(member_idx);
 			int check = hts.memberCheck(member_idx);
 			
 			HeartDto hdto = new HeartDto();

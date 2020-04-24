@@ -19,8 +19,8 @@
 		<!--  S: 내용작성 -->
 		
 	<div class="row">
-		
-		<div class="col-lg-5">
+		<div class="col-lg-4"></div>
+		<div class="col-lg-4">
        			<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
         		<title>Placeholder</title><rect width="100%" height="100%" fill="#777">
         		</rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
@@ -43,9 +43,9 @@
           		</div>
       		</div>
 		</div>
+		<div class="col-lg-4"></div>		
 		
-		
-		<div class="col-md-2"></div>
+		<!-- <div class="col-md-2"></div>
 		
 		<div class="col-md-5">
 			
@@ -75,7 +75,7 @@
           			<p class="mb-auto">여기에는 병원 주소가 들어감</p>
         		</div>
       		</div>
-    	</div>
+    	</div> -->
     </div>
     
     <hr>
@@ -91,13 +91,11 @@
 									<th align="left" width="30%">제목</th>
 									<th width="20%">작성자</th>
 									<th width="20%">작성일자</th>
-									<th width="10%">조회</th>
 								</tr>
 							</thead>	
 							<tbody>
 								
 								<tr>
-									<td></td>
 									<td></td>
 									<td></td>
 									<td></td>

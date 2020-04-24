@@ -191,7 +191,7 @@ $(function() {
 			<div class="row my-3 p-3">
 				<main role="main" class="col-lg-12 bg-white rounded shadow-sm">
 					
-					<h2 align="left">고민 상담</h2>
+					<h2 align="left">고민 나누기</h2>
 					<p></p>
 						<div class="mb-3" align="left">
 			          		<label for="title">제목</label>
@@ -201,7 +201,7 @@ $(function() {
 						<input name="is_private" type="hidden" value="n" /> 
 						<input name="doctor_idx" type="hidden" value="1" /> 
 						<input name="pet_idx" type="hidden" value="1" />
-						<input name="member_idx" type="hidden" id="subject" value="${info.member_idx}">
+						<input name="member_idx" type="hidden" id="subject" value="${sc.memberDto.member_idx}">
 
 					<!-- 동물 종류 찾기 -->
 

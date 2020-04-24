@@ -43,7 +43,7 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	}
 	
 	public List<QuestionBoardDto> getDoctorBoardSearch(SearchBoardCommand sbc){
-		return getSqlSession().selectList("doctorQuestionBrd.getSrchArticle");
+		return getSqlSession().selectList("doctorQuestionBrd.getSrchArticle", sbc);
 	}
 
 	
@@ -212,12 +212,12 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	
 // Heart 추천
 
-	public int addHeartForCasual(int idx) {
-		return getSqlSession().update("casualQuestionBrd.addHeart", idx);
+	public int addHeartForCasual(int question_board_comment_idx) {
+		return getSqlSession().update("casualQuestionBrd.addHeart", question_board_comment_idx);
 	}
 	
-	public int subHeartForCasual(int idx) {
-		return getSqlSession().update("casualQuestionBrd.subHeart", idx);
+	public int subHeartForCasual(int question_board_comment_idx) {
+		return getSqlSession().update("casualQuestionBrd.subHeart", question_board_comment_idx);
 	}
 	
 	public int updateCheckHeart(BoardCommentDto cdto) {
@@ -244,6 +244,21 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	
 	public List<QuestionBoardDto> getContents(){
 		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
+	}
+	
+// Tag 가져오기
+	
+	public List<TagDto> getTagContent(int board_idx){
+		return getSqlSession().selectList("doctorQuestionBrd.getTagsDoctor", board_idx);
+	}
+	
+// 회원 작성글 가져오기(최근 순)
+	public List<QuestionBoardDto> getMemberDoctorBoard (Map<String,Integer>param){
+		return getSqlSession().selectList("doctorQuestionBrd.getMemberDoctorBrd", param);
+	}
+	
+	public List<QuestionBoardDto> getMemberCasualBoard (Map<String,Integer>param){
+		return getSqlSession().selectList("casualQuestionBrd.getMemberCasualBrd", param);
 	}
 		
 }

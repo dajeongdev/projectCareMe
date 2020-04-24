@@ -48,8 +48,8 @@
 	
 	<insert id="insertArt" parameterType="com.careme.model.dto.QuestionBoardDto">
 		insert into question_board (member_idx, title, question_type, doctor_idx, pet_idx, pet_species_idx, content, 
-		view_count, is_private, reg_date, update_date, del_yn) values (#{member_idx}, #{title}, #{question_type}, #{doctor_idx}, #{pet_idx}, 
-		#{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n')
+		view_count, is_private, reg_date, update_date, del_yn, pet_care_idx) values (#{member_idx}, #{title}, #{question_type}, #{doctor_idx}, #{pet_idx}, 
+		#{pet_species_idx}, #{content}, 0, #{is_private}, #{reg_date}, null, 'n', null)
 		
 		<selectKey keyProperty="question_table_idx" resultType="int">
 	        SELECT LAST_INSERT_ID()
@@ -107,6 +107,18 @@
 	<update id="subHeart" parameterType="int">
 		update question_board_comment set heart=heart-1 where question_board_comment_idx=#{question_board_comment_idx}
 	</update>
+
+<!-- 태그 불러오기 -->
+	
+	<select id="getTags" resultType="com.careme.model.dto.TagDto">
+		select * from tag inner join board_use_tag on tag.tag_idx = board_use_tag.tag_idx 
+		where board_idx = #{board_idx} and board_type = 'c'
+	</select>
+	
+<!-- 회원 작성 글 가져오기 -->
+	<select id="getMemberCasualBrd" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="HashMap">
+		select SQL_CALC_FOUND_ROWS * from question_board where question_type like 'n' order by reg_date desc limit 1, #{contentPerPage}
+	</select>
 
 
 </mapper>

@@ -10,7 +10,7 @@ public class BoardCommentDto {
 	String member_id;
 	String content;
 	int heart;
-	LocalDateTime reg_date;
+	String reg_date;
 	String del_yn;
 	String checkHeart;
 
@@ -50,10 +50,10 @@ public class BoardCommentDto {
 	public void setHeart(int heart) {
 		this.heart = heart;
 	}
-	public LocalDateTime getReg_date() {
+	public String getReg_date() {
 		return reg_date;
 	}
-	public void setReg_date(LocalDateTime reg_date) {
+	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
 	public String getDel_yn() {

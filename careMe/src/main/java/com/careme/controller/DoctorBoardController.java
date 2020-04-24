@@ -100,11 +100,6 @@ public class DoctorBoardController {
 	public ModelAndView toDoctorBoard(int currentPage) {
 		ModelAndView listPro = new ModelAndView("/doctorBoardView/doctorBoard");
 		
-		//회원 정보 및 확인
-		//	SessionCommand sc = (SessionCommand)session.getAttribute("sc")
-		//	MemberDto info = sc.getMemberDto();
-		//	list.addObject("info", info);
-		
 		// 내용 및 페이지 번호
 		PageNumberCommand paging = new PageNumberCommand();
 		int contentPerPage = 10;
@@ -114,7 +109,7 @@ public class DoctorBoardController {
 		param.put("contentPerPage", contentPerPage);
 		
 		List<QuestionBoardDto> getArticles = bs.getDoctorBoardPage(param);
-		paging = pns.paging(getArticles.size(), contentPerPage, currentPage, "doctorBoardView/doctorBoard?currentPage=");
+		paging = pns.paging(bs.getTotalDoctor(), contentPerPage, currentPage, "doctorBoard?currentPage=");
 		
 		listPro.addObject("listPro", getArticles);
 		listPro.addObject("paging", paging);
@@ -136,18 +131,18 @@ public class DoctorBoardController {
 		QuestionBoardDto mlist=bs.getDoctorBoardContents(question_table_idx);
 		List<BoardFileDto> flist = bs.getDoctorBoardFiles(question_table_idx);
 		List<BoardCommentDto> clist = bs.getDoctorBoardComments(question_table_idx);
+		List<TagDto> tlist = bs.getTagContent(question_table_idx);
 		
 		int carediaryIdx = mlist.getPet_care_idx();
 		CarediaryCommand dlist = cds.getCarediaryByIdx(carediaryIdx);
 		String idx = String.valueOf(question_table_idx);
 		int commentCount = clist.size();
 		
-		System.out.println("diary 확인 ::::"+dlist);
-		
 		mav.addObject("info", info);
 		mav.addObject("mlist", mlist);
 		mav.addObject("flist", flist);
 		mav.addObject("dlist", dlist);
+		mav.addObject("tlist", tlist);
 		mav.addObject("idx", idx);
 		mav.addObject("clist", clist);
 		mav.addObject("commCount", commentCount);
@@ -226,6 +221,7 @@ public class DoctorBoardController {
 			
 			@SuppressWarnings("unchecked")
 			List<CarediaryCommand> plist = (List<CarediaryCommand>) petItems.get("list");
+			
 			System.out.println("plisting::::"+plist);
 			Gson json = new Gson();
 			return json.toJson(plist);	
@@ -376,11 +372,11 @@ public class DoctorBoardController {
 		
 		@RequestMapping(value ="/view/doctorBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
 		@ResponseBody
-		public String updateHeart(int question_board_comment_idx) {
+		public String updateHeart(int question_board_comment_idx, HttpSession session) {
 			
 			//회원 정보 및 확인
-			MemberDto info = ms.memberInfo("testmin");
-			int member_idx = info.getMember_idx();
+			SessionCommand sc = new SessionCommand();
+			int member_idx = sc.getMemberDto().getMember_idx();
 			int check = hts.memberCheck(member_idx);
 			
 			HeartDto hdto = new HeartDto();
