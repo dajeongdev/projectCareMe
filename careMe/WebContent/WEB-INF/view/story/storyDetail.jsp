@@ -21,7 +21,7 @@
 	left: 50%;
 	top: 50%;
 	margin-left: -500px;
-	margin-top: -150px;
+	margin-top: -300px;
 }
 h3 { font-family: 'GmarketSansBold';}
 .container { margin:0 auto;}
