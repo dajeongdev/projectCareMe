@@ -107,6 +107,10 @@
 	<update id="subHeart" parameterType="int">
 		update question_board_comment set heart=heart-1 where question_board_comment_idx=#{question_board_comment_idx}
 	</update>
+	
+	<select id="getMemberCasualBrd" resultType="com.careme.model.dto.QuestionBoardDto" parameterType="HashMap">
+		select SQL_CALC_FOUND_ROWS * from question_board where question_type like 'n' order by reg_date desc limit 1, #{contentPerPage}
+	</select>
 
 
 </mapper>

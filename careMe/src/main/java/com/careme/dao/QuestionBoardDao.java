@@ -245,5 +245,15 @@ public class QuestionBoardDao extends SqlSessionDaoSupport {
 	public List<QuestionBoardDto> getContents(){
 		return getSqlSession().selectList("casualQuestionBrd.contentDivide");
 	}
+	
+	// 회원 작성글 가져오기(최근 순)
+	public List<QuestionBoardDto> getMemberDoctorBoard (Map<String,Integer>param){
+		return getSqlSession().selectList("doctorQuestionBrd.getMemberDoctorBrd", param);
+	}
+	
+	public List<QuestionBoardDto> getMemberCasualBoard (Map<String,Integer>param){
+		return getSqlSession().selectList("casualQuestionBrd.getMemberCasualBrd", param);
+	}
+
 		
 }

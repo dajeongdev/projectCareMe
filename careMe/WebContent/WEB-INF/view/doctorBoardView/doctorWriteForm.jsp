@@ -250,7 +250,7 @@
 		class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
 		<div class="container min-vh-100 pt-3 text-center">
 
-			<form name="addWrite" enctype="multipart/form-data">
+			<form name="addWrite" enctype="multipart/form-data" method="POST">
 				<div class="row my-3 p-3">
 					<main role="main" class="col-lg-12 bg-white rounded shadow-sm">
 

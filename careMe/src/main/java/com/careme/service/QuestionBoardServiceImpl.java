@@ -338,6 +338,22 @@ public class QuestionBoardServiceImpl implements QuestionBoardService {
 		sbc.setSearchKeyword(searchKeyword);
 		return sbc;
 	}
+	
+	@Override
+	public List<QuestionBoardDto> getMemberDoctorBoard (int member_idx, Map<String,Integer>param){
+		int contentPerPage= 5;
+		param.put("member_idx", member_idx);
+		param.put("contentPerPage", contentPerPage);
+		return dao.getMemberDoctorBoard(param);
+	}
+	
+	
+	public List<QuestionBoardDto> getMemberCasualBoard (int member_idx, Map<String,Integer>param){
+		int contentPerPage= 5;
+		param.put("member_idx", member_idx);
+		param.put("contentPerPage", contentPerPage);
+		return dao.getMemberCasualBoard(param);
+	}
 		
 		
 }

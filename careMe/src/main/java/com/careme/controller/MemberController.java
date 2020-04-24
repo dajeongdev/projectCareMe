@@ -82,7 +82,7 @@ public class MemberController {
 	// 로그인 성공
 	@RequestMapping(value = "login/loginok")
 	public String loginOk(LoginCommand lc, HttpSession session) {
-		int i = memberService.loginOk(lc);// 1이나 0리턴
+		int i = memberService.loginOk(lc, session);// 1이나 0리턴
 
 		// System.out.println(i);
 		if (i == 0) {// 실패
