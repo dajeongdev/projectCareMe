@@ -4,6 +4,7 @@
 <%@ taglib prefix="Form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
+<Spring:url value="/resources/img/profile_dog.jpg" var="default_image" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,7 +61,6 @@ $(function(){
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
 </head>
-
 <body>
 	<jsp:include page="/WEB-INF/view/include/header.jsp" flush="false" />
 	<div class="cover-container d-flex w-100 h-100 mx-auto flex-column bg-light">
@@ -69,7 +69,7 @@ $(function(){
 
 		<div class="row">
 			<main role="main" class="col-lg-12 px-4">
-			<h2 align="left">고민 상담</h2>
+			<h2 align="left">고민 나누기</h2>
 			<p></p>
 
 			<!-- 게시글 본문 -->
@@ -77,32 +77,37 @@ $(function(){
 		<div class="row card border-dark ">
 			<div class="card">
   				
-  				<div class="card-header">
+  				<div class="card-header" >
   					<h2 class="blog-post-title" align="left"><c:out value="${mlist.title}" /></h2>
   				</div>
   				
 
-		  		<div class="row card-body">
-  				
+		  		<div class="row card-body" style="height:auto;">
   					<div class="col-md-3">
-	       				<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
-    	    			<title>Placeholder</title><rect width="100%" height="100%" fill="#777">
-        				</rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-        
-        				<h2 class="card-title"><c:out value="${mlist.member_id}"/></h2>
-        
-        				<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
+	    				<div>
+	    	   			<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
+	    	   		 	<rect width="100%" height="100%" fill="#777">
+	        			</rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+        					<h2 class="card-title"><c:out value="${mlist.member_id}"/></h2>
+        					<p class="card-text">written on<br><c:out value="${mlist.reg_date}" /></p>
+  						</div>	
+  			
+  						<div>
+  							<div id="tag-list">
+								<c:forEach var="taging" items="${tlist}">
+									<span class="hashTag" data-idx="${taging.tag_idx}">#<c:out value="${taging.tag_name}"/></span>
+								</c:forEach>
+							</div>
+  						</div>
+  			
   					</div>
-  					
-  					<!-- 다이어리 -->
-  					
-  					<div class="row">
-  					<div class="col-md-12 shadow-sm">
+  				
+  					<div class="col-md-9 shadow-sm">
   						<div>
   							<c:if test="${flist.size()>0}">
   								<c:forEach var="flist" items="${flist}">
   									<div class="img">
-  										<img class="w-50 h-40" border="1px" src="${fullName}${flist.file_path}">
+  										<img style="float:left" height="500" border="1px" src="${fullName}${flist.file_path}">
   									</div>
   								</c:forEach>
   							</c:if>
@@ -116,85 +121,6 @@ $(function(){
 					</div>
 				</div>
   				
-  				<div class="row">
-  				<c:if test="${dlist.size() > 0}">
-						<c:forEach var="d" items="${dlist}" varStatus="status">
-							<div class="card b-1 hover-shadow mb-20">
-								<header class="card-header flexbox align-items-center">
-									<div>
-										<strong>${d.diary.title} : </strong> <span>${d.diary.reg_date}</span>
-									</div>
-									<div class="card-hover-show">
-										<a class="btn btn-xs fs-10 btn-dark btn-sm"
-											href="update?d_id=${d.diary.pet_care_idx}">수정</a> 
-										<button type="button" class="btn btn-xs fs-10 btn-dark btn-sm"
-											data-toggle="collapse" data-target="#image${status.index}"
-											aria-expanded="false" aria-controls="image${status.index}">열기</button>
-										<!-- <a class="btn btn-xs fs-10 btn-bold btn-warning" href="#">열기</a> -->
-									</div>
-								</header>
-
-								<div class="media card-body table-responsive row">
-
-									<div class="row mb-2 w-100">
-										<div class="col-md-6 p-2">
-											<div class="card-body">
-												<table class="table-sm w-100 text-center">
-													<thead class="border-bottom">
-														<tr>
-															<th>날짜</th>
-															<th>산책</th>
-															<th>소변</th>
-															<th>대변</th>
-															<th>몸무게</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>${d.diary.diary_date}</td>
-															<td>${d.diary.exercise}/m</td>
-															<td>
-																<div class="color-circle"
-																	style="background-color:${article.urineContent};"></div>
-															</td>
-															<td>${d.fecesContent}</td>
-															<td>${d.diary.weight}111/kg</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
-										</div>
-										<div class="col-md-6 p-2">
-											<div class="card-body">
-												<p>${d.diary.memo}</p>
-											</div>
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-md-12 p-2 collapse" id="image${status.index}">
-											<div class="card-body">
-												<div class="row">
-													<c:if test="${d.files.size() > 0}">
-														<c:forEach var="image" items="${article.files}">
-															<div class="col-md-3">
-																<img src="${hostname}${image.file_path}">
-															</div>
-														</c:forEach>
-													</c:if>
-												</div>
-											</div>
-										</div>
-									</div>
-
-								</div>
-							</div>
-							<!-- E:diary -->
-						</c:forEach>
-					</c:if>
-  					</div>
-  				
-  			
   			</div>
 		</div>
 		
@@ -204,12 +130,10 @@ $(function(){
 			<table align="right">
 				<tr height="30">
 					<td colspan="4" align="right">
-					
 					<c:if test="${sc.memberDto.member_idx==mlist.member_idx}">
 					<button type="button" class="btn btn-dark btn-sm" onclick="document.location.href='casualBoardUpdateForm?question_table_idx=${mlist.question_table_idx}'">글수정</button>
 					<button type="button" class="btn btn-dark btn-sm" onclick="deleteArticle('${mlist.question_table_idx}')">글삭제</button>
 					</c:if>
-					
 					<button type="button" class="btn btn-dark btn-sm" onClick="location.href='casualBoard?currentPage=1'">글목록</button>
 					</td>
 				</tr>
@@ -224,45 +148,45 @@ $(function(){
 			<div>
 			
 			<c:forEach var="item" items="${clist}" varStatus="status">
-			
 			<div class="row">
-				<div class="card border-dark col-md-3" align="center">
-  						<p></p>
-  						<svg class="bd-placeholder-img rounded-circle" width="100" height="100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
-    	    			<title>Placeholder</title><rect width="100%" height="100%" fill="#777">
-        				</rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
-        
+				
+				<div class="card border-dark col-md-3" align="center" height="auto">
+  				<p></p>
+  					<div class="py-30">
+	  					<svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
+		    	   		<rect width="100%" height="100%" fill="#777">
+		        		</rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+		        	       
         				<h2 class="card-title"><c:out value="${item.member_id}"/></h2>
         
         				<p class="card-text">written on<br><c:out value="${item.reg_date}" /></p>
-        				<p></p>
-  				</div>
+        			</div>
+        		<p></p>
+        		</div>
 				
 				<div class="card border-dark col-md-9">
   					<div class="row card-body my-3 p-3 bg-white rounded shadow-sm">
-    					<blockquote>	
-    						<p style="" align="left">
-								<c:out value="${item.content}"/>
+    					<blockquote>
+          					<p style="font:20; white-space: normal;" align="left">
+							<c:out value="${item.content}" />
 							</p>
-						</blockquote>
-        			</div>
+        				</blockquote>
+					</div>
 					<div class="row" id="heartInfo" data-idx="${item.question_board_comment_idx}">
-					<div class="col-md-8"></div>
+					<div class="col-md-2">
 						<div id="heartDiv${status.index}" class="col-md-1" align="left">
-							
 							<label for="heart${item.question_board_comment_idx}"><span id="count${item.question_board_comment_idx}">${item.heart}</span>&nbsp;<i class="fas fa-heart"></i></label>
 							<button id="heart${item.question_board_comment_idx}" onclick="testFunction(${item.question_board_comment_idx})" style="display:none"></button>
-							
-						</div>	
+						</div>
+					</div>	
+					<div class="col-md-7"></div>	
 						<div class="col-md-3" align="right">
-						
 						<c:if test="${sc.memberDto.member_idx==item.member_idx}">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 수정"
 							onClick="">
 						<input type="button" class="btn btn-dark btn-sm" value="댓글 삭제"
 							onClick="">
-						</c:if>
-						
+						</c:if>	
 						</div>
 					</div>
 					<p></p>
@@ -280,7 +204,7 @@ $(function(){
 				</h5>
 
 			<form action="casualCommentAdd?question_table_idx=${mlist.question_table_idx}" method="post">
-				<textarea name="content" style="width: 100%; height: 100px"></textarea>
+				<textarea name="content" style="width: 100%; height: 100px" rows="3"></textarea>
 						<div class="col-md-12" align="right">
 							<input class="btn btn-dark btn-sm" type="submit" name="submit" value="확인"> 
 							<input type="hidden" name="member_idx" value="${sc.memberDto.member_idx}">

@@ -20,7 +20,7 @@
 
 			<div class="row mb-3">
 				<main role="main" class="col-lg-12">
-					<h2 align="left">고민 상담 (검색결과)</h2>
+					<h2 align="left">고민 나누기 (검색결과)</h2>
 					<p align="left"> (전체 글: <c:out value="${paging.totalCount}" />)</p>
 					<div class="table" style="height: 540px">
 						<table class="table table-striped table-lg table-hover">
@@ -42,7 +42,7 @@
 								<tr onClick="location.href='casualBoardContent?question_table_idx=${item.question_table_idx}'">
 									<td><c:out value="${item.question_table_idx}"/></td>
 									<td><c:out value="${item.title}"/></td>
-									<td><c:out value="${info.member_id}" /></td>
+									<td><c:out value="${item.member_id}" /></td>
 									<td><c:out value="${item.reg_date}" /></td>
 									<td><c:out value="${item.view_count}" /></td>
 								</tr>

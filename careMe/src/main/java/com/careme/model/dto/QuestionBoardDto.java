@@ -19,8 +19,8 @@ public class QuestionBoardDto {
 	String content;
 	int view_count;
 	String is_private;
-	LocalDateTime reg_date;
-	LocalDateTime update_date;
+	String reg_date;
+	String update_date;
 	String del_yn;
 	int pet_care_idx;
 	
@@ -88,16 +88,16 @@ public class QuestionBoardDto {
 	public void setIs_private(String is_private) {
 		this.is_private = is_private;
 	}
-	public LocalDateTime getReg_date() {
+	public String getReg_date() {
 		return reg_date;
 	}
-	public void setReg_date(LocalDateTime reg_date) {
+	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
 	}
-	public LocalDateTime getUpdate_date() {
+	public String getUpdate_date() {
 		return update_date;
 	}
-	public void setUpdate_date(LocalDateTime update_date) {
+	public void setUpdate_date(String update_date) {
 		this.update_date = update_date;
 	}
 	public String getDel_yn() {

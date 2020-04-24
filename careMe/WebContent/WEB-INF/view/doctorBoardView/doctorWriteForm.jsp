@@ -145,8 +145,7 @@
 					//배열에 tag의 idx를 넣어준다
 					var idx = data.tag_idx;
 					var name = data.tag_name;
-					var html = "<li class='hashTag' data-idx=" + idx + ">"
-							+ "#" + name + "</li>";
+					var html = "<span class='hashTag' data-idx=" + idx + ">" + "#" + name + "<a href='javascript:;'>X</a>" + "</span>";
 
 					//서버에 보낼 배열에 넣기
 					tags.push(idx);
@@ -162,9 +161,15 @@
 
 					//alert("성공!");
 				}).fail(function() {
-			alert("실패!");
-		});
-	}
+					alert("실패!");
+				});
+
+	 			$("#tag-list").on("click", ".hashTag", function () {
+					$(this).remove();
+				});
+		}
+		
+	
 </script>
 
 
@@ -239,7 +244,12 @@
 	}
 </script>
 
-
+<!-- <script type="text/javascript">
+    $(document).ready(function() {
+        $("[name=pet_species_idx]").attr("required" , false);
+        $("[name=pet_care_idx]").attr("required" , false);
+    })
+</script>-->
 
 
 </head>
@@ -260,14 +270,12 @@
 							<label for="title">제목</label> <input id="title" name="title"
 								width="100%" type="text" class="form-control" />
 						</div>
-						<input name="question_type" type="hidden" value="y" /> <input
-							name="is_private" type="hidden" value="n" /> <input
-							name="doctor_idx" type="hidden" value="1" /> <input
-							name="pet_idx" type="hidden" value="1" /> <input
-							name="member_id" type="hidden" id="subjectId"
-							value="${sc.memberDto.member_id}"> <input
-							name="member_idx" type="hidden" id="subject"
-							value="${sc.memberDto.member_idx}">
+						<input name="question_type" type="hidden" value="y" /> 
+						<input name="is_private" type="hidden" value="n" /> 
+						<input name="doctor_idx" type="hidden" value="${sc.memberDto.member_id}" /> 
+						<input name="pet_idx" type="hidden" value="1" /> 
+						<input name="member_id" type="hidden" id="subjectId" value="${sc.memberDto.member_id}"> 
+						<input name="member_idx" type="hidden" id="subject" value="${sc.memberDto.member_idx}">
 
 						<!-- 동물 종류 찾기 -->
 
@@ -307,7 +315,7 @@
 							</div>
 							<div class="col-md-6  mb-3">
 								<label for="selectPetDiary">다이어리 찾기</label> 
-								<select class="form-control" id="pet_care_idx" name="pet_care_idx">
+								<select class="form-control" id="pet_care_idx" name="pet_care_idx" required>
 								</select>
 							</div>
 						</div>
