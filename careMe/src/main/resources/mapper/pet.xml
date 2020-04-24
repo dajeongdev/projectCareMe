@@ -50,6 +50,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update pet set selected = 'y' where pet_idx = #{pet_idx}
 	</update>
 	
+	<update id="updateToselectedPetTop1">
+		update pet set selected = 'y'
+		where member_idx = #{member_idx} 
+		and del_yn = 'n'
+	</update>
+	
 	<update id="deSelectPet">
 		update pet set selected = 'n' where member_idx = #{member_idx}
 	</update>
@@ -78,4 +84,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update pet set del_yn = 'y' where pet_idx = #{pet_idx}
 	</update>
 	
+	<select id="selectPetSpecName" resultType="HashMap" >
+		select spec.pet_species_name spec_name, ance.pet_species_name ance_name
+		from pet
+		inner join pet_species spec on pet.pet_species_idx = spec.pet_species_idx
+		inner join pet_species ance on spec.pet_species_ancestor = ance.pet_species_idx
+		where pet_idx = #{pet_idx}
+	</select>
+	
+<!-- 	<resultMap type="hashMap" id="petSpecName">
+        <result javaType="String" column="spec_name" property="spec_name"></result>
+        <result javaType="String" column="ance_name" property="ance_name"></result>
+    </resultMap>
+	
+	 -->
 </mapper>

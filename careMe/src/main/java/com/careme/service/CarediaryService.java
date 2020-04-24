@@ -92,11 +92,13 @@ public class CarediaryService {
 
 		List<CarediaryCommand> list = new ArrayList<CarediaryCommand>();
 		HashMap<String, Integer> param = new HashMap<String, Integer>();
+		
 		int start = pageService.getStartIdx(currentPage, contentPerPage);
 		param.put("pet_idx", petIdx);
 		param.put("start", start);
 		param.put("contentPerPage", contentPerPage);
 		list = carediaryDao.selectCarediaryListByPetIdx(param);
+		
 		int totalCount = carediaryDao.selectTotalCount();
 		
 		for (CarediaryCommand command : list) {
@@ -105,7 +107,6 @@ public class CarediaryService {
 		}
 		
 		String path = petIdx + "?page=";
-		System.out.println("토탈카운트:: " + totalCount);
 		PageNumberCommand paging = pageService.paging(totalCount, contentPerPage, currentPage, path);
 		
 		data.put("list", list);

@@ -187,13 +187,17 @@ public class MemberController {
 	// 회원가입 성공
 	@RequestMapping(value = "login/insertok")
 	public String insertOk(MemberDto mdto, HttpSession session, MultipartHttpServletRequest request) {
-		// System.out.println("test" + mdto);
+		System.out.println("test" + mdto);
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
+		if (sc == null) sc = new SessionCommand();
 		int i3 = memberService.insertOk(mdto, request);// 0이나 1리턴
-		 System.out.println(i3);
+		System.out.println(i3);
 		if (i3 == 1) { // 없으면 가입
 			session.setAttribute("sussess", mdto.getMember_idx());
-			return "login/signupsu"; // 성공
+			System.out.println("sc :::" + sc);
+			sc.setMemberDto(mdto);
+			session.setAttribute("sc", sc);
+			return "redirect:/pet/regist"; // 성공
 		} else {
 			return "redirect:signup"; // 실패
 		}
@@ -230,10 +234,12 @@ public class MemberController {
 	}
 
 	// 정보수정폼-일반
-	@RequestMapping(value = "login/memberUpdateForm", method = RequestMethod.GET)
-	public String form5() {
-		// System.out.println("멤버 업데이트폼");
-		return "login/memberUpdateForm";
+	@RequestMapping(value = "login/memberUpdateForm")
+	public ModelAndView form5(MemberDto mdto, Model model) {
+
+		ModelAndView mav2 = new ModelAndView("login/memberUpdateForm");
+	
+		return mav2;
 	}
 
 	// 정보수정-비밀번호 변경
@@ -258,10 +264,12 @@ public class MemberController {
 		List<PetSpeciesDto> selectPet = petService.selectPetSpeciesLevel1();// 체크박스
 		model.addAttribute("addpet", selectPet); // 모델에 추가
 		System.out.println("받아온동물" + selectPet);
+
 		ModelAndView mav = new ModelAndView("login/doctorUpdateForm");
 		int member_idx = ((SessionCommand) session.getAttribute("sc")).getMemberDto().getMember_idx();
 		DoctorDto doctorDto = memberService.selectDoctor(member_idx);
 		mav.addObject("doctorDto", doctorDto);
+		System.out.println("doctorDto" + doctorDto);
 		return mav;
 	}
 

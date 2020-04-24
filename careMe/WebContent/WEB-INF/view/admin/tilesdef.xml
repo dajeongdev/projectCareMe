@@ -25,7 +25,7 @@
 	
 	<definition name="/admin/doctor/*" extends="base_layout">
 		<put-attribute name="title" value="의사회원" />
-		<put-attribute name="body" value="/WEB-INF/view/admin/doctor/{1}" />
+		<put-attribute name="body" value="/WEB-INF/view/admin/doctor/{1}.jsp" />
 	</definition>
 	
 

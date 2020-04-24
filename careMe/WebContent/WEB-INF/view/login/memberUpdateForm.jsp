@@ -121,7 +121,7 @@ function godelete(){
 					<!-- 프로필 파일 -->
 					<td style="padding-left: 20px; padding-top: 10px;"><b>프로필:</b></td>
 					<td><img src="${hostname}${memberDto.member_profile}"
-						id="cert_preview2"></td>
+						id="cert_preview"></td>
 				</tr>
 			</table>
 			<br>
