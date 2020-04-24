@@ -221,6 +221,7 @@ public class DoctorBoardController {
 			
 			@SuppressWarnings("unchecked")
 			List<CarediaryCommand> plist = (List<CarediaryCommand>) petItems.get("list");
+			
 			System.out.println("plisting::::"+plist);
 			Gson json = new Gson();
 			return json.toJson(plist);	
