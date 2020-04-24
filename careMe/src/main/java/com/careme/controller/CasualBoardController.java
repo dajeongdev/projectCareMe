@@ -195,7 +195,7 @@ public class CasualBoardController {
 
 	
 // 게시글 작성
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm", method = RequestMethod.GET)
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm")
 	public ModelAndView toWriteForm(HttpSession session) throws Exception {
 		ModelAndView write = new ModelAndView("casualBoardView/casualWriteForm");
 		
@@ -213,7 +213,7 @@ public class CasualBoardController {
 		return write;
 	}
 	
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_species_idx", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getCasualPetSpeciesList(int level, int ancestor) {
 		List<PetSpeciesDto> items = null;
@@ -225,7 +225,7 @@ public class CasualBoardController {
 		return json.toJson(items);	
 	}
 	
-	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_idx", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value = "/view/casualBoardView/casualWriteForm/pet_idx", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String getCasualPetListLevel2(int level, int selectPet) {
 		
@@ -243,7 +243,7 @@ public class CasualBoardController {
 		
 		
 	
-	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd", method = RequestMethod.POST)
+	@RequestMapping(value = "/view/casualBoardView/casualBoardWriteAdd")
 	public String writeCasualBoardArticle(QuestionBoardDto dto, int[] rdTag, MultipartHttpServletRequest request) throws Exception {
 		bs.addCasualArticles(dto, request);
 		int result = dto.getQuestion_table_idx();
@@ -252,7 +252,7 @@ public class CasualBoardController {
 	}
 
 	// hashtag 기능
-	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashCheck", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String hashtagCompare(HttpServletRequest request, String tag_name) {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
@@ -264,7 +264,7 @@ public class CasualBoardController {
 		return json.toJson(tagDto);
 	}
 	
-	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", method = RequestMethod.POST, produces = "text/plain;charset=UTF-8")
+	@RequestMapping(value="/view/casualBoardView/casualWriteForm/hashInsert", produces = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public String hashTagInsert(HttpServletRequest request, String tag_name, int board_idx) {
 		SessionCommand sc = (SessionCommand) request.getSession().getAttribute("sc");
@@ -302,7 +302,7 @@ public class CasualBoardController {
 	}
 	
 
-	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd", method = RequestMethod.POST)
+	@RequestMapping(value = "/view/casualBoardView/casualBoardUpdateAdd")
 	public String updateCasualArticle(QuestionBoardDto dto) throws Exception {
 		int result = bs.updateCasualArticle(dto);
 		if (result > 0) {
@@ -359,7 +359,7 @@ public class CasualBoardController {
 
 		
 	// comment 수정
-		@RequestMapping(value = "/view/casualBoardView/casualCommentUpdate", method = RequestMethod.POST)
+		@RequestMapping(value = "/view/casualBoardView/casualCommentUpdate")
 		public String updateCasualComment(BoardCommentDto commentDto) throws Exception {
 			int result = bs.updateCasualComment(commentDto);
 			int backToPage=commentDto.getQuestion_table_idx();
@@ -389,7 +389,7 @@ public class CasualBoardController {
 		
 	// comment heart 업데이트
 		
-		@RequestMapping(value ="/view/casualBoardView/updateHeart", method = RequestMethod.GET, produces = "text/plain;charset=UTF-8")
+		@RequestMapping(value ="/view/casualBoardView/updateHeart", produces = "text/plain;charset=UTF-8")
 		@ResponseBody
 		public String updateHeart(int question_board_comment_idx, HttpSession session) {
 			

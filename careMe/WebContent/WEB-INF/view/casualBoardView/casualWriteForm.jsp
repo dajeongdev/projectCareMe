@@ -199,7 +199,6 @@ $(function(){
     $(document).ready(function() {
         $("[name=pet_species_idx]").attr("required" , false);
     })
-        
 </script> -->
 
 </head>

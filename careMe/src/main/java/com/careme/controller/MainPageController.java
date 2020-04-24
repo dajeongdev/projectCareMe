@@ -97,9 +97,4 @@ public class MainPageController {
 		return mav;
 	}
 	
-	
-	
-	
-		
-	
 }
